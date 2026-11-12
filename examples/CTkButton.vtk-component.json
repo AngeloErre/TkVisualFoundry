@@ -1,0 +1,8 @@
+{
+  "name": "CTkButton",
+  "module": "customtkinter",
+  "class": "CTkButton",
+  "description": "Pulsante CustomTkinter. Importare il descrittore e installare le dipendenze del progetto dopo aver aggiunto il componente.",
+  "defaults": {"text": "Pulsante moderno", "fg_color": "#1f6aa5", "hover_color": "#144870", "corner_radius": 8},
+  "requirements": ["customtkinter>=5.2"]
+}

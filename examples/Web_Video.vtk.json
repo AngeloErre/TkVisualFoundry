@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "name": "Applicazione",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Web_Video",
+      "width": 1100,
+      "height": 790,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "HtmlView1",
+          "kind": "HtmlView",
+          "x": 20,
+          "y": 20,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "html": "<h2>VisualTk Studio</h2><p>HTML semplice</p>"
+          },
+          "events": {}
+        },
+        {
+          "name": "WebView1",
+          "kind": "WebView",
+          "x": 550,
+          "y": 20,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "url": "https://www.python.org"
+          },
+          "events": {}
+        },
+        {
+          "name": "NativeWebButton1",
+          "kind": "NativeWebButton",
+          "x": 20,
+          "y": 265,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "url": "https://www.python.org",
+            "text": "Apri web nativo",
+            "title": "Browser"
+          },
+          "events": {}
+        },
+        {
+          "name": "VideoPlayer1",
+          "kind": "VideoPlayer",
+          "x": 550,
+          "y": 265,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "source": "",
+            "volume": 70
+          },
+          "events": {}
+        },
+        {
+          "name": "YouTubePlayer1",
+          "kind": "YouTubePlayer",
+          "x": 20,
+          "y": 510,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "url": "",
+            "backend": "yt-dlp"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

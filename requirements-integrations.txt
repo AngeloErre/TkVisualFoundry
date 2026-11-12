@@ -1,0 +1,11 @@
+tkinterdnd2>=0.4
+tkfilebrowser>=2.3
+tkinterweb>=4
+tkhtmlview>=0.3
+pywebview>=5
+python-vlc>=3
+yt-dlp
+pytubefix
+customtkinter>=5.2
+ttkbootstrap>=1.10
+tkcalendar>=1.6

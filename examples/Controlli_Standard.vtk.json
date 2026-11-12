@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "name": "Applicazione",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Controlli_Standard",
+      "width": 1100,
+      "height": 790,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Treeview1",
+          "kind": "Treeview",
+          "x": 20,
+          "y": 20,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "columns": [
+              "nome",
+              "valore"
+            ],
+            "show": "tree headings",
+            "selectmode": "browse"
+          },
+          "events": {
+            "Load": "self.Treeview1.heading('nome', text='Nome')\nself.Treeview1.heading('valore', text='Valore')\nself.Treeview1.insert('', 'end', text='Esempio', values=('Prova', 123))"
+          }
+        },
+        {
+          "name": "Notebook1",
+          "kind": "Notebook",
+          "x": 550,
+          "y": 20,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "pages": [
+              "Pagina 1",
+              "Pagina 2"
+            ]
+          },
+          "events": {
+            "Load": "ttk.Label(self.Notebook1.pages['Pagina 1'], text='Prima pagina').pack(padx=20, pady=20)"
+          }
+        },
+        {
+          "name": "ScrolledText1",
+          "kind": "ScrolledText",
+          "x": 20,
+          "y": 265,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "font": "Helvetica 12",
+            "wrap": "word",
+            "bg": "#ffffff",
+            "fg": "#182230"
+          },
+          "events": {}
+        },
+        {
+          "name": "FileDropZone1",
+          "kind": "FileDropZone",
+          "x": 550,
+          "y": 265,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "text": "Trascina qui file dal Finder",
+            "bg": "#eaf2ff"
+          },
+          "events": {
+            "FilesDropped": "print(self.FileDropZone1.paths)"
+          }
+        },
+        {
+          "name": "FileBrowserButton1",
+          "kind": "FileBrowserButton",
+          "x": 20,
+          "y": 510,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "text": "Sfoglia…",
+            "mode": "open",
+            "advanced": false
+          },
+          "events": {
+            "FileSelected": "print(self.FileBrowserButton1.paths)"
+          }
+        },
+        {
+          "name": "MessageButton1",
+          "kind": "MessageButton",
+          "x": 550,
+          "y": 510,
+          "width": 510,
+          "height": 220,
+          "props": {
+            "text": "Mostra messaggio",
+            "title": "Informazione",
+            "message": "Ciao!",
+            "mode": "info"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

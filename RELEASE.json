@@ -1,0 +1,10 @@
+{
+  "version": "1.6",
+  "python_minimum": "3.15",
+  "python_releaselevel": "final",
+  "tests_passed": 33,
+  "tests_skipped_graphical": 6,
+  "validation_interpreter": "Python 3.15 locale; test grafici non disponibili",
+  "target_python315_validation": "33 passed; 6 graphical skipped",
+  "detected_python315": "3.15.0rc3"
+}

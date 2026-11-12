@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "name": "Applicazione",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Componenti multimediali e periferiche",
+      "width": 1100,
+      "height": 790,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "ImageGallery1",
+          "kind": "ImageGallery",
+          "x": 20,
+          "y": 20,
+          "width": 510,
+          "height": 225,
+          "props": {
+            "directory": "",
+            "thumbnail_size": 110,
+            "columns": 3,
+            "bg": "#ffffff"
+          },
+          "events": {
+            "ImageSelected": "print(\"Immagine selezionata:\", self.ImageGallery1.selected_path)"
+          }
+        },
+        {
+          "name": "AudioPlayer1",
+          "kind": "AudioPlayer",
+          "x": 550,
+          "y": 20,
+          "width": 510,
+          "height": 225,
+          "props": {
+            "source": "",
+            "volume": 0.7,
+            "bg": "#e4e8ee"
+          },
+          "events": {}
+        },
+        {
+          "name": "WebcamView1",
+          "kind": "WebcamView",
+          "x": 20,
+          "y": 265,
+          "width": 510,
+          "height": 225,
+          "props": {
+            "camera_index": 0,
+            "fps": 20,
+            "bg": "#182230"
+          },
+          "events": {}
+        },
+        {
+          "name": "USBExplorer1",
+          "kind": "USBExplorer",
+          "x": 550,
+          "y": 265,
+          "width": 510,
+          "height": 225,
+          "props": {
+            "bg": "#e4e8ee"
+          },
+          "events": {
+            "DeviceSelected": "device = self.USBExplorer1.selected_device\nprint(\"Dispositivo USB:\", hex(device.idVendor), hex(device.idProduct))"
+          }
+        },
+        {
+          "name": "SerialMonitor1",
+          "kind": "SerialMonitor",
+          "x": 20,
+          "y": 510,
+          "width": 510,
+          "height": 225,
+          "props": {
+            "port": "",
+            "baudrate": 9600,
+            "bg": "#e4e8ee"
+          },
+          "events": {
+            "DataReceived": "print(\"Ricevuti:\", self.SerialMonitor1.last_data)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

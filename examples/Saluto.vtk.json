@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "name": "Applicazione",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Saluto — Demo VisualTk",
+      "width": 640,
+      "height": 440,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Label1",
+          "kind": "Label",
+          "x": 30,
+          "y": 25,
+          "width": 360,
+          "height": 40,
+          "props": {
+            "text": "Come ti chiami?",
+            "bg": "#f0f0f0",
+            "fg": "#16395b",
+            "font": "Helvetica 18"
+          },
+          "events": {}
+        },
+        {
+          "name": "Entry1",
+          "kind": "Entry",
+          "x": 30,
+          "y": 85,
+          "width": 300,
+          "height": 35,
+          "props": {
+            "bg": "white",
+            "fg": "black",
+            "font": "Helvetica 14"
+          },
+          "events": {}
+        },
+        {
+          "name": "Button1",
+          "kind": "Button",
+          "x": 30,
+          "y": 145,
+          "width": 140,
+          "height": 40,
+          "props": {
+            "text": "Saluta",
+            "bg": "#e4e8ee",
+            "fg": "#182230",
+            "font": "Helvetica 12"
+          },
+          "events": {
+            "Click": "nome = self.Entry1.get().strip() or \"Professore\"\nself.Label1.configure(text=\"Ciao, \" + nome + \"!\")\nprint(\"Saluto inviato a\", nome)"
+          }
+        },
+        {
+          "name": "Button2",
+          "kind": "Button",
+          "x": 190,
+          "y": 145,
+          "width": 180,
+          "height": 40,
+          "props": {
+            "text": "Apri seconda finestra"
+          },
+          "events": {
+            "Click": "self.show(\"Form2\")"
+          }
+        }
+      ],
+      "events": {}
+    },
+    {
+      "name": "Form2",
+      "title": "Seconda finestra",
+      "width": 400,
+      "height": 220,
+      "bg": "#eaf2ff",
+      "widgets": [
+        {
+          "name": "Label2",
+          "kind": "Label",
+          "x": 30,
+          "y": 40,
+          "width": 330,
+          "height": 70,
+          "props": {
+            "text": "Una seconda finestra Tkinter!",
+            "bg": "#eaf2ff",
+            "font": "Helvetica 16"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}
