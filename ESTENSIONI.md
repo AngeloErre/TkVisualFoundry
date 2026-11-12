@@ -91,3 +91,6 @@ Il sorgente esportato contiene il runtime dei componenti integrati e può essere
 La galleria carica al massimo 300 miniature per cartella, in modo sincrono, e non scorre ricorsivamente le sottocartelle. pygame.mixer.music usa un canale musicale condiviso: in questa versione va usato un solo AudioPlayer attivo per applicazione. WebcamView non registra video; lo snapshot cattura l'ultimo frame disponibile. USBExplorer espone l'oggetto PyUSB per il codice utente, ma non comprende un editor universale di protocolli USB/HID. Letture/scritture USB lente vanno svolte dal codice utente su un worker; gli aggiornamenti Tk devono avvenire nel thread grafico. SerialMonitor è un monitor testuale UTF-8 con accesso ai byte originali via last_data.
 
 Documentazione ufficiale: https://docs.pypi.org/api/json/ — https://pillow.readthedocs.io/ — https://www.pygame.org/docs/ref/music.html — https://docs.opencv.org/ — https://github.com/pyusb/pyusb — https://pyserial.readthedocs.io/
+
+## Preparazione guidata (1.7)
+Il designer propone il wizard PIP prima di inserire controlli con dipendenze. Puoi scegliere Solo designer; l’avvio verificherà i requisiti. Le classi esterne restano descritte tramite JSON e non vengono importate dal designer. DatabaseView è incluso nella palette con SQLite; i driver remoti si preparano dalla sua configurazione.

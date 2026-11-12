@@ -1,10 +1,12 @@
 {
-  "version": "1.6",
+  "version": "1.7",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 33,
-  "tests_skipped_graphical": 6,
-  "validation_interpreter": "Python 3.15 locale; test grafici non disponibili",
-  "target_python315_validation": "33 passed; 6 graphical skipped",
-  "detected_python315": "3.15.0rc3"
+  "tests_passed": 50,
+  "tests_skipped_graphical": 8,
+  "validation_interpreter": "Python 3.15.2",
+  "sqlite_validation": "real CRUD and rollback tests passed",
+  "remote_database_validation": "mock connection test only; real servers pending",
+  "gui_and_packaging": "pending",
+  "pip_install_validation": "simulated pipeline; metadata checks real"
 }

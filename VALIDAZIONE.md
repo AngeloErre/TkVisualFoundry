@@ -1,3 +1,20 @@
+# Verifica corrente — 1.7
+
+Eseguiti 58 test con Python 3.15.2: **50 superati, 8 grafici saltati**.
+
+- SQLite reale: inserimento/lettura/modifica/eliminazione, valori parametrizzati, rollback, chiavi composte, assenza di chiavi, identificatori non validi, persistenza su file e limite righe.
+- Generazione autonoma del componente database e progetto dimostrativo; dipendenze condizionali al backend.
+- Driver remoto: simulato URL con password contenente caratteri speciali e chiusura engine su errore. Nessun server remoto reale contattato.
+- Verifiche PIP: metadati reali dell’interprete (PIP presente, distribuzione fittizia assente, vincolo incompatibile), comando senza shell, pipeline di installazione simulata e mancata verifica di successo quando PIP fallisce.
+- Test già esistenti per modello, estensioni, integrazioni, completamento e policy interprete.
+- Non installati pacchetti nell’ambiente dell’utente per questa verifica.
+
+Restano da collaudare: nuove finestre grafiche, flusso completo di installazione con rete, webcam/USB/audio, database PostgreSQL/MySQL reali, installer completo e PyInstaller/app/DMG.
+
+Le verifiche storiche sotto descrivono le rispettive versioni e non lo stato dell’interprete corrente.
+
+---
+
 # Verifica aggiuntiva 1.3.1
 
 32 test: 26 superati e 6 grafici saltati. Verificata sul Mac la presenza di Python 3.15.0rc3 con Tk 9.0. Eseguita solo la sezione di rilevamento dell’installer, senza installare o modificare software: il messaggio identifica correttamente rc3 e la distingue da un interprete mancante. Nessun collaudo GUI su 3.15 final.

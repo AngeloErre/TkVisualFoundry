@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "name": "Database demo",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Database • esempio SQLite",
+      "width": 920,
+      "height": 580,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "DatabaseView1",
+          "kind": "DatabaseView",
+          "x": 20,
+          "y": 20,
+          "width": 880,
+          "height": 530,
+          "props": {
+            "backend": "sqlite",
+            "database": "visualtk_demo.sqlite",
+            "host": "localhost",
+            "port": 0,
+            "username": "",
+            "password_env": "VISUALTK_DB_PASSWORD",
+            "table": "",
+            "limit": 200
+          },
+          "events": {
+            "Load": "self.DatabaseView1.connect()",
+            "DatabaseConnected": "if not self.DatabaseView1.table_name:\n    self.DatabaseView1.create_demo()",
+            "DataLoaded": "print(\"Righe caricate:\", len(self.DatabaseView1.rows))",
+            "DatabaseError": "print(\"Database:\", self.DatabaseView1.last_error)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

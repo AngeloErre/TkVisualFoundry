@@ -35,9 +35,9 @@ fi
 INSTALL_DIR="$HOME/Applications/VisualTkStudio"
 mkdir -p "$INSTALL_DIR"
 # Copy only distribution files, never a previous environment.
-cp studio.py ux_theme.py workspace_ui.py code_assist.py assist_ui.py support_ui.py runtime_requirements.py core.py components.py library_explorer.py visualtk_runtime.py build_project.py requirements.txt requirements-multimedia.txt requirements-integrations.txt Build_Mac.command Install_Optional_Legacy.command "$INSTALL_DIR/"
+cp studio.py ux_theme.py workspace_ui.py code_assist.py assist_ui.py dependency_manager.py dependency_ui.py configuration_ui.py database_runtime.py support_ui.py runtime_requirements.py core.py components.py library_explorer.py visualtk_runtime.py build_project.py requirements.txt requirements-multimedia.txt requirements-integrations.txt Build_Mac.command Install_Optional_Legacy.command "$INSTALL_DIR/"
 cp -R examples "$INSTALL_DIR/"
-cp README.md ESTENSIONI.md ESEMPI.md COMPATIBILITA.md VALIDAZIONE.md CHANGELOG.md RELEASE.json "$INSTALL_DIR/"
+cp README.md ESTENSIONI.md ESEMPI.md COMPATIBILITA.md VALIDAZIONE.md CHANGELOG.md RELEASE.json DATABASE.md PACCHETTI.md RELEASE_NOTES.md "$INSTALL_DIR/"
 if [ -x "$INSTALL_DIR/.venv/bin/python" ]; then
   if ! "$INSTALL_DIR/.venv/bin/python" -c 'import sys,importlib.metadata; assert sys.version_info[:2] >= (3, 15) and sys.version_info.releaselevel == "final"; assert not any(d.metadata.get("Name","").lower()=="pygame" for d in importlib.metadata.distributions())' >/dev/null 2>&1; then
     ENV_BACKUP="$INSTALL_DIR/.venv.backup-$(date +%Y%m%d-%H%M%S)-$$"
@@ -48,16 +48,8 @@ fi
 "$PYTHON_BIN" -m venv "$INSTALL_DIR/.venv"
 "$INSTALL_DIR/.venv/bin/python" -m pip install --upgrade pip
 "$INSTALL_DIR/.venv/bin/python" -m pip install -r "$INSTALL_DIR/requirements.txt"
-"$INSTALL_DIR/.venv/bin/python" -m pip install -r "$INSTALL_DIR/requirements-multimedia.txt"
-"$INSTALL_DIR/.venv/bin/python" -m pip install -r "$INSTALL_DIR/requirements-integrations.txt"
-echo "Per riprodurre video installa VLC per la stessa architettura di Python: https://www.videolan.org/vlc/"
-# PyUSB needs a native backend; install it when a Homebrew installation exists.
-for usb_brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
-  if [ -x "$usb_brew" ]; then "$usb_brew" install libusb; break; fi
-done
-if [ ! -f /opt/homebrew/lib/libusb-1.0.dylib ] && [ ! -f /usr/local/lib/libusb-1.0.dylib ]; then
-  echo 'USB generico: libusb non rilevata. Installala con brew install libusb per usare USBExplorer.'
-fi
+echo 'I componenti esterni si preparano dall’app: Pacchetti PIP → scegli componente → Installa.'
+echo 'Webcam: il wizard installerà OpenCV, NumPy e Pillow. SQLite non richiede pacchetti.'
 "$INSTALL_DIR/.venv/bin/python" -c 'import tkinter, jedi, PyInstaller; r=tkinter.Tk(); r.withdraw(); r.update(); r.destroy()'
 APP_DIR="$HOME/Applications/VisualTk Studio.app"
 mkdir -p "$APP_DIR/Contents/MacOS"
@@ -75,7 +67,7 @@ cat > "$APP_DIR/Contents/Info.plist" <<'PLIST'
 <key>CFBundleDisplayName</key><string>VisualTk Studio</string>
 <key>CFBundleExecutable</key><string>VisualTkStudio</string>
 <key>CFBundleIdentifier</key><string>it.visualtk.studio</string>
-<key>CFBundleVersion</key><string>1.6</string>
+<key>CFBundleVersion</key><string>1.7</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>NSHighResolutionCapable</key><true/>
 </dict></plist>

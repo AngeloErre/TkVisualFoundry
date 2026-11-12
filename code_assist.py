@@ -11,6 +11,14 @@ METHODS = {
     'winfo_height': ('', 'Legge l’altezza effettiva in pixel.'),
 }
 SPECIFIC = {
+    'DatabaseView': {
+        'connect': ('','Apre la connessione in background; attendi DatabaseConnected.'),
+        'refresh': ('','Rilegge e visualizza i dati; attendi DataLoaded.'),
+        'create_demo': ('','Crea la tabella contatti su SQLite dopo la connessione.'),
+        'insert_record': ('{"nome": "Mario", "email": "mario@example.com"}','Aggiunge un record alla tabella selezionata (esempio contatti).'),
+        'update_record': ('{"id": 1}, {"nome": "Nuovo nome"}','Modifica un record tramite chiave primaria (esempio contatti).'),
+        'delete_record': ('{"id": 1}','Elimina un record tramite chiave primaria; chiedi conferma all’utente prima di chiamarlo.'),
+    },
     'Button': {'invoke': ('', 'Esegue il comando associato a command, se presente; non genera il Click del designer.')},
     'Entry': {'get': ('', 'Legge il testo.'), 'insert': ('0, "testo"', 'Inserisce testo.'), 'delete': ('0, "end"', 'Cancella il testo.')},
     'Text': {'get': ('"1.0", "end-1c"', 'Legge il contenuto.'), 'insert': ('"end", "testo"', 'Aggiunge testo.'), 'delete': ('"1.0", "end"', 'Cancella il contenuto.')},
@@ -29,6 +37,7 @@ def objects(project):
 
 def properties(obj, project):
     if 'kind' not in obj:return {'bg':obj.get('bg','white')}
+    if obj.get('kind')=='DatabaseView':return {}
     props=dict(registry(project).get(obj['kind'],{}).get('defaults',{}));props.update(obj.get('props',{}))
     kind=obj['kind']
     if kind in ('Button','Label','Checkbutton','Radiobutton'):props.setdefault('text',obj['name'])
@@ -41,6 +50,7 @@ def properties(obj, project):
 def methods(obj):
     if 'kind' not in obj:
         return {'title': ('"Titolo"','Cambia il titolo.'),'geometry': ('"640x440"','Cambia dimensioni.'),'deiconify': ('','Mostra la finestra.'),'withdraw': ('','Nasconde la finestra.'),'configure': ('**opzioni','Modifica proprietà della finestra.')}
+    if obj['kind']=='DatabaseView':return SPECIFIC['DatabaseView']
     return {**METHODS,**SPECIFIC.get(obj['kind'],{})}
 
 
@@ -54,7 +64,12 @@ def examples(obj, project):
     for method,(args,help_) in methods(obj).items():
         if method=='configure':continue
         if method=='cget' and 'text' not in props:args=repr(next(iter(props),'bg'))
-        result.append((method+'('+args+')',ref+'.'+method+'('+args+')',help_))
+        snippet=ref+'.'+method+'('+args+')'
+        if obj.get('kind')=='DatabaseView' and method=='delete_record':snippet='if messagebox.askyesno("Elimina", "Eliminare il record?"):\n    '+snippet
+        result.append((method+'('+args+')',snippet,help_))
+    if obj.get('kind')=='DatabaseView':
+        result.append(('Leggi riga selezionata',f'record = {ref}.selected_record', 'Dizionario della riga selezionata o None.'))
+        result.append(('Leggi dati caricati',f'records = {ref}.rows', 'Usa nell’evento DataLoaded: lista di dizionari.'))
     for form in project['forms']:
         result.append(('Mostra '+form['name'],f'self.show({form["name"]!r})','Apre una finestra del progetto.'))
     result.append(('Messaggio informativo','messagebox.showinfo("Informazione", "Operazione completata")','Mostra un messaggio.'))
@@ -72,7 +87,9 @@ def completions(before, project):
     match=re.search(r'(self\.(\w+)\.)(\w*)$',before)
     if match and match.group(2) in objs:
         base,name,prefix=match.groups();obj=objs[name]
-        return base+prefix,[(base+k,help_+' Firma: '+k+'('+args+')') for k,(args,help_) in methods(obj).items() if k.startswith(prefix)]
+        items=[(base+k,help_+' Firma: '+k+'('+args+')') for k,(args,help_) in methods(obj).items() if k.startswith(prefix)]
+        if obj.get('kind')=='DatabaseView':items += [(base+k,doc) for k,doc in [('rows','Lista dei record caricati'),('selected_record','Dizionario selezionato o None'),('last_error','Ultimo errore database')] if k.startswith(prefix)]
+        return base+prefix,items
     match=re.search(r'self\.(\w*)$',before)
     if match:
         prefix='self.'+match.group(1)

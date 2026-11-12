@@ -1,3 +1,9 @@
+# 1.7 — Configurazione, wizard PIP e database
+
+Centro configurazione, dipendenze prima dell’uso, installazioni in background con esito verificato, NumPy esplicito per webcam, DatabaseView SQLite/PostgreSQL/MySQL con griglia e CRUD, guide/esempio database, ispettore scorrevole e toolbar riorganizzata. Installer base con pacchetti opzionali su richiesta.
+
+50 test superati, 8 grafici saltati; database remoto e installazioni live da collaudare.
+
 # 1.6 — Assistente codice
 
 Completamento contestuale per nomi progetto, metodi Tkinter e opzioni configure. Pannello esempi per componente/evento, firme e descrizioni italiane, popup al cursore e inserimento da tastiera. Installer aggiornato.

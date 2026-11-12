@@ -50,11 +50,11 @@ print('La presenza del modulo non certifica compatibilità o funzionamento hardw
         else:webbrowser.open(directory.as_uri())
     def help_topic(self,topic='Guida rapida'):
         HELP=getattr(sys.modules[self.__class__.__module__],'HELP','Consulta il Manuale')
-        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — VisualTk Studio 1.6');win.geometry('900x650')
+        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — VisualTk Studio 1.7');win.geometry('900x650')
         row=ttk.Frame(win,padding=5);row.pack(fill='x');selection=tk.StringVar(value=topic);query=tk.StringVar()
-        box=ttk.Combobox(row,textvariable=selection,values=['Guida rapida','Manuale','Estensioni','Esempi','Compatibilità'],state='readonly');box.pack(side='left');entry=ttk.Entry(row,textvariable=query);entry.pack(side='left',fill='x',expand=True,padx=6)
+        box=ttk.Combobox(row,textvariable=selection,values=['Guida rapida','Manuale','Estensioni','Esempi','Compatibilità','Database','Pacchetti PIP'],state='readonly');box.pack(side='left');entry=ttk.Entry(row,textvariable=query);entry.pack(side='left',fill='x',expand=True,padx=6)
         text=ScrolledText(win,wrap='word',font=('Helvetica',12));text.pack(fill='both',expand=True)
-        files={'Manuale':'README.md','Estensioni':'ESTENSIONI.md','Esempi':'ESEMPI.md','Compatibilità':'COMPATIBILITA.md'}
+        files={'Manuale':'README.md','Estensioni':'ESTENSIONI.md','Esempi':'ESEMPI.md','Compatibilità':'COMPATIBILITA.md','Database':'DATABASE.md','Pacchetti PIP':'PACCHETTI.md'}
         def show(event=None):
             path=base/files.get(selection.get(),'README.md');content=HELP if selection.get()=='Guida rapida' else (path.read_text(encoding='utf-8') if path.exists() else 'Documento non disponibile.')
             text.configure(state='normal');text.delete('1.0','end');text.insert('1.0',content);text.configure(state='disabled')

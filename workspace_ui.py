@@ -94,6 +94,7 @@ class WorkspaceMixin:
         style.map('Accent.TButton',background=[('active',colors['accent']),('!disabled',colors['accent'])])
         style.map('Treeview',background=[('selected',colors['accent'])],foreground=[('selected','white')])
         self.configure(background=colors['background']);self.canvas.configure(bg=colors['canvas'])
+        self.propbox.master.configure(bg=colors['background'])
         self.palette.configure(bg=colors['surface'],fg=colors['foreground'],selectbackground=colors['accent'],selectforeground='white')
         self.assist_list.configure(bg=colors['surface'],fg=colors['foreground'],selectbackground=colors['accent'],selectforeground='white')
         for widget in (self.code,self.generated,self.log):

@@ -71,14 +71,9 @@ class LibraryExplorer(tk.Toplevel):
         name=re.split(r'[<>=!~\[]',spec)[0].lower().replace('_','-')
         specs[:]=[s for s in specs if re.split(r'[<>=!~\[]',s)[0].lower().replace('_','-')!=name];specs.append(spec);self.studio.update_source();self.status.set('Aggiunta al progetto: '+spec)
     def install(self):
-        try:spec=self.selected_spec();args=install_args(self.studio.config_data['python'],[spec])
+        try:spec=self.selected_spec();install_args(self.studio.config_data['python'],[spec])
         except ValueError as exc:return messagebox.showerror('Installazione',str(exc),parent=self)
-        if not messagebox.askyesno('Installa da PyPI',f'Installare {spec} e le sue dipendenze in:\n{self.studio.config_data["python"]}?\n\nL’installazione di pacchetti può eseguire codice del fornitore.',parent=self):return
-        def install():
-            validate_interpreter(self.studio.config_data["python"])
-            result=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=600)
-            return ('text',f'Codice uscita: {result.returncode}\n'+result.stdout)
-        self.async_task(install)
+        self.studio.open_dependencies(specs=[spec])
     def installed(self):
         python=self.studio.config_data['python']
         def fetch():

@@ -56,6 +56,8 @@ class AssistMixin:
             elif self.code.get('insert linestart','insert').strip():
                 line=self.code.get('insert linestart','insert');indent=re.match(r'\s*',line).group()
                 self.code.insert('insert','\n'+indent)
+        base_indent=re.match(r'\s*',self.code.get('insert linestart','insert')).group()
+        snippet=snippet.replace('\n','\n'+base_indent)
         self.code.insert('insert',snippet);self.code.edit_separator();self.highlight();self.code.focus_set()
 
     def assist_key(self,event):

@@ -33,9 +33,12 @@ BUILTINS.update({
  'CTkSwitch': {'module':'customtkinter','class':'CTkSwitch','defaults':{'text':'Attiva opzione'},'requirements':['customtkinter>=5.2'],'description':'Interruttore CustomTkinter.'}
 })
 
+BUILTINS['DatabaseView']={'module':'database_runtime','class':'DatabaseView','defaults':{'backend':'sqlite','database':'visualtk.sqlite','host':'localhost','port':0,'username':'','password_env':'VISUALTK_DB_PASSWORD','table':'','limit':200},'requirements':[],'description':'Database SQLite/PostgreSQL/MySQL con tabella dati e comandi CRUD. SQLite non richiede PIP.'}
+BUILTINS['WebcamView']['requirements']=['opencv-python>=4.10','numpy','Pillow>=10']
+
 CATALOG = [
  ('Pillow','Immagini / gallerie'),('pygame-ce','Audio MP3 — Python 3.15'),('opencv-python','Webcam / computer vision'),('pyusb','USB generico'),('pyserial','Seriale / Arduino'),
- ('customtkinter','Widget moderni'),('ttkbootstrap','Temi e componenti ttk'),('tkcalendar','Calendario'),('tksheet','Tabelle'),('matplotlib','Grafici'),('numpy','Calcolo numerico'),('tkinterdnd2','Drag & drop Finder'),('tkfilebrowser','Dialoghi file avanzati'),('tkinterweb','HTML/CSS web'),('tkhtmlview','HTML leggero'),('pywebview','Web nativo'),('python-vlc','Video / streaming'),('yt-dlp','YouTube'),('pytubefix','YouTube alternativo'),('pytube','YouTube legacy'),('tkVideoPlayer','Video legacy / verificare Python'),('cefpython3','Chromium legacy — non supportato su Python 3.13')]
+ ('customtkinter','Widget moderni'),('ttkbootstrap','Temi e componenti ttk'),('tkcalendar','Calendario'),('SQLAlchemy','Database remoti'),('psycopg','PostgreSQL'),('PyMySQL','MySQL'),('tksheet','Tabelle'),('matplotlib','Grafici'),('numpy','Calcolo numerico'),('tkinterdnd2','Drag & drop Finder'),('tkfilebrowser','Dialoghi file avanzati'),('tkinterweb','HTML/CSS web'),('tkhtmlview','HTML leggero'),('pywebview','Web nativo'),('python-vlc','Video / streaming'),('yt-dlp','YouTube'),('pytubefix','YouTube alternativo'),('pytube','YouTube legacy'),('tkVideoPlayer','Video legacy / verificare Python'),('cefpython3','Chromium legacy — non supportato su Python 3.13')]
 
 def descriptor(data):
     for field in ('module','class'):
@@ -64,6 +67,12 @@ def requirements(project):
         for w in f['widgets']:
             if w['kind']=='YouTubePlayer' and w.get('props',{}).get('backend') in ('pytubefix','pytube'):result.add(w['props']['backend'])
             if w['kind']=='FileBrowserButton' and w.get('props',{}).get('advanced'):result.add('tkfilebrowser>=2.3')
+    for f in project['forms']:
+        for w in f['widgets']:
+            if w['kind']=='DatabaseView':
+                backend=w.get('props',{}).get('backend','sqlite')
+                if backend=='postgresql':result.update(['SQLAlchemy>=2.0','psycopg[binary]>=3'])
+                elif backend=='mysql':result.update(['SQLAlchemy>=2.0','PyMySQL>=1.1'])
     # Validate also user-added packages before invoking pip.
     descriptor({'module':'placeholder','class':'Placeholder','requirements':list(result)})
     return sorted(result)

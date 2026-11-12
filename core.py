@@ -6,7 +6,7 @@ from components import registry, requirements
 from pathlib import Path
 
 KINDS = ('Button','Label','Entry','Text','Checkbutton','Radiobutton','Listbox','Combobox','Scale','Spinbox','Frame','Canvas','Progressbar')
-EVENTS = {'Click':'<Button-1>', 'DoubleClick':'<Double-Button-1>', 'Enter':'<Enter>', 'Leave':'<Leave>', 'KeyPress':'<KeyPress>', 'FocusIn':'<FocusIn>', 'FocusOut':'<FocusOut>', 'Change':'<<ComboboxSelected>>', 'ImageSelected':'<<ImageSelected>>', 'PlaybackStarted':'<<PlaybackStarted>>', 'SnapshotSaved':'<<SnapshotSaved>>', 'DeviceSelected':'<<DeviceSelected>>', 'DeviceError':'<<DeviceError>>', 'DataReceived':'<<DataReceived>>', 'FilesDropped':'<<FilesDropped>>', 'FileSelected':'<<FileSelected>>', 'DialogClosed':'<<DialogClosed>>', 'NavigationStarted':'<<NavigationStarted>>', 'StreamResolved':'<<StreamResolved>>', 'TreeSelect':'<<TreeviewSelect>>', 'TabChanged':'<<NotebookTabChanged>>', 'DateSelected':'<<CalendarSelected>>'}
+EVENTS = {'Click':'<Button-1>', 'DoubleClick':'<Double-Button-1>', 'Enter':'<Enter>', 'Leave':'<Leave>', 'KeyPress':'<KeyPress>', 'FocusIn':'<FocusIn>', 'FocusOut':'<FocusOut>', 'Change':'<<ComboboxSelected>>', 'ImageSelected':'<<ImageSelected>>', 'PlaybackStarted':'<<PlaybackStarted>>', 'SnapshotSaved':'<<SnapshotSaved>>', 'DeviceSelected':'<<DeviceSelected>>', 'DeviceError':'<<DeviceError>>', 'DataReceived':'<<DataReceived>>', 'FilesDropped':'<<FilesDropped>>', 'FileSelected':'<<FileSelected>>', 'DialogClosed':'<<DialogClosed>>', 'NavigationStarted':'<<NavigationStarted>>', 'StreamResolved':'<<StreamResolved>>', 'TreeSelect':'<<TreeviewSelect>>', 'TabChanged':'<<NotebookTabChanged>>', 'DateSelected':'<<CalendarSelected>>', 'DatabaseConnected':'<<DatabaseConnected>>', 'DataLoaded':'<<DataLoaded>>', 'RecordSelected':'<<RecordSelected>>', 'DataChanged':'<<DataChanged>>', 'DatabaseError':'<<DatabaseError>>'}
 
 def new_project():
     return {'version':1,'name':'Applicazione','forms':[{'name':'Form1','title':'Form1','width':640,'height':440,'bg':'#f0f0f0','widgets':[],'events':{}}], 'imports':'', 'startup':'self.Form1.deiconify()'}
@@ -26,6 +26,10 @@ def validate(p, code=True):
             for dim in ('width','height'):
                 if not 1 <= int(obj[dim]) <= 10000: raise ValueError('Dimensioni tra 1 e 10000')
             if obj is not f and obj['kind'] not in KINDS and obj['kind'] not in reg: raise ValueError('Componente sconosciuto')
+            if obj.get('kind')=='DatabaseView':
+                props=obj.get('props',{})
+                if props.get('backend','sqlite') not in ('sqlite','postgresql','mysql'):raise ValueError('Backend database non supportato')
+                if not 0<=int(props.get('port',0))<=65535 or not 1<=int(props.get('limit',200))<=5000:raise ValueError('Porta o limite database non validi')
             for ev, body in obj.get('events',{}).items():
                 if ev not in EVENTS and ev != 'Load': raise ValueError('Evento sconosciuto')
                 if code: ast.parse('def handler(self, event=None):\n'+ '\n'.join('    '+l for l in (body or 'pass').splitlines()))
@@ -43,11 +47,12 @@ def generate(p):
     reg=registry(p)
     used=sorted({w['kind'] for f in p['forms'] for w in f['widgets'] if w['kind'] in reg})
     prelude=[]
-    if any(reg[k]['module']=='visualtk_runtime' for k in used):
-        prelude.append(Path(__file__).with_name('visualtk_runtime.py').read_text(encoding='utf-8'))
+    embedded={'visualtk_runtime','database_runtime'}
+    for module in sorted({reg[k]['module'] for k in used}&embedded):
+        prelude.append(Path(__file__).with_name(module+'.py').read_text(encoding='utf-8'))
     for kind in used:
         d=reg[kind]
-        if d['module']!='visualtk_runtime':prelude.append(f"from {d['module']} import {d['class']} as _component_{kind}")
+        if d['module'] not in embedded:prelude.append(f"from {d['module']} import {d['class']} as _component_{kind}")
     # Insert embedded runtime and external imports before the Application class.
     index=lines.index('class Application:'); lines[index:index]=prelude+['']
     if p.get('theme'):
@@ -62,7 +67,7 @@ def generate(p):
             opts=dict(w.get('props',{}))
             if kind in ('Combobox','Progressbar'): opts={k:v for k,v in opts.items() if k in ('values','state','maximum','value','orient','mode')}
             if kind in reg:
-                d=reg[kind]; constructor=d['class'] if d['module']=='visualtk_runtime' else '_component_'+kind
+                d=reg[kind]; constructor=d['class'] if d['module'] in embedded else '_component_'+kind
             else:constructor=('ttk' if kind in ('Combobox','Progressbar') else 'tk')+'.'+kind
             lines.append(f'        {wr} = {constructor}({ref}, **{opts!r})')
             lines.append(f'        {wr}.place(x={int(w["x"])}, y={int(w["y"])}, width={int(w["width"])}, height={int(w["height"])})')

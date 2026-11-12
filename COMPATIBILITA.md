@@ -8,7 +8,7 @@ Python minimo richiesto: 3.15 stabile, con Tcl/Tk. Il software è destinato prin
 | filedialog, messagebox, simpledialog, colorchooser | Componenti FileBrowserButton e MessageButton; servizi dell'IDE | Mode determina il dialogo; risultato in paths/result |
 | tkinter.font | Selettore carattere, peso, corsivo e anteprima | Solo componenti con proprietà font |
 | tkinter.dnd | Modulo standard disponibile al codice utente | Designer usa eventi mouse; FileDropZone usa tkinterdnd2 per Finder |
-| Galleria / MP3 / webcam / USB / seriale | Componenti della versione 1.1 mantenuti | Pillow, pygame-ce, OpenCV, PyUSB + libusb, pySerial |
+| Galleria / MP3 / webcam / USB / seriale | Componenti della versione 1.1 mantenuti | Pillow, pygame-ce, OpenCV + NumPy, PyUSB + libusb, pySerial |
 | Drag & drop Finder | FileDropZone | tkinterdnd2 e binari tkdnd compatibili con Tk/architettura |
 | Dialoghi file avanzati | AdvancedFileBrowser | tkfilebrowser; non è una promessa di anteprima di ogni formato |
 | HTML semplice | HtmlView | tkhtmlview; non esegue applicazioni web complete |
@@ -25,14 +25,17 @@ Python minimo richiesto: 3.15 stabile, con Tcl/Tk. Il software è destinato prin
 
 ## Installazione
 
-Install_Mac.command installa librerie IDE, multimedia e integrazioni moderne in un ambiente isolato. Se Homebrew è presente installa anche libusb. VLC va installato separatamente da https://www.videolan.org/vlc/ per la stessa architettura di Python. Non viene scaricato silenziosamente da fonti non verificate.
+Install_Mac.command installa gli strumenti dell’IDE in un ambiente isolato. Multimedia e integrazioni si preparano dal wizard Pacchetti PIP; libusb si installa separatamente tramite il gestore di sistema. VLC va installato separatamente da https://www.videolan.org/vlc/ per la stessa architettura di Python. Non viene scaricato silenziosamente da fonti non verificate.
 
 Install_Optional_Legacy.command, dalla cartella installata, prova a installare tkVideoPlayer e pytube solo dopo una scelta esplicita; può fallire con interpreti moderni. Non installa cefpython3.
 
-Help → Diagnostica dipendenze mostra l'interprete usato, i moduli trovati e i backend nativi rilevati. Un modulo trovato non garantisce che tutti i suoi binari funzionino. Usa Librerie → Installa dipendenze progetto per installare ciò che serve ai controlli effettivamente usati.
+Help → Diagnostica dipendenze mostra l'interprete usato, i moduli trovati e i backend nativi rilevati. Un modulo trovato non garantisce che tutti i suoi binari funzionino. Usa Librerie → Wizard PIP / dipendenze progetto per installare ciò che serve ai controlli effettivamente usati.
 
 ## Esportazione e macOS
 
 Il generatore incorpora il runtime dei componenti nel sorgente esportato e produce requirements-visualtk.txt. Non copia automaticamente foto/audio/video o altri file riferiti da percorso. Il packaging tenta di raccogliere le dipendenze importate, ma i pacchetti con binari o dati nativi possono richiedere hook PyInstaller dedicati: non è garantita una build universale senza ulteriori interventi. La build dell'app usa una firma locale ad hoc e la descrizione della fotocamera; non è una release notarizzata Apple.
 
 La fotocamera richiede il consenso in Privacy e sicurezza. L'accesso USB dipende dai driver, dai permessi e dal protocollo del dispositivo. Il codice utente e i pacchetti installati eseguono codice con i permessi dell'utente.
+
+## DatabaseView 1.7
+SQLite usa sqlite3 standard; PostgreSQL richiede SQLAlchemy e psycopg[binary]; MySQL richiede SQLAlchemy e PyMySQL. Requisiti condizionali al backend. Connessioni remote, GUI e packaging devono essere verificati sul sistema di destinazione.

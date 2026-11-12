@@ -72,3 +72,6 @@ print(self.DateEntry1.get_date())
 - Moderni.vtk.json: pulsanti moderni, interruttore e calendario.
 
 Prima di avviare un esempio con librerie esterne, usa Librerie → Installa dipendenze progetto. Aprire un esempio non avvia automaticamente webcam o riproduzione video.
+
+## Database.vtk.json
+Esempio SQLite locale: connessione dal Load del componente, tabella contatti creata solo se il database è vuoto. Usa i comandi del controllo per aggiungere, modificare e cancellare record. Dettagli ed esempi nell’Help → Database.
