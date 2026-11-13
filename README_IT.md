@@ -1,127 +1,183 @@
 # VisualTk Studio 1.14
 
-Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
+**IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
-## Novità 1.14
+[English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
 
-Valori guidati con virgolette automatiche, suggerimenti per scelte e booleani, scheda Documentazione nell’ispettore e API installate tramite pydoc. Controlli in background su link, PIP, pacchetti e aggiornamenti stabili compatibili. Aggiornamento revisionabile nel wizard PIP. [Guida completa](INTELLISENSE.md).
+## Installazione e aggiornamento
 
-## Novità 1.9 — IntelliSense semantico
-
-- Suggerimenti automatici dopo il punto per moduli Python/Tkinter, oggetti, variabili e librerie importate.
-- `messagebox.` elenca funzioni e costanti pubbliche; `messagebox.showinfo(` mostra firma e argomento attivo.
-- Riconoscimento degli import del progetto e dell’editor, inclusi alias come `import numpy as np`.
-- Metodi ereditati dei controlli e analisi delle classi dei componenti esterni.
-- Analisi Jedi in un processo separato, eseguito nel Python configurato per il progetto.
-- Descrizione del simbolo selezionato, firme, completamento degli argomenti nominati e filtraggio durante la digitazione.
-- Risposte obsolete scartate dopo modifiche, cambio contesto o Esc; cache temporanea dedicata.
-- Pulsante **Motore…** per predisporre Jedi con il wizard PIP quando manca nell’interprete scelto.
-
-## Funzionalità
-
-| Area | Contenuto |
-|---|---|
-| Designer | Form multipli, palette, spostamento, ridimensionamento, colori e font |
-| Editor eventi | Doppio clic sul controllo, sintassi colorata, indentazione e completamento |
-| Assistente codice | Suggerimenti per componente/evento, metodi, proprietà e frammenti spiegati in italiano |
-| Form | Creazione, apertura, duplicazione ed eliminazione; `self.show` e `self.hide` |
-| Componenti esterni | Procedura guidata, descrittori JSON ed esploratore PyPI |
-| Pacchetti | Wizard nell’interprete dei progetti, controllo versioni/import e conflitti |
-| Dati | DatabaseView con tabella, inserimento, modifica, eliminazione e rilettura |
-| Multimedia e periferiche | Immagini, audio, webcam, USB e seriale tramite pacchetti opzionali |
-| Web e video | Adattatori HTML/web, VLC e risoluzione stream YouTube |
-| Esecuzione | Avvio separato, output, arresto, breakpoint e comandi pdb |
-| Esportazione | Sorgente Python indipendente e packaging con PyInstaller |
-| Ambiente | Preset Chiaro, Scuro, Seppia e colori personalizzati persistenti |
-| Help | Guida, esempi, diagnostica, pacchetti e database |
-
-## Installazione e aggiornamento su Mac
-
-1. Scarica i sorgenti o estrai il pacchetto ZIP in una cartella scrivibile.
+1. Scarica ed estrai il repository o lo ZIP in una cartella scrivibile.
 2. Esegui `Install_Mac.command` con doppio clic oppure `bash Install_Mac.command` dal Terminale.
-3. L’installer individua **Python 3.15 stabile o successivo con Tkinter**, prepara l’ambiente virtuale dell’IDE e crea `VisualTk Studio.app` in `~/Applications`.
-4. Avvia l’app. Usa **Progetto → Configurazione…** per scegliere l’interprete dei progetti; l’installazione predefinita usa il proprio ambiente virtuale.
-5. Per un componente opzionale, scegli **PIP → Prepara automaticamente il progetto…** oppure segui il wizard proposto quando lo inserisci.
+3. L’installer individua **Python 3.15 stabile o successivo con Tkinter**, prepara un ambiente virtuale privato e crea `VisualTk Studio.app` in `~/Applications`.
+4. Avvia l’app e scegli il Python dei progetti in **Progetto → Configurazione…**.
+5. Segui il wizard PIP quando inserisci componenti che richiedono pacchetti opzionali.
 
-Se manca Python compatibile e Homebrew è già disponibile, l’installer prova a installare Python e Tcl/Tk tramite Homebrew. Altrimenti apre il sito ufficiale Python. Alpha, beta e release candidate non sono accettate. Tkinter non si installa con PIP.
+Per aggiornare, riesegui l’installer della nuova versione: copia anche i nuovi moduli. Conserva progetti `.vtk.json` e risorse in cartelle separate. Se manca Python compatibile, l’installer tenta la preparazione con Homebrew se già disponibile; altrimenti apre il sito Python. Le versioni prerelease non sono accettate. Tkinter proviene dall’installazione Python/Tcl/Tk, non da PIP.
 
-L’installazione iniziale comprende gli strumenti dell’IDE (Jedi e PyInstaller), senza imporre tutti i pacchetti multimediali. Gli ambienti precedenti conservano le librerie già installate. Per aggiornare riesegui l’installer della nuova versione. I progetti sono file `.vtk.json` separati.
+I requisiti di base sono Jedi, PyInstaller, packaging e certifi. Le librerie multimediali, database, cloud e AI sono opzionali. Installazione dei pacchetti e verifiche online richiedono Internet. Serve una sessione grafica macOS e librerie compatibili con l’architettura del computer. Firma pubblica e notarizzazione sono passaggi di distribuzione separati.
 
-Serve una sessione grafica macOS. Apple Silicon e Intel richiedono Python, librerie e dipendenze native compatibili con l’architettura. Installer e applicazione non sono firmati o notarizzati per la distribuzione Apple.
-
-## Inizia dal designer
+## Primo progetto
 
 1. Apri `examples/Saluto.vtk.json` oppure crea un progetto.
-2. Seleziona un componente: la palette ne mostra funzioni e requisiti. Doppio clic lo inserisce.
-3. Trascina per spostare; il quadrato blu ridimensiona. Le proprietà si applicano dall’ispettore.
-4. Doppio clic sul componente apre il codice dell’evento. Scrivi il corpo del metodo senza `def`.
-5. Salva e premi **F5**. Con dipendenze esterne, il wizard verifica l’ambiente prima dell’avvio.
-
-Nell’evento Click di Button1:
+2. Filtra la palette per nome/famiglia e inserisci un componente con doppio clic.
+3. Trascina per spostarlo, usa la maniglia per ridimensionarlo e modifica le proprietà nell’ispettore.
+4. Doppio clic sul controllo apre il corpo dell’evento: scrivi Python senza il `def` esterno.
+5. Salva e premi **F5**. Usa **Deploy…** per preparare la distribuzione.
 
 ```python
+# Esempio: evento Click di Button1
 self.Button1.configure(text="Operazione completata")
-self.show("Form2")
+messagebox.showinfo("Informazione", "La tua applicazione è in esecuzione")
+# Se esiste un secondo form chiamato Form2:
+# self.show("Form2")
 ```
 
-Scrivi `self.`, `self.Button1.` o `self.Button1.configure(` per esplorare nomi, metodi e proprietà. Ctrl+Spazio richiama i suggerimenti; Invio/Tab accetta, Esc chiude. Il pannello “cosa puoi fare” inserisce esempi al cursore. Jedi, incluso nell’installazione dell’IDE, abilita l’analisi delle librerie nell’interprete scelto. Senza Jedi rimane un fallback per Python, Tkinter standard e controlli del progetto. [Guida IntelliSense](INTELLISENSE.md).
+## Designer, form e file di progetto
 
-## Webcam e pacchetti
+| Funzionalità | Cosa offre | Come viene implementata |
+|---|---|---|
+| Designer visuale | Inserimento, selezione, spostamento, ridimensionamento, allineamento, duplicazione, eliminazione, griglia e movimento da tastiera | Un Canvas schematico modifica il modello del progetto; il generatore produce i widget eseguibili |
+| Form multipli | Creazione, selezione, duplicazione, eliminazione e apertura/chiusura da codice | Form nominati ed eventi nel JSON; metodi generati `self.show()` / `self.hide()` |
+| Contenitori annidati e schede | Figli dentro frame/pagine, selezione della pagina visibile e gestione dei sottoalberi | Relazioni `parent`/`page`, coordinate relative, controllo dei cicli e generazione dei genitori prima dei figli |
+| Ispettore | Proprietà, geometria, testi, colori, caratteri e configurazione specializzata | Valori tipizzati, dialoghi dedicati e azioni persistenti sopra l’area proprietà scorrevole |
+| Annulla/ripeti | Ripristino delle modifiche al designer/modello | Snapshot del progetto; le operazioni sul disco non rientrano nell’undo del designer |
+| Esploratore progetto | File/cartelle, creazione, importazione, rinomina, cestino ed editor UTF-8 | Percorsi relativi, editor separati ed elenco esplicito delle risorse da distribuire |
+| Salvataggio/esportazione | Apertura, salvataggio, controllo delle modifiche e sorgente Python | Modello `.vtk.json`, validazione e generazione del codice mantenendo i corpi degli eventi |
+| Organizzazione UI | Menu a tendina, icone, pannelli ridimensionabili, log richiudibile e ripristino layout | Menu e pannelli Tk/ttk; limiti al log per preservare lo spazio operativo |
 
-Seleziona WebcamView: il wizard mostra **opencv-python, numpy e Pillow**, verifica il Python configurato e guida all’installazione. **Solo designer** rimanda la preparazione all’avvio del progetto. PIP non sostituisce le autorizzazioni Fotocamera né installa VLC o libusb.
+La duplicazione dei contenitori include i discendenti; quella dei form rimappa i genitori. Il codice scritto dall’utente non viene riscritto: verificare i riferimenti dopo rinomine/duplicazioni. Le rinomine dei file non aggiornano import o percorsi nel codice. L’esploratore esclude cartelle tecniche/nascoste e link simbolici, mostra fino a 1.500 elementi e apre file UTF-8 fino a 2 MB. Il cestino consente il recupero manuale. [Guida file/deploy](PROJECTS_DEPLOY.md).
 
-[Guida completa ai pacchetti](PACCHETTI.md).
+## Editor e IntelliSense
 
-## Database con tabella pronta
+| Funzionalità | Cosa offre | Come viene implementata |
+|---|---|---|
+| Codice eventi/progetto | Eventi di componenti e form, avvio, import e funzioni globali | I corpi degli eventi vengono associati agli oggetti e assemblati nei metodi generati |
+| Aiuto alla scrittura | Sintassi colorata, indentazione, esempi e navigazione dei suggerimenti | Editor Tk, tokenizzazione e metadati di proprietà/metodi/frammenti |
+| Autocompletamento Python/librerie | Membri dopo `messagebox.`, `self.Button1.` e alias importati | Jedi in un processo persistente separato, nel Python configurato; analisi statica degli eventi |
+| Firme e descrizioni | Parametri, argomento attivo e descrizione del simbolo | Analisi semantica e fallback locale; risposte obsolete scartate dopo modifiche/cambio contesto |
+| Valori guidati | Virgolette per testi, booleani e scelte note | Riconoscimento dei valori keyword in `configure`/`config`, con tipi ricavati da proprietà e valori iniziali dei componenti |
+| Esempi contestuali | Operazioni utili per componente/evento, inseribili al cursore | Registro di esempi per controlli, database e componenti avanzati |
 
-Inserisci **DatabaseView**, selezionalo e scegli **Azioni → Configura componente…** nell’ispettore. SQLite non richiede PIP. Per PostgreSQL/MySQL la configurazione prepara il relativo gruppo SQLAlchemy/driver. In esecuzione, **Connetti…** apre la connessione; scegli la tabella e usa i comandi per i record.
+Scrivendo `self.Button1.configure(text=` vengono inserite `''` con il cursore all’interno, anche accettando `text=` dal menu. Digitare la chiusura oltrepassa la virgoletta generata; Backspace nella coppia vuota elimina entrambe. I numeri noti non vengono racchiusi tra virgolette. Commenti, stringhe e valori già presenti vengono preservati. I componenti esterni possono fornire `defaults` tipizzati; per tipi sconosciuti/API dinamiche il risultato dipende dalle informazioni disponibili a Jedi.
 
-[Guida database ed esempi CRUD](DATABASE.md). Progetto dimostrativo: `examples/Database.vtk.json`.
+**Ctrl+Spazio** richiama l’elenco, **Invio/Tab** accetta, **Esc** chiude. **Motore…** prepara Jedi se manca nel Python scelto. Le virgolette automatiche sono disattivabili dalla Configurazione. [Guida IntelliSense](INTELLISENSE.md).
 
-## Documentazione
+## Componenti, librerie e temi delle applicazioni
 
-- [IntelliSense Python e librerie](INTELLISENSE.md)
-- [Pacchetti e configurazione guidata](PACCHETTI.md)
-- [Database locali/remoti](DATABASE.md)
-- [Componenti ed estensioni](ESTENSIONI.md)
-- [Esempi](ESEMPI.md)
-- [Compatibilità](COMPATIBILITA.md)
-- [Verifiche e limiti](VALIDAZIONE.md)
-- [Note della versione](RELEASE_NOTES.md)
-- [Cronologia](CHANGELOG.md)
+| Famiglia | Componenti e funzioni | Implementazione |
+|---|---|---|
+| Tkinter standard | Button, Label, Entry, Text, Checkbutton, Radiobutton, Listbox, Scale, Spinbox, Frame, LabelFrame, Canvas | Widget Tk emessi dal generatore Python |
+| ttk | Combobox, Progressbar, Treeview, Notebook; palette estesa di pulsanti, etichette, entry, check/radio, scale/spinbox, frame/labelframe, separator, scrollbar, menubutton, sizegrip e panedwindow | Widget nativi a tema; adattatore per le schede del progetto |
+| CustomTkinter | Pulsanti, etichette, entry, switch, checkbox/radio, slider/progress, option/combo/segmented, textbox, frame, frame scorrevoli e schede | Classi registrate e adattatori, geometria nei costruttori e modalità System/Light/Dark separata |
+| Controlli avanzati | Calendar, DateEntry, Sheet, MapView, ScrolledText e Pmw ComboBox/EntryField/Counter/ScrolledText | tkcalendar, tksheet, tkintermapview, ScrolledText standard e Pmw |
+| File e dialoghi | FileDropZone, FileBrowserButton, AdvancedFileBrowser, MessageButton | TkinterDnD2, dialoghi nativi/tkfilebrowser e messaggi/input/colori |
+| Web | HtmlView, WebView, NativeWebButton | tkhtmlview, tkinterweb e processo pywebview separato |
+| Immagini, media e periferiche | ImageGallery, AudioPlayer, WebcamView, USBExplorer, SerialMonitor | Pillow, pygame-ce, OpenCV/NumPy, PyUSB e pyserial |
+| Video e streaming | VideoPlayer, LegacyVideoPlayer, YouTubePlayer | VLC, tkVideoPlayer opzionale/legacy, yt-dlp e risolutori alternativi |
+| Temi del progetto | ttkbootstrap 1.x, ttkthemes, Sun Valley (`sv-ttk`), Azure, Forest | Un provider ttk per progetto; importazione locale delle risorse Tcl/immagini per Azure/Forest |
+| Componenti esterni | Wizard di creazione e importazione di descrittori JSON | Metadati modulo/classe/default/requisiti validati e registrazione nella palette senza eseguire il plugin durante l’import del descrittore |
 
-## Verifica e limiti
+Il gestore librerie mostra tipo di integrazione, requisiti e risultati per interprete; può eseguire controlli di import e prove grafiche rappresentative in processi isolati. La palette filtra per famiglia. Il designer è **schematico**: non istanzia componenti esterni né riproduce ogni dettaglio grafico o di scorrimento. Le sezioni di TPanedwindow si gestiscono da codice. Tix non è supportato; PySimpleGUI, FreeSimpleGUI e guizero sono voci informative relative a motori separati, non backend generati.
 
-Versione 1.11: 99 test superati, 11 grafici saltati su macOS con Python 3.15.2 e Jedi 0.20.0. Verificati caricamento lingua, catalogo, formattazione, avvio dei moduli in inglese, conservazione dei dati ed esportazione autonoma. Il percorso grafico completo e la build macOS richiedono ancora collaudo manuale.
+[Guida librerie/temi/contenitori](LIBRARIES_THEMES.md) · [Estensioni](ESTENSIONI.md) · [Compatibilità](COMPATIBILITA.md).
 
-Il completamento dipende dalle informazioni di tipo disponibili. Il designer usa coordinate assolute e non supporta ancora l’annidamento visuale. Hardware e librerie native possono richiedere configurazioni specifiche. DatabaseView non è uno strumento di amministrazione del server.
+## Database locali e remoti
 
-## Menu e pannelli
+**DatabaseView** offre configurazione della connessione, selezione tabella, visualizzazione dei dati e operazioni sui record già predisposte.
 
-I comandi Apri/Salva sono in **File**; Annulla/Ripeti in **Modifica**. In alto rimangono solo Avvia, Stop e Mostra/Nascondi log. **Vista → Ripristina pannelli** riporta palette e proprietà alle larghezze iniziali e richiude il log. Il log si apre per esecuzione e verifiche, senza poter occupare tutto il designer.
+| Funzione | Implementazione |
+|---|---|
+| SQLite, PostgreSQL e MySQL | `sqlite3` standard oppure SQLAlchemy con psycopg/PyMySQL |
+| Tabelle e dati | Lettura dello schema e tabella ttk con limite righe configurabile |
+| Inserimento, modifica, aggiornamento, eliminazione e rilettura | Transazioni, valori parametrizzati e chiavi primarie; esempi di codice contestuali |
+| Operazioni reattive | Worker proprietario della sessione e risultati tramite eventi DatabaseConnected/DataLoaded/DataChanged |
+| Credenziali | Password a runtime o variabile ambiente esterna, senza proprietà password salvate nel componente |
 
-Nell’ispettore **Azioni** raccoglie configurazione del controllo, colori e carattere. **Componenti** include la creazione/importazione di controlli esterni. **PIP** comprende preparazione automatica, verifica senza installare, installazione di un pacchetto per nome ed esplorazione PyPI.
+SQLite non richiede PIP; il wizard prepara i driver dei backend remoti. Senza chiave primaria la modifica/eliminazione dei record è disabilitata. Non è uno strumento di amministrazione del server. [Guida database/CRUD](DATABASE.md); esempio `examples/Database.vtk.json`.
 
-## Lingue
+## MIDI, Excel, PDF, stampa, cloud e AI
 
-In Progetto → Configurazione → Aspetto scegli Italiano o English, salva e riavvia. La lingua dei componenti generati è una scelta separata, salvata nel progetto. Testi e codice esistenti non vengono tradotti.
+| Componente | Funzioni | Implementazione e limiti principali |
+|---|---|---|
+| MIDIPlayer | Ricerca uscite, riproduzione, pausa/ripresa e stop | mido/python-rtmidi inviano comandi MIDI a un sintetizzatore; nessun sintetizzatore audio incluso |
+| ExcelWorkbook | XLSX/XLSM, fogli, celle, anteprima tabellare, creazione e salvataggio copie | openpyxl; formule conservate, non calcolate; niente XLS/XLSB o esecuzione macro |
+| PDFDocument | Testo/anteprima testuale, unione ed estrazione pagine | pypdf con supporto crypto; nessun rendering grafico o OCR |
+| PrintDocument | Anteprima e invio stampa con conferma | Applicazione associata per anteprima; `lp`/CUPS su Mac o print verb Windows; invio non equivale a stampa fisica completata |
+| CloudStorage | Elenco, upload e download con Drive, S3/MinIO e WebDAV | Backend specifici, OAuth Desktop/ADC, credenziali AWS/sessione o WebDAV HTTPS; nessuna sincronizzazione completa |
+| LLMClient | Elenco modelli, prompt testuale, risposta e utilizzo | SDK ufficiali OpenAI Responses, Claude Messages e Gemini Generate Content; richieste singole senza cronologia automatica, tool o allegati |
 
-## File di progetto e deploy
+Le finestre di configurazione selezionano opzioni e pacchetti per servizio. Le operazioni lente usano thread worker; eventi di completamento/errore vengono gestiti sul thread Tk. I segreti di sessione restano in memoria, i progetti salvano nomi di variabili ambiente e i token Drive rimangono esterni al progetto. Il designer non collega account e non invia richieste AI a pagamento. Account API, consenso, quote/fatturazione, stampanti, sintetizzatori, driver e librerie native sono requisiti esterni. Un abbonamento alla chat non configura automaticamente le API.
 
-La scheda Progetto gestisce form/componenti e file/cartelle. Il pulsante Deploy genera il kit con sorgenti, risorse, dipendenze, avvio e build per Mac e Windows. La compilazione avviene sul sistema di destinazione. [Guida completa](PROJECTS_DEPLOY.md).
+[Guida completa](PRODUCTIVITY.md); esempi in `examples/Productivity/`.
 
-Prova `examples/ProjectFiles/ProjectFilesDemo.vtk.json`: include un modulo Python locale e una risorsa da distribuire.
+## Wizard PIP e verifiche iniziali
 
-Build reale di esempio verificata: .app Mac, ZIP con risorse e firma ad hoc. La sessione non permette la creazione del DMG: verificato il ripiego automatico sullo ZIP. Avvio grafico, build Windows e installazioni finali restano da collaudare.
+| Funzionalità | Cosa offre | Implementazione |
+|---|---|---|
+| Requisiti guidati | Spiegazione prima di inserimento/avvio e preparazione dei pacchetti | Requisiti per componente/provider nel Python del progetto; automatismi configurabili |
+| Wizard di installazione | Verifica versioni/import, installazione, log, avanzamento, annullamento e conflitti | Processi separati, PIP/ensurepip, probe e controlli di consistenza; modalità opzionale solo wheel |
+| Esplorazione PyPI | Ricerca, metadati e preparazione installazione | Interfaccia collegata al wizard dell’interprete selezionato |
+| Controllo all’avvio | PIP, requisiti progetto/IDE, distribuzioni installate e `pip check` | Inventario in subprocess e richieste di rete in background |
+| Versioni stabili compatibili | Candidati rispettosi di Python e vincoli dichiarati | Metadati PyPI e packaging; esclusione di prerelease, release di sviluppo e file ritirati |
+| Aggiornamenti revisionabili | Aggiornamento dei requisiti dichiarati conservando extra/vincoli | Wizard esistente; le dipendenze transitive vengono risolte da PIP, senza aggiornarle tutte indipendentemente |
 
-## Novità 1.12
+Per WebcamView vengono spiegati e preparati **opencv-python, NumPy e Pillow**. Il wizard non concede permessi Fotocamera e non sostituisce le dipendenze di sistema. Le librerie opzionali non utilizzate non vengono installate tutte.
 
-Gestore di librerie e temi, filtro palette per famiglia, nuovi controlli ttk e CustomTkinter, tabella tksheet, MapView e megawidget Pmw selezionati. Contenitori annidati con parent/page e temi ttkbootstrap, ttkthemes, Sun Valley, Azure e Forest. [Guida completa](LIBRARIES_THEMES.md).
+Apri **PIP → Controlli iniziali** oppure il pulsante dell’ispettore per vedere risultati o ripetere la verifica con progetto/interprete correnti. I controlli all’avvio sono disattivabili. Gli errori di rete restano non verificati e non bloccano l’editor. La compatibilità Python dichiarata non certifica wheel, driver o import nativi: il wizard effettua ulteriori controlli. [Guida pacchetti](PACCHETTI.md).
 
-118 test superati e 11 grafici saltati. Import di sette librerie opzionali verificati nell’interprete scelto. Build Mac reale di un esempio con librerie moderne: app/ZIP, risorse e firma ad hoc verificati. Il DMG non è disponibile in questa sessione; verificato il ripiego ZIP. Avvio grafico e build Windows restano da collaudare. PySimpleGUI, FreeSimpleGUI e guizero sono catalogati come motori separati, non generati da questa versione; Tix non è supportato.
+## Documentazione dei componenti e help
 
-## Novità 1.13
+La scheda **Documentazione** dell’ispettore offre riferimento locale, proprietà, metodi, esempi e requisiti. Il pulsante ufficiale apre il sito pertinente. **API installata (pydoc)** importa il modulo del componente in un subprocess con timeout e mostra la documentazione della versione installata; non esegue gli eventi del progetto. I descrittori esterni possono aggiungere un URL HTTPS `documentation` validato.
 
-Sei componenti predefiniti per MIDI, Excel, PDF, stampa, cloud (Drive, S3/MinIO, WebDAV) e API LLM (OpenAI, Claude, Gemini). Configurazione guidata, dipendenze per servizio, credenziali di sessione o variabili esterne ed eventi asincroni. [Guida completa](PRODUCTIVITY.md).
+A ogni avvio vengono controllati i link: redirect seguiti, 404/410 segnalati come non validi. Blocchi, problemi di rete/certificati e guasti temporanei rimangono non verificati. I link non vengono rimossi o riscritti automaticamente e il riferimento locale resta disponibile offline. L’help integra scelta argomento, ricerca, esempi e diagnostica. Le docstring delle librerie possono rimanere nella lingua originale.
 
-141 test superati e 11 grafici saltati. Verificati documenti temporanei e import SDK. Stampa, MIDI e API remote usano simulazioni nei test; nessuna chiamata a pagamento o stampa reale. Build Mac dell’esempio Office verificata; avvio grafico, Windows e servizi reali ancora da collaudare.
+## Esecuzione, debug, esportazione e deploy
+
+| Funzionalità | Implementazione |
+|---|---|
+| Avvio/arresto | Applicazione generata in un processo separato nel Python scelto; output nel log dell’IDE |
+| Controllo sintassi | Compilazione/verifica del Python generato prima di esecuzione/esportazione |
+| Debug | Processo pdb, breakpoint dal sorgente generato e comandi continua/passo/entra/stack/locali |
+| Esportazione Python | Generatore deterministico con adattatori interni e supporto lingua/tema incorporati; pacchetti/risorse esterni restano necessari |
+| Kit deploy | Sorgenti, file inclusi, progetto, requisiti, metadati, istruzioni e script di avvio/build/installazione |
+| Build native | PyInstaller e raccolta risorse delle librerie attive, temi, font, Tcl, asset nativi e certificati; build opzionale sul computer corrente |
+| Distribuzione Mac | `.app`, DMG e ripiego ZIP se il disco immagine non è disponibile; installazione in `~/Applications` |
+| Distribuzione Windows | Cartella eseguibile e ZIP portabile; Setup opzionale mediante configurazione Inno Setup fornita |
+
+Compilare sul sistema operativo e sull’architettura di destinazione: il Mac non genera direttamente eseguibili Windows. Il Setup Windows richiede Inno Setup. Gli utenti delle build native non necessitano di Python, ma possono aver bisogno di driver, VLC, autorizzazioni e credenziali. Firma/notarizzazione pubblica e prove su sistemi puliti sono fasi separate. Includere solo le risorse volute, conservare le licenze e collocare i dati modificabili fuori dal bundle. [Guida deploy](PROJECTS_DEPLOY.md).
+
+## Lingue e personalizzazione
+
+In **Progetto → Configurazione → Aspetto** scegli **Italiano / English**, salva e riavvia. L’italiano è predefinito; `VTS_LANGUAGE=it` / `VTS_LANGUAGE=en` forza la lingua all’avvio. Le etichette dei componenti generati hanno una lingua separata nel progetto. Codice, identificatori, testi e dati esistenti non vengono tradotti.
+
+Preset IDE Chiaro, Scuro e Seppia e colori personalizzati vengono conservati localmente insieme a font editor, griglia, interprete e preferenze pacchetti. I temi dell’applicazione generata sono indipendenti dall’aspetto dell’IDE.
+
+## Architettura e sviluppo
+
+| Moduli | Responsabilità |
+|---|---|
+| `studio.py`, mixin UI, `component_palette.py`, `ux_theme.py` | Workspace, designer, menu, ispettore e aspetto |
+| `core.py`, `components.py`, `hierarchy.py` | Modello/validazione, registro componenti, gerarchie e generazione Python |
+| `assist_ui.py`, `analysis_client.py`, `intellisense_worker.py`, `semantic_engine.py`, `editor_guidance.py` | Suggerimenti, analisi isolata e valori guidati |
+| `dependency_manager.py`, `dependency_ui.py`, `startup_checks.py` | Preparazione pacchetti e controlli in background |
+| `component_docs.py`, `intelligence_ui.py`, `support_ui.py`, `i18n.py` | Riferimenti, risultati verifiche, help e traduzioni |
+| Adattatori runtime e `service_backends.py` | Operazioni di componenti, dispositivi, dati, documenti, cloud e AI |
+| `project_files.py`, `deployment.py`, `deploy_build.py` | Risorse, kit e packaging nativo |
+
+Dopo avere installato `requirements.txt`, avvia `python3 studio.py` con Python/Tkinter supportato. `Build_Mac.command` prepara il packaging dell’IDE. Test dalla cartella del repository:
+
+```bash
+VTS_LANGUAGE=it python3 -m unittest discover -s tests -q
+```
+
+**Verifiche della versione 1.14:** 151 test superati e 11 grafici saltati. Suite semantica inglese: 20 superati e uno grafico saltato. Verificati documenti reali temporanei, import SDK, richieste rappresentative PyPI/link e precedenti build di esempio Mac app/ZIP. Cloud/LLM/MIDI/stampa usano simulazioni nei test, senza operazioni su account, generazione a pagamento o stampa fisica. Digitazione/focus interattivi, avvio grafico completo, build Windows e installazioni su sistemi puliti restano da collaudare.
+
+## Guide ed esempi
+
+- [IntelliSense, documentazione e verifiche iniziali](INTELLISENSE.md)
+- [Pacchetti](PACCHETTI.md) · [Librerie, temi e contenitori](LIBRARIES_THEMES.md)
+- [Database e CRUD](DATABASE.md) · [Documenti, cloud e LLM](PRODUCTIVITY.md)
+- [File e deploy](PROJECTS_DEPLOY.md) · [Estensioni](ESTENSIONI.md)
+- [Esempi](ESEMPI.md) · [Compatibilità](COMPATIBILITA.md) · [Verifiche](VALIDAZIONE.md)
+
+Progetti dimostrativi: `examples/Database.vtk.json`, `examples/Libraries/`, `examples/Productivity/` ed `examples/ProjectFiles/ProjectFilesDemo.vtk.json`.
