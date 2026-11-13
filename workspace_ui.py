@@ -110,7 +110,7 @@ class WorkspaceMixin:
         self.assist_list.configure(bg=colors['surface'],fg=colors['foreground'],selectbackground=colors['accent'],selectforeground='white')
         for widget in (self.code,self.generated,self.log):
             style_editor(widget);widget.configure(bg=colors['editor_bg'],fg=colors['editor_fg'],insertbackground=colors['editor_fg'],selectbackground=colors['accent'])
-        for tag,color in editor_palette(colors['editor_bg']).items():self.code.tag_configure(tag,foreground=color)
+        for tag,color in editor_palette(colors['editor_bg'],self.winfo_rgb(colors['editor_bg'])).items():self.code.tag_configure(tag,foreground=color)
         if hasattr(self,'docs_text'):self.docs_text.configure(bg=colors['surface'],fg=colors['foreground'])
 
     def appearance_settings(self):

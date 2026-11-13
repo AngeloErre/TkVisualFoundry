@@ -1,8 +1,14 @@
-# VisualTk Studio 1.15
+# VisualTk Studio 1.16
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Reliability fixes (1.16)
+
+Recover malformed local settings and invalid colors, reset event-editor context/native undo when switching or restoring projects, preserve previous files on failed saves, cancel queued startup checks on shutdown and ignore obsolete installed-API responses after an interpreter change. Dependency reports now depend on requirements/interpreter/documentation URLs rather than unrelated code edits. Project-local component API documentation resolves from the project directory. Invalid geometry is rejected before rendering, and analysis-worker exit races are handled.
+
+Validation: **167 tests passed in each language (Italian and English), 11 GUI tests skipped per run**. All 12 example projects validated and compiled; installed Tkinter documentation, Python syntax, installer shell syntax and local README links checked. Interactive graphical workflows, Windows/native target installs and live devices/services remain outside this validation.
 
 ## VB6-inspired workspace (1.15)
 

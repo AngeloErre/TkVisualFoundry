@@ -11,6 +11,7 @@ from unittest.mock import patch
 import zipfile
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from component_palette import icon_pixels,KINDS,LayoutMixin
+from i18n import tr
 from dependency_manager import install_dependencies,preparation_action,PACKAGE_MODULES,probe_interpreter
 
 class LayoutAndPreparationTests(unittest.TestCase):
@@ -53,7 +54,7 @@ class PipConflictTests(unittest.TestCase):
     def test_preexisting_conflict_is_not_blame_for_new_install(self):
         self.assertEqual(self.run_conflict('old conflict\n'),[{'state':'ready'}])
     def test_new_conflicts_block_success(self):
-        with self.assertRaisesRegex(RuntimeError,'Conflitti'):self.run_conflict('new conflict\n')
+        with self.assertRaisesRegex(RuntimeError,tr('Conflitti di dipendenze dopo l’installazione.\n')):self.run_conflict('new conflict\n')
 
 class RealPipOfflineTests(unittest.TestCase):
     def test_real_install_in_isolated_environment_without_network(self):
@@ -71,7 +72,7 @@ class RealPipOfflineTests(unittest.TestCase):
             output=[]
             with patch('dependency_manager.pip_install_command',side_effect=offline),patch.dict(PACKAGE_MODULES,{'visualtk-pip-smoke':'visualtk_pip_smoke'}):
                 states=install_dependencies(python,['visualtk-pip-smoke==1.0'],on_output=output.append)
-            self.assertEqual(states[0]['state'],'ready');self.assertEqual(states[0]['detail'],'Import verificato')
+            self.assertEqual(states[0]['state'],'ready');self.assertEqual(states[0]['detail'],tr('Import verificato'))
             actual=subprocess.run([python,'-c','import visualtk_pip_smoke; print(visualtk_pip_smoke.VALUE)'],capture_output=True,text=True,timeout=10)
             self.assertEqual(actual.stdout.strip(),'42');self.assertTrue(any('Successfully installed' in line for line in output))
 

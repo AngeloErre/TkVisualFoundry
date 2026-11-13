@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from database_runtime import DatabaseSession,parse_database_value
+from i18n import tr
 from core import new_project,generate,validate
 from components import BUILTINS,requirements
 from code_assist import examples,completions
@@ -72,7 +73,7 @@ class RemoteConnectionTests(unittest.TestCase):
         fake=types.ModuleType('sqlalchemy');fake.create_engine=create;sub=types.ModuleType('sqlalchemy.engine');sub.URL=types.SimpleNamespace(create=url)
         with patch.dict(sys.modules,{'sqlalchemy':fake,'sqlalchemy.engine':sub}):
             db=DatabaseSession()
-            with self.assertRaisesRegex(RuntimeError,'Connessione remota non riuscita'):
+            with self.assertRaisesRegex(RuntimeError,tr('Connessione remota non riuscita: verifica server, database, credenziali, rete e driver.')):
                 db.connect(backend='postgresql',database='example',username='test',password='secret@:/',host='localhost',port=5432)
         self.assertEqual(url.call_args.kwargs['password'],'secret@:/');self.assertEqual(url.call_args.args[0],'postgresql+psycopg')
         self.assertTrue(create.call_args.kwargs['hide_parameters']);dispose.assert_called_once()

@@ -3,6 +3,7 @@ from pathlib import Path
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from core import new_project
+from i18n import tr
 from code_assist import completions,examples,signature
 
 class AssistTests(unittest.TestCase):
@@ -25,7 +26,7 @@ class AssistTests(unittest.TestCase):
 
     def test_examples_are_valid_and_type_specific(self):
         button=examples(self.button,self.p);entry=examples(self.entry,self.p)
-        self.assertIn("self.Button1.configure(text='Nuovo testo')",[x[1] for x in button])
+        self.assertIn("self.Button1.configure(text="+repr(tr('Nuovo testo'))+")",[x[1] for x in button])
         self.assertIn('self.Entry1.get()',[x[1] for x in entry])
         self.assertNotIn('self.Button1.get()',[x[1] for x in button])
         for obj in [self.button,self.entry,self.p['forms'][0]]:
@@ -41,6 +42,6 @@ class AssistTests(unittest.TestCase):
 
     def test_signatures_and_unknown_control(self):
         self.assertIn('text',signature('self.Button1.configure(',self.p))
-        self.assertIn('Legge il testo',signature('self.Entry1.get(',self.p))
+        self.assertIn(tr('Legge il testo.'),signature('self.Entry1.get(',self.p))
         self.assertEqual(completions('self.Unknown.',self.p),('',[]))
         self.assertEqual(completions('print(123)',self.p),('',[]))

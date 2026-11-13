@@ -40,6 +40,12 @@ class AssistMixin:
         self.tabs.bind('<<NotebookTabChanged>>',lambda e:self.dismiss_completion(),add='+')
         self.code.pack(fill='both',expand=True)
 
+    def reset_code_context(self):
+        self.code_target=None;self.dismiss_completion()
+        self.code.configure(state='normal');self.code.delete('1.0','end');self.code.edit_reset();self.code.configure(state='disabled')
+        self.code_label.set(tr('Seleziona un componente e un evento'));self.code_object_var.set('')
+        self.update_assistant()
+
     def update_assistant(self):
         mark=getattr(self,'guided_quote_mark',None)
         if mark and mark in self.code.mark_names():self.code.mark_unset(mark)

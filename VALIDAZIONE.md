@@ -1,3 +1,9 @@
+# Versione 1.16 — debugging generale
+
+Suite completa: 167 test superati in italiano e 167 in inglese; 11 test grafici saltati per esecuzione. Nuove regressioni: impostazioni malformate, colori nominati, reset del contesto/undo editor, chiusura worker e cancellazione delle verifiche in coda, validità dei report, geometria e salvataggio atomico con errore simulato.
+
+Validati e compilati tutti i 12 progetti di esempio; verificata la lettura reale delle API Tkinter senza creare widget. Controlli Python/shell e link locali README completati. Non eseguiti collaudo grafico completo, installazione su Windows/sistemi puliti o operazioni su account, dispositivi e stampanti reali.
+
 # Versione 1.15
 
 155 test superati; 11 grafici saltati. Verificate otto maniglie, conservazione dei bordi opposti, limiti minimi/coordinate e palette sintassi chiare/scure. La riorganizzazione grafica richiede verifica interattiva a diverse dimensioni; non è una replica MDI con pannelli flottanti.

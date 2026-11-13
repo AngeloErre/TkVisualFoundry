@@ -2,6 +2,7 @@
 """VisualTk Studio: visual Tkinter designer, event IDE and process debugger."""
 from i18n import tr,get_language
 from runtime_requirements import ensure_current, validate_interpreter
+from settings_store import load_settings
 
 if __name__ == "__main__":
     try: ensure_current()
@@ -38,6 +39,7 @@ from configuration_ui import ConfigurationMixin
 from dependency_manager import dependency_plan
 from component_palette import ComponentPalette,LayoutMixin
 from project_ui import ProjectFilesMixin
+from project_files import atomic_write_text
 from library_ui import LibraryMixin
 from productivity_ui import ProductivityMixin
 from library_catalog import component_family
@@ -56,10 +58,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         self.project=new_project(); self.path=None; self.selected=None; self.form_index=0
         self.history=[]; self.future=[]; self.proc=None; self.messages=queue.Queue(); self.code_target=None
         self.temp=tempfile.TemporaryDirectory(prefix='visualtk-'); self.config_data={'language':get_language(),'grid':10,'font_size':13,'python':str(Path.home()/'Applications/VisualTkStudio/.venv/bin/python') if getattr(sys,'frozen',False) else sys.executable}
-        try: self.config_data.update(json.loads(SETTINGS.read_text()))
-        except (OSError,ValueError): pass
-        for key,default in {'dependency_before_insert':True,'dependency_before_run':True,'pip_auto_install':True,'pip_wheels_only':False}.items():
-            if not isinstance(self.config_data.get(key),bool):self.config_data[key]=default
+        self.config_data=load_settings(SETTINGS,self.config_data,self.winfo_rgb)
         self.saved_state=json.dumps(self.project,sort_keys=True); self.drag=None; self.breaks=set()
         self.build(); self.apply_appearance(); self.menus(); self.refresh(); self.after(70,self.poll)
         if self.config_data.get('startup_checks',True):self.after(600,self.start_health)
@@ -77,6 +76,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         if self.history:
             self.future.append(copy.deepcopy(self.project)); self.project=self.history.pop(); self.form_index=min(self.form_index,len(self.project['forms'])-1); self.selected=None; self.code_target=None; self.refresh()
     def redo(self):
+        self.commit_code()
         if self.future:
             self.history.append(copy.deepcopy(self.project)); self.project=self.future.pop(); self.form_index=min(self.form_index,len(self.project['forms'])-1); self.selected=None; self.code_target=None; self.refresh()
     def build(self):
@@ -216,6 +216,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         if selected in self.palette.names:self.palette.selection_set(self.palette.names.index(selected))
 
     def refresh(self):
+        if self.code_target is None:self.reset_code_context()
         self.dismiss_completion()
         self.kinds=list(KINDS)+list(registry(self.project))
         self.filter_palette()
@@ -431,10 +432,10 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         self.update_source()
     def edit_event(self):
         self.commit_code(); obj=self.selected if self.selected is not None else self.form; event=self.evvar.get()
-        self.code_target=(obj,event,False);self.code_object_var.set(obj['name']); self.code_label.set(obj['name']+' → '+event+'(self, event=None)')
-        self.code.delete('1.0','end'); self.code.insert('1.0',obj.get('events',{}).get(event,'pass')); self.tabs.select(1); self.highlight(); self.code.focus_set(); self.update_assistant()
+        self.code.configure(state='normal');self.code_target=(obj,event,False);self.code_object_var.set(obj['name']); self.code_label.set(obj['name']+' → '+event+'(self, event=None)')
+        self.code.delete('1.0','end'); self.code.insert('1.0',obj.get('events',{}).get(event,'pass')); self.code.edit_reset();self.tabs.select(1); self.highlight(); self.code.focus_set(); self.update_assistant()
     def global_code(self,key):
-        self.commit_code();self.code_object_var.set(tr('Codice progetto')); self.code_target=(self.project,key,True); self.code_label.set(tr('Progetto → ')+key); self.code.delete('1.0','end'); self.code.insert('1.0',self.project.get(key,'')); self.tabs.select(1); self.highlight(); self.update_assistant()
+        self.commit_code();self.code.configure(state='normal');self.code_object_var.set(tr('Codice progetto')); self.code_target=(self.project,key,True); self.code_label.set(tr('Progetto → ')+key); self.code.delete('1.0','end'); self.code.insert('1.0',self.project.get(key,'')); self.code.edit_reset();self.tabs.select(1); self.highlight(); self.update_assistant()
     def highlight(self):
         for tag in ('kw','str','comment','num'):self.code.tag_remove(tag,'1.0','end')
         try:
@@ -486,7 +487,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
             messagebox.showinfo(tr('File di progetto'),tr('Per mantenere i percorsi relativi, copia prima la cartella del progetto nella nuova destinazione e aprila da lì.'));return False
         try:
             # Save even unfinished code, allowing recovery after syntax errors.
-            temp=path.with_name(path.name+'.tmp'); temp.write_text(json.dumps(self.project,indent=2,ensure_ascii=False),encoding='utf-8'); temp.replace(path)
+            atomic_write_text(path,json.dumps(self.project,indent=2,ensure_ascii=False))
             self.path=path; self.saved_state=json.dumps(self.project,sort_keys=True); self.update_source(); self.refresh_project_files(); return True
         except OSError as exc:messagebox.showerror(tr('Salvataggio'),str(exc)); return False
     def check(self):

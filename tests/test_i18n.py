@@ -15,7 +15,8 @@ from core import new_project, generate
 
 ROOT=Path(__file__).resolve().parents[1]
 class TranslationTests(unittest.TestCase):
-    def tearDown(self):i18n.set_language('it')
+    def setUp(self):self.previous_language=i18n.get_language()
+    def tearDown(self):i18n.set_language(self.previous_language)
     def test_catalog_covers_calls(self):
         for file in ROOT.glob('*.py'):
             for node in ast.walk(ast.parse(file.read_text())):
@@ -23,7 +24,7 @@ class TranslationTests(unittest.TestCase):
                     self.assertIn(node.args[0].value,i18n.EN_MESSAGES,str(file)+':'+str(node.lineno))
     def test_configuration_and_about_are_localized(self):
         self.assertEqual(i18n.tr('Configurazione…',language='en'),'Configuration…')
-        self.assertIn('Visual Python',i18n.tr('VisualTk Studio 1.15\nDesigner visuale Python / Tkinter',language='en'))
+        self.assertIn('Visual Python',i18n.tr('VisualTk Studio 1.16\nDesigner visuale Python / Tkinter',language='en'))
     def test_format_fields_preserved(self):
         def fields(s):return {f for _,f,_,_ in string.Formatter().parse(s) if f is not None}
         for source,target in i18n.EN_MESSAGES.items():self.assertEqual(fields(source),fields(target),source)

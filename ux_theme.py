@@ -2,8 +2,8 @@
 from tkinter import ttk
 
 
-def editor_palette(background):
-    rgb=[int(background[i:i+2],16) for i in (1,3,5)]
+def editor_palette(background,rgb=None):
+    rgb=[v/257 for v in rgb] if rgb is not None else [int(background[i:i+2],16) for i in (1,3,5)]
     light=sum(v*w for v,w in zip(rgb,(.2126,.7152,.0722)))>145
     return ({'kw':'#0000a0','str':'#8a2020','comment':'#187034','num':'#804000'} if light else
             {'kw':'#c792ea','str':'#c3e88d','comment':'#a2b4c5','num':'#f78c6c'})

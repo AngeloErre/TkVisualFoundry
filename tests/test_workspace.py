@@ -3,6 +3,7 @@ from pathlib import Path
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from core import new_project,generate,validate
+from i18n import tr
 from workspace_ui import duplicate_form,PRESETS
 
 class WorkspaceTests(unittest.TestCase):
@@ -20,7 +21,7 @@ class WorkspaceTests(unittest.TestCase):
         self.assertEqual(again['name'],'Form3');self.assertEqual(again['widgets'][0]['name'],'Button1_copy2')
 
     def test_presets_have_complete_hex_colors(self):
-        keys=set(PRESETS['Chiaro'])
+        keys=set(PRESETS[tr('Chiaro')])
         for preset in PRESETS.values():
             self.assertEqual(set(preset),keys)
             for value in preset.values():

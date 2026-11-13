@@ -1,8 +1,8 @@
 {
-  "version": "1.15",
+  "version": "1.16",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 155,
+  "tests_passed": 167,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -28,5 +28,11 @@
     "boto3": "1.44.2"
   },
   "intelligence_validation": "Token-aware guided values, offline reference for every registered component, stable version filtering and HTTP failure classification. Graphical acceptance/typing remains pending.",
-  "ui_layout": "Left toolbox; center designer/code; right Project Explorer over Properties; VB6 Classic preset."
+  "ui_layout": "Left toolbox; center designer/code; right Project Explorer over Properties; VB6 Classic preset.",
+  "validation_languages": [
+    "it",
+    "en"
+  ],
+  "example_projects_compiled": 12,
+  "debugging_validation": "Full suite passed in both languages; settings, editor context, worker cancellation/exit, dependency signatures, geometry and atomic save regressions covered. Interactive GUI/Windows/live services remain pending."
 }

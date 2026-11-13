@@ -34,7 +34,8 @@ def validate(p, code=True):
             if not identifier(n) or n in names: raise ValueError(tr('Nome non valido o duplicato: {v0}', v0=f'{n}'))
             names.add(n)
             for dim in ('width','height'):
-                if not 1 <= int(obj[dim]) <= 10000: raise ValueError(tr('Dimensioni tra 1 e 10000'))
+                if type(obj[dim]) is not int or not 1 <= obj[dim] <= 10000: raise ValueError(tr('Dimensioni tra 1 e 10000'))
+            if obj is not f and any(type(obj.get(axis)) is not int for axis in ('x','y')):raise ValueError(tr('Le coordinate devono essere numeri interi.'))
             if obj is not f and obj['kind'] not in KINDS and obj['kind'] not in reg: raise ValueError(tr('Componente sconosciuto'))
             validate_productivity(obj.get('kind'),obj.get('props',{}))
             if obj.get('kind')=='DatabaseView':

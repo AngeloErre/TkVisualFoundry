@@ -5,6 +5,7 @@ import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from runtime_requirements import supported,validate_interpreter,ensure_current,format_version
+from i18n import tr,get_language
 
 class RuntimePolicyTests(unittest.TestCase):
     def test_stable_315_and_future_stable(self):
@@ -17,12 +18,12 @@ class RuntimePolicyTests(unittest.TestCase):
             self.assertEqual(validate_interpreter('/path/python3.15')[:2],[3,15])
     def test_external_interpreter_alpha_rejected(self):
         with patch('runtime_requirements.subprocess.run',return_value=subprocess.CompletedProcess([],0,'[3,16,0,"alpha",2]','')):
-            with self.assertRaisesRegex(ValueError,'stabile'):validate_interpreter('/path/python3.16')
+            with self.assertRaisesRegex(ValueError,'stabile' if get_language()=='it' else 'stable'):validate_interpreter('/path/python3.16')
     def test_missing_tk_and_timeout_actionable(self):
         with patch('runtime_requirements.subprocess.run',return_value=subprocess.CompletedProcess([],1,'','No module named tkinter')):
             with self.assertRaisesRegex(ValueError,'tkinter'):validate_interpreter('/path/python')
         with patch('runtime_requirements.subprocess.run',side_effect=subprocess.TimeoutExpired([],10)):
-            with self.assertRaisesRegex(ValueError,'Interprete non utilizzabile'):validate_interpreter('/path/python')
+            with self.assertRaisesRegex(ValueError,tr('Interprete non utilizzabile: ')):validate_interpreter('/path/python')
     def test_ensure_current_uses_policy(self):
         with patch('runtime_requirements.sys.version_info',(3,15,0,'final',0)):ensure_current()
         with patch('runtime_requirements.sys.version_info',(3,16,0,'alpha',2)):

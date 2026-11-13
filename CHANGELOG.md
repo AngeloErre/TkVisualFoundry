@@ -1,3 +1,12 @@
+# 1.16
+
+- Recover malformed IDE settings and validate color/grid/font/flag values before building the UI; accept Tk named editor colors.
+- Reset editor target, text and native undo across history/form context changes; prevent edits without an active target.
+- Use unique atomic text-file replacements with failure cleanup for project and local source saves.
+- Cancel queued startup audit work on destruction, track polling lifetime and key report validity to actual dependency inputs.
+- Scope installed API results to the interpreter and resolve project-local component modules. Reject non-integer model geometry before rendering.
+- Handle concurrent analysis-worker exits and make the full test suite independent of the selected UI language.
+
 # 1.15
 
 - Reorganize the IDE around a VB6-style toolbox, central designer/code workspace and right-hand Project Explorer/Properties split dock.

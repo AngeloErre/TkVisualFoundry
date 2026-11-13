@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, simpledialog
 from tkinter.scrolledtext import ScrolledText
 from i18n import tr
-from project_files import project_file,list_files,rename_file,trash_file
+from project_files import project_file,list_files,rename_file,trash_file,atomic_write_text
 from deployment import export_deployment
 
 class ProjectFilesMixin:
@@ -131,14 +131,14 @@ class ProjectFilesMixin:
         editors=getattr(self,'project_editors',{});self.project_editors=editors
         if path in editors and editors[path].winfo_exists():editors[path].lift();return
         win=tk.Toplevel(self);editors[path]=win;win.title(relative);win.geometry('850x600')
-        text=ScrolledText(win,undo=True,font=('Menlo',12),wrap='none');text.pack(fill='both',expand=True);text.insert('1.0',original);text.edit_modified(False)
+        text=ScrolledText(win,undo=True,font=('Menlo',12),wrap='none');text.pack(fill='both',expand=True);text.insert('1.0',original);text.edit_reset();text.edit_modified(False)
         stamp=path.stat().st_mtime_ns
         def save(event=None):
             nonlocal stamp
             try:
                 if not path.exists() or path.stat().st_mtime_ns!=stamp:raise ValueError(tr('File modificato o spostato sul disco: riaprilo prima di salvare.'))
                 project_file(root,path.relative_to(root).as_posix())
-                path.write_text(text.get('1.0','end-1c'),encoding='utf-8');stamp=path.stat().st_mtime_ns;text.edit_modified(False);self.refresh_project_files();return True
+                atomic_write_text(path,text.get('1.0','end-1c'));stamp=path.stat().st_mtime_ns;text.edit_modified(False);self.refresh_project_files();return True
             except Exception as exc:messagebox.showerror(tr('File di progetto'),str(exc),parent=win);return False
         def close():
             if text.edit_modified():
@@ -146,7 +146,9 @@ class ProjectFilesMixin:
                 if answer is None or (answer and not save()):return
             editors.pop(path,None);win.destroy()
         ttk.Button(win,text=tr('Salva'),command=save).pack(anchor='e',padx=8,pady=8)
-        win.bind('<Command-s>',save);win.bind('<Control-s>',save);win.protocol('WM_DELETE_WINDOW',close);win.project_close=close;text.focus_set()
+        def save_shortcut(event):
+            save();return 'break'
+        win.bind('<Command-s>',save_shortcut);win.bind('<Control-s>',save_shortcut);win.protocol('WM_DELETE_WINDOW',close);win.project_close=close;text.focus_set()
 
     def close_project_editors(self):
         for win in list(getattr(self,'project_editors',{}).values()):

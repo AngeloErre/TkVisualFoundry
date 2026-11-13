@@ -50,3 +50,18 @@ def trash_file(project,root,relative):
     trash.mkdir(exist_ok=True);target=trash/(str(time.time_ns())+'-'+source.name);shutil.move(str(source),str(target))
     project['files']=[name for name in project.get('files',[]) if name!=relative and not name.startswith(relative+'/')]
     return target
+
+
+def atomic_write_text(path,text):
+    """Replace a text file atomically; preserve the previous file on write failure."""
+    import os
+    import tempfile
+    path=Path(path)
+    fd,temporary=tempfile.mkstemp(prefix='.'+path.name+'.',suffix='.tmp',dir=path.parent)
+    try:
+        with os.fdopen(fd,'w',encoding='utf-8') as stream:
+            stream.write(text);stream.flush();os.fsync(stream.fileno())
+        if path.exists():os.chmod(temporary,path.stat().st_mode&0o777)
+        os.replace(temporary,path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)

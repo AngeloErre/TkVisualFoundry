@@ -53,7 +53,7 @@ def package_check(name,version,requirements,python):
 def check_link(url):
     for method in ('HEAD','GET'):
         try:
-            request=urllib.request.Request(url,method=method,headers={'User-Agent':'VisualTkStudio/1.14 documentation check'})
+            request=urllib.request.Request(url,method=method,headers={'User-Agent':'VisualTkStudio/1.16 documentation check'})
             with urllib.request.urlopen(request,timeout=8,context=https_context()) as response:
                 return {'url':url,'status':'ok','resolved':response.url}
         except urllib.error.HTTPError as exc:
@@ -62,8 +62,11 @@ def check_link(url):
             return {'url':url,'status':'broken' if code in (404,410) else 'unverified','detail':str(code)}
         except Exception as exc:return {'url':url,'status':'unverified','detail':str(exc)[:160]}
 
-def audit(python,specs,urls):
+def audit(python,specs,urls,cancelled=None):
+    def stopped():return cancelled is not None and cancelled.is_set()
+    if stopped():return {'cancelled':True}
     inventory=installed(python)
+    if stopped():return {'cancelled':True}
     packages={canonicalize_name(k):v for k,v in inventory['packages'].items()}
     grouped={}
     for spec in specs:
@@ -73,8 +76,9 @@ def audit(python,specs,urls):
     # All installed distributions, including optional and transitive libraries, are checked.
     names=sorted(set(packages)|set(grouped))
     with ThreadPoolExecutor(max_workers=6) as pool:
-        rows=list(pool.map(lambda name:package_check(name,packages.get(name),grouped.get(name,[]),inventory['python']),names))
-        links=list(pool.map(check_link,urls))
+        rows=list(pool.map(lambda name:None if stopped() else package_check(name,packages.get(name),grouped.get(name,[]),inventory['python']),names))
+        links=list(pool.map(lambda url:None if stopped() else check_link(url),urls))
+    if stopped():return {'cancelled':True}
     try:
         check=subprocess.run([python,'-m','pip','check'],capture_output=True,text=True,timeout=20)
         consistency=(check.stdout+check.stderr).strip()[:8000]

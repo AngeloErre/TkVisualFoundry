@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.15\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.15\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.16\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.16\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -613,3 +613,5 @@ EN_MESSAGES.update({'Documentazione': 'Documentation', 'Sito ufficiale': 'Offici
 EN_MESSAGES.update({'Alfabetico': 'Alphabetical', 'Aspetto e comportamento': 'Appearance and behavior', 'Casella degli strumenti': 'Toolbox', 'Classico VB6': 'VB6 Classic', 'Codice': 'Code', 'Codice progetto': 'Project code', 'Designer': 'Designer', 'Disposizione': 'Layout', 'Identità': 'Identity', 'Per categoria': 'Categorized', 'Seleziona una proprietà per vedere il valore.': 'Select a property to see its value.'})
 
 EN_MESSAGES.update({'Cerca componente':'Find component','Filtra le proprietà per nome':'Filter properties by name'})
+
+EN_MESSAGES['Le coordinate devono essere numeri interi.']='Coordinates must be integers.'

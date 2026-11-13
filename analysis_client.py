@@ -10,6 +10,7 @@ PREFIX='VTS_INTELLISENSE '
 class AnalysisClient:
     def __init__(self,worker=None,timeout=15):
         self.worker=Path(worker or Path(__file__).with_name('intellisense_worker.py'));self.timeout=timeout;self.requests=queue.Queue(maxsize=1);self.results=queue.Queue();self.closed=False;self.process=None;self.python=None;self.sequence=0
+        self.process_lock=threading.Lock()
         self.thread=threading.Thread(target=self.run,daemon=True);self.thread.start()
     def submit(self,python,request):
         if self.closed:return None
@@ -19,11 +20,15 @@ class AnalysisClient:
         except queue.Empty:pass
         self.requests.put_nowait((python,request));return self.sequence
     def stop_process(self):
-        process=self.process;self.process=None
+        with self.process_lock:
+            process=self.process;self.process=None
         if process and process.poll() is None:
-            process.terminate()
+            try:process.terminate()
+            except OSError:return
             def kill():
-                if process.poll() is None:process.kill()
+                try:
+                    if process.poll() is None:process.kill()
+                except OSError:pass
             timer=threading.Timer(1,kill);timer.daemon=True;timer.start()
     def start(self,python):
         self.stop_process()
