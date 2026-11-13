@@ -80,3 +80,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Non-executing resolution, bounded visible-tab rendering, changed values and rename preservation.
 - [x] Cross-project ownership and unmonitored-launch reset; real changing-watch and model regressions.
 - [ ] Graphical acceptance and stack-frame selection; arbitrary expression watches remain outside this first stage.
+
+## Phase 13 — selected stack context and uninstall lifecycle (1.29)
+
+- [x] Paused stack frame selection with selected locals/globals/Watches and stale-token protection.
+- [x] Owned IDE uninstallers and Windows per-user install; generated Mac/Windows uninstall support.
+- [x] Real pdb and temporary uninstall preservation regressions; bilingual documentation.
+- [ ] Graphical acceptance: desktop control unavailable. Native Windows registry/shortcut/Recycle Bin and target OS installer acceptance pending.

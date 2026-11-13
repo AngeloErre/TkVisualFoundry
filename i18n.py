@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.28\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.28\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.29\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.29\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -656,3 +656,5 @@ EN_MESSAGES.update({'Attiva/disattiva riga · ⇧F9':'Toggle line · ⇧F9','Rim
 EN_MESSAGES.update({'Watch / Osserva':'Watch','Aggiungi Watch':'Add watch','Rimuovi selezionata':'Remove selected',"Percorsi: self.contatore, self.samples[0], config['porta'], globals.nome, locals.nome. Nessuna chiamata o espressione aritmetica.":"Paths: self.counter, self.samples[0], config['port'], globals.name, locals.name. No calls or arithmetic.",'Percorso':'Path','Ambito':'Scope','Sono consentite al massimo 100 Watch.':'Up to 100 watches are allowed.','Watch':'Watch','Non disponibile nel campione':'Unavailable in sample','Nessun campione della sessione corrente':'No sample from the current session'})
 
 EN_MESSAGES.update({'Usa un percorso di variabile con al massimo 256 caratteri.':'Use a variable path of at most 256 characters.','Percorso Watch non valido.':'Invalid watch path.','Le Watch accettano nomi, attributi, indici interi non negativi e chiavi stringa; chiamate e calcoli non sono supportati.':'Watches accept names, attributes and literal non-negative indices/string keys; calls and arithmetic are not supported.','Percorso Watch troppo profondo.':'Watch path is too deep.','Usa al massimo 100 percorsi Watch distinti.':'Use up to 100 unique watch paths.'})
+
+EN_MESSAGES.update({'Seleziona frame':'Select frame','Seleziona un frame durante una pausa del debug corrente.':'Select a frame while the current debug session is paused.'})

@@ -72,7 +72,7 @@ class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMi
         self.geometry('1400x900'); self.minsize(1050,650)
         self.project=new_project(); self.path=None; self.selected=None; self.selection_names=set();self.form_index=0
         self.history=[]; self.future=[]; self.proc=None; self.messages=queue.Queue(); self.code_target=None
-        self.temp=tempfile.TemporaryDirectory(prefix='visualtk-'); self.config_data={'language':get_language(),'grid':10,'font_size':13,'python':str(Path.home()/'Applications/VisualTkStudio/.venv/bin/python') if getattr(sys,'frozen',False) else sys.executable}
+        self.temp=tempfile.TemporaryDirectory(prefix='visualtk-'); self.config_data={'language':get_language(),'grid':10,'font_size':13,'python':str(Path(sys.executable).with_name('python.exe')) if sys.platform=='win32' and Path(sys.executable).name.lower()=='pythonw.exe' else str(Path.home()/'Applications/VisualTkStudio/.venv/bin/python') if getattr(sys,'frozen',False) else sys.executable}
         self.config_data=load_settings(SETTINGS,self.config_data,self.winfo_rgb)
         self.global_python=self.config_data['python'];self.environment_busy=False
         self.init_preview()

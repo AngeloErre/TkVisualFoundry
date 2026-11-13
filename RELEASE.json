@@ -1,8 +1,8 @@
 {
-  "version": "1.28",
+  "version": "1.29",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 242,
+  "tests_passed": 249,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -46,5 +46,7 @@
   "visual_debug_validation": "Real pdb subprocess over piped stdin/stdout, fragmented prompts, macOS path aliases, external frames, bounded buffering, old-process isolation, resume/finish markers and exact-session source guard tested. GUI acceptance pending; first-stage current position, no graphical watches.",
   "variable_inspector_validation": "Real F5/F9 subprocess sampling, changing globals/self fields, returning locals, function-local breakpoints and stack; bounded containers/cycles, non-evaluating summaries and stale process completion covered. Approximate 0.5-second sampling; no exhaustive assignment trace or arbitrary property inspection; GUI acceptance pending.",
   "event_breakpoints_validation": "Persisted event/startup/import line metadata; exact executable generated-line resolution, embedded runtime offsets, insertion/replacement/deletion remapping, rename/save/load preservation and real pdb event stop tested. Text-diff approximation for large rewrites; graphical marker/shortcut acceptance pending.",
-  "watch_validation": "Scoped names and literal container paths from existing snapshots; no calls/arithmetic/property evaluation. Persistence, rename, rejection of executable paths, unavailable/truncated data, real changing sampled global and cross-project ownership tested. Bounded rendering; interactive GUI acceptance pending."
+  "watch_validation": "Scoped names and literal container paths from existing snapshots; no calls/arithmetic/property evaluation. Persistence, rename, rejection of executable paths, unavailable/truncated data, real changing sampled global and cross-project ownership tested. Bounded rendering; interactive GUI acceptance pending.",
+  "stack_selection_validation": "Real pdb frame switching updates locals and Watch resolution; stale pause tokens and wrong-project UI requests are rejected. Full stack and selected frame remain represented; external source navigation and graphical acceptance pending.",
+  "uninstall_validation": "Owned file/venv plans, modified/personal/empty-folder preservation, path/link/ownership rejection and actual uninstall in temporary fixtures tested. Generated Mac uninstaller syntax and Inno Setup flags checked. Windows installer/registry/shortcut/Recycle Bin and graphical/native uninstall acceptance pending."
 }

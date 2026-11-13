@@ -4,16 +4,17 @@ from i18n import tr
 
 class DebugViewMixin:
     def start_debug_view(self,path):
-        self.debug_output=DebugOutput(str(path));self.debug_source=path.read_text(encoding='utf-8');self.debug_position=None;self.debug_process=None
+        self.debug_output=DebugOutput(str(path));self.debug_source=path.read_text(encoding='utf-8');self.debug_position=None;self.debug_process=None;self.debug_paused=False
         self.debug_location.set(tr('Debug: in attesa del programma'));self.debug_jump.configure(state='disabled')
     def observe_debug(self,process,text,finished=False):
         if process is not getattr(self,'debug_process',None):return
         if finished:
-            self.debug_output=None;self.debug_source=None;self.debug_position=None;self.debug_process=None
+            self.debug_output=None;self.debug_source=None;self.debug_position=None;self.debug_process=None;self.debug_paused=False
             self.debug_location.set(tr('Debug terminato'));self.debug_jump.configure(state='disabled');self.update_source();return
         parser=getattr(self,'debug_output',None)
         if parser is None:return
         for position in parser.feed(text):
+            self.debug_paused=True
             self.debug_position=position
             if position:
                 line,context=position
@@ -32,4 +33,4 @@ class DebugViewMixin:
     def debug_resuming(self,text):
         command=text.strip().split(' ',1)[0]
         if command in ('c','cont','continue','n','next','s','step','r','return','until','unt','j','jump','q','quit','exit','restart','run'):
-            self.debug_position=None;self.generated.tag_remove('debug_current','1.0','end');self.debug_jump.configure(state='disabled');self.debug_location.set(tr('Debug: esecuzione in corso'))
+            self.debug_paused=False;self.debug_position=None;self.generated.tag_remove('debug_current','1.0','end');self.debug_jump.configure(state='disabled');self.debug_location.set(tr('Debug: esecuzione in corso'))

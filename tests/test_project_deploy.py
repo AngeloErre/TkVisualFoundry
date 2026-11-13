@@ -47,9 +47,11 @@ class DeploymentTests(unittest.TestCase):
         (self.root/'helper.py').write_text('ANSWER=42');self.project['files']=['assets','helper.py'];self.project['imports']='import helper'
         original=copy.deepcopy(self.project);target=self.export();self.assertEqual(self.project,original)
         self.assertEqual((target/'src/assets/readme.txt').read_text(),'resource');self.assertFalse((target/'src/unselected.txt').exists())
-        for name in ['Run_Mac.command','Build_Mac.command','Install_Mac.command','Run_Windows.cmd','Build_Windows.cmd','Install_Windows.cmd','Installer_Windows.iss','deploy_build.py','requirements.txt','README_DEPLOY.md']:self.assertTrue((target/name).is_file(),name)
+        for name in ['Run_Mac.command','Build_Mac.command','Install_Mac.command','Uninstall_Mac.command','Run_Windows.cmd','Build_Windows.cmd','Install_Windows.cmd','Installer_Windows.iss','deploy_build.py','requirements.txt','README_DEPLOY.md']:self.assertTrue((target/name).is_file(),name)
         self.assertTrue((target/'Build_Mac.command').stat().st_mode&0o111)
         subprocess.run(['bash','-n',str(target/'Build_Mac.command')],check=True)
+        subprocess.run(['bash','-n',str(target/'Uninstall_Mac.command')],check=True)
+        self.assertIn('Uninstallable=yes',(target/'Installer_Windows.iss').read_text())
         compile((target/'src/main.py').read_text(),'main.py','exec');compile((target/'deploy_build.py').read_text(),'deploy_build.py','exec')
         # Load the exported module from its source folder without creating a Tk root.
         result=subprocess.check_output([sys.executable,'-c','import runpy; scope=runpy.run_path("main.py",run_name="check");print(scope["helper"].ANSWER)'],cwd=target/'src',text=True)

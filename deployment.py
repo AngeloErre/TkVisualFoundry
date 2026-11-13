@@ -12,6 +12,29 @@ from library_catalog import packaging_flags,theme_config
 
 BUILD_HELPER=Path(__file__).with_name('deploy_build.py')
 
+def mac_uninstall_script(name):
+    if not re.fullmatch(r'[A-Za-z][A-Za-z0-9_-]{0,59}',name):raise ValueError('Invalid application name')
+    return r'''#!/bin/bash
+set -euo pipefail
+app="$HOME/Applications/@NAME@.app"
+owner="$HOME/Applications/.visualtk-@NAME@.sha256"
+if [ ! -f "$owner" ] || [ -L "$owner" ] || [ -L "$app" ] || [ ! -d "$app" ]; then
+  echo 'No recognized installation. Use the generated Install_Mac.command first.'; exit 1
+fi
+expected=$(cat "$owner")
+actual=$(/usr/bin/shasum -a 256 "$app/Contents/MacOS/@NAME@" | /usr/bin/awk '{print $1}')
+if [[ ! "$expected" =~ ^[a-f0-9]{64}$ ]] || [ "$actual" != "$expected" ]; then
+  echo 'Application ownership changed; preserving files.'; exit 1
+fi
+echo 'Close @NAME@ before continuing. Data outside the app is preserved.'
+read -r -p 'Move @NAME@ to Trash? [y/N]: ' answer
+case "$answer" in y|Y|yes|s|si) ;; *) exit 0 ;; esac
+mkdir -p "$HOME/.Trash"
+mv "$app" "$HOME/.Trash/@NAME@-$(date +%Y%m%d-%H%M%S)-$$.app"
+rm -f "$owner"
+echo 'Moved to Trash. Personal data outside the app was preserved.'
+'''.replace('@NAME@',name)
+
 def export_deployment(project,project_path,destination,name,version):
     if not re.fullmatch(r'[A-Za-z][A-Za-z0-9_-]{0,59}',name):raise ValueError('Application name: letters, digits, _ and -, starting with a letter (max 60).')
     if not re.fullmatch(r'\d+(?:\.\d+){0,3}',version):raise ValueError('Version must contain 1–4 numeric parts.')
@@ -46,6 +69,7 @@ def export_deployment(project,project_path,destination,name,version):
             (temporary/filename).write_text('#!/bin/bash\nset -euo pipefail\ncd "$(dirname "$0")"\nPYTHON_BIN="${VTS_PYTHON:-python3}"\nexec "$PYTHON_BIN" deploy_build.py '+action+'\n');(temporary/filename).chmod(0o755)
         for filename,action in [('Run_Windows.cmd','run'),('Build_Windows.cmd','build'),('Install_Windows.cmd','install')]:
             (temporary/filename).write_text('@echo off\ncd /d "%~dp0"\nif defined VTS_PYTHON (\n  "%VTS_PYTHON%" deploy_build.py '+action+'\n) else (\n  py -3 deploy_build.py '+action+'\n)\nif errorlevel 1 pause\n',encoding='utf-8')
+        (temporary/'Uninstall_Mac.command').write_text(mac_uninstall_script(name));(temporary/'Uninstall_Mac.command').chmod(0o755)
         # Identifiers are restricted above, so they cannot inject Inno Setup directives.
         setup_icon='SetupIconFile=build-assets\\app.ico\n' if icons else ''
         (temporary/'Installer_Windows.iss').write_text(f'''[Setup]
@@ -54,6 +78,8 @@ AppName={name}
 AppVersion={version}
 DefaultDirName={{localappdata}}\\Programs\\{name}
 PrivilegesRequired=lowest
+Uninstallable=yes
+UninstallDisplayName={name}
 OutputDir=installers
 OutputBaseFilename={name}-{version}-Setup
 Compression=lzma2
@@ -71,6 +97,8 @@ This is a source/build kit, not a precompiled application. Build on the target O
 - Build_Mac.command: build dist/{name}.app and installers/{name}-{version}.dmg on macOS (ZIP fallback if disk image creation is unavailable).
 - Install_Mac.command: build and copy the app to ~/Applications; existing installations are preserved with a timestamp suffix.
 - Build_Windows.cmd: build dist/{name}/{name}.exe, its supporting files, and a portable ZIP on Windows. If Inno Setup is installed, also build an installer in installers/.
+- Uninstall_Mac.command: move the app installed by Install_Mac.command to Trash after ownership verification and confirmation. Manually copied apps can be moved to Trash in Finder.
+- Windows Setup includes a native uninstaller in Windows Settings → Apps. Portable folders are not registered installations; remove their extracted files manually.
 - Install_Windows.cmd: build and start that installer. Install Inno Setup from https://jrsoftware.org/isinfo.php if it is missing, then rerun.
 
 Copy the entire app folder or portable ZIP, not just the exe. End users of native builds do not need Python. Compiled applications and installers are unsigned; distribution through Apple/Microsoft signing services is a separate step. Native libraries such as VLC, device drivers and camera permissions are separate requirements.

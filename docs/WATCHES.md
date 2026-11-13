@@ -9,7 +9,7 @@ Open **Watch** (also available from **Output/Debug → Debug → Watch**) and ad
 - Standard-container access: `self.samples[0]`, `settings['port']`, `settings['nested'][2]`.
 - Explicit scope prefixes: `globals.counter`, `locals.counter`, `last.counter`.
 
-A bare name looks first in sampled active local scopes, then globals, then historical returning-function locals. Explicit `locals` excludes historical locals; `last` selects those historical values. If more than one matching group exists, the first group shown by the inspector wins; the Scope column identifies that source. `globals`, `locals`, `last` and `self` are reserved scope prefixes in watch paths.
+A bare name looks first in sampled active local scopes, then globals, then historical returning-function locals. In a paused debug session, frame selection updates active locals and puts that frame’s module globals first. Explicit `locals` excludes historical locals; `last` selects those historical values. If more than one matching group exists, the first group shown by the inspector wins; the Scope column identifies that source. `globals`, `locals`, `last` and `self` are reserved scope prefixes in watch paths.
 
 Only identifiers, attributes, non-negative integer indices and literal string keys are accepted. Calls, arithmetic, comprehensions, slices, negative indices and assignment are rejected. Watches do not evaluate Python expressions, invoke properties or query widgets. Custom object attributes are available only when already represented by inspector data; arbitrary objects are summarized, not traversed.
 

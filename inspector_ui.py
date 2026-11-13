@@ -16,10 +16,13 @@ class InspectorMixin:
         bar=ttk.Frame(page,padding=6);bar.pack(fill='x')
         ttk.Checkbutton(bar,text=tr('Monitoraggio per il prossimo avvio'),variable=self.inspector_enabled).pack(side='left')
         ttk.Label(bar,text=tr('Filtra')).pack(side='left',padx=(12,4));entry=ttk.Entry(bar,textvariable=self.inspector_filter,width=25);entry.pack(side='left');entry.bind('<KeyRelease>',lambda e:self.render_inspector())
+        ttk.Button(bar,text=tr('Seleziona frame'),command=self.select_inspector_frame).pack(side='left',padx=4)
         self.inspector_status=tk.StringVar(value=tr('Avvia con F5 o F9 per osservare le variabili.'));ttk.Label(page,textvariable=self.inspector_status,padding=6,wraplength=900).pack(fill='x')
         self.inspector_tree=ttk.Treeview(page,columns=('type','value'),show='tree headings');self.inspector_tree.heading('#0',text=tr('Variabile / ambito'));self.inspector_tree.heading('type',text=tr('Tipo'));self.inspector_tree.heading('value',text=tr('Valore'));self.inspector_tree.column('#0',width=300);self.inspector_tree.column('type',width=120);self.inspector_tree.column('value',width=500)
         scroll=ttk.Scrollbar(page,command=self.inspector_tree.yview);scroll.pack(side='right',fill='y');self.inspector_tree.configure(yscrollcommand=scroll.set);self.inspector_tree.pack(fill='both',expand=True)
         self.inspector_tree.tag_configure('changed',foreground='#b35400')
+        self.inspector_stack_rows={}
+        self.inspector_tree.bind('<Double-1>',self.select_inspector_frame);self.inspector_tree.bind('<Return>',self.select_inspector_frame)
         ttk.Label(page,text=tr('Campioni ogni 0,5 s. Locali attive o ultima funzione osservata; valori e contenitori limitati. Nessuna espressione o proprietà viene eseguita.'),wraplength=900,padding=6).pack(fill='x')
         self.inspector_previous={}
     def inspector_args(self,path,debug=False):
@@ -83,13 +86,25 @@ class InspectorMixin:
             if query and not any(matches(n) for n in values):continue
             tree.insert('','end',iid=key,text=title,values=('',(Path(group.get('file','')).name+':'+str(group.get('line',''))) if group.get('file') else ''),open=key in opened or not self.inspector_previous or bool(query))
             for node in values:insert(key,node,key+'/'+str(node.get('name','')))
-        stack=data.get('stack',[])
+        stack=data.get('stack',[]);self.inspector_stack_rows={}
         if stack and not query:
             tree.insert('','end',iid='stack',text=tr('Stack delle chiamate'),open='stack' in opened)
-            for i,frame in enumerate(stack):tree.insert('stack','end',text=frame.get('function',''),values=(str(frame.get('line','')),frame.get('file','')))
+            for i,frame in enumerate(stack):
+                iid='frame:'+str(i);self.inspector_stack_rows[iid]=frame;tree.insert('stack','end',iid=iid,text=('▶ ' if frame.get('selected') else '')+frame.get('function',''),values=(str(frame.get('line','')),frame.get('file','')))
         self.inspector_previous=current
         for item in selection:
             if tree.exists(item):tree.selection_add(item)
         tree.yview_moveto(scroll)
         state={'paused':tr('In pausa: valori del punto di arresto'),'running':tr('In esecuzione: valori campionati'),'finished':tr('Terminato: ultimi valori disponibili')}.get(data.get('state'),tr('Valori campionati'))
         self.inspector_status.set(state+' · '+time.strftime('%H:%M:%S',time.localtime(data.get('time',time.time()))))
+
+    def select_inspector_frame(self,event=None):
+        selection=self.inspector_tree.selection();data=self.inspector_data
+        if not selection or not data:return
+        frame=self.inspector_stack_rows.get(selection[0])
+        if not frame:return
+        if data.get('state')!='paused' or not getattr(self,'debug_paused',False) or self.watch_session!=getattr(self,'history_session',None) or self.debug_process is not self.inspector_process or self.proc is not self.debug_process or self.proc.poll() is not None:
+            self.inspector_status.set(tr('Seleziona un frame durante una pausa del debug corrente.'));return
+        token=data.get('pause_id');index=frame.get('index')
+        if not isinstance(token,str) or len(token)!=32 or any(c not in '0123456789abcdef' for c in token) or type(index) is not int:return
+        self.debug_cmd('vtsframe '+token+' '+str(index))

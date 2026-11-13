@@ -1,6 +1,6 @@
-# VisualTk Studio 1.28
+# VisualTk Studio 1.29
 
-**A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
+**A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
 
@@ -27,6 +27,12 @@ Extended component palette and integrated reference for the LLM client component
 *Screenshots show the Italian interface on macOS. The IDE also supports English.*
 
 Startup layout fix: Project Explorer and Properties initialize after pane geometry is available, with a wider right dock and minimum visible areas. Valid manual pane sizes are preserved.
+
+## Stack frame selection and uninstallers (1.29)
+
+With **F9** paused, open **Variables / Inspector → Call stack**, select a frame and double-click, press Enter or choose **Select frame**. The debugger selects that function; locals, selected-module globals and Watch paths follow its context. The selected frame has a ▶ marker. **Show line** reaches generated-source positions; external source files are not opened automatically. Selection uses a pause token so stale requests cannot switch a later stop.
+
+The IDE now includes **Uninstall_Mac.command** and **Uninstall_Windows.cmd** with ownership checks and preservation of personal/modified files. A new **Install_Windows.cmd** creates the IDE environment, Start menu shortcut and Windows Apps uninstall entry. Generated Mac deployment kits include a Trash-based app uninstaller; Windows Setup retains its native uninstaller. [Installation, removal and platform-test limits](docs/INSTALL_UNINSTALL.md).
 
 ## Persistent Watch panel (1.28)
 

@@ -1,6 +1,6 @@
-# VisualTk Studio 1.28
+# VisualTk Studio 1.29
 
-**IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
+**IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
 
@@ -27,6 +27,12 @@ Catalogo dei componenti estesi e documentazione integrata del componente client 
 *Le immagini mostrano l’interfaccia italiana su macOS. L’IDE supporta anche l’inglese.*
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Selezione frame e disinstallazione (1.29)
+
+Con **F9** in pausa, apri **Variabili / Ispettore → Stack delle chiamate**, seleziona una funzione e fai doppio clic, premi Invio oppure **Seleziona frame**. Locali, globali del modulo selezionato e Watch seguono quel contesto. Il simbolo ▶ indica il frame corrente. **Mostra riga** raggiunge le posizioni nel sorgente generato; i file esterni non vengono aperti automaticamente. Un identificativo della pausa impedisce a richieste obsolete di cambiare un arresto successivo.
+
+Aggiunti **Uninstall_Mac.command** e **Uninstall_Windows.cmd** per l’IDE, con verifica dei file installati e conservazione di quelli personali/modificati. Il nuovo **Install_Windows.cmd** prepara ambiente, collegamento Start e voce di disinstallazione in Windows. I kit Mac generati includono un uninstaller che sposta l’app riconosciuta nel Cestino; Windows Setup usa il proprio disinstallatore. [Installazione, rimozione e limiti del collaudo](docs/INSTALL_UNINSTALL.md).
 
 ## Pannello Watch persistente (1.28)
 

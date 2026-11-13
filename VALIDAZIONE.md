@@ -1,3 +1,7 @@
+# Versione 1.29
+
+249 test superati per lingua, 11 grafici saltati. Cambio frame pdb reale con locali/Watch e rifiuto di richieste obsolete; pianificazione e disinstallazione effettiva in cartelle temporanee con conservazione di progetti, file modificati e cartelle personali vuote. Verificata sintassi shell dei kit e configurazione uninstall di Inno Setup. Controllo desktop non disponibile: collaudo grafico e installazione/disinstallazione Windows nativa ancora da eseguire. Nessuna installazione reale dell’utente rimossa.
+
 # Versione 1.28
 
 242 test superati per lingua, 11 grafici saltati. Verificati percorsi con ambito e indici/chiavi letterali, rifiuto di chiamate/espressioni eseguibili, dati mancanti/troncati, rinomina e salvataggio, cambio di proprietà della sessione aprendo un altro progetto. Un processo reale produce campioni con valore globale osservato che cambia. Collaudo grafico ancora da completare.

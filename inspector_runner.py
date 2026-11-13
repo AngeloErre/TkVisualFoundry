@@ -4,19 +4,28 @@ import json
 from pathlib import Path
 import pdb
 import sys
+import uuid
 from inspector_runtime import Inspector
 
 class InspectorPdb(pdb.Pdb):
     def __init__(self,inspector):
         super().__init__(readrc=False);self.inspector=inspector
     def preloop(self):
-        super().preloop();self.inspector.pause(self.curframe)
+        super().preloop();self.inspector.pause(self.curframe,self.stack,self.curindex,self.pause_token)
     def postcmd(self,stop,line):
         result=super().postcmd(stop,line)
         if stop:self.inspector.resume()
-        else:self.inspector.pause(self.curframe)
+        else:self.inspector.pause(self.curframe,self.stack,self.curindex,self.pause_token)
         return result
+    def do_vtsframe(self,arg):
+        try:
+            token,index=arg.split();index=int(index)
+        except (ValueError,TypeError):return self.error('Invalid frame request')
+        if token!=self.pause_token or not 0<=index<len(self.stack):return self.error('Stale or invalid frame request')
+        if index<self.curindex:self.do_up(str(self.curindex-index))
+        elif index>self.curindex:self.do_down(str(index-self.curindex))
     def interaction(self,frame,tb_or_exc):
+        self.pause_token=uuid.uuid4().hex
         try:return super().interaction(frame,tb_or_exc)
         finally:self.inspector.resume()
 

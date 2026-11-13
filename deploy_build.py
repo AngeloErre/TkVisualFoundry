@@ -1,4 +1,5 @@
 """Standalone native build/install driver copied into each deployment kit."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -55,7 +56,9 @@ def main(action=None):
         if action=='install':
             target=Path.home()/'Applications'/(name+'.app');target.parent.mkdir(exist_ok=True)
             if target.exists():target.rename(target.with_name(name+'-backup-'+str(time.time_ns())+'.app'))
-            shutil.copytree(app,target);print('Installed:',target)
+            shutil.copytree(app,target)
+            owner=target.parent/('.visualtk-'+name+'.sha256');owner.write_text(hashlib.sha256((target/'Contents/MacOS'/name).read_bytes()).hexdigest())
+            print('Installed:',target)
     else:
         shutil.make_archive(str(installers/(name+'-'+version+'-portable')),'zip',ROOT/'dist',name)
         compiler=shutil.which('ISCC')

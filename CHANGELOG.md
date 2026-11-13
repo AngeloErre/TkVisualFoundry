@@ -1,3 +1,11 @@
+# 1.29
+
+- Select paused pdb frames with locals/global/Watch context and stale-stop protection.
+- Add macOS/Windows IDE uninstallers, owned manifests and a Windows IDE installer.
+- Preserve modified/personal files and system Python; remove only managed files/environment.
+- Add Mac deployment Trash uninstaller and explicit Windows Setup uninstall flags.
+- Add real frame-switch, ownership and temporary uninstall regressions; native Windows/GUI acceptance pending.
+
 # 1.28
 
 - Add persistent, read-only Watch paths backed by live/debug inspector snapshots.

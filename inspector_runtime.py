@@ -66,7 +66,7 @@ def variable_nodes(values,budget=None):
 class Inspector:
     def __init__(self,target,output,tracked=()):
         self.target=os.path.realpath(target);self.tracked={self.target,*map(os.path.realpath,tracked),*map(os.path.abspath,tracked)}
-        self.output=Path(output);self.stop_event=threading.Event();self.paused=None;self.last_locals=None;self.modules={};self.app=None;self.sequence=0;self.lock=threading.RLock();self.last_return=0;self.last_return_code=None
+        self.output=Path(output);self.stop_event=threading.Event();self.paused=None;self.paused_stack=[];self.selected_index=None;self.pause_id=None;self.last_locals=None;self.modules={};self.app=None;self.sequence=0;self.lock=threading.RLock();self.last_return=0;self.last_return_code=None
     def profile(self,frame,event,arg):
         if event not in ('call','return') or frame.f_code.co_filename not in self.tracked:return
         with self.lock:
@@ -84,21 +84,26 @@ class Inspector:
         while not self.stop_event.wait(0.5):
             try:self.write()
             except (OSError,RuntimeError,ValueError):pass
-    def pause(self,frame):
-        with self.lock:self.paused=frame
+    def pause(self,frame,stack=None,index=None,pause_id=None):
+        with self.lock:self.paused=frame;self.paused_stack=list(stack or []);self.selected_index=index;self.pause_id=pause_id
         self.write()
     def resume(self):
-        with self.lock:self.paused=None
+        with self.lock:self.paused=None;self.paused_stack=[];self.selected_index=None;self.pause_id=None
     def snapshot(self):
         with self.lock:
             frames=[];stack=[];paused=self.paused
             if paused is not None:
-                frame=paused
-                while frame is not None and len(stack)<40:
-                    filename=os.path.realpath(frame.f_code.co_filename)
-                    stack.append({'file':filename,'line':frame.f_lineno,'function':frame.f_code.co_name})
-                    if filename in self.tracked:frames.append(frame)
-                    frame=frame.f_back
+                entries=list(enumerate(self.paused_stack))
+                if entries:
+                    for index,(frame,line) in reversed(entries[-40:]):
+                        stack.append({'file':os.path.realpath(frame.f_code.co_filename),'line':line,'function':frame.f_code.co_name,'index':index,'selected':index==self.selected_index})
+                    frames.append(paused)
+                else:
+                    frame=paused
+                    while frame is not None and len(stack)<40:
+                        filename=os.path.realpath(frame.f_code.co_filename);stack.append({'file':filename,'line':frame.f_lineno,'function':frame.f_code.co_name})
+                        if filename in self.tracked:frames.append(frame)
+                        frame=frame.f_back
             else:
                 for thread_id,frame in sys._current_frames().items():
                     count=0
@@ -108,16 +113,20 @@ class Inspector:
                         frame=frame.f_back;count+=1
             groups=[];budget=[1500]
             for frame in frames[:20]:
-                filename=os.path.realpath(frame.f_code.co_filename);self.modules[filename]=frame.f_globals
+                filename=os.path.realpath(frame.f_code.co_filename)
+                if filename in self.tracked:self.modules[filename]=frame.f_globals
                 if frame.f_code.co_name!='<module>':groups.append({'scope':'locals','name':frame.f_code.co_name,'file':filename,'line':frame.f_lineno,'values':variable_nodes(frame.f_locals,budget)})
             if not groups and self.last_locals:groups.append({'scope':'last locals','name':self.last_locals['function'],**self.last_locals})
-            for filename,values in list(self.modules.items())[:20]:groups.append({'scope':'globals','name':Path(filename).name,'file':filename,'values':variable_nodes(values,budget)})
+            modules=list(self.modules.items())
+            if paused is not None:
+                selected_file=os.path.realpath(paused.f_code.co_filename);modules=[(selected_file,paused.f_globals)]+[item for item in modules if item[0]!=selected_file]
+            for filename,values in modules[:20]:groups.append({'scope':'globals','name':Path(filename).name,'file':filename,'values':variable_nodes(values,budget)})
             app=self.app() if self.app else None
             if app is not None:
                 try:values=instance_attributes(app);groups.append({'scope':'self','name':'Application','values':variable_nodes(values,budget)})
                 except AttributeError:pass
             self.sequence+=1
-            return {'version':1,'sequence':self.sequence,'state':'paused' if paused is not None else 'running','time':time.time(),'groups':groups,'stack':stack}
+            return {'version':1,'sequence':self.sequence,'state':'paused' if paused is not None else 'running','time':time.time(),'groups':groups,'stack':stack,'pause_id':self.pause_id,'selected_index':self.selected_index}
     def write(self,state=None):
         with self.lock:
             data=self.snapshot()
@@ -129,7 +138,7 @@ class Inspector:
     def close(self):
         self.stop_event.set();sys.setprofile(self.previous_profile)
         self.thread.join(timeout=1)
-        with self.lock:self.paused=None
+        with self.lock:self.paused=None;self.paused_stack=[];self.selected_index=None;self.pause_id=None
         try:
             self.write(state='finished')
         except (OSError,RuntimeError,ValueError):pass
