@@ -8,6 +8,7 @@ from tkinter.scrolledtext import ScrolledText
 from i18n import tr
 from project_files import project_file,list_files,rename_file,trash_file,atomic_write_text
 from deployment import export_deployment
+from deploy_icons import import_icon
 
 class ProjectFilesMixin:
     def build_file_explorer(self,parent):
@@ -160,7 +161,7 @@ class ProjectFilesMixin:
         if any(win.winfo_exists() for win in getattr(self,'project_editors',{}).values()):
             return messagebox.showinfo('Deploy',tr('Salva e chiudi gli editor dei file prima del deploy.'),parent=self)
         if not self.check():return
-        win=tk.Toplevel(self);win.title('Deploy');win.geometry('650x360');win.transient(self)
+        win=tk.Toplevel(self);win.title('Deploy');win.geometry('720x510');win.transient(self)
         body=ttk.Frame(win,padding=18);body.pack(fill='both',expand=True)
         name=tk.StringVar(value='MyApplication');version=tk.StringVar(value='1.0.0');destination=tk.StringVar(value=str(self.path.parent/'deploy'))
         for i,(label,var) in enumerate([('Nome applicazione',name),('Versione',version),('Destinazione',destination)]):
@@ -169,18 +170,39 @@ class ProjectFilesMixin:
             value=filedialog.askdirectory(parent=win)
             if value:destination.set(value)
         ttk.Button(body,text=tr('Sfoglia…'),command=browse).grid(row=2,column=2)
-        ttk.Label(body,text=tr('Genera un kit Mac + Windows. La compilazione va eseguita sul sistema di destinazione. Include soltanto i file contrassegnati ✓.'),wraplength=590).grid(row=3,column=0,columnspan=3,pady=16)
-        build=tk.BooleanVar(value=False);ttk.Checkbutton(body,text=tr('Compila anche su questo computer (installa le dipendenze nel kit)'),variable=build).grid(row=4,column=0,columnspan=3,sticky='w')
+        icon=tk.StringVar(value=self.project.get('deployment',{}).get('icon',''))
+        ttk.Label(body,text=tr('Icona applicazione')).grid(row=3,column=0,sticky='w',pady=8)
+        ttk.Entry(body,textvariable=icon,state='readonly',width=43).grid(row=3,column=1,sticky='ew')
+        preview=ttk.Label(body);preview.grid(row=4,column=0,sticky='w')
+        def show_icon():
+            preview.configure(image='',text='');preview.image=None
+            if icon.get():
+                try:
+                    image=tk.PhotoImage(master=win,file=str(project_file(self.path.parent,icon.get())))
+                    image=image.subsample(max(1,image.width()//48));preview.configure(image=image);preview.image=image
+                except (OSError,tk.TclError,ValueError):preview.configure(text=tr('Icona non disponibile: selezionala nuovamente.'))
+        def choose_icon():
+            source=filedialog.askopenfilename(parent=win,title=tr('Scegli icona applicazione'),filetypes=[('PNG / ICO / ICNS','*.png *.ico *.icns')])
+            if not source:return
+            try:icon.set(import_icon(source,self.path.parent));show_icon()
+            except Exception as exc:messagebox.showerror(tr('Icona applicazione'),str(exc),parent=win)
+        icon_actions=ttk.Frame(body);icon_actions.grid(row=3,column=2)
+        ttk.Button(icon_actions,text=tr('Sfoglia…'),command=choose_icon).pack(side='left')
+        ttk.Button(icon_actions,text=tr('Rimuovi'),command=lambda:(icon.set(''),show_icon())).pack(side='left')
+        ttk.Label(body,text=tr('PNG, ICO o ICNS quadrata, almeno 256 px. Consigliata: PNG trasparente 1024 × 1024. Conversione automatica per Mac e Windows.'),wraplength=540).grid(row=4,column=1,columnspan=2,sticky='w')
+        show_icon()
+        ttk.Label(body,text=tr('Genera un kit Mac + Windows. La compilazione va eseguita sul sistema di destinazione. Include soltanto i file contrassegnati ✓.'),wraplength=590).grid(row=5,column=0,columnspan=3,pady=12)
+        build=tk.BooleanVar(value=False);ttk.Checkbutton(body,text=tr('Compila anche su questo computer (installa le dipendenze nel kit)'),variable=build).grid(row=6,column=0,columnspan=3,sticky='w')
         def create():
             try:
                 if not destination.get().strip():raise ValueError(tr('Scegli una cartella di destinazione.'))
                 if build.get() and self.proc and self.proc.poll() is None:raise ValueError(tr('Arresta prima il processo corrente.'))
-                candidate={**self.project,'deployment':{'name':name.get(),'version':version.get()}}
+                candidate={**self.project,'deployment':{'name':name.get(),'version':version.get(),'icon':icon.get()}}
                 target=export_deployment(candidate,self.path,destination.get(),name.get(),version.get())
                 self.checkpoint();self.project['deployment']=candidate['deployment']
                 self.save();win.destroy();self.refresh_project_files();self.write_log('Deploy: '+str(target)+'\n');self.show_log(True)
                 if build.get():self.launch([self.config_data['python'],str(target/'deploy_build.py'),'build'],cwd=str(target))
                 else:messagebox.showinfo('Deploy',str(target)+'\n'+tr('Kit pronto. Leggi README_DEPLOY.md e usa gli script del sistema di destinazione.'),parent=self)
             except Exception as exc:messagebox.showerror('Deploy',str(exc),parent=win)
-        ttk.Button(body,text=tr('Genera deploy'),command=create,style='Accent.TButton').grid(row=5,column=0,columnspan=3,pady=16)
+        ttk.Button(body,text=tr('Genera deploy'),command=create,style='Accent.TButton').grid(row=7,column=0,columnspan=3,pady=12)
         name.set(self.project.get('deployment',{}).get('name','MyApplication'));version.set(self.project.get('deployment',{}).get('version','1.0.0'))

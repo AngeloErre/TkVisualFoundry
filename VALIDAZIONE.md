@@ -1,3 +1,7 @@
+# Versione 1.18 — icone applicazione
+
+179 test superati per lingua, 11 grafici saltati. Conversione reale PNG/ICO/ICNS, lettura dei formati generati, sorgente runtime e passaggio icona ai comandi build Mac/Windows verificati. Controllati riferimento Setup, input non validi, pulizia dopo errore e aggiornamento riferimenti dopo rinomina/cestino. Nessuna build Windows reale o verifica visuale Dock/taskbar effettuata.
+
 # Versione 1.17 — catalogo PIP integrato
 
 176 test superati per lingua, 11 grafici saltati per esecuzione. Verificati cache offline, conservazione dopo aggiornamento fallito, cancellazione, paginazione/priorità, metadati di versioni compatibili, selezioni obsolete e gestione dei wizard già aperti. Download reale dal Simple Index PyPI: 938.819 nomi; ricerca NumPy verificata. Non effettuata installazione massiva dei pacchetti. Il nuovo gestore richiede ancora verifica grafica interattiva.

@@ -32,3 +32,8 @@ L’utente finale dell’app compilata non necessita di Python. Restano separati
 Le risorse vengono raccolte accanto ai sorgenti e nei dati del bundle. Usa percorsi relativi per leggerle. Salva database modificabili e dati persistenti in una cartella utente scrivibile, non dentro il bundle. Verifica il contenuto prima di distribuire; credenziali e file privati devono restare esclusi. Import dinamici o librerie particolari possono richiedere hook aggiuntivi in `deploy_build.py`. Collauda ogni build su un computer di destinazione pulito.
 
 Se il sistema non permette la creazione del DMG, il driver conserva l’app e produce uno ZIP Mac con `ditto`.
+
+
+## Icona applicazione
+
+Il wizard Deploy consente di scegliere PNG/ICO/ICNS quadrata da 256–4096 px e mostra un’anteprima. L’IDE importa una copia in assets/app-icons, memorizza il percorso relativo e converte automaticamente ICNS/ICO/PNG per bundle Mac, eseguibile/Setup Windows e finestre Tk. Non occorre marcare manualmente queste icone per includerle nel kit. Rimuovi azzera la selezione senza cancellare i file importati. Copia l’intera cartella quando sposti il progetto; rinomina/cestino dal gestore file aggiornano il riferimento. L’aspetto finale va verificato sul sistema di destinazione.

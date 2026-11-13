@@ -1,8 +1,12 @@
-# VisualTk Studio 1.17
+# VisualTk Studio 1.18
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Application icons (1.18)
+
+In **Deploy… → Application icon**, choose a square PNG, ICO or ICNS image (256–4096 px; a transparent 1024 px PNG is recommended). The image is imported into the project with a preview; remove the selection to restore default icons. Deployment uses Pillow to generate ICNS for the Mac app, ICO for Windows executable/Setup and PNG for runtime windows. Files are included automatically in the kit; the selected path is stored relative to the project. Pillow is now an IDE requirement; deployed apps use Tk for the PNG icon and do not need Pillow solely for their icon. Build on each target OS as before. Icon appearance in Dock/taskbar depends on OS caching and platform behavior.
 
 ## In-app package catalog (1.17)
 

@@ -43,12 +43,16 @@ def rename_file(project,root,relative,new_relative):
     if not target.parent.is_dir():raise ValueError('Destination folder does not exist.')
     source.rename(target)
     project['files']=[new_relative+name[len(relative):] if name==relative or name.startswith(relative+'/') else name for name in project.get('files',[])]
+    icon=project.get('deployment',{}).get('icon','')
+    if icon and (icon==relative or icon.startswith(relative+'/')):project['deployment']['icon']=new_relative+icon[len(relative):]
 
 def trash_file(project,root,relative):
     source=project_file(root,relative);trash=Path(root)/'.visualtk-trash'
     if trash.is_symlink():raise ValueError('Invalid trash folder.')
     trash.mkdir(exist_ok=True);target=trash/(str(time.time_ns())+'-'+source.name);shutil.move(str(source),str(target))
     project['files']=[name for name in project.get('files',[]) if name!=relative and not name.startswith(relative+'/')]
+    icon=project.get('deployment',{}).get('icon','')
+    if icon and (icon==relative or icon.startswith(relative+'/')):project['deployment']['icon']=''
     return target
 
 

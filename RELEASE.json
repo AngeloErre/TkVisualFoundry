@@ -1,8 +1,8 @@
 {
-  "version": "1.17",
+  "version": "1.18",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 176,
+  "tests_passed": 179,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -35,5 +35,6 @@
   ],
   "example_projects_compiled": 12,
   "debugging_validation": "Full suite passed in both languages; settings, editor context, worker cancellation/exit, dependency signatures, geometry and atomic save regressions covered. Interactive GUI/Windows/live services remain pending.",
-  "package_catalog_validation": "Live official PyPI Simple Index: 938819 names; partial-name search, caching, failed refresh preservation, cancellation, pagination and compatible metadata covered. GUI interaction pending."
+  "package_catalog_validation": "Live official PyPI Simple Index: 938819 names; partial-name search, caching, failed refresh preservation, cancellation, pagination and compatible metadata covered. GUI interaction pending.",
+  "icon_validation": "Real PNG/ICO/ICNS generation and decoding, runtime source compilation, Mac/Windows build icon arguments and Setup directive verified; native OS icon display and graphical picker pending."
 }

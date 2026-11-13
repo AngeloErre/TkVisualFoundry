@@ -26,3 +26,8 @@ Native builds do not require Python on the user's computer. Native libraries, dr
 Use relative resource paths. Store writable databases and persistent data in a user directory, outside the app bundle. Review included files and licenses before shipping. Dynamic imports and unusual integrations may need custom PyInstaller hooks in `deploy_build.py`. Test builds on clean target computers.
 
 If disk image creation is unavailable, the driver preserves the app and creates a macOS ZIP using `ditto`.
+
+
+## Application icon
+
+The Deploy wizard accepts square PNG/ICO/ICNS artwork at 256–4096 px and shows a preview. The IDE imports a copy into assets/app-icons, stores a relative reference and converts ICNS/ICO/PNG for the Mac bundle, Windows executable/Setup and Tk windows. Generated icon files are automatically included in the kit. Remove clears the selection without deleting imported files. Move the whole project folder; project explorer rename/trash updates the icon reference. Verify final appearance on the target OS.

@@ -1,3 +1,10 @@
+# 1.18
+
+- Add deployment application-icon selection, preview, removal and project-relative artwork import.
+- Convert PNG/ICO/ICNS artwork into Mac ICNS, Windows ICO and runtime PNG; wire PyInstaller --icon and Inno Setup SetupIconFile.
+- Apply the PNG as the default Tk window icon in the deployment source, preserve old kits without icon metadata and remap/remove icon references with project file operations.
+- Add Pillow to IDE requirements and protect Save As when icon resources would lose their relative base.
+
 # 1.17
 
 - Replace browser-based package search with an in-app Recommended / All PyPI / Installed catalog and paginated name search.

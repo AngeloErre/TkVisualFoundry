@@ -483,7 +483,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         if as_new or path is None:
             s=filedialog.asksaveasfilename(defaultextension='.vtk.json',filetypes=[('VisualTk project','*.vtk.json')]); path=Path(s) if s else None
         if path is None:return False
-        if self.path and path.resolve().parent!=self.path.resolve().parent and self.project.get('files'):
+        if self.path and path.resolve().parent!=self.path.resolve().parent and (self.project.get('files') or self.project.get('deployment',{}).get('icon')):
             messagebox.showinfo(tr('File di progetto'),tr('Per mantenere i percorsi relativi, copia prima la cartella del progetto nella nuova destinazione e aprila da lì.'));return False
         try:
             # Save even unfinished code, allowing recovery after syntax errors.

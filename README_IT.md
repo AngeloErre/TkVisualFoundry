@@ -1,8 +1,12 @@
-# VisualTk Studio 1.17
+# VisualTk Studio 1.18
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Icona dell’applicazione (1.18)
+
+In **Deploy… → Icona applicazione** scegli PNG, ICO o ICNS quadrata (256–4096 px; consigliata PNG trasparente 1024 px). L’immagine viene importata nel progetto e mostrata in anteprima; Rimuovi ripristina l’icona predefinita. Il deploy usa Pillow per generare ICNS per Mac, ICO per eseguibile/Setup Windows e PNG per le finestre in esecuzione. I file sono inclusi automaticamente nel kit e il percorso è salvato relativo al progetto. Pillow è ora un requisito dell’IDE; l’app esportata usa Tk per l’icona PNG e non richiede Pillow solo per questa funzione. La compilazione resta sul sistema di destinazione; Dock/taskbar dipendono anche da cache e comportamento del sistema operativo.
 
 ## Catalogo pacchetti interno (1.17)
 
