@@ -4,6 +4,28 @@
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
 
+## Screenshots
+
+### Visual designer
+
+VB6-inspired workspace with the component toolbox, form designer, Project Explorer and property inspector.
+
+![VisualTk Studio visual designer and project workspace](docs/screenshots/designer-workspace.png)
+
+### Running application
+
+An application running alongside the designer, with standard controls, a calendar and an interactive map.
+
+![Application running with calendar and map components](docs/screenshots/running-application.png)
+
+### Components and documentation
+
+Extended component palette and integrated reference for the LLM client component.
+
+![Component palette and integrated LLM client documentation](docs/screenshots/components-documentation.png)
+
+*Screenshots show the Italian interface on macOS. The IDE also supports English.*
+
 Startup layout fix: Project Explorer and Properties initialize after pane geometry is available, with a wider right dock and minimum visible areas. Valid manual pane sizes are preserved.
 
 ## Adaptive edge anchors — first stage (1.23)

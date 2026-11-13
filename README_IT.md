@@ -4,6 +4,28 @@
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
 
+## Schermate
+
+### Designer visuale
+
+Ambiente ispirato a VB6 con casella degli strumenti, designer dei form, Esplora progetto e ispettore delle proprietà.
+
+![Designer visuale e ambiente di progetto di VisualTk Studio](docs/screenshots/designer-workspace.png)
+
+### Applicazione in esecuzione
+
+Un’applicazione in esecuzione accanto al designer, con controlli standard, calendario e mappa interattiva.
+
+![Applicazione in esecuzione con calendario e mappa](docs/screenshots/running-application.png)
+
+### Componenti e documentazione
+
+Catalogo dei componenti estesi e documentazione integrata del componente client LLM.
+
+![Catalogo componenti e documentazione integrata del client LLM](docs/screenshots/components-documentation.png)
+
+*Le immagini mostrano l’interfaccia italiana su macOS. L’IDE supporta anche l’inglese.*
+
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
 
 ## Ancoraggi adattivi — prima fase (1.23)
