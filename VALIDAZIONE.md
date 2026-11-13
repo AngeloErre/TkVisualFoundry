@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.32.1
+
+266 test superati per lingua, 11 grafici saltati. Colorazione condivisa del Python generato e palette adattiva; priorità breakpoint/debug/selezione mantenuta. Accettazione grafica ancora da completare.
+
 # TkVisualFoundry 1.32
 
 266 test superati per lingua, 11 grafici saltati. SQLite/WAL reale, nomi quotati, file inesistenti non creati, SQL non eseguito, CSV Unicode/multiline, JSON/NDJSON, limiti e confronto duplicati, XLSX reale con formule e hash invariato, protocollo worker reale. Access verificato con contratto ODBC simulato; accettazione Access nativa, XLS/DBF/Parquet e grafica ancora da eseguire. Confronto limitato al campione.

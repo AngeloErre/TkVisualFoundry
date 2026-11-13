@@ -1,3 +1,8 @@
+# 1.32.1 — Generated Python syntax colors
+
+- Share syntax tokenization and light/dark palette between event editor and generated Python.
+- Preserve debug/breakpoint/selection priority and skip unchanged source tokenization.
+
 # 1.32 — Data viewer
 
 - Read-only table/sheet previews, filter, manual/automatic refresh and session baseline comparison.

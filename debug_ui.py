@@ -26,7 +26,7 @@ class DebugViewMixin:
         self.generated.tag_remove('debug_current','1.0','end')
         position=getattr(self,'debug_position',None)
         if position and self.generated.get('1.0','end-1c')==getattr(self,'debug_source',None):
-            line=position[0];self.generated.tag_add('debug_current',f'{line}.0',f'{line}.end');self.generated.tag_raise('debug_current')
+            line=position[0];self.generated.tag_add('debug_current',f'{line}.0',f'{line}.end');self.generated.tag_raise('debug_current');self.generated.tag_raise('sel')
     def show_debug_position(self):
         if not getattr(self,'debug_position',None):return
         self.update_source();self.tabs.select(self.generated);line=self.debug_position[0];self.generated.see(f'{line}.0');self.generated.mark_set('insert',f'{line}.0');self.generated.focus_set()

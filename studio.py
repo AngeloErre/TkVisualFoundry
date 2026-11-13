@@ -492,14 +492,17 @@ class Studio(DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,Insp
         self.code.delete('1.0','end'); self.code.insert('1.0',obj.get('events',{}).get(event,'pass')); self.code.edit_reset();self.tabs.select(1); self.highlight(); self.code.focus_set(); self.update_assistant()
     def global_code(self,key):
         self.commit_code();self.code.configure(state='normal');self.code_object_var.set(tr('Codice progetto')); self.code_target=(self.project,key,True); self.code_label.set(tr('Progetto → ')+key); self.code.delete('1.0','end'); self.code.insert('1.0',self.project.get(key,'')); self.code.edit_reset();self.tabs.select(1); self.highlight(); self.update_assistant()
-    def highlight(self):
-        for tag in ('kw','str','comment','num'):self.code.tag_remove(tag,'1.0','end')
+    def highlight(self,widget=None):
+        target=self.code if widget is None else widget
+        for tag in ('kw','str','comment','num'):target.tag_remove(tag,'1.0','end')
         try:
-            for tok in tokenize.generate_tokens(io.StringIO(self.code.get('1.0','end-1c')).readline):
+            for tok in tokenize.generate_tokens(io.StringIO(target.get('1.0','end-1c')).readline):
                 tag='kw' if keyword.iskeyword(tok.string) else {tokenize.STRING:'str',tokenize.COMMENT:'comment',tokenize.NUMBER:'num'}.get(tok.type)
-                if tag:self.code.tag_add(tag,f'{tok.start[0]}.{tok.start[1]}',f'{tok.end[0]}.{tok.end[1]}')
+                if tag:target.tag_add(tag,f'{tok.start[0]}.{tok.start[1]}',f'{tok.end[0]}.{tok.end[1]}')
         except (tokenize.TokenError,IndentationError,SyntaxError):pass
-        self.paint_event_breakpoints()
+        if target is self.code:self.paint_event_breakpoints()
+        else:
+            for tag in ('break','debug_current','sel'):target.tag_raise(tag)
     def tab_indent(self,event):
         if self.assist_popup:return self.accept_completion()
         self.code.insert('insert','    '); return 'break'
@@ -508,7 +511,10 @@ class Studio(DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,Insp
         line=self.code.get('insert linestart','insert'); indent=re.match(r'\s*',line).group(); self.code.insert('insert','\n'+indent+('    ' if line.rstrip().endswith(':') else '')); return 'break'
     def update_source(self):
         try:
-            source=getattr(self,'debug_source',None) or generate(self.project); self.generated.configure(state='normal'); self.generated.delete('1.0','end'); self.generated.insert('1.0',source)
+            source=getattr(self,'debug_source',None) or generate(self.project)
+            if self.generated.get('1.0','end-1c')!=source:
+                self.generated.configure(state='normal');self.generated.delete('1.0','end');self.generated.insert('1.0',source);self.highlight(self.generated)
+            self.generated.tag_remove('break','1.0','end')
             markers=getattr(self,'session_breaks',self.breaks) if getattr(self,'debug_source',None) else set(self.breaks)|resolve_breakpoints(self.project,source)[0]
             for line in markers:self.generated.tag_add('break',f'{line}.0',f'{line}.end')
             self.generated.configure(state='disabled');self.paint_debug_position(); self.status.set(tr('Pronto • ')+(tr('* modificato • ') if json.dumps(self.project,sort_keys=True)!=self.saved_state else '')+(str(self.path) if self.path else tr('Progetto senza nome')))

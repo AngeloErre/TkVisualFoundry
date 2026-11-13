@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.32
+# TkVisualFoundry 1.32.1
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Colorazione del Python generato (1.32.1)
+
+Il Python generato colora parole chiave, stringhe, commenti e numeri, adattandosi al tema. Breakpoint, riga corrente di debug e selezione restano prioritari. Il codice generato invariato non viene ricolorato inutilmente.
 
 ## Visualizzatore dati (1.32)
 

@@ -77,7 +77,7 @@ cat > "$APP_DIR/Contents/Info.plist" <<'PLIST'
 <key>CFBundleDisplayName</key><string>TkVisualFoundry</string>
 <key>CFBundleExecutable</key><string>VisualTkStudio</string>
 <key>CFBundleIdentifier</key><string>it.visualtk.studio</string>
-<key>CFBundleVersion</key><string>1.32</string>
+<key>CFBundleVersion</key><string>1.32.1</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>NSHighResolutionCapable</key><true/>
 </dict></plist>

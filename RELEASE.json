@@ -1,5 +1,5 @@
 {
-  "version": "1.32",
+  "version": "1.32.1",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
   "tests_passed": 266,
@@ -55,5 +55,6 @@
   "rebrand_validation": "UI/help/docs/generator headers/install labels and Mac build artifacts renamed; legacy storage, settings/history and ownership identifiers preserved. Legacy Mac launcher ownership and recording-from-installed-folder rejection tested. Windows shortcut/Apps migration and GUI/native acceptance pending.",
   "command_palette_validation": "Bilingual/accent-insensitive search, stable ranking, session recent ordering and non-executing discovery tested. Graphical focus, keyboard and modal acceptance pending; desktop Terminal access unavailable.",
   "menu_validation": "Removed custom duplicate menu row; single Tk native menu retains all menu definitions, command palette and shortcuts. Full suite checked; graphical macOS/Windows/Linux acceptance pending.",
-  "data_viewer_validation": "Read-only SQLite/WAL, quoted names, missing files, SQL non-execution, CSV/JSON/NDJSON, limits, multiset comparisons, real XLSX formulas/no-save and worker subprocess passed. Access uses mocked ODBC contract; native Access, legacy XLS/DBF/Parquet and GUI acceptance pending. Preview only: 500 rows, 80 columns, 512 chars per cell."
+  "data_viewer_validation": "Read-only SQLite/WAL, quoted names, missing files, SQL non-execution, CSV/JSON/NDJSON, limits, multiset comparisons, real XLSX formulas/no-save and worker subprocess passed. Access uses mocked ODBC contract; native Access, legacy XLS/DBF/Parquet and GUI acceptance pending. Preview only: 500 rows, 80 columns, 512 chars per cell.",
+  "generated_syntax_validation": "Shared token highlighter and theme palette cover generated Python; debugger/breakpoint/selection priorities retained. Unchanged source avoids repeated tokenization. Interactive graphical acceptance pending."
 }
