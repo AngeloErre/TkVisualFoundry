@@ -27,7 +27,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, colorchooser, simpledialog
 from tkinter.scrolledtext import ScrolledText
 from core import KINDS, EVENTS, new_project, generate, load, validate, identifier
-from components import registry, descriptor, requirements, install_args
+from components import registry, descriptor, requirements, install_args, design_size
 from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
@@ -36,11 +36,15 @@ from configuration_ui import ConfigurationMixin
 from dependency_manager import dependency_plan
 from component_palette import ComponentPalette,LayoutMixin
 from project_ui import ProjectFilesMixin
+from library_ui import LibraryMixin
+from library_catalog import component_family
+from container_ui import ContainerMixin
+from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -94,6 +98,8 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         other.add_command(label=tr('Importa descrittore…'),command=self.import_component)
         other.add_command(label=tr('Prepara pacchetti del componente…'),command=self.palette_dependencies)
         ttk.Menubutton(palette_actions,text=tr('Altre opzioni ▾'),menu=other).pack(fill='x',pady=(3,0))
+        self.palette_family=tk.StringVar(value=tr('Tutte le famiglie'))
+        self.family_box=ttk.Combobox(palette_area,textvariable=self.palette_family,values=[tr('Tutte le famiglie')],state='readonly');self.family_box.pack(fill='x',pady=(2,5));self.family_box.bind('<<ComboboxSelected>>',lambda event:self.filter_palette())
         self.palette_query=tk.StringVar()
         search=ttk.Entry(palette_area,textvariable=self.palette_query);search.pack(side='top',fill='x',pady=(2,5))
         self.palette_query.trace_add('write',lambda *_:self.filter_palette())
@@ -176,8 +182,11 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         query=self.palette_query.get().strip().casefold()
         selected=self.palette.get(self.palette.curselection()[0]) if self.palette.curselection() else None
         self.palette.delete(0,'end')
+        family=self.palette_family.get();reg=registry(self.project);family_of={kind:component_family(kind,self.project,reg) for kind in self.kinds};families=[tr('Tutte le famiglie')]+sorted(set(family_of.values()))
+        self.family_box.configure(values=families)
+        if family not in families:family=tr('Tutte le famiglie');self.palette_family.set(family)
         for kind in self.kinds:
-            if query in kind.casefold():self.palette.insert('end',kind)
+            if query in kind.casefold() and (family==tr('Tutte le famiglie') or family_of[kind]==family):self.palette.insert('end',kind)
         if selected in self.palette.names:self.palette.selection_set(self.palette.names.index(selected))
 
     def refresh(self):
@@ -188,7 +197,9 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         self.tree.delete(*self.tree.get_children())
         for i,f in enumerate(self.project['forms']):
             self.tree.insert('','end',iid='f:'+str(i),text=f['name'],open=True)
-            for w in f['widgets']:self.tree.insert('f:'+str(i),'end',iid='w:'+w['name'],text=w['name']+' : '+w['kind'])
+            for w in ordered_widgets(f):
+                parent='w:'+w['parent'] if w.get('parent') and w['parent']!=f['name'] else 'f:'+str(i)
+                self.tree.insert(parent,'end',iid='w:'+w['name'],text=w['name']+' : '+w['kind']+(' ['+w['page']+']' if w.get('page') else ''),open=True)
         self.refresh_project_files()
         self.draw(); self.properties(); self.update_source()
     def draw(self):
@@ -200,8 +211,8 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         if grid>=5:
             for x in range(ox,ox+min(f['width'],1600),grid):
                 for y in range(oy,oy+min(f['height'],1200),grid): c.create_line(x,y,x+1,y,fill='#bfc6ce')
-        for w in f['widgets']:
-            x=ox+w['x']; y=oy+w['y']; width=w['width']; height=w['height']; p=w['props']; k=w['kind']
+        for w in self.displayed_widgets():
+            wx,wy=widget_origin(f,w);x=ox+wx; y=oy+wy; width=w['width']; height=w['height']; p=w['props']; k=w['kind']
             bg=p.get('bg','#ffffff' if k in ('Entry','Text','Listbox','Combobox','Spinbox') else '#e4e8ee')
             try:
                 c.create_rectangle(x,y,x+width,y+height,fill=bg,outline='#8190a1',tags=('widget',w['name']))
@@ -217,6 +228,10 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
                     c.create_line(cx,y+32,cx,y+height,fill='#c8d2df')
                 for row in range(3):c.create_line(x,y+62+row*28,x+width,y+62+row*28,fill='#c8d2df')
                 c.create_text(x+8,y+height-15,text=tr('Connetti e scegli la tabella durante l’esecuzione'),anchor='w',width=max(1,width-16),fill='#62718a')
+            if k in TABS:
+                pages=p.get('pages',[tr('Pagina 1'),tr('Pagina 2')]);active=self.current_container_pages().get(w['name'],pages[0])
+                c.create_rectangle(x,y,x+width,y+26,fill='#dce8ff',outline='#8190a1')
+                c.create_text(x+8,y+13,text=' | '.join(('['+page+']' if page==active else page) for page in pages),anchor='w',fill='#243b63',width=max(1,width-16))
             if self.selected is w:
                 c.create_rectangle(x-2,y-2,x+width+2,y+height+2,outline='#1677ff',width=2)
                 c.create_rectangle(x+width-5,y+height-5,x+width+5,y+height+5,fill='#1677ff',outline='white',tags='handle')
@@ -229,6 +244,7 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
             for i,f in enumerate(self.project['forms']):
                 for w in f['widgets']:
                     if 'w:'+w['name']==ident:self.form_index=i; self.selected=w
+        if self.selected:self.reveal_widget(self.selected)
         self.formvar.set(self.form['name']); self.draw(); self.properties()
     def switch_form(self,event=None):
         self.commit_code(); self.form_index=self.formbox.current(); self.selected=None; self.draw(); self.properties()
@@ -237,11 +253,14 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         self.propvars={}; obj=self.selected if self.selected is not None else self.form
         self.inspector_title.set(obj['name']+' • '+obj.get('kind',tr('Finestra')))
         values={k:obj[k] for k in ('name','x','y','width','height','title','bg') if k in obj}
+        values=self.container_properties(obj,values)
         if self.selected is not None:values.update(obj['props'])
         for i,(key,val) in enumerate(values.items()):
             ttk.Label(self.propbox,text=key,width=10).grid(row=i,column=0,sticky='w',pady=2)
             var=tk.StringVar(value=json.dumps(val,ensure_ascii=False) if isinstance(val,(list,dict)) else str(val)); self.propvars[key]=var
+            if self.container_property_entry(key,var,i,obj):continue
             entry=ttk.Entry(self.propbox,textvariable=var,width=18); entry.grid(row=i,column=1,sticky='ew'); entry.bind('<Return>',lambda e:self.apply_props())
+        self.page_preview_selector(obj,len(values))
         self.propbox.columnconfigure(1,weight=1)
     def apply_props(self):
         obj=self.selected if self.selected is not None else self.form; candidate=copy.deepcopy(obj)
@@ -249,6 +268,7 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
             for k,v in self.propvars.items():
                 value=v.get()
                 if k in ('x','y','width','height'):candidate[k]=int(value)
+                elif k in ('parent','page') and self.selected is not None:candidate[k]=value
                 elif k in candidate:candidate[k]=value
                 else:
                     previous=candidate['props'].get(k)
@@ -269,7 +289,9 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
             if self.selected is not None and candidate['kind'] in KINDS:
                 cls=getattr(ttk if candidate['kind'] in ('Combobox','Progressbar') else tk,candidate['kind'])
                 test=cls(self,**candidate['props']); test.destroy()
-            self.checkpoint(); obj.clear(); obj.update(candidate); self.refresh()
+            self.checkpoint(); obj.clear(); obj.update(candidate)
+            if self.selected:self.reveal_widget(self.selected)
+            self.refresh()
         except Exception as exc:messagebox.showerror(tr('Proprietà non valide'),str(exc))
     def pick_color(self,key):
         if key in self.propvars:
@@ -297,7 +319,13 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         if k=='Progressbar':props={'value':40,'maximum':100}
         if k in ('Button','Entry','Text','Checkbutton','Radiobutton','Listbox','Combobox','Scale','Spinbox'):props['state']='normal' if k!='Combobox' else 'readonly'
         if k in registry(self.project):props=copy.deepcopy(registry(self.project)[k].get('defaults',{}))
-        self.checkpoint(); self.selected={'name':name,'kind':k,'x':30,'y':30,'width':480 if k in registry(self.project) else 140,'height':280 if k in registry(self.project) else (90 if k in ('Text','Listbox','Canvas','Frame') else 35),'props':props,'events':{}}
+        container=self.selected if self.selected and self.selected['kind'] in CONTAINERS else None
+        width,height=design_size(k,external=k in registry(self.project))
+        self.checkpoint(); self.selected={'name':name,'kind':k,'x':30,'y':30,'width':width,'height':height,'props':props,'events':{}}
+        if container:
+            if container['kind'] in TABS:container['props'].setdefault('pages',copy.deepcopy(registry(self.project)[container['kind']]['defaults']['pages']))
+            self.selected['parent']=container['name']
+            if container['kind'] in TABS:self.selected['page']=self.current_container_pages().get(container['name'],container['props']['pages'][0])
         self.form['widgets'].append(self.selected); self.refresh()
     def add_form(self):
         name=simpledialog.askstring(tr('Nuova finestra'),tr('Nome Python:'),initialvalue=self.unique('Form'),parent=self)
@@ -309,10 +337,12 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         resize=False; target=None
         if self.selected:
             w=self.selected
-            if abs(x-w['x']-w['width'])<9 and abs(y-w['y']-w['height'])<9:target=w; resize=True
+            wx,wy=widget_origin(self.form,w)
+            if abs(x-wx-w['width'])<9 and abs(y-wy-w['height'])<9:target=w; resize=True
         if target is None:
-            for w in reversed(self.form['widgets']):
-                if w['x']<=x<=w['x']+w['width'] and w['y']<=y<=w['y']+w['height']:target=w; break
+            for w in reversed(self.displayed_widgets()):
+                wx,wy=widget_origin(self.form,w)
+                if wx<=x<=wx+w['width'] and wy<=y<=wy+w['height']:target=w; break
         self.selected=target
         if target:self.drag=(x,y,copy.deepcopy(target),resize); self.checkpoint()
         self.draw(); self.properties()
@@ -329,10 +359,10 @@ class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,Worksp
         if self.selected:self.checkpoint(); self.selected['x']=max(0,self.selected['x']+x); self.selected['y']=max(0,self.selected['y']+y); self.draw(); self.properties(); self.update_source()
     def duplicate(self):
         if self.selected:
-            self.commit_code(); self.checkpoint(); w=copy.deepcopy(self.selected); w['name']=self.unique(w['kind']); w['x']+=20; w['y']+=20; self.form['widgets'].append(w); self.selected=w; self.refresh()
+            self.commit_code(); self.checkpoint(); self.duplicate_widget_tree(); self.refresh()
     def delete(self):
         if self.selected:
-            self.commit_code(); self.checkpoint(); self.form['widgets'].remove(self.selected); self.selected=None; self.code_target=None; self.code.delete('1.0','end'); self.refresh()
+            self.commit_code(); self.checkpoint(); removed=descendants(self.form,self.selected['name'])|{self.selected['name']}; self.form['widgets'][:]=[w for w in self.form['widgets'] if w['name'] not in removed]; self.selected=None; self.code_target=None; self.code.delete('1.0','end'); self.refresh()
         elif len(self.project['forms'])>1 and messagebox.askyesno(tr('Elimina finestra'),tr('Eliminare la finestra e tutti i suoi componenti?')):
             self.commit_code(); self.checkpoint(); del self.project['forms'][self.form_index]; self.form_index=0; self.code_target=None; self.refresh()
     def align(self,axis):

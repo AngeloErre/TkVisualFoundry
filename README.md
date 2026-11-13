@@ -1,8 +1,14 @@
-# VisualTk Studio 1.11
+# VisualTk Studio 1.12
 
 A visual Python/Tkinter IDE for macOS, inspired by the Visual Basic 6 workflow. Design multiple forms, edit control properties, write event handlers and run your application from one workspace.
 
 [Guida italiana](README_IT.md) · [Changelog](CHANGELOG.md)
+
+## New in 1.12
+
+Library/theme manager with 19 catalog entries, isolated import/GUI checks, palette family filtering and expanded ttk/CustomTkinter controls. Adds tksheet, map and selected Pmw adapters, project theme providers and nested frame/tab containers. PySimpleGUI, FreeSimpleGUI and guizero are informational separate-engine entries, not supported project backends; Tix is unavailable in the supported Python runtime.
+
+[Library and container guide](docs/en/LIBRARIES.md). Try `examples/Libraries/NestedLibraries.vtk.json` and `MapExample.vtk.json`. The designer preview remains schematic.
 
 ## New in 1.11
 
@@ -56,4 +62,6 @@ GUI behavior and the packaged macOS application require local graphical validati
 
 Try `examples/ProjectFiles/ProjectFilesDemo.vtk.json` for a local Python module and a resource included in deployment.
 
-Validation: 99 tests passed, 11 graphical tests skipped. A native macOS example app and ZIP were built with PyInstaller 6.22.3; resource inclusion and ad hoc signature verification passed. DMG creation was unavailable in this session, and ZIP fallback succeeded. Graphical launch, Windows builds and installation on clean targets remain pending.
+Validation: 118 tests passed, 11 graphical tests skipped. A native macOS example app and ZIP were built with PyInstaller 6.22.3; resource inclusion and ad hoc signature verification passed. DMG creation was unavailable in this session, and ZIP fallback succeeded. Graphical launch, Windows builds and installation on clean targets remain pending.
+
+Version 1.12 validation: 118 tests passed, 11 graphical tests skipped. Seven optional libraries imported successfully in the selected Python 3.15.2 environment. A native macOS example build with CustomTkinter, tksheet and sv-ttk produced an app/ZIP with library resources and a valid ad hoc signature. DMG creation unavailable in this session; fallback succeeded. Graphical execution and Windows builds remain pending.

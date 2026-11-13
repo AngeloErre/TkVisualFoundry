@@ -7,6 +7,7 @@ import tempfile
 from core import generate
 from components import requirements
 from project_files import included_files
+from library_catalog import packaging_flags,theme_config
 
 BUILD_HELPER=Path(__file__).with_name('deploy_build.py')
 
@@ -14,6 +15,8 @@ def export_deployment(project,project_path,destination,name,version):
     if not re.fullmatch(r'[A-Za-z][A-Za-z0-9_-]{0,59}',name):raise ValueError('Application name: letters, digits, _ and -, starting with a letter (max 60).')
     if not re.fullmatch(r'\d+(?:\.\d+){0,3}',version):raise ValueError('Version must contain 1–4 numeric parts.')
     source=generate(project);files=included_files(project,Path(project_path).resolve().parent)
+    config=theme_config(project)
+    if config['provider'] in ('azure','forest') and config.get('file') not in files:raise ValueError('Include the Tcl theme and its resource folder in project files.')
     reserved={'main.py','project.vtk.json'}
     if reserved.intersection(files):raise ValueError('main.py and project.vtk.json are reserved deployment names.')
     parent=Path(destination).resolve();parent.mkdir(parents=True,exist_ok=True);target=parent/(name+'-'+version)
@@ -32,7 +35,7 @@ def export_deployment(project,project_path,destination,name,version):
         (src/'main.py').write_text(prelude+source,encoding='utf-8')
         (temporary/'project.vtk.json').write_text(json.dumps(project,indent=2,ensure_ascii=False),encoding='utf-8')
         (temporary/'requirements.txt').write_text('\n'.join(requirements(project))+'\n',encoding='utf-8')
-        (temporary/'deploy.json').write_text(json.dumps({'name':name,'version':version,'files':sorted(files),'python_minimum':'3.15','project_language':project.get('language','it')},indent=2),encoding='utf-8')
+        (temporary/'deploy.json').write_text(json.dumps({'name':name,'version':version,'files':sorted(files),'packaging_flags':packaging_flags(project),'python_minimum':'3.15','project_language':project.get('language','it')},indent=2),encoding='utf-8')
         shutil.copy2(BUILD_HELPER,temporary/'deploy_build.py')
         for filename,action in [('Run_Mac.command','run'),('Build_Mac.command','build'),('Install_Mac.command','install')]:
             (temporary/filename).write_text('#!/bin/bash\nset -euo pipefail\ncd "$(dirname "$0")"\nPYTHON_BIN="${VTS_PYTHON:-python3}"\nexec "$PYTHON_BIN" deploy_build.py '+action+'\n');(temporary/filename).chmod(0o755)

@@ -7,7 +7,7 @@ import os
 import threading
 from components import registry, requirements, install_args
 
-PACKAGE_MODULES = {'jedi':'jedi','pillow':'PIL','opencv-python':'cv2','numpy':'numpy','pygame-ce':'pygame','pyusb':'usb','pyserial':'serial','sqlalchemy':'sqlalchemy','psycopg':'psycopg','pymysql':'pymysql','python-vlc':'vlc','yt-dlp':'yt_dlp','pywebview':'webview','tkvideoplayer':'tkVideoPlayer','pyinstaller':'PyInstaller'}
+PACKAGE_MODULES = {'sv-ttk':'sv_ttk','pmw':'Pmw','customtkinter':'customtkinter','ttkbootstrap':'ttkbootstrap','ttkthemes':'ttkthemes','tksheet':'tksheet','tkcalendar':'tkcalendar','tkintermapview':'tkintermapview','tkinterweb':'tkinterweb','jedi':'jedi','pillow':'PIL','opencv-python':'cv2','numpy':'numpy','pygame-ce':'pygame','pyusb':'usb','pyserial':'serial','sqlalchemy':'sqlalchemy','psycopg':'psycopg','pymysql':'pymysql','python-vlc':'vlc','yt-dlp':'yt_dlp','pywebview':'webview','tkvideoplayer':'tkVideoPlayer','pyinstaller':'PyInstaller'}
 NOTES = {
  'WebcamView':tr('OpenCV acquisisce il video e richiede NumPy; Pillow converte e visualizza i fotogrammi. Dopo l’installazione macOS deve autorizzare la Fotocamera per Python o l’app avviata.'),
  'USBExplorer':tr('PyUSB richiede anche la libreria nativa libusb (su Mac: brew install libusb). Il wizard PIP non installa driver di sistema.'),

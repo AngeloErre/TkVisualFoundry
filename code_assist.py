@@ -31,6 +31,18 @@ SPECIFIC = {
     'Canvas': {'create_text': ('30, 30, text="Ciao"', tr('Disegna testo.')), 'create_rectangle': ('10, 10, 100, 60', tr('Disegna un rettangolo.'))},
 }
 
+SPECIFIC.update({
+    'Sheet':{'get_data':('',tr('Legge i dati della tabella.')),'set_data':('[["A", 1], ["B", 2]]',tr('Sostituisce i dati della tabella.')),'get_cell':('0, 0',tr('Legge una cella.')),'set_cell':('0, 0, "Updated"',tr('Modifica una cella.'))},
+    'MapView':{'set_position':('40.8518, 14.2681',tr('Centra la mappa sulle coordinate.')),'set_zoom':('12',tr('Imposta lo zoom della mappa.')),'set_address':('"Napoli, Italia"',tr('Cerca un indirizzo online.')),'add_marker':('40.8518, 14.2681, text="Marker"',tr('Aggiunge un marcatore.')),'clear_markers':('',tr('Rimuove i marcatori.'))},
+    'CTkTabview':{'get':('',tr('Legge la pagina attiva.')),'set':('"Page 1"',tr('Seleziona una pagina.')),'add_page':('"New page"',tr('Aggiunge una pagina e restituisce il contenitore.'))},
+    'Notebook':{'add_page':('"New page"',tr('Aggiunge una pagina e restituisce il contenitore.')),'select':('',tr('Legge o seleziona la scheda.'))},
+})
+for name in ('CTkEntry','TEntry'):SPECIFIC[name]=SPECIFIC['Entry']
+for name in ('CTkTextbox',):SPECIFIC[name]=SPECIFIC['Text']
+for name in ('TButton','CTkButton'):SPECIFIC[name]=SPECIFIC['Button']
+for name in ('TScale','CTkSlider'):SPECIFIC[name]=SPECIFIC['Scale']
+for name in ('CTkComboBox','CTkOptionMenu','CTkSegmentedButton'):SPECIFIC[name]={'get':('',tr('Legge la selezione.')),'set':('"First"',tr('Imposta la selezione.'))}
+
 
 def objects(project):
     return {obj['name']:obj for form in project['forms'] for obj in [form]+form['widgets']}
@@ -38,9 +50,10 @@ def objects(project):
 
 def properties(obj, project):
     if 'kind' not in obj:return {'bg':obj.get('bg','white')}
-    if obj.get('kind')=='DatabaseView':return {}
+    if obj.get('kind') in ('DatabaseView','Sheet','MapView','CTkTabview'):return {}
     props=dict(registry(project).get(obj['kind'],{}).get('defaults',{}));props.update(obj.get('props',{}))
     kind=obj['kind']
+    if kind=='Notebook':props.pop('pages',None)
     if kind in ('Button','Label','Checkbutton','Radiobutton'):props.setdefault('text',obj['name'])
     if kind in ('Button','Label','Entry','Text','Checkbutton','Radiobutton','Listbox','Scale','Spinbox','Frame','Canvas'):
         props.setdefault('bg','#ffffff');props.setdefault('fg','#182230') if kind not in ('Frame','Canvas') else None

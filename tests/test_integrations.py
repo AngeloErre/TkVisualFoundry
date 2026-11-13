@@ -25,8 +25,8 @@ class IntegrationTests(unittest.TestCase):
         self.assertIs(button.result,True)
     def test_theme_and_alternative_backend_dependencies(self):
         p=new_project();p['theme']='darkly';p['forms'][0]['widgets']=[{'name':'YT','kind':'YouTubePlayer','x':0,'y':0,'width':400,'height':250,'props':{'backend':'pytubefix'},'events':{}}]
-        specs=requirements(p);self.assertIn('pytubefix',specs);self.assertIn('ttkbootstrap>=1.10',specs)
-        source=generate(p);self.assertIn("ttkbootstrap.Style(theme='darkly')",source);self.assertIn('multiprocessing.freeze_support()',source)
+        specs=requirements(p);self.assertIn('pytubefix',specs);self.assertIn('ttkbootstrap>=1.10,<2',specs)
+        source=generate(p);self.assertIn("ttkbootstrap.Style(theme=name or 'litera')",source);self.assertIn("'name': 'darkly'",source);self.assertIn('multiprocessing.freeze_support()',source)
     def test_youtube_resolves_without_downloading(self):
         class YDL:
             def __init__(self,options):self.options=options

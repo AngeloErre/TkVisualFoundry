@@ -5,9 +5,11 @@ import json
 import keyword
 from components import registry, requirements
 from pathlib import Path
+from hierarchy import ordered_widgets
+from library_catalog import theme_config
 
 KINDS = ('Button','Label','Entry','Text','Checkbutton','Radiobutton','Listbox','Combobox','Scale','Spinbox','Frame','Canvas','Progressbar')
-EVENTS = {'Click':'<Button-1>', 'DoubleClick':'<Double-Button-1>', 'Enter':'<Enter>', 'Leave':'<Leave>', 'KeyPress':'<KeyPress>', 'FocusIn':'<FocusIn>', 'FocusOut':'<FocusOut>', 'Change':'<<ComboboxSelected>>', 'ImageSelected':'<<ImageSelected>>', 'PlaybackStarted':'<<PlaybackStarted>>', 'SnapshotSaved':'<<SnapshotSaved>>', 'DeviceSelected':'<<DeviceSelected>>', 'DeviceError':'<<DeviceError>>', 'DataReceived':'<<DataReceived>>', 'FilesDropped':'<<FilesDropped>>', 'FileSelected':'<<FileSelected>>', 'DialogClosed':'<<DialogClosed>>', 'NavigationStarted':'<<NavigationStarted>>', 'StreamResolved':'<<StreamResolved>>', 'TreeSelect':'<<TreeviewSelect>>', 'TabChanged':'<<NotebookTabChanged>>', 'DateSelected':'<<CalendarSelected>>', 'DatabaseConnected':'<<DatabaseConnected>>', 'DataLoaded':'<<DataLoaded>>', 'RecordSelected':'<<RecordSelected>>', 'DataChanged':'<<DataChanged>>', 'DatabaseError':'<<DatabaseError>>'}
+EVENTS = {'Click':'<Button-1>', 'DoubleClick':'<Double-Button-1>', 'Enter':'<Enter>', 'Leave':'<Leave>', 'KeyPress':'<KeyPress>', 'FocusIn':'<FocusIn>', 'FocusOut':'<FocusOut>', 'Change':'<<ComboboxSelected>>', 'ImageSelected':'<<ImageSelected>>', 'PlaybackStarted':'<<PlaybackStarted>>', 'SnapshotSaved':'<<SnapshotSaved>>', 'DeviceSelected':'<<DeviceSelected>>', 'DeviceError':'<<DeviceError>>', 'DataReceived':'<<DataReceived>>', 'FilesDropped':'<<FilesDropped>>', 'FileSelected':'<<FileSelected>>', 'DialogClosed':'<<DialogClosed>>', 'NavigationStarted':'<<NavigationStarted>>', 'StreamResolved':'<<StreamResolved>>', 'TreeSelect':'<<TreeviewSelect>>', 'TabChanged':'<<NotebookTabChanged>>', 'DateSelected':'<<CalendarSelected>>', 'DatabaseConnected':'<<DatabaseConnected>>', 'DataLoaded':'<<DataLoaded>>', 'RecordSelected':'<<RecordSelected>>', 'DataChanged':'<<DataChanged>>', 'SheetChanged':'<<SheetChanged>>','SheetSelected':'<<SheetSelected>>','MapClicked':'<<MapClicked>>','MarkerSelected':'<<MarkerSelected>>', 'DatabaseError':'<<DatabaseError>>'}
 
 def new_project(language=None):
     return {'version':1,'files':[],'language':language or get_language(),'name':tr('Applicazione'),'forms':[{'name':'Form1','title':'Form1','width':640,'height':440,'bg':'#f0f0f0','widgets':[],'events':{}}], 'imports':'', 'startup':'self.Form1.deiconify()'}
@@ -21,8 +23,11 @@ def validate(p, code=True):
     if not isinstance(files,list) or not all(isinstance(value,str) for value in files):raise ValueError('Project files must be a list of relative paths.')
     if 'deployment' in p and not isinstance(p['deployment'],dict):raise ValueError('Invalid deployment settings.')
     reg=registry(p); requirements(p)
+    theme_config(p)
+    if p.get('appearance_mode','System') not in ('System','Light','Dark'):raise ValueError('Invalid CustomTkinter appearance mode')
     names=set()
     for f in p['forms']:
+        ordered_widgets(f)
         for obj in [f]+f['widgets']:
             n=obj['name']
             if not identifier(n) or n in names: raise ValueError(tr('Nome non valido o duplicato: {v0}', v0=f'{n}'))
@@ -53,7 +58,7 @@ def generate(p):
     reg=registry(p)
     used=sorted({w['kind'] for f in p['forms'] for w in f['widgets'] if w['kind'] in reg})
     prelude=[]
-    embedded={'visualtk_runtime','database_runtime'}
+    embedded={'visualtk_runtime','database_runtime','integration_runtime'}
     if any(reg[k]['module'] in embedded for k in used):
         prelude.append(Path(__file__).with_name('i18n.py').read_text(encoding='utf-8')+'\nset_language('+repr(language)+')\n')
     for module in sorted({reg[k]['module'] for k in used}&embedded):
@@ -64,22 +69,35 @@ def generate(p):
         if d['module'] not in embedded:prelude.append(f"from {d['module']} import {d['class']} as _component_{kind}")
     # Insert embedded runtime and external imports before the Application class.
     index=lines.index('class Application:'); lines[index:index]=prelude+['']
-    if p.get('theme'):
-        index=lines.index('class Application:');lines[index:index]=['import ttkbootstrap']
-        index=lines.index('        self.root.withdraw()');lines[index+1:index+1]=[f"        self._theme_style = ttkbootstrap.Style(theme={p['theme']!r})"]
+    config=theme_config(p)
+    setup=[]
+    if config['provider']!='none':
+        index=lines.index('class Application:');lines[index:index]=[Path(__file__).with_name('theme_runtime.py').read_text(encoding='utf-8')]
+        setup.append(f"        self._theme_style = apply_project_theme(self.root, {config!r})")
+    if p.get('appearance_mode'):
+        index=lines.index('class Application:');lines[index:index]=['import customtkinter']
+        setup.append(f"        customtkinter.set_appearance_mode({p['appearance_mode']!r})")
+    if any(reg[k]['module']=='Pmw' for k in used):setup.extend(['        import Pmw','        Pmw.initialise(self.root)'])
+    index=lines.index('        self.root.withdraw()');lines[index+1:index+1]=setup
     handlers=[]
     for f in p['forms']:
         fn=f['name']; ref='self.'+fn
         lines += [f'        {ref} = tk.Toplevel(self.root)', f'        {ref}.withdraw()',f'        {ref}.title({f["title"]!r})',f'        {ref}.geometry({str(f["width"])+"x"+str(f["height"])!r})',f'        {ref}.configure(bg={f["bg"]!r})', f'        {ref}.protocol("WM_DELETE_WINDOW", self.root.destroy)' if f is p['forms'][0] else f'        {ref}.protocol("WM_DELETE_WINDOW", {ref}.withdraw)']
-        for w in f['widgets']:
+        for w in ordered_widgets(f):
             name=w['name']; kind=w['kind']; wr='self.'+name
             opts=dict(w.get('props',{}))
             if kind in ('Combobox','Progressbar'): opts={k:v for k,v in opts.items() if k in ('values','state','maximum','value','orient','mode')}
             if kind in reg:
                 d=reg[kind]; constructor=d['class'] if d['module'] in embedded else '_component_'+kind
             else:constructor=('ttk' if kind in ('Combobox','Progressbar') else 'tk')+'.'+kind
-            lines.append(f'        {wr} = {constructor}({ref}, **{opts!r})')
-            lines.append(f'        {wr}.place(x={int(w["x"])}, y={int(w["y"])}, width={int(w["width"])}, height={int(w["height"])})')
+            custom_geometry=kind in reg and reg[kind]['module'].split('.')[0]=='customtkinter'
+            if custom_geometry:opts.update(width=int(w['width']),height=int(w['height']))
+            parent=w.get('parent');master='self.'+parent if parent and parent!=fn else ref
+            if w.get('page'):master+=f".pages[{w['page']!r}]"
+            lines.append(f'        {wr} = {constructor}({master}, **{opts!r})')
+            placement={'x':int(w['x']),'y':int(w['y'])}
+            if not custom_geometry:placement.update(width=int(w['width']),height=int(w['height']))
+            lines.append(f'        {wr}.place('+', '.join(f'{key}={value}' for key,value in placement.items())+')')
             for ev,body in w.get('events',{}).items():
                 method=f'event_{name}_{ev}'
                 if ev=='Load': lines.append(f'        self.root.after_idle(self.{method})')

@@ -28,7 +28,7 @@ def main(action=None):
     call([python,'-m','pip','install','-r',ROOT/'requirements.txt'])
     if action=='run':return call([python,ROOT/'src/main.py'])
     call([python,'-m','pip','install','PyInstaller>=6'])
-    extras=[];specs=(ROOT/'requirements.txt').read_text().lower()
+    extras=list(meta.get('packaging_flags',[]));specs=(ROOT/'requirements.txt').read_text().lower()
     if 'psycopg' in specs:extras+=['--hidden-import=sqlalchemy.dialects.postgresql.psycopg','--collect-all=psycopg','--collect-all=psycopg_binary']
     if 'pymysql' in specs:extras+=['--hidden-import=sqlalchemy.dialects.mysql.pymysql','--collect-all=pymysql']
     for file in (ROOT/'src').glob('*.py'):

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "MapExample",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Map example \u2014 needs online tiles",
+      "width": 800,
+      "height": 600,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Map1",
+          "kind": "MapView",
+          "x": 20,
+          "y": 20,
+          "width": 750,
+          "height": 520,
+          "props": {
+            "latitude": 40.8518,
+            "longitude": 14.2681,
+            "zoom": 10
+          },
+          "events": {
+            "MapClicked": "print(self.Map1.selected_position)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

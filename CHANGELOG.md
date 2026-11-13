@@ -1,3 +1,12 @@
+# 1.12
+
+- Add a 19-family library/theme catalog with interpreter-scoped import checks and isolated representative GUI probes.
+- Expand ttk and CustomTkinter controls; add tksheet, map and selected Pmw integrations with contextual completion examples.
+- Add validated nested frame/tab relationships, page previews, subtree duplication/deletion and parent remapping on form duplication.
+- Add ttkbootstrap 1.x, ttkthemes, sv-ttk and local Azure/Forest theme configuration, preserving independent CustomTkinter appearance.
+- Collect active library resources in deployment and fix CustomTkinter constructor geometry.
+- Keep separate-engine frameworks informational and Tix unsupported in Python 3.15+.
+
 # 1.11
 
 - Add a project file/folder explorer with UTF-8 editing, imports, renaming, recoverable trash and explicit deployment inclusion.

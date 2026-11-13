@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "NestedLibraries",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Nested containers and editable data",
+      "width": 900,
+      "height": 620,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Tabs1",
+          "kind": "Notebook",
+          "x": 20,
+          "y": 20,
+          "width": 850,
+          "height": 550,
+          "props": {
+            "pages": [
+              "Data",
+              "Modern"
+            ]
+          },
+          "events": {}
+        },
+        {
+          "name": "Panel1",
+          "kind": "TFrame",
+          "x": 15,
+          "y": 15,
+          "width": 780,
+          "height": 460,
+          "props": {},
+          "events": {},
+          "parent": "Tabs1",
+          "page": "Data"
+        },
+        {
+          "name": "Sheet1",
+          "kind": "Sheet",
+          "x": 15,
+          "y": 15,
+          "width": 730,
+          "height": 340,
+          "props": {
+            "data": [
+              [
+                "A",
+                1
+              ],
+              [
+                "B",
+                2
+              ]
+            ],
+            "headers": [
+              "Name",
+              "Value"
+            ],
+            "editable": true
+          },
+          "events": {},
+          "parent": "Panel1"
+        },
+        {
+          "name": "Button1",
+          "kind": "TButton",
+          "x": 15,
+          "y": 375,
+          "width": 240,
+          "height": 38,
+          "props": {
+            "text": "Update first cell"
+          },
+          "events": {
+            "Click": "self.Sheet1.set_cell(0, 0, \"Updated\")"
+          },
+          "parent": "Panel1"
+        },
+        {
+          "name": "ModernFrame1",
+          "kind": "CTkFrame",
+          "x": 15,
+          "y": 15,
+          "width": 780,
+          "height": 460,
+          "props": {
+            "corner_radius": 8
+          },
+          "events": {},
+          "parent": "Tabs1",
+          "page": "Modern"
+        },
+        {
+          "name": "ModernButton1",
+          "kind": "CTkButton",
+          "x": 25,
+          "y": 25,
+          "width": 240,
+          "height": 42,
+          "props": {
+            "text": "Modern button"
+          },
+          "events": {
+            "Click": "self.ModernButton1.configure(text=\"Done\")"
+          },
+          "parent": "ModernFrame1"
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()",
+  "theme_config": {
+    "provider": "sv-ttk",
+    "mode": "light"
+  }
+}

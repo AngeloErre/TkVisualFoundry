@@ -25,7 +25,12 @@ def duplicate_form(project, index):
         name=prefix+str(n);used.add(name);return name
     form=copy.deepcopy(project['forms'][index])
     form['name']=unique('Form');form['title']+=tr(' (copia)')
-    for widget in form['widgets']:widget['name']=unique(widget['name']+'_copy')
+    mapping={widget['name']:unique(widget['name']+'_copy') for widget in form['widgets']}
+    previous=project['forms'][index]['name']
+    for widget in form['widgets']:
+        widget['name']=mapping[widget['name']]
+        if widget.get('parent')==previous:widget['parent']=form['name']
+        elif widget.get('parent') in mapping:widget['parent']=mapping[widget['parent']]
     return form
 
 class WorkspaceMixin:

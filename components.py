@@ -37,6 +37,21 @@ BUILTINS.update({
 BUILTINS['DatabaseView']={'module':'database_runtime','class':'DatabaseView','defaults':{'backend':'sqlite','database':'visualtk.sqlite','host':'localhost','port':0,'username':'','password_env':'VISUALTK_DB_PASSWORD','table':'','limit':200},'requirements':[],'description':tr('Database SQLite/PostgreSQL/MySQL con tabella dati e comandi CRUD. SQLite non richiede PIP.')}
 BUILTINS['WebcamView']['requirements']=['opencv-python>=4.10','numpy','Pillow>=10']
 
+# Typed integration metadata also drives palette families and the library manager.
+for suffix in ('Button','Label','Entry','Checkbutton','Radiobutton','Scale','Spinbox','Frame','Labelframe','Separator','Scrollbar','Menubutton','Sizegrip','Panedwindow'):
+    BUILTINS['T'+suffix]={'module':'tkinter.ttk','class':suffix,'family':'tkinter.ttk','container':suffix in ('Frame','Labelframe'),'defaults':({'text':suffix} if suffix in ('Button','Label','Checkbutton','Radiobutton','Labelframe','Menubutton') else {}),'requirements':[],'description':'ttk '+suffix}
+for suffix,defaults in {
+    'Label':{'text':'Label'},'CheckBox':{'text':'Check'},'RadioButton':{'text':'Option'},'Slider':{'from_':0,'to':100},'ProgressBar':{},'OptionMenu':{'values':['First','Second']},'ComboBox':{'values':['First','Second']},'SegmentedButton':{'values':['First','Second']},'Textbox':{},'Frame':{'corner_radius':8},'ScrollableFrame':{'label_text':'Panel'}
+}.items():
+    BUILTINS['CTk'+suffix]={'module':'customtkinter','class':'CTk'+suffix,'family':'CustomTkinter','defaults':defaults,'requirements':['customtkinter>=5.2,<7'],'description':'CustomTkinter '+suffix}
+for name in ('CTkButton','CTkEntry','CTkSwitch'):BUILTINS[name].update(family='CustomTkinter',requirements=['customtkinter>=5.2,<7'])
+BUILTINS['CTkTabview']={'module':'integration_runtime','class':'ModernTabs','family':'CustomTkinter','defaults':{'pages':['Page 1','Page 2']},'requirements':['customtkinter>=5.2,<7'],'description':'CustomTkinter tab container'}
+BUILTINS['LabelFrame']={'module':'tkinter','class':'LabelFrame','family':'tkinter','defaults':{'text':'Group'},'requirements':[],'description':'Tkinter labelled container'}
+BUILTINS['Sheet']={'module':'integration_runtime','class':'SheetView','family':'tksheet','defaults':{'data':[['A',1],['B',2]],'headers':['Name','Value'],'editable':True},'requirements':['tksheet>=7,<8'],'description':'Editable table: get_data, set_data, get_cell, set_cell'}
+BUILTINS['MapView']={'module':'integration_runtime','class':'MapView','family':'tkintermapview','defaults':{'latitude':40.8518,'longitude':14.2681,'zoom':10},'requirements':['tkintermapview>=1.29,<2'],'description':'Map with coordinates, zoom and markers'}
+for suffix,defaults in {'ComboBox':{'scrolledlist_items':['First','Second']},'EntryField':{'value':''},'Counter':{'entryfield_value':0},'ScrolledText':{}}.items():
+    BUILTINS['Pmw'+suffix]={'module':'Pmw','class':suffix,'family':'Pmw','defaults':defaults,'requirements':['Pmw>=2.1,<3'],'description':'Pmw '+suffix}
+
 CATALOG = [
  ('Pillow',tr('Immagini / gallerie')),('pygame-ce',tr('Audio MP3 — Python 3.15')),('opencv-python','Webcam / computer vision'),('pyusb',tr('USB generico')),('pyserial',tr('Seriale / Arduino')),
  ('customtkinter',tr('Widget moderni')),('ttkbootstrap',tr('Temi e componenti ttk')),('tkcalendar',tr('Calendario')),('SQLAlchemy',tr('Database remoti')),('psycopg','PostgreSQL'),('PyMySQL','MySQL'),('tksheet',tr('Tabelle')),('matplotlib',tr('Grafici')),('numpy',tr('Calcolo numerico')),('tkinterdnd2',tr('Drag & drop Finder')),('tkfilebrowser',tr('Dialoghi file avanzati')),('tkinterweb',tr('HTML/CSS web')),('tkhtmlview',tr('HTML leggero')),('pywebview',tr('Web nativo')),('python-vlc',tr('Video / streaming')),('yt-dlp','YouTube'),('pytubefix',tr('YouTube alternativo')),('pytube','YouTube legacy'),('tkVideoPlayer',tr('Video legacy / verificare Python')),('cefpython3',tr('Chromium legacy — non supportato su Python 3.13'))]
@@ -63,7 +78,9 @@ def requirements(project):
     for f in project['forms']:
         for w in f['widgets']:
             if w['kind'] in reg:result.update(reg[w['kind']].get('requirements',[]))
-    if project.get('theme'):result.add('ttkbootstrap>=1.10')
+    from library_catalog import theme_requirements
+    result.update(theme_requirements(project))
+    if project.get('appearance_mode'):result.add('customtkinter>=5.2,<7')
     for f in project['forms']:
         for w in f['widgets']:
             if w['kind']=='YouTubePlayer' and w.get('props',{}).get('backend') in ('pytubefix','pytube'):result.add(w['props']['backend'])
@@ -82,3 +99,16 @@ def install_args(python, specs):
     descriptor({'module':'placeholder','class':'Placeholder','requirements':list(specs)})
     if not specs:raise ValueError(tr('Nessuna dipendenza da installare'))
     return [python,'-m','pip','install','--index-url','https://pypi.org/simple',*specs]
+
+def design_size(kind,external=False):
+    if kind in ('Sheet','MapView'):return 600,380
+    if kind in ('Notebook','CTkTabview'):return 500,320
+    if kind in ('Frame','LabelFrame','TFrame','TLabelframe','CTkFrame','CTkScrollableFrame','TPanedwindow'):return 400,240
+    if kind in ('CTkTextbox','PmwScrolledText'):return 360,220
+    if kind=='TSeparator':return 240,12
+    if kind=='TScrollbar':return 20,160
+    if kind=='TSizegrip':return 20,20
+    if kind in ('CTkSlider','TScale'):return 240,36
+    if kind=='CTkProgressBar':return 240,22
+    if kind.startswith(('T','CTk','Pmw')) and kind in BUILTINS and kind not in ('Treeview',):return 180,38
+    return (480,280) if kind in BUILTINS or external else (140,90 if kind in ('Text','Listbox','Canvas') else 35)

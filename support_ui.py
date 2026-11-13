@@ -26,12 +26,7 @@ class SupportMixin:
             # Tcl list quoting preserves font family names containing spaces.
             self.propvars['font'].set(self.tk.call('format','%s',value));self.apply_props();win.destroy()
         ttk.Button(win,text=tr('Applica'),command=apply).pack(pady=10)
-    def choose_theme(self):
-        win=tk.Toplevel(self);win.title(tr('Tema del progetto'));theme=tk.StringVar(value=self.project.get('theme',''))
-        ttk.Label(win,text=tr('Tema ttkbootstrap dell’app generata. Vuoto = standard Tk.')).pack(padx=15,pady=10)
-        ttk.Combobox(win,textvariable=theme,values=['','litera','flatly','cosmo','minty','darkly','superhero','cyborg','solar'],state='readonly').pack(padx=15,pady=5)
-        def apply():self.commit_code();self.checkpoint();self.project['theme']=theme.get();self.update_source();win.destroy()
-        ttk.Button(win,text=tr('Salva tema'),command=apply).pack(pady=10)
+    def choose_theme(self):return self.configure_project_theme()
     def diagnostics(self):
         script="""import importlib.util,sys,ctypes.util
 print('Python:',sys.version);print('Interprete:',sys.executable)
@@ -53,15 +48,16 @@ print('La presenza del modulo non certifica compatibilità o funzionamento hardw
         else:webbrowser.open(directory.as_uri())
     def help_topic(self,topic=tr('Guida rapida')):
         HELP=getattr(sys.modules[self.__class__.__module__],'HELP',tr('Consulta il Manuale'))
-        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — VisualTk Studio 1.11');win.geometry('900x650')
+        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — VisualTk Studio 1.12');win.geometry('900x650')
         row=ttk.Frame(win,padding=5);row.pack(fill='x');selection=tk.StringVar(value=topic);query=tk.StringVar()
-        box=ttk.Combobox(row,textvariable=selection,values=[tr('File e deploy'),tr('Guida rapida'),tr('Manuale'),tr('Estensioni'),tr('Esempi'),tr('Compatibilità'),'Database',tr('Pacchetti PIP'),'IntelliSense'],state='readonly');box.pack(side='left');entry=ttk.Entry(row,textvariable=query);entry.pack(side='left',fill='x',expand=True,padx=6)
+        box=ttk.Combobox(row,textvariable=selection,values=[tr('Librerie e temi'),tr('File e deploy'),tr('Guida rapida'),tr('Manuale'),tr('Estensioni'),tr('Esempi'),tr('Compatibilità'),'Database',tr('Pacchetti PIP'),'IntelliSense'],state='readonly');box.pack(side='left');entry=ttk.Entry(row,textvariable=query);entry.pack(side='left',fill='x',expand=True,padx=6)
         text=ScrolledText(win,wrap='word',font=('Helvetica',12));text.pack(fill='both',expand=True)
         files={tr('Manuale'):'README.md',tr('Estensioni'):'ESTENSIONI.md',tr('Esempi'):'ESEMPI.md',tr('Compatibilità'):'COMPATIBILITA.md','Database':'DATABASE.md',tr('Pacchetti PIP'):'PACCHETTI.md','IntelliSense':'INTELLISENSE.md'}
         if get_language()=='en':
             files={tr('Manuale'):'README.md',tr('Estensioni'):'docs/en/EXTENSIONS.md',tr('Esempi'):'docs/en/EXAMPLES.md',tr('Compatibilità'):'docs/en/COMPATIBILITY.md',tr('Database'):'docs/en/DATABASE.md',tr('Pacchetti PIP'):'docs/en/PACKAGES.md','IntelliSense':'docs/en/INTELLISENSE.md'}
         else:files[tr('Manuale')]='README_IT.md'
         files[tr('File e deploy')]='docs/en/DEPLOYMENT.md' if get_language()=='en' else 'PROJECTS_DEPLOY.md'
+        files[tr('Librerie e temi')]='docs/en/LIBRARIES.md' if get_language()=='en' else 'LIBRARIES_THEMES.md'
         def show(event=None):
             path=base/files.get(selection.get(),'README.md');content=HELP if selection.get()==tr('Guida rapida') else (path.read_text(encoding='utf-8') if path.exists() else tr('Documento non disponibile.'))
             text.configure(state='normal');text.delete('1.0','end');text.insert('1.0',content);text.configure(state='disabled')

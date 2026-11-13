@@ -21,7 +21,7 @@ class ExtensionTests(unittest.TestCase):
         self.assertIn('class ImageGallery(tk.Frame):',source)
         self.assertNotIn('from visualtk_runtime import',source)
         for name,d in BUILTINS.items():
-            constructor=d['class'] if d['module'] in ('visualtk_runtime','database_runtime') else '_component_'+name
+            constructor=d['class'] if d['module'] in ('visualtk_runtime','database_runtime','integration_runtime') else '_component_'+name
             self.assertIn('self.'+name+'1 = '+constructor+'(',source)
         for spec in ['Pillow>=10','pygame-ce>=2.5.8','opencv-python>=4.10','pyusb>=1.2','pyserial>=3.5']:self.assertIn(spec,requirements(p))
         self.assertEqual(source.count('class WebcamView(tk.Frame):'),1)
