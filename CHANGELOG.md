@@ -1,3 +1,10 @@
+# 1.24
+
+- Add adaptive anchors inside Notebook pages with theme-dependent client-area calibration.
+- Handle pages first visited after resize, independent per-page bindings and safe queued teardown.
+- Add a two-page demo, regression coverage and bilingual documentation.
+- 218 tests passed per language; 11 graphical tests skipped. Interactive resizing remains pending.
+
 # 1.23
 
 - Add optional multi-control edge-anchor settings with minimum stretched dimensions and fixed-placement reset.

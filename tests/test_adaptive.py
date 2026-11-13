@@ -35,3 +35,27 @@ class AnchorTests(unittest.TestCase):
         self.assertEqual(widget.place_configure.call_args.kwargs['x'],300)
         bindings['<Configure>'][0](types.SimpleNamespace(widget=object()));self.assertEqual(pending,[])
         bindings['<Configure>'][0](types.SimpleNamespace(widget=parent));bindings['<Configure>'][0](types.SimpleNamespace(widget=parent));self.assertEqual(len(pending),1)
+    def test_notebook_generation_targets_each_page(self):
+        p=new_project();tab=dict(name='Tabs',kind='Notebook',x=0,y=0,width=400,height=300,props={'pages':['One','Two']},events={})
+        children=[dict(name='Button'+str(i),kind='Button',parent='Tabs',page=page,x=10,y=10,width=100,height=30,props={},events={},layout={'anchors':['right','bottom']}) for i,page in enumerate(['One','Two'])]
+        p['forms'][0]['widgets']=[tab,*children];source=generate(p)
+        for page in ['One','Two']:self.assertIn("_vts_install_anchors(self.Tabs.pages["+repr(page)+"]",source)
+        self.assertEqual(source.count('baseline_host=self.Tabs'),2);compile(source,'tabs','exec')
+        tab['kind']='CTkTabview'
+        with self.assertRaises(ValueError):validate(p)
+
+    def test_page_first_map_after_resize_uses_designed_client_area(self):
+        callbacks=[];bindings={};state={'mapped':False,'width':596,'height':424}
+        parent=types.SimpleNamespace(winfo_exists=lambda:True,winfo_ismapped=lambda:state['mapped'],winfo_width=lambda:state['width'],winfo_height=lambda:state['height'],after_idle=lambda cb:callbacks.append(cb) or 'timer',after_cancel=Mock())
+        parent.bind=lambda event,callback,add:bindings.__setitem__(event,callback)
+        host=types.SimpleNamespace(winfo_exists=lambda:True,winfo_width=lambda:600,winfo_height=lambda:450)
+        widget=Mock();widget.winfo_exists.return_value=True
+        _vts_install_anchors(parent,[(widget,self.original,{'anchors':['right','bottom']})],(400,300),baseline_host=host)
+        callbacks.pop()();widget.place_configure.assert_not_called()
+        state['mapped']=True;bindings['<Map>'](types.SimpleNamespace(widget=parent));callbacks.pop()()
+        self.assertEqual(widget.place_configure.call_args.kwargs,{'x':300,'y':200,'width':100,'height':30})
+        state.update(width=696,height=474);bindings['<Configure>'](types.SimpleNamespace(widget=parent));callbacks.pop()()
+        self.assertEqual(widget.place_configure.call_args.kwargs['x'],400)
+        # Teardown cancels the queued operation and never touches destroyed widgets.
+        bindings['<Configure>'](types.SimpleNamespace(widget=parent));bindings['<Destroy>'](types.SimpleNamespace(widget=parent));parent.after_cancel.assert_called_once_with('timer')
+        count=widget.place_configure.call_count;callbacks.pop()();self.assertEqual(widget.place_configure.call_count,count)

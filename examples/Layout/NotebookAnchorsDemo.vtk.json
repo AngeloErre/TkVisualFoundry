@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "NotebookAnchors",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Notebook anchors \u2014 resize and switch pages",
+      "width": 640,
+      "height": 440,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Tabs",
+          "kind": "Notebook",
+          "x": 10,
+          "y": 10,
+          "width": 620,
+          "height": 420,
+          "props": {
+            "pages": [
+              "Editor",
+              "Actions"
+            ]
+          },
+          "events": {},
+          "layout": {
+            "anchors": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ]
+          }
+        },
+        {
+          "name": "Editor",
+          "kind": "Text",
+          "parent": "Tabs",
+          "page": "Editor",
+          "x": 10,
+          "y": 10,
+          "width": 590,
+          "height": 350,
+          "props": {},
+          "events": {},
+          "layout": {
+            "anchors": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ]
+          }
+        },
+        {
+          "name": "CloseButton",
+          "kind": "Button",
+          "parent": "Tabs",
+          "page": "Actions",
+          "x": 490,
+          "y": 340,
+          "width": 110,
+          "height": 32,
+          "props": {
+            "text": "Close"
+          },
+          "events": {
+            "Click": "self.root.destroy()"
+          },
+          "layout": {
+            "anchors": [
+              "right",
+              "bottom"
+            ]
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

@@ -123,11 +123,13 @@ def generate(p):
     for form in p['forms']:
         grouped={};by_name={w['name']:w for w in form['widgets']}
         for widget in form['widgets']:
-            if widget.get('layout') is not None:grouped.setdefault(widget.get('parent') or form['name'],[]).append(widget)
-        for parent,widgets in grouped.items():
+            if widget.get('layout') is not None:grouped.setdefault((widget.get('parent') or form['name'],widget.get('page')),[]).append(widget)
+        for (parent,page),widgets in grouped.items():
             container=by_name.get(parent,form);baseline=(container['width'],container['height'])
             entries=', '.join('(self.'+w['name']+', '+repr({key:w[key] for key in ('x','y','width','height')})+', '+repr(w['layout'])+')' for w in widgets)
-            lines.append('        _vts_install_anchors(self.'+parent+', ['+entries+'], '+repr(baseline)+')')
+            target='self.'+parent+(f'.pages[{page!r}]' if page else '')
+            host=', baseline_host=self.'+parent if page else ''
+            lines.append('        _vts_install_anchors('+target+', ['+entries+'], '+repr(baseline)+host+')')
     lines += ['        self.startup()','','    def _error(self, kind, value, tb):','        traceback.print_exception(kind, value, tb)',f'        messagebox.showerror({tr("Errore applicazione",language=language)!r}, str(value))','','    def show(self, name):','        getattr(self, name).deiconify()','','    def hide(self, name):','        getattr(self, name).withdraw()','','    def startup(self):']
     lines += ['        '+l for l in (p.get('startup') or 'pass').splitlines()]
     for name,body in handlers:

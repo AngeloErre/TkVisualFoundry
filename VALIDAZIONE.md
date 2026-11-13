@@ -1,3 +1,7 @@
+# Versione 1.24
+
+218 test superati per lingua, 11 grafici saltati. Nuove regressioni: generazione indipendente per pagina Notebook, prima apertura dopo ridimensionamento, calibrazione area interna, cancellazione callback alla distruzione. Ridimensionamento grafico e temi reali ancora da collaudare. 14 esempi validati e compilati.
+
 # Versione 1.23
 
 216 test superati per lingua, 11 grafici saltati. Verificate geometria ancorata a destra/basso, espansione/minimi, centratura, posizione fissa, helper incorporato, contenitori non supportati e accorpamento degli eventi senza sostituire binding esistenti. Non verificata interazione grafica di ridimensionamento. Supporto limitato alla prima fase Tk/ttk su form/frame ordinari.

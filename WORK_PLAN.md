@@ -46,3 +46,9 @@ Next: adaptive layouts and visual debugging.
 - [ ] Later: CustomTkinter scaling, tab/scrollable client areas and visual grid/pack layouts.
 
 Next: visual debugging and expansion of adaptive layouts.
+
+## Phase 8 — adaptive Notebook pages (1.24)
+
+- [x] Independent anchors per page with measured client area and first-map calibration after resize.
+- [x] Regression tests, demo and bilingual documentation; graphical/theme acceptance pending.
+- [ ] CustomTkinter scaling, scrollable client areas and visual grid/pack remain future work.

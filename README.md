@@ -1,4 +1,4 @@
-# VisualTk Studio 1.23
+# VisualTk Studio 1.24
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
@@ -10,11 +10,11 @@ Startup layout fix: Project Explorer and Properties initialize after pane geomet
 
 Select one or more controls and use **Edit → Adaptive anchors…** or inspector Actions. Left/top preserves position, right/bottom follows the container edge, opposite edges stretch the control and no edges centers it relative to the container size change. Set minimum stretched dimensions or restore fixed placement. The designer keeps the original coordinates; use **F6 preview** or run and resize the window to see adaptation.
 
-This stage supports Tk/ttk-style geometry on forms and ordinary Frame/LabelFrame/TFrame/TLabelframe/Canvas containers. Nested ordinary frames can each adapt. CustomTkinter controls and children inside tab pages/scrollable containers are explicitly rejected for now; they still need code-managed layout. A tab container itself can be anchored when its own geometry is Tk-style. This is edge anchoring, not a visual grid/pack editor. Minimum dimensions must not exceed the designed size; when the window is too small, minimum size wins over fitting both edges.
+This stage supports Tk/ttk-style geometry on forms, ordinary Frame/LabelFrame/TFrame/TLabelframe/Canvas containers and Notebook pages. Page client sizes are calibrated from actual theme insets, including pages first opened after a resize. Nested ordinary frames can each adapt. CustomTkinter controls and children inside scrollable containers are explicitly rejected for now; they still need code-managed layout. A tab container itself can be anchored when its own geometry is Tk-style. This is edge anchoring, not a visual grid/pack editor. Minimum dimensions must not exceed the designed size; when the window is too small, minimum size wins over fitting both edges.
 
-Bindings are coalesced and added without replacing existing handlers; helpers are embedded in standalone/deployment/preview source. Existing projects without layout settings keep fixed placement. 216 tests passed per language, 11 graphical tests skipped; real resize interaction remains pending.
+Bindings are coalesced and added without replacing existing handlers; helpers are embedded in standalone/deployment/preview source. Existing projects without layout settings keep fixed placement. 218 tests passed per language, 11 graphical tests skipped; real resize interaction remains pending.
 
-Try `examples/Layout/AnchorsDemo.vtk.json` for nested stretching and a bottom-right button.
+Try `examples/Layout/NotebookAnchorsDemo.vtk.json` for two resizable pages, or `examples/Layout/AnchorsDemo.vtk.json` for nested stretching and a bottom-right button.
 
 ## Local history and recovery (1.22)
 

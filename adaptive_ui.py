@@ -19,7 +19,7 @@ class AdaptiveMixin:
         sizes=ttk.Frame(win,padding=10);sizes.pack(fill='x');minimum={}
         for key,label in [('min_width',tr('Larghezza minima')),('min_height',tr('Altezza minima'))]:
             ttk.Label(sizes,text=label).pack(side='left');minimum[key]=tk.StringVar(value=str(initial.get(key,min(10,min(w['width' if key=='min_width' else 'height'] for w in controls)))));ttk.Entry(sizes,textvariable=minimum[key],width=6).pack(side='left',padx=8)
-        ttk.Label(win,text=tr('Prima fase: controlli con geometria Tk/ttk su form e frame/canvas ordinari. CustomTkinter, pagine di schede e contenitori scorrevoli interni richiedono ancora layout da codice.'),wraplength=570,padding=12).pack(fill='x')
+        ttk.Label(win,text=tr('Controlli Tk/ttk su form, frame/canvas e pagine Notebook. CustomTkinter e contenitori scorrevoli interni richiedono ancora layout da codice.'),wraplength=570,padding=12).pack(fill='x')
         def apply(reset=False):
             self.commit_code();probe=copy.deepcopy(self.project);found=[]
             try:

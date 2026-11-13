@@ -1,8 +1,8 @@
 {
-  "version": "1.23",
+  "version": "1.24",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 216,
+  "tests_passed": 218,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -33,7 +33,7 @@
     "it",
     "en"
   ],
-  "example_projects_compiled": 12,
+  "example_projects_compiled": 14,
   "debugging_validation": "Full suite passed in both languages; settings, editor context, worker cancellation/exit, dependency signatures, geometry and atomic save regressions covered. Interactive GUI/Windows/live services remain pending.",
   "package_catalog_validation": "Live official PyPI Simple Index: 938819 names; partial-name search, caching, failed refresh preservation, cancellation, pagination and compatible metadata covered. GUI interaction pending.",
   "icon_validation": "Real PNG/ICO/ICNS generation and decoding, runtime source compilation, Mac/Windows build icon arguments and Setup directive verified; native OS icon display and graphical picker pending.",
@@ -42,5 +42,5 @@
   "preview_validation": "Visual-only snapshot/source compilation, callback removal, service/external placeholders, selected form/page and independent spawned-process ownership tested. Real graphical preview pending.",
   "refactor_validation": "Source-preserving rename, parent/form/event references, Unicode positions, reflective literals, collisions/syntax and shadowed-self warnings tested. Interactive review/undo pending.",
   "history_validation": "Pending-editor capture, deduplication/retention, incomplete code, atomic failure preservation, corrupt records, comparison limits and recovery naming collisions tested. Interactive history/recovery pending.",
-  "adaptive_validation": "Edge/center/stretch/minimum geometry, standalone helper embedding, unsupported containers and coalesced add-on Configure handlers tested. Tk/ttk form/frame first stage only; graphical resizing pending."
+  "adaptive_validation": "Tk/ttk forms, ordinary frames and Notebook pages. Theme client baseline, first map after resize, independent page generation, teardown and coalesced bindings tested. CustomTkinter and scrollable internals unsupported; graphical/theme acceptance pending."
 }

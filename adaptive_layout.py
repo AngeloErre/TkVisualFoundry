@@ -1,4 +1,4 @@
-"""Opt-in edge anchoring for Tk/ttk coordinates and ordinary frame containers."""
+"""Opt-in edge anchoring for Tk/ttk coordinates and ordinary frames and Notebook pages."""
 EDGES={'left','top','right','bottom'}
 PARENTS={'Frame','LabelFrame','TFrame','TLabelframe','Canvas'}
 
@@ -14,7 +14,7 @@ def validate_layout(form,widget,registry):
         if value>widget['width' if key=='min_width' else 'height']:raise ValueError('Minimum size cannot exceed the designed control size.')
     if registry.get(widget['kind'],{}).get('module','').startswith('customtkinter'):raise ValueError('Adaptive anchors currently support Tk/ttk geometry; CustomTkinter controls are not supported yet.')
     parent=next((w for w in form['widgets'] if w['name']==widget.get('parent')),None)
-    if widget.get('page') or parent and parent['kind'] not in PARENTS:raise ValueError('Adaptive anchors currently require a form or ordinary Tk/ttk frame/canvas parent.')
+    if parent and parent['kind'] not in PARENTS and not (parent['kind']=='Notebook' and widget.get('page')):raise ValueError('Adaptive anchors currently require a form, ordinary Tk/ttk frame/canvas parent or Notebook page.')
 
 def anchored_geometry(original,baseline,current,spec):
     result={key:original[key] for key in ('x','y','width','height')};edges=set(spec.get('anchors',['left','top']))
@@ -24,15 +24,22 @@ def anchored_geometry(original,baseline,current,spec):
         elif near not in edges:result[axis]=max(0,original[axis]+round(delta/2))
     return result
 
-def _vts_install_anchors(parent,entries,baseline):
-    pending=[None];alive=[True]
+def _vts_install_anchors(parent,entries,baseline,baseline_host=None):
+    pending=[None];alive=[True];client_baseline=[None]
     def apply():
         pending[0]=None
         if not alive[0] or not parent.winfo_exists():return
         size=(parent.winfo_width(),parent.winfo_height())
         if min(size)<=1:return
+        if baseline_host is not None and client_baseline[0] is None:
+            if not parent.winfo_ismapped() or not baseline_host.winfo_exists():return
+            host_size=(baseline_host.winfo_width(),baseline_host.winfo_height())
+            if min(host_size)<=1:return
+            # Calibrate theme-dependent client insets, even on a first visit after resize.
+            client_baseline[0]=tuple(size[i]-(host_size[i]-baseline[i]) for i in (0,1))
+        effective_baseline=client_baseline[0] or baseline
         for widget,original,spec in entries:
-            if widget.winfo_exists():widget.place_configure(**anchored_geometry(original,baseline,size,spec))
+            if widget.winfo_exists():widget.place_configure(**anchored_geometry(original,effective_baseline,size,spec))
     def schedule(event=None):
         if event is not None and event.widget is not parent:return
         if alive[0] and pending[0] is None:pending[0]=parent.after_idle(apply)
