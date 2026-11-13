@@ -1,8 +1,16 @@
-# VisualTk Studio 1.16
+# VisualTk Studio 1.17
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Catalogo pacchetti interno (1.17)
+
+Da **PIP → Catalogo pacchetti…** (oppure Installa un pacchetto…) consulta **Consigliati**, **Tutto PyPI** e **Installati** senza aprire il browser. Cerca per parte del nome, sfoglia pagine da 100 risultati e seleziona un pacchetto per descrizione, licenza, URL e versione stabile compatibile con Python. Puoi installarlo tramite wizard o aggiungerlo ai requisiti del progetto. **Nome esatto…** consulta direttamente un pacchetto noto senza scaricare l’indice completo.
+
+Tutto PyPI usa il Simple Index ufficiale, scaricato al primo accesso in background e conservato in cache locale. Le ricerche sui nomi funzionano poi anche offline; dettagli e installazione richiedono rete. **Aggiorna indice** rinnova il catalogo; le cache oltre 24 ore vengono segnalate. La ricerca globale riguarda i nomi, non le descrizioni complete. La consultazione non importa codice dei pacchetti; PIP verifica dipendenze e disponibilità per piattaforma/wheel.
+
+176 test superati per lingua e 11 grafici saltati. Il download reale di verifica ha restituito 938.819 nomi; il numero cambia nel tempo. Interazione grafica ancora da collaudare.
 
 ## Correzioni di affidabilità (1.16)
 

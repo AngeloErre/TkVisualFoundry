@@ -47,3 +47,8 @@ Dopo l’installazione sono eseguiti `pip check` e una nuova verifica dei requis
 Un’interruzione non disinstalla pacchetti già scritti: premi Verifica prima di continuare. Se l’errore riguarda rete, certificati, distribuzioni incompatibili o un Python non scrivibile, correggi la causa o scegli un ambiente virtuale funzionante in Configurazione.
 
 La versione 1.8 è stata provata con un’installazione PIP reale da un wheel di test locale in un ambiente temporaneo. Download da PyPI e percorso grafico completo richiedono una verifica sul Mac di destinazione.
+
+
+## Catalogo interno (1.17)
+
+Apri PIP → Catalogo pacchetti…: Consigliati raccoglie i pacchetti dei componenti; Tutto PyPI permette ricerche per nome nell’indice ufficiale; Installati mostra il Python configurato. Cerca e sfoglia 100 risultati per pagina, poi seleziona per dettagli/versione stabile compatibile e installazione o aggiunta al progetto. Nome esatto… evita il download dell’intero indice. La cache dei nomi resta utilizzabile offline; descrizioni e installazioni richiedono rete. Aggiorna indice rinnova i nomi e conserva la vecchia cache se fallisce. La ricerca per descrizione completa non è disponibile.

@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.16\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.16\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.17\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.17\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -615,3 +615,5 @@ EN_MESSAGES.update({'Alfabetico': 'Alphabetical', 'Aspetto e comportamento': 'Ap
 EN_MESSAGES.update({'Cerca componente':'Find component','Filtra le proprietà per nome':'Filter properties by name'})
 
 EN_MESSAGES['Le coordinate devono essere numeri interi.']='Coordinates must be integers.'
+
+EN_MESSAGES.update({'Aggiorna indice': 'Refresh index', 'Cache oltre 24 ore: usa Aggiorna indice per aggiornarla.': 'Cache is over 24 hours old: use Refresh index to update it.', 'Caricamento catalogo… Il primo accesso a Tutto PyPI scarica l’indice dei nomi.': 'Loading catalog… First access to All PyPI downloads the project-name index.', 'Catalogo pacchetti…': 'Package catalog…', 'Cerca e installa pacchetti senza uscire dall’app. Tutto PyPI cerca nei nomi; seleziona un risultato per i dettagli.': 'Find and install packages inside the app. All PyPI searches names; select a result for details.', 'Consigliati': 'Recommended', 'Indice aggiornato da PyPI': 'Index refreshed from PyPI', 'Indice locale': 'Local index', 'Installati': 'Installed', 'Interprete cambiato: seleziona nuovamente il pacchetto.': 'Interpreter changed: select the package again.', 'Lettura dettagli: ': 'Loading details: ', 'Nessuna versione stabile compatibile': 'No compatible stable release', 'Precedenti': 'Previous', 'Seleziona un pacchetto e attendi i dettagli.': 'Select a package and wait for its details.', 'Successivi': 'Next', 'Tutto PyPI': 'All PyPI', 'Versione installata': 'Installed version', 'Nome esatto…': 'Exact name…'})

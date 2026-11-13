@@ -1,7 +1,7 @@
-# VisualTk Studio 1.16
+# VisualTk Studio 1.17
 
-General debugging and reliability release: recover malformed settings and colors, prevent stale event-editor context/undo across switches and history restores, preserve files on failed saves and validate geometry before rendering.
+In-app PIP package catalog: Recommended, All PyPI and Installed lists, partial-name search, pagination, package details and compatible stable release selection. Install through the existing wizard or add the selected version to project requirements. Exact-name lookup bypasses the full index download. Browser search is removed.
 
-Cancel queued network checks when closing, track report validity by actual dependency inputs, scope API documentation results to the selected interpreter and resolve project-local component modules. Handle analysis-worker exit races.
+The official Simple Index loads in the background and is cached locally. Search cached names offline; metadata/installations require network access. Refresh explicitly for newer names; old caches are marked. Search covers names rather than full descriptions. No package code is imported for browsing.
 
-167 tests passed in Italian and 167 in English; 11 GUI tests skipped per run. All 12 example projects validated/compiled, installed Tkinter API documentation and installer/Python syntax checked. These checks do not establish graphical acceptance, live device/service operation or Windows/clean-target installation.
+176 tests passed in Italian and English; 11 graphical tests skipped per run. A real index download returned 938819 names and a NumPy search returned matching results. Graphical usability and clean-target installs remain pending.

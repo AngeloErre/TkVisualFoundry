@@ -1,3 +1,7 @@
+# Versione 1.17 — catalogo PIP integrato
+
+176 test superati per lingua, 11 grafici saltati per esecuzione. Verificati cache offline, conservazione dopo aggiornamento fallito, cancellazione, paginazione/priorità, metadati di versioni compatibili, selezioni obsolete e gestione dei wizard già aperti. Download reale dal Simple Index PyPI: 938.819 nomi; ricerca NumPy verificata. Non effettuata installazione massiva dei pacchetti. Il nuovo gestore richiede ancora verifica grafica interattiva.
+
 # Versione 1.16 — debugging generale
 
 Suite completa: 167 test superati in italiano e 167 in inglese; 11 test grafici saltati per esecuzione. Nuove regressioni: impostazioni malformate, colori nominati, reset del contesto/undo editor, chiusura worker e cancellazione delle verifiche in coda, validità dei report, geometria e salvataggio atomico con errore simulato.

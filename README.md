@@ -1,8 +1,16 @@
-# VisualTk Studio 1.16
+# VisualTk Studio 1.17
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## In-app package catalog (1.17)
+
+Use **PIP → Package catalog…** (or Install a package…) to browse **Recommended**, **All PyPI** and **Installed** packages without opening a browser. Search by partial project name, browse pages of 100 results, select a package for description/license/project URLs and its latest Python-compatible stable release, then install through the existing wizard or add a pinned project requirement. **Exact name…** retrieves a known package directly without downloading the full index.
+
+All PyPI uses the official Simple Index, downloaded on first access in a background task and cached locally. Subsequent name searches can use that cache offline; metadata and installation still need network access. Use **Refresh index** for new projects/updates; caches older than 24 hours are marked. Global search matches names, not full descriptions. No package code is imported to browse the catalog; PIP still checks dependencies and platform/wheel availability.
+
+176 tests passed in each language, with 11 graphical tests skipped. A live index download returned 938,819 project names during validation; counts change over time. Graphical interaction remains to be checked.
 
 ## Reliability fixes (1.16)
 

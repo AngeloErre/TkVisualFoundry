@@ -1,3 +1,11 @@
+# 1.17
+
+- Replace browser-based package search with an in-app Recommended / All PyPI / Installed catalog and paginated name search.
+- Stream the official Simple Index in a cancellable worker, cache names atomically and keep the previous cache on failed refresh.
+- Load descriptions/licenses and Python-compatible stable version metadata internally; support direct exact-name lookup without the full index.
+- Scope selections to the current interpreter, debounce metadata requests and prevent stale results from enabling installation.
+- Extend recommendations with component/provider packages and replace idle PIP wizard plans when a different explicit package is selected.
+
 # 1.16
 
 - Recover malformed IDE settings and validate color/grid/font/flag values before building the UI; accept Tk named editor colors.

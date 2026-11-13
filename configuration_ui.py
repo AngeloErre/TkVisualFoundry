@@ -1,4 +1,5 @@
 """Discoverable configuration center and component-specific setup."""
+from library_explorer import LibraryExplorer
 from i18n import tr,get_language,LANGUAGES
 import json
 from pathlib import Path
@@ -12,15 +13,13 @@ from runtime_requirements import validate_interpreter
 class ConfigurationMixin:
     def open_dependencies(self,kind=None,props=None,on_ready=None,allow_skip=False,specs=None,auto_install=None):
         previous=getattr(self,'dependency_window',None)
-        if previous and previous.winfo_exists():previous.lift();return previous
+        if previous and previous.winfo_exists():
+            if specs is not None and not previous.busy and (previous.python!=self.config_data['python'] or list(specs)!=previous.specs):previous.dispose()
+            else:previous.lift();return previous
         self.dependency_window=DependencyWizard(self,kind,props,on_ready,allow_skip,specs,auto_install=bool(on_ready) and self.config_data.get('pip_auto_install',True) if auto_install is None else auto_install);return self.dependency_window
 
     def install_package(self):
-        spec=simpledialog.askstring(tr('Pacchetto PIP'),tr('Nome del pacchetto (anche con versione, es. Pillow>=10):'),parent=self)
-        if not spec:return
-        try:install_args(self.config_data['python'],[spec.strip()])
-        except ValueError as exc:return messagebox.showerror(tr('Pacchetto non valido'),str(exc),parent=self)
-        self.open_dependencies(specs=[spec.strip()],auto_install=True)
+        return LibraryExplorer(self)
 
     def palette_info(self,event=None):
         sel=self.palette.curselection()
