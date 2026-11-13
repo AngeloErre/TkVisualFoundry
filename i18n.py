@@ -583,3 +583,5 @@ EN_MESSAGES['Nel codice evento: self.show("Form2") / self.hide("Form2").\nIl pri
 EN_MESSAGES.update({'Errore: ': 'Error: ', '+ Nuovo record': '+ New record'})
 
 EN_MESSAGES.update({'Licenza':'License','Repository/documentazione':'Repository/documentation'})
+
+EN_MESSAGES['Configurazione…'] = 'Configuration…'

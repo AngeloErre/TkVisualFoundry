@@ -2,7 +2,7 @@
   "version": "1.10",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 83,
+  "tests_passed": 84,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
