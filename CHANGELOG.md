@@ -1,3 +1,9 @@
+# 1.31.1 — Single native menu
+
+- Remove the custom duplicate menu row and its empty frame.
+- Keep native menu actions, quick toolbar and command palette.
+- Update existing graphical layout assertion for the native menu.
+
 # 1.31 — Command palette
 
 - Search menu actions in Italian or English with Ctrl/Cmd+Shift+P.

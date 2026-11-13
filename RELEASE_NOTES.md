@@ -1,5 +1,5 @@
-# TkVisualFoundry 1.31
+# TkVisualFoundry 1.31.1
 
-Add a command palette through Ctrl/Cmd+Shift+P and Edit → Find a command. Search existing menu actions in either language, navigate with arrows, execute with Enter and dismiss with Esc. Empty queries prioritize session-recent commands. Existing action handlers retain their context checks; queries are never executed.
+Remove the duplicate in-window menu strip. The existing Tk menu remains the only menu: in the macOS screen menu bar, or in the application window on Windows/Linux. Retain the quick-action toolbar, menu commands, keyboard shortcuts and command palette.
 
-254 tests passed per language; 11 graphical tests skipped. Graphical focus/keyboard acceptance remains pending because desktop Terminal access is unavailable.
+254 tests passed per language; 11 graphical tests skipped. Native graphical acceptance on target platforms remains pending.

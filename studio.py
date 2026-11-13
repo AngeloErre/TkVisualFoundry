@@ -101,7 +101,6 @@ class Studio(CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,Debug
             self.history.append(copy.deepcopy(self.project)); self.project=self.future.pop(); self.form_index=min(self.form_index,len(self.project['forms'])-1); self.selected=None; self.code_target=None; self.refresh()
     def build(self):
         apply_theme(self)
-        self.menu_bar=ttk.Frame(self,padding=(6,6));self.menu_bar.pack(fill='x')
         self.log_visible=False;self.log_toggle_text=tk.StringVar(value=tr('Mostra log'))
         self.build_classic_toolbar()
         self.statusbar=statusbar=ttk.Frame(self,relief='sunken',borderwidth=1);statusbar.pack(side='bottom',fill='x')

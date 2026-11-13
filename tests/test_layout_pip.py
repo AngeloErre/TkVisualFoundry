@@ -81,13 +81,16 @@ class CompactLayoutUITests(unittest.TestCase):
         from test_studio import GUI
         if not GUI:self.skipTest('Sessione grafica macOS non disponibile')
         from studio import Studio
+        from tkinter import ttk
         app=Studio();app.geometry('1050x650');app.update()
         try:
             app.show_log(True);app.update();app.vertical.sashpos(0,5);app.clamp_log();app.update()
             for button in (app.insert_button,app.apply_button):
                 self.assertTrue(button.winfo_viewable());self.assertGreater(button.winfo_height(),10)
                 self.assertLess(button.winfo_rooty()+button.winfo_height(),app.vertical.winfo_rooty()+app.vertical.sashpos(0))
-            self.assertGreaterEqual(len(app.menu_buttons),7)
+            menu=app.nametowidget(app.cget('menu'))
+            self.assertGreaterEqual(menu.index('end')+1,8)
+            self.assertFalse(any(isinstance(widget,ttk.Menubutton) for widget in app.winfo_children()))
             app.palette.selection_set(0);app.palette_query.set('Button');app.update();self.assertIn('Button',app.palette.names)
         finally:app.temp.cleanup();app.destroy()
     def test_pip_actions_visible_even_on_small_window(self):

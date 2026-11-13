@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.31.1
+
+254 test superati per lingua, 11 grafici saltati. Rimossi barra duplicata e relativo frame; aggiornato controllo grafico sul menu nativo. Accettazione grafica sui sistemi di destinazione ancora da eseguire.
+
 # TkVisualFoundry 1.31
 
 254 test superati per lingua, 11 grafici saltati. Ricerca bilingue e senza accenti, ordinamento stabile, priorità ai recenti di sessione e assenza di esecuzione durante la ricerca verificati. Collaudo grafico di focus, tastiera e dialoghi ancora da completare: accesso desktop al Terminale non disponibile.
