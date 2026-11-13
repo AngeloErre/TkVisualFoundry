@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "VariableInspectorDemo",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Variable Inspector \u2014 click and observe self.counter",
+      "width": 600,
+      "height": 220,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "CounterLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 20,
+          "width": 540,
+          "height": 50,
+          "props": {
+            "text": "Counter: 0",
+            "font": "Helvetica 20"
+          },
+          "events": {}
+        },
+        {
+          "name": "IncrementButton",
+          "kind": "Button",
+          "x": 180,
+          "y": 90,
+          "width": 220,
+          "height": 45,
+          "props": {
+            "text": "Increment counter"
+          },
+          "events": {
+            "Click": "previous = self.counter\nself.counter += 1\nself.samples.append(self.counter)\nself.CounterLabel.configure(text=f\"Counter: {self.counter}\")"
+          }
+        },
+        {
+          "name": "HelpLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 155,
+          "width": 560,
+          "height": 40,
+          "props": {
+            "text": "Open Variables / Inspector in the IDE. Expand self attributes and samples."
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "example_title = 'Variable Inspector demo'",
+  "startup": "self.counter = 0\nself.samples = []\nself.Form1.deiconify()"
+}

@@ -59,3 +59,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Immutable session source, resume/finish cleanup and old process isolation.
 - [x] Real subprocess/parser tests and bilingual documentation; GUI acceptance pending.
 - [ ] Later: graphical stack/variables/watch editor and event-relative breakpoints.
+
+## Phase 10 — sampled variable inspector (1.26)
+
+- [x] F5/F9 live globals, active/last locals, Application fields and stack snapshots.
+- [x] Read-only expandable/filterable tree, changed values and bounded non-evaluating serialization.
+- [x] Private per-session files, lifecycle isolation, real subprocess regressions and limits documentation.
+- [ ] Interactive graphical acceptance, frame switching, explicit watch expressions and event-relative breakpoints.

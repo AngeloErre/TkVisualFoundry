@@ -1,5 +1,7 @@
-# VisualTk Studio 1.25
+# VisualTk Studio 1.26
 
-First-stage visual debug position: F9 starts pdb, the output panel reports current line/function and Show line opens a yellow marker in the immutable session source. Resume clears the marker; external frames and process termination update status. Project edits take effect on the next launch; stop before changing GUI breakpoints. Existing pdb commands remain available; graphical watches are not included.
+Add Variables / Inspector for F5/F9: read-only sampled locals, globals, Application self attributes and stack, expandable standard containers, name filtering and changed-value accents. Updates run about every 0.5 seconds; paused pdb captures selected-frame scopes. Last returning-function locals are labeled historical. Each launch has a private temporary snapshot; normal exit/Stop preserves last values as finished.
 
-224 tests passed per language, 11 graphical tests skipped. Real piped pdb subprocess and parser/session regressions tested; interactive GUI acceptance pending.
+Values and scope counts are bounded; complex objects use type summaries without user repr/property evaluation. Sampling can miss short-lived locals and adds development overhead. Disable monitoring for the next launch when needed. Export, preview and deployment remain uninstrumented.
+
+230 tests passed per language, 11 graphical tests skipped. Real live/debug subprocess tests passed; graphical acceptance pending. See docs/VARIABLE_INSPECTOR.md for full limits.

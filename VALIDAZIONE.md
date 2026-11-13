@@ -1,3 +1,7 @@
+# Versione 1.26
+
+230 test superati per lingua, 11 grafici saltati. Verificati aggiornamento reale di globali/attributi self, locali all’uscita dalle funzioni, pausa/next di pdb, breakpoint con variabili locali e stack, limiti/cicli, assenza di repr/proprietà personalizzate e chiusura sessioni obsolete. Campionamento circa ogni 0,5 s, non traccia completa delle assegnazioni. Collaudo grafico ancora da eseguire.
+
 # Versione 1.25
 
 224 test superati per lingua, 11 grafici saltati. Verificati processo pdb reale senza GUI, prompt frammentati, percorsi macOS equivalenti, frame esterni, buffer limitato, isolamento sessioni, reset marcatori e confronto esatto del sorgente. Interazione grafica di debug ancora da collaudare.

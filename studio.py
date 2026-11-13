@@ -34,6 +34,7 @@ from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
+from inspector_ui import InspectorMixin
 from debug_ui import DebugViewMixin
 from adaptive_ui import AdaptiveMixin
 from history_ui import HistoryMixin
@@ -60,7 +61,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -180,7 +181,7 @@ class Studio(DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixi
         self.generated.bind('<Double-Button-1>',self.toggle_break)
         self.generated.tag_configure('break',background='#f6a0a0',foreground='#111111')
         self.generated.tag_configure('debug_current',background='#ffe08a',foreground='#111111')
-        self.build_problems()
+        self.build_problems();self.build_inspector()
         main.add(self.right_panel,weight=0);right=inspector_area
         panel_caption(right,tr('Proprietà'))
         self.inspector_object_var=tk.StringVar()
@@ -218,6 +219,7 @@ class Studio(DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixi
         ttk.Menubutton(br,text='Debug ▾',menu=debug_menu).pack(side='left')
         self.debug_location=tk.StringVar(value=tr('Debug non avviato'))
         self.debug_jump=ttk.Button(br,text=tr('Mostra riga'),command=self.show_debug_position,state='disabled');self.debug_jump.pack(side='left',padx=4)
+        ttk.Button(br,text=tr('Ispettore'),command=lambda:self.tabs.select(self.inspector_page)).pack(side='left')
         ttk.Label(bottom,textvariable=self.debug_location).grid(row=3,column=0,sticky='ew',padx=8)
         ttk.Button(br,text=tr('Chiudi log'),command=lambda:self.show_log(False)).pack(side='right')
         ttk.Button(br,text=tr('Pulisci'),command=self.clear_log).pack(side='right',padx=4)
@@ -581,8 +583,9 @@ class Studio(DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixi
         try:
             while True:
                 process,text,finished=self.messages.get_nowait();self.write_log(text);self.observe_debug(process,text,finished)
+                if finished:self.inspector_finished(process)
         except queue.Empty:pass
-        self.after(70,self.poll)
+        self.poll_inspector();self.after(70,self.poll)
     def runtime_file(self):
         path=Path(self.temp.name)/'application.py';source=generate(self.project)
         if self.path:source=source.replace(source.splitlines()[0], 'import sys; sys.path.insert(0, '+repr(str(self.path.resolve().parent))+')',1)
@@ -591,7 +594,11 @@ class Studio(DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixi
         if not dependencies_checked and self.config_data.get('dependency_before_run',True) and dependency_plan(self.project):
             return self.open_dependencies(on_ready=lambda:self.run(True))
         if self.proc and self.proc.poll() is None:return messagebox.showwarning(tr('Processo attivo'),tr('Arresta prima il processo corrente.'))
-        if self.check():self.launch([self.config_data['python'],'-u',str(self.runtime_file())],cwd=str(self.path.parent if self.path else BASE))
+        if self.check():
+            try:
+                path=self.runtime_file();args=self.inspector_args(path) or [self.config_data['python'],'-u',str(path)]
+            except (OSError,ValueError) as exc:return messagebox.showerror(tr('Ispettore'),str(exc))
+            self.launch(args,cwd=str(self.path.parent if self.path else BASE));self.inspector_launched(self.proc)
     def debug(self,dependencies_checked=False):
         if not dependencies_checked and self.config_data.get('dependency_before_run',True) and dependency_plan(self.project):
             return self.open_dependencies(on_ready=lambda:self.debug(True))
@@ -599,7 +606,10 @@ class Studio(DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixi
         if not self.check():return
         args=[self.config_data['python'],'-u','-m','pdb']
         for line in sorted(self.breaks):args+=['-c',f'break {line}']
-        path=self.runtime_file();self.start_debug_view(path);args.append(str(path));self.launch(args,cwd=str(self.path.parent if self.path else BASE));self.debug_process=self.proc
+        try:
+            path=self.runtime_file();instrumented=self.inspector_args(path,debug=True)
+        except (OSError,ValueError) as exc:return messagebox.showerror(tr('Ispettore'),str(exc))
+        self.start_debug_view(path);args.append(str(path));self.launch(instrumented or args,cwd=str(self.path.parent if self.path else BASE));self.debug_process=self.proc;self.inspector_launched(self.proc)
         if self.proc is None or self.proc.poll() is not None:
             self.debug_source=None;self.debug_output=None;self.debug_process=None;self.debug_location.set(tr('Debug non avviato'))
         else:self.update_source()

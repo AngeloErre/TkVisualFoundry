@@ -1,4 +1,4 @@
-# VisualTk Studio 1.25
+# VisualTk Studio 1.26
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
@@ -27,6 +27,12 @@ Extended component palette and integrated reference for the LLM client component
 *Screenshots show the Italian interface on macOS. The IDE also supports English.*
 
 Startup layout fix: Project Explorer and Properties initialize after pane geometry is available, with a wider right dock and minimum visible areas. Valid manual pane sizes are preserved.
+
+## Live variable inspector (1.26)
+
+Open **Variables / Inspector** or click **Inspector** in Output/Debug, then start with **F5** or **F9**. The read-only tree shows sampled locals, globals, Application `self` attributes and a call stack. Expand standard containers, filter names and spot changed values. The checkbox enables monitoring for the next launch.
+
+Samples refresh about every **0.5 seconds** during execution and at debugger stops. Returning-function locals remain labeled as **Last locals** when no project frame is active. Values are bounded excerpts; complex objects are summarized without evaluating user properties or repr. This is sampled observation, so brief locals and intermediate assignments may be missed. Exported/deployed applications are not instrumented. See [Variable inspector](docs/VARIABLE_INSPECTOR.md) for scopes, performance and limits. Try `examples/Debugging/VariableInspectorDemo.vtk.json`: click Increment and observe `self.counter` and `self.samples`.
 
 ## Visual debug position (1.25)
 

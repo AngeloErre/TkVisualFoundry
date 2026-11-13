@@ -1,3 +1,10 @@
+# 1.26
+
+- Add read-only Variables / Inspector for F5/F9 with globals, active/last locals, self fields and stack.
+- Refresh sampled values about every 0.5 seconds; filter/expand trees and accent changes.
+- Isolate temporary per-process snapshots, bound values and avoid user repr/property evaluation.
+- Add live changing-value and real pdb breakpoint regressions; document sampling limits and performance.
+
 # 1.25
 
 - Show current pdb position and jump to a yellow line marker in immutable session source.

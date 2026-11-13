@@ -1,4 +1,4 @@
-# VisualTk Studio 1.25
+# VisualTk Studio 1.26
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
@@ -27,6 +27,12 @@ Catalogo dei componenti estesi e documentazione integrata del componente client 
 *Le immagini mostrano l’interfaccia italiana su macOS. L’IDE supporta anche l’inglese.*
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Ispettore delle variabili durante l’esecuzione (1.26)
+
+Apri **Variabili / Ispettore**, oppure premi **Ispettore** nel pannello Output/Debug, quindi avvia con **F5** o **F9**. L’albero in sola lettura mostra locali campionate, globali, attributi `self` di Application e stack. Puoi espandere i contenitori standard, filtrare i nomi e individuare valori cambiati. La casella abilita il monitoraggio per il prossimo avvio.
+
+I campioni si aggiornano circa ogni **0,5 secondi** durante l’esecuzione e ai punti di arresto. Quando non ci sono funzioni attive, le locali dell’ultima funzione osservata restano indicate come **Ultime locali**. I valori sono estratti limitati; gli oggetti complessi sono sintetizzati senza eseguire proprietà o repr dell’utente. Locali molto brevi e assegnazioni intermedie possono sfuggire al campionamento. Le applicazioni esportate non vengono strumentate. [Guida tecnica e limiti](docs/VARIABLE_INSPECTOR.md). Prova `examples/Debugging/VariableInspectorDemo.vtk.json`: premi Increment e osserva `self.counter` e `self.samples`.
 
 ## Posizione del debug visuale (1.25)
 
