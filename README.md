@@ -1,4 +1,4 @@
-# VisualTk Studio 1.10
+# VisualTk Studio 1.10.1
 
 A visual Python/Tkinter IDE for macOS, inspired by the Visual Basic 6 workflow. Design multiple forms, edit control properties, write event handlers and run your application from one workspace.
 

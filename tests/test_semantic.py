@@ -165,6 +165,19 @@ class TargetEnvironmentTests(unittest.TestCase):
         fake=types.SimpleNamespace(analysis_client=types.SimpleNamespace(results=results),analysis_requests={1:(('old',),True,None)},assist_snapshot=lambda:('new',),show_completions=show,after=lambda *a:'timer',poll_analysis=lambda:None)
         AssistMixin.poll_analysis(fake);show.assert_not_called()
 
+class CompletionFocusTests(unittest.TestCase):
+    def test_suggestions_use_an_in_window_panel_without_focus_calls(self):
+        from assist_ui import AssistMixin
+        from unittest.mock import Mock
+        code=Mock();code.bbox.return_value=(10,15,0,20);code.winfo_rootx.return_value=120;code.winfo_rooty.return_value=140
+        fake=types.SimpleNamespace(assist_popup=None,code=code,config_data={},winfo_width=lambda:800,winfo_height=lambda:600,winfo_rootx=lambda:100,winfo_rooty=lambda:100,completion_describe=Mock(),accept_completion=Mock())
+        panel=Mock();box=Mock()
+        with patch('assist_ui.tk.Frame',return_value=panel) as frame,patch('assist_ui.tk.Toplevel') as native,patch('assist_ui.tk.Listbox',return_value=box),patch('assist_ui.ttk.Scrollbar'):
+            AssistMixin.show_completions(fake,[{'name':'showinfo','insert':'showinfo','prefix_len':0}])
+        native.assert_not_called();frame.assert_called_once_with(fake,takefocus=False,borderwidth=1,relief='solid')
+        panel.place.assert_called_once_with(x=30,y=75,width=540,height=240)
+        code.focus_set.assert_not_called();box.focus_set.assert_not_called();panel.focus_set.assert_not_called()
+
 class IntellisenseUITests(unittest.TestCase):
     def test_dot_popup_and_acceptance(self):
         from test_studio import GUI
@@ -174,7 +187,13 @@ class IntellisenseUITests(unittest.TestCase):
         app.update()
         try:
             app.tabs.select(1);app.code.delete('1.0','end');app.code.insert('1.0','messagebox.');app.code.mark_set('insert','end-1c');app.complete()
+            app.update()
             self.assertIsNotNone(app.assist_popup)
+            self.assertIs(app.assist_popup.winfo_toplevel(),app)
+            self.assertIs(app.focus_get(),app.code)
+            app.code.event_generate('<KeyPress>',keysym='s');app.update()
+            self.assertEqual(app.code.get('1.0','end-1c'),'messagebox.s')
+            app.code.delete('insert-1c','insert')
             index=next(i for i,item in enumerate(app.completion_items) if item['name']=='showinfo')
             app.completion_box.selection_clear(0,'end');app.completion_box.selection_set(index);app.accept_completion()
             self.assertEqual(app.code.get('1.0','end-1c'),'messagebox.showinfo')

@@ -1,4 +1,4 @@
-# VisualTk Studio 1.10
+# VisualTk Studio 1.10.1
 
 Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
 
@@ -88,7 +88,7 @@ Inserisci **DatabaseView**, selezionalo e scegli **Azioni → Configura componen
 
 ## Verifica e limiti
 
-Versione 1.10: 84 test superati, 11 grafici saltati su macOS con Python 3.15.2 e Jedi 0.20.0. Verificati caricamento lingua, catalogo, formattazione, avvio dei moduli in inglese, conservazione dei dati ed esportazione autonoma. Il percorso grafico completo e la build macOS richiedono ancora collaudo manuale.
+Versione 1.10.1: 85 test superati, 11 grafici saltati su macOS con Python 3.15.2 e Jedi 0.20.0. Verificati caricamento lingua, catalogo, formattazione, avvio dei moduli in inglese, conservazione dei dati ed esportazione autonoma. Il percorso grafico completo e la build macOS richiedono ancora collaudo manuale.
 
 Il completamento dipende dalle informazioni di tipo disponibili. Il designer usa coordinate assolute e non supporta ancora l’annidamento visuale. Hardware e librerie native possono richiedere configurazioni specifiche. DatabaseView non è uno strumento di amministrazione del server.
 

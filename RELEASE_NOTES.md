@@ -1,5 +1,5 @@
-# VisualTk Studio 1.10
+# VisualTk Studio 1.10.1
 
-Adds Italian and English interface languages. Choose the interface language in Configuration → Appearance, save and restart. Generated component controls use a separate project language. Existing project text and code remain unchanged.
+Fixes a probable cause of interrupted typing on macOS: completion suggestions now appear in an in-window panel rather than a native popup window that can steal keyboard focus.
 
-Includes English documentation and an Italian README. Graphical macOS validation and packaging remain manual checks.
+85 tests passed; 11 graphical tests skipped. Manual verification of the reported macOS symptom remains necessary.

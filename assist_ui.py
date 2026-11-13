@@ -159,11 +159,17 @@ class AssistMixin:
             if selection:selected_name=self.completion_items[selection[0]]['name']
             self.completion_box.delete(0,'end')
         else:
-            popup=tk.Toplevel(self);self.assist_popup=popup;popup.overrideredirect(True);popup.transient(self)
-            bounds=self.code.bbox('insert') or (0,0,0,20);width=min(540,self.winfo_screenwidth());height=240
-            x=max(0,min(self.code.winfo_rootx()+bounds[0],self.winfo_screenwidth()-width));y=self.code.winfo_rooty()+bounds[1]+bounds[3]
-            if y+height>self.winfo_screenheight():y=max(0,y-height-bounds[3])
-            popup.geometry(f'{width}x{height}+{x}+{y}');colors=self.config_data.get('appearance',{})
+            # A native Toplevel can take keyboard focus when mapped on macOS.
+            # Keep suggestions inside the editor's window instead.
+            popup=tk.Frame(self,takefocus=False,borderwidth=1,relief='solid');self.assist_popup=popup
+            bounds=self.code.bbox('insert') or (0,0,0,20)
+            available_width=max(1,self.winfo_width());available_height=max(1,self.winfo_height())
+            width=min(540,available_width);height=min(240,available_height)
+            x=max(0,min(self.code.winfo_rootx()-self.winfo_rootx()+bounds[0],available_width-width))
+            y=self.code.winfo_rooty()-self.winfo_rooty()+bounds[1]+bounds[3]
+            if y+height>available_height:y-=height+bounds[3]
+            y=max(0,min(y,available_height-height))
+            popup.place(x=x,y=y,width=width,height=height);popup.lift();colors=self.config_data.get('appearance',{})
             scroll=ttk.Scrollbar(popup);scroll.pack(side='right',fill='y')
             self.completion_box=tk.Listbox(popup,exportselection=False,font=('Menlo',12),takefocus=False,bg=colors.get('surface','#ffffff'),fg=colors.get('foreground','#25324a'),selectbackground=colors.get('accent','#2563eb'),selectforeground='white',yscrollcommand=scroll.set)
             self.completion_box.pack(fill='both',expand=True);scroll.configure(command=self.completion_box.yview)
@@ -203,7 +209,7 @@ class AssistMixin:
         try:focus=self.focus_get()
         except tk.TclError:return
         if focus is self.code:return
-        if self.assist_popup and focus and focus.winfo_toplevel() is self.assist_popup:return
+        if self.assist_popup and focus and (focus is self.assist_popup or str(focus).startswith(str(self.assist_popup)+'.')):return
         self.dismiss_completion()
 
     def restart_intellisense(self):

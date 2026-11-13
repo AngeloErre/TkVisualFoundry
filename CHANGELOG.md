@@ -1,3 +1,8 @@
+# 1.10.1
+
+- Keep completion suggestions inside the main window, preventing native popup focus changes from interrupting typing on macOS.
+- Add panel focus regression coverage and a graphical typing check.
+
 # 1.10
 
 - Italian/English interface with a persistent language selector and restart notice.
