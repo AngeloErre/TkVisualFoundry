@@ -1,8 +1,8 @@
 {
-  "version": "1.31.1",
+  "version": "1.32",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 254,
+  "tests_passed": 266,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -54,5 +54,6 @@
   "repository": "https://github.com/AngeloErre/TkVisualFoundry",
   "rebrand_validation": "UI/help/docs/generator headers/install labels and Mac build artifacts renamed; legacy storage, settings/history and ownership identifiers preserved. Legacy Mac launcher ownership and recording-from-installed-folder rejection tested. Windows shortcut/Apps migration and GUI/native acceptance pending.",
   "command_palette_validation": "Bilingual/accent-insensitive search, stable ranking, session recent ordering and non-executing discovery tested. Graphical focus, keyboard and modal acceptance pending; desktop Terminal access unavailable.",
-  "menu_validation": "Removed custom duplicate menu row; single Tk native menu retains all menu definitions, command palette and shortcuts. Full suite checked; graphical macOS/Windows/Linux acceptance pending."
+  "menu_validation": "Removed custom duplicate menu row; single Tk native menu retains all menu definitions, command palette and shortcuts. Full suite checked; graphical macOS/Windows/Linux acceptance pending.",
+  "data_viewer_validation": "Read-only SQLite/WAL, quoted names, missing files, SQL non-execution, CSV/JSON/NDJSON, limits, multiset comparisons, real XLSX formulas/no-save and worker subprocess passed. Access uses mocked ODBC contract; native Access, legacy XLS/DBF/Parquet and GUI acceptance pending. Preview only: 500 rows, 80 columns, 512 chars per cell."
 }

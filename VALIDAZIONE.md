@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.32
+
+266 test superati per lingua, 11 grafici saltati. SQLite/WAL reale, nomi quotati, file inesistenti non creati, SQL non eseguito, CSV Unicode/multiline, JSON/NDJSON, limiti e confronto duplicati, XLSX reale con formule e hash invariato, protocollo worker reale. Access verificato con contratto ODBC simulato; accettazione Access nativa, XLS/DBF/Parquet e grafica ancora da eseguire. Confronto limitato al campione.
+
 # TkVisualFoundry 1.31.1
 
 254 test superati per lingua, 11 grafici saltati. Rimossi barra duplicata e relativo frame; aggiornato controllo grafico sul menu nativo. Accettazione grafica sui sistemi di destinazione ancora da eseguire.

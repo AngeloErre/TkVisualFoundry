@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "TkVisualFoundry 1.31.1\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.31.1\nVisual Python / Tkinter designer",
+  "TkVisualFoundry 1.32\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.32\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -660,3 +660,9 @@ EN_MESSAGES.update({'Usa un percorso di variabile con al massimo 256 caratteri.'
 EN_MESSAGES.update({'Seleziona frame':'Select frame','Seleziona un frame durante una pausa del debug corrente.':'Select a frame while the current debug session is paused.'})
 
 EN_MESSAGES.update({'Palette dei comandi':'Command palette','Cerca una funzione, poi premi Invio. Puoi usare termini italiani o inglesi.':'Find a function, then press Enter. You can search in Italian or English.','↑↓ seleziona · Invio esegue · Esc chiude. Senza ricerca, i comandi recenti sono in cima.':'↑↓ select · Enter runs · Esc closes. With no query, recent commands appear first.','Comandi trovati: {v0}':'Commands found: {v0}','Nessun comando trovato.':'No commands found.','Cerca un comando…':'Find a command…'})
+
+EN_MESSAGES.update({'Visualizzatore dati': 'Data viewer', 'Visualizzatore dati…': 'Data viewer…', 'Apri un file dati per controllarne il contenuto.': 'Open a data file to inspect its contents.', 'Apri file dati…': 'Open data file…', 'Aggiorna ogni 2 secondi': 'Refresh every 2 seconds', 'Nuovo riferimento': 'Reset baseline', 'Tabella / foglio': 'Table / sheet', 'Filtra anteprima': 'Filter preview', 'Prepara lettore PIP…': 'Prepare reader with PIP…', 'Sola lettura • confronto sulla sola anteprima: massimo 500 righe, 80 colonne, 512 caratteri per cella. CSV: prima riga come intestazione. Excel: formule visibili, non calcolate.': 'Read only • comparison covers the preview only: up to 500 rows, 80 columns, 512 characters per cell. CSV: first row is the header. Excel: formulas shown, not calculated.', 'File dati': 'Data files', 'Tutti i file': 'All files', 'Lettura in corso…': 'Reading…', 'Lettura non riuscita: {v0}': 'Read failed: {v0}', 'Letto: {v0} • Righe nel campione: {v1} • Aggiunte: {v2}, rimosse: {v3} • Colonne cambiate: {v4}': 'Read: {v0} • Sample rows: {v1} • Added: {v2}, removed: {v3} • Columns changed: {v4}', 'Riferimento aggiornato al campione visualizzato.': 'Baseline reset to the displayed sample.', 'Questo formato non richiede pacchetti PIP oppure non è supportato.': 'This format requires no PIP packages or is unsupported.'})
+
+EN_MESSAGES.update({'Sì':'Yes','No':'No','Mostra riferimento':'Show baseline'})
+
+EN_MESSAGES.update({' • Ultima lettura riuscita: {v0}':' • Last successful read: {v0}'})

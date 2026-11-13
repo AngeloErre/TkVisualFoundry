@@ -1,3 +1,10 @@
+# 1.32 — Data viewer
+
+- Read-only table/sheet previews, filter, manual/automatic refresh and session baseline comparison.
+- SQLite, SQL text, CSV/TSV, JSON/JSONL, XLS/XLSX/XLSM and optional Access/DBF/Parquet.
+- Selected-Python worker with timeout, stale-result rejection and reader PIP wizard.
+- Explicit preview limits, Access driver prerequisite and DBX ambiguity; bilingual guide.
+
 # 1.31.1 — Single native menu
 
 - Remove the custom duplicate menu row and its empty frame.

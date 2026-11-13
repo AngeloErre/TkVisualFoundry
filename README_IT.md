@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.31.1
+# TkVisualFoundry 1.32
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Visualizzatore dati (1.32)
+
+Apri **Progetto → Visualizzatore dati…** per controllare SQLite, Excel, JSON, CSV/TSV, script SQL e i lettori opzionali Access/DBF/Parquet. Tabelle e fogli in sola lettura, filtro, aggiornamento ogni due secondi e confronto con il campione iniziale aiutano a verificare le scritture della tua applicazione. **Prepara lettore PIP…** usa il Python del progetto. Access richiede anche un driver ODBC di sistema; DBX viene riconosciuto solo se contiene SQLite. Il confronto riguarda massimo 500 righe, 80 colonne e 512 caratteri per cella, non l’intera base dati. Consulta la [guida ai formati](docs/DATA_VIEWER.md).
 
 ## Una sola barra dei menu (1.31.1)
 

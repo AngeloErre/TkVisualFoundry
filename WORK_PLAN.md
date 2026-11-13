@@ -100,3 +100,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Bilingual search, keyboard selection and session-recent ranking.
 - [x] Model regressions and bilingual documentation.
 - [ ] Interactive focus, keyboard and modal acceptance (desktop access unavailable).
+
+## Phase 16 — read-only data viewer (1.32)
+
+- [x] Selected-Python worker, bounded SQLite/Excel/JSON/CSV/SQL and optional reader adapters.
+- [x] Dataset selection, sample filter, refresh and session baseline comparison.
+- [x] Reader PIP wizard, format matrix, DBX/Access prerequisites and regression tests.
+- [ ] Native optional-reader and interactive GUI acceptance.

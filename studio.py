@@ -35,6 +35,7 @@ from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
 from command_palette import CommandPaletteMixin
+from data_viewer_ui import DataViewerMixin
 from watch_ui import WatchMixin
 from breakpoint_ui import BreakpointMixin
 from event_breakpoints import resolve_breakpoints
@@ -65,7 +66,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -675,6 +676,8 @@ class Studio(CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,Debug
         if self.proc and self.proc.poll() is None:
             try:self.proc.wait(timeout=2)
             except subprocess.TimeoutExpired:self.proc.kill(); self.proc.wait()
+        viewer=getattr(self,'data_viewer_window',None)
+        if viewer is not None and viewer.winfo_exists():viewer.close()
         self.finish_local_history();self.stop_preview();self.temp.cleanup(); self.destroy()
 
 HELP=tr('TKVISUALFOUNDRY — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.')
