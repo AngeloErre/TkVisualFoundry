@@ -26,6 +26,7 @@ def validate(p, code=True):
     reg=registry(p); requirements(p)
     theme_config(p)
     if p.get('appearance_mode','System') not in ('System','Light','Dark'):raise ValueError('Invalid CustomTkinter appearance mode')
+    if 'environment' in p and (not isinstance(p['environment'],dict) or type(p['environment'].get('managed',False)) is not bool):raise ValueError('Invalid project environment settings.')
     names=set()
     for f in p['forms']:
         ordered_widgets(f)

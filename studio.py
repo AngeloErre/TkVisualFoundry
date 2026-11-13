@@ -32,6 +32,10 @@ from components import registry, descriptor, requirements, install_args, design_
 from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
+from environment_ui import EnvironmentMixin
+from selection_ui import SelectionMixin
+from problems_ui import ProblemsMixin
+from multi_selection import selected_roots,moved_geometry
 from vb6_ui import VB6Mixin,panel_caption,resize_handle,resized_geometry,ToolTip
 from assist_ui import AssistMixin
 from intelligence_ui import IntelligenceMixin
@@ -49,16 +53,17 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
         self.title('VisualTk Studio • Python Visual Development')
         self.geometry('1400x900'); self.minsize(1050,650)
-        self.project=new_project(); self.path=None; self.selected=None; self.form_index=0
+        self.project=new_project(); self.path=None; self.selected=None; self.selection_names=set();self.form_index=0
         self.history=[]; self.future=[]; self.proc=None; self.messages=queue.Queue(); self.code_target=None
         self.temp=tempfile.TemporaryDirectory(prefix='visualtk-'); self.config_data={'language':get_language(),'grid':10,'font_size':13,'python':str(Path.home()/'Applications/VisualTkStudio/.venv/bin/python') if getattr(sys,'frozen',False) else sys.executable}
         self.config_data=load_settings(SETTINGS,self.config_data,self.winfo_rgb)
+        self.global_python=self.config_data['python'];self.environment_busy=False
         self.saved_state=json.dumps(self.project,sort_keys=True); self.drag=None; self.breaks=set()
         self.build(); self.apply_appearance(); self.menus(); self.refresh(); self.after(70,self.poll)
         if self.config_data.get('startup_checks',True):self.after(600,self.start_health)
@@ -136,6 +141,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         ttk.Button(row,text='Form…',command=self.manage_forms).pack(side='left',padx=4)
         edit_menu=tk.Menu(row,tearoff=False)
         for label,cmd in [(tr('Codice evento'),self.edit_event),(tr('Duplica'),self.duplicate),(tr('Elimina'),self.delete),(tr('Allinea X'),lambda:self.align('x')),(tr('Allinea Y'),lambda:self.align('y'))]:edit_menu.add_command(label=label,command=cmd)
+        for label,operation in [(tr('Allinea a sinistra'),'left'),(tr('Allinea in alto'),'top'),(tr('Allinea a destra'),'right'),(tr('Allinea in basso'),'bottom'),(tr('Stessa larghezza'),'width'),(tr('Stessa altezza'),'height'),(tr('Distribuisci orizzontalmente'),'horizontal'),(tr('Distribuisci verticalmente'),'vertical')]:edit_menu.add_command(label=label,command=lambda op=operation:self.layout_selection(op))
         ttk.Menubutton(row,text=tr('Selezione ▾'),menu=edit_menu).pack(side='left',padx=4)
         self.canvas=tk.Canvas(design,bg='#e8edf5',highlightthickness=0,scrollregion=(0,0,2000,1600))
         xs=ttk.Scrollbar(design,orient='horizontal',command=self.canvas.xview); xs.pack(side='bottom',fill='x')
@@ -143,6 +149,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         self.canvas.pack(fill='both',expand=True); self.canvas.configure(xscrollcommand=xs.set,yscrollcommand=ys.set)
         self.canvas.bind('<Button-1>',self.press); self.canvas.bind('<B1-Motion>',self.motion); self.canvas.bind('<ButtonRelease-1>',self.release); self.canvas.bind('<Double-Button-1>',lambda e:self.edit_event())
         self.canvas.bind('<Motion>',self.designer_cursor)
+        for sequence in ('<Control-a>','<Command-a>'):self.canvas.bind(sequence,self.select_all_controls)
         self.canvas.bind('<Delete>',lambda e:self.delete()); self.canvas.bind('<BackSpace>',lambda e:self.delete())
         for key,dx,dy in [('Left',-1,0),('Right',1,0),('Up',0,-1),('Down',0,1)]: self.canvas.bind('<'+key+'>',lambda e,x=dx,y=dy:self.nudge(x,y))
         codeframe=ttk.Frame(self.tabs); self.tabs.add(codeframe,text=tr('Codice eventi'))
@@ -162,6 +169,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         style_editor(self.generated)
         self.generated.bind('<Double-Button-1>',self.toggle_break)
         self.generated.tag_configure('break',background='#f6a0a0',foreground='#111111')
+        self.build_problems()
         main.add(self.right_panel,weight=0);right=inspector_area
         panel_caption(right,tr('Proprietà'))
         self.inspector_object_var=tk.StringVar()
@@ -216,6 +224,8 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         if selected in self.palette.names:self.palette.selection_set(self.palette.names.index(selected))
 
     def refresh(self):
+        self.activate_project_environment()
+        if self.selected is None:self.selection_names=set()
         if self.code_target is None:self.reset_code_context()
         self.dismiss_completion()
         self.kinds=list(KINDS)+list(registry(self.project))
@@ -231,6 +241,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         self.draw(); self.properties(); self.update_source()
     def draw(self):
         c=self.canvas; c.delete('all'); f=self.form; ox=30; oy=45
+        selected_names={w['name'] for w in self.selected_controls()}
         item=self.selected if self.selected is not None else f
         self.selection_status.set(item['name']+'  •  '+str(item.get('x',0))+', '+str(item.get('y',0))+'  •  '+str(item['width'])+' × '+str(item['height']))
         c.create_rectangle(ox-2,oy-29,ox+f['width']+2,oy-2,fill='#153d73',outline='#404040')
@@ -263,14 +274,16 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
                 pages=p.get('pages',[tr('Pagina 1'),tr('Pagina 2')]);active=self.current_container_pages().get(w['name'],pages[0])
                 c.create_rectangle(x,y,x+width,y+26,fill='#dce8ff',outline='#8190a1')
                 c.create_text(x+8,y+13,text=' | '.join(('['+page+']' if page==active else page) for page in pages),anchor='w',fill='#243b63',width=max(1,width-16))
-            if self.selected is w:
+            if w['name'] in selected_names:
                 c.create_rectangle(x-2,y-2,x+width+2,y+height+2,outline='#202020',width=1,dash=(2,2))
+                if self.selected is not w:continue
                 for hx,hy in ((x,y),(x+width/2,y),(x+width,y),(x,y+height/2),(x+width,y+height/2),(x,y+height),(x+width/2,y+height)):
                     c.create_rectangle(hx-3,hy-3,hx+3,hy+3,fill='#202020',outline='white')
                 c.create_rectangle(x+width-5,y+height-5,x+width+5,y+height+5,fill='#202020',outline='white',tags='handle')
     def tree_select(self,event=None):
         ids=self.tree.selection()
         if not ids:return
+        self.selection_names=set()
         self.commit_code(); ident=ids[0]
         if ident.startswith('f:'):self.form_index=int(ident[2:]); self.selected=None
         else:
@@ -280,11 +293,12 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         if self.selected:self.reveal_widget(self.selected)
         self.formvar.set(self.form['name']); self.draw(); self.properties()
     def switch_form(self,event=None):
+        self.selection_names=set()
         self.commit_code(); self.form_index=self.formbox.current(); self.selected=None; self.draw(); self.properties()
     def properties(self):
         for w in self.propbox.winfo_children():w.destroy()
         self.propvars={}; obj=self.selected if self.selected is not None else self.form
-        self.inspector_title.set(obj['name']+' • '+obj.get('kind',tr('Finestra')))
+        self.inspector_title.set(obj['name']+' • '+obj.get('kind',tr('Finestra'))+(' • '+str(len(self.selected_controls()))+tr(' selezionati') if len(self.selected_controls())>1 else ''))
         self.update_documentation(obj)
         names=[item['name'] for form in self.project['forms'] for item in [form]+form['widgets']]
         self.inspector_object.configure(values=names);self.inspector_object_var.set(obj['name'])
@@ -398,28 +412,43 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
             for w in reversed(self.displayed_widgets()):
                 wx,wy=widget_origin(self.form,w)
                 if wx<=x<=wx+w['width'] and wy<=y<=wy+w['height']:target=w; break
-        self.selected=target
-        if target:self.drag=(x,y,copy.deepcopy(target),resize); self.checkpoint()
+        names={w['name'] for w in self.selected_controls()}
+        if target and e.state&1:
+            if target['name'] in names:names.remove(target['name']);target=next((w for w in self.form['widgets'] if w['name'] in names),None)
+            else:names.add(target['name'])
+            resize=False
+        elif not target:names=set()
+        elif target['name'] not in names:names={target['name']}
+        self.selected=target;self.selection_names=names
+        self.group_drag=[copy.deepcopy(w) for w in selected_roots(self.form,self.selected_controls())]
+        if target:self.drag=(x,y,copy.deepcopy(target),resize);self.drag_checkpoint=False
         self.draw(); self.properties()
     def motion(self,e):
         if not self.drag or not self.selected:return
         x,y,original,resize=self.drag; dx=self.canvas.canvasx(e.x)-30-x; dy=self.canvas.canvasy(e.y)-45-y; grid=max(1,int(self.config_data['grid']))
+        if not dx and not dy:return
+        if not self.drag_checkpoint:self.checkpoint();self.drag_checkpoint=True
         def snap(n):return round(n/grid)*grid
         if resize:self.selected.update(resized_geometry(original,resize,dx,dy,grid))
-        else:self.selected['x']=max(0,snap(original['x']+dx)); self.selected['y']=max(0,snap(original['y']+dy))
+        else:
+            changes=moved_geometry(self.group_drag,snap(dx),snap(dy))
+            for w in self.form['widgets']:
+                if w['name'] in changes:w.update(changes[w['name']])
         self.draw()
     def release(self,e):
         if self.drag:self.drag=None; self.properties(); self.update_source()
     def nudge(self,x,y):
-        if self.selected:self.checkpoint(); self.selected['x']=max(0,self.selected['x']+x); self.selected['y']=max(0,self.selected['y']+y); self.draw(); self.properties(); self.update_source()
+        widgets=selected_roots(self.form,self.selected_controls())
+        if widgets:
+            changes=moved_geometry(widgets,x,y);self.checkpoint()
+            for w in widgets:w.update(changes[w['name']])
+            self.draw();self.properties();self.update_source()
     def duplicate(self):
-        if self.selected:
-            self.commit_code(); self.checkpoint(); self.duplicate_widget_tree(); self.refresh()
+        if self.selected:self.duplicate_selection()
     def delete(self):
-        if self.selected:
-            self.commit_code(); self.checkpoint(); removed=descendants(self.form,self.selected['name'])|{self.selected['name']}; self.form['widgets'][:]=[w for w in self.form['widgets'] if w['name'] not in removed]; self.selected=None; self.code_target=None; self.code.delete('1.0','end'); self.refresh()
+        if self.selected:self.delete_selection()
         elif len(self.project['forms'])>1 and messagebox.askyesno(tr('Elimina finestra'),tr('Eliminare la finestra e tutti i suoi componenti?')):
-            self.commit_code(); self.checkpoint(); del self.project['forms'][self.form_index]; self.form_index=0; self.code_target=None; self.refresh()
+            self.commit_code();self.checkpoint();del self.project['forms'][self.form_index];self.form_index=0;self.code_target=None;self.refresh()
     def align(self,axis):
         if self.selected:
             self.checkpoint(); self.selected[axis]=0; self.draw(); self.properties(); self.update_source()
@@ -474,7 +503,11 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         if not self.dirty_guard():return
         path=filedialog.askopenfilename(filetypes=[('VisualTk project','*.vtk.json'),('JSON','*.json')])
         if not path:return
-        try:p=load(path)
+        try:
+            p=load(path)
+            if p.get('environment',{}).get('managed'):
+                from project_environment import environment_python
+                environment_python(Path(path).parent)
         except Exception as exc:return messagebox.showerror(tr('Apertura'),str(exc))
         self.project=p; self.path=Path(path); self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(p,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
     def save(self,as_new=False):
@@ -483,7 +516,7 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
         if as_new or path is None:
             s=filedialog.asksaveasfilename(defaultextension='.vtk.json',filetypes=[('VisualTk project','*.vtk.json')]); path=Path(s) if s else None
         if path is None:return False
-        if self.path and path.resolve().parent!=self.path.resolve().parent and (self.project.get('files') or self.project.get('deployment',{}).get('icon')):
+        if self.path and path.resolve().parent!=self.path.resolve().parent and (self.project.get('files') or self.project.get('deployment',{}).get('icon') or self.project.get('environment',{}).get('managed')):
             messagebox.showinfo(tr('File di progetto'),tr('Per mantenere i percorsi relativi, copia prima la cartella del progetto nella nuova destinazione e aprila da lì.'));return False
         try:
             # Save even unfinished code, allowing recovery after syntax errors.
@@ -579,6 +612,8 @@ class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,Container
 
     def help(self):self.help_topic(tr('Guida rapida'))
     def close(self):
+        if self.environment_busy:
+            self.environment_window.lift();return
         wizard=getattr(self,'dependency_window',None)
         if wizard and wizard.winfo_exists() and wizard.busy:
             wizard.lift();return messagebox.showinfo(tr('Installazione in corso'),tr('Interrompi o attendi il wizard PIP prima di chiudere l’IDE.'))

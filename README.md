@@ -1,8 +1,18 @@
-# VisualTk Studio 1.18
+# VisualTk Studio 1.19
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Three workflow upgrades (1.19)
+
+**Multiple selection:** Shift-click controls to add/remove them; Ctrl/Cmd+A on the canvas selects visible controls. Drag or nudge the group, duplicate/delete it, and use Designer → Selection for alignment, equal sizes and distribution. The primary control supplies alignment/size values; property fields still edit the primary control. Layout operations require the same parent/page, while nested selected children follow their selected parent only once. Only the primary control has resize handles.
+
+**Problems:** open Run → Problems and analyze the project. The panel lists syntax errors, unrecognized `self` references and modules absent from the selected interpreter/local project module inventory. Double-click an item to open the event/startup/import source at its location. Analysis never executes project event source. Reference/import diagnostics are warnings, not proof that dynamic code is broken; rerun after edits.
+
+**Project Python environment:** save the project, then use Project → Project Python environment → Create / use .venv and prepare packages. Environment creation runs in the background, validates stable Python/Tkinter and reuses existing valid environments without overwriting other folders. The PIP wizard then prepares Jedi and project requirements. The choice is stored in the project and restored on reopen; global IDE preferences keep the global Python. Missing environments are not silently replaced by the global interpreter. Switch back with Use global interpreter. Virtual environments are not portable: move project/source/resources without .venv, then recreate the environment on the destination. They are excluded from deployment kits.
+
+See [work plan and validation checkpoints](WORK_PLAN.md). 191 tests passed per language, 11 graphical tests skipped. Graphical selection/navigation/onboarding still require interactive acceptance.
 
 ## Application icons (1.18)
 

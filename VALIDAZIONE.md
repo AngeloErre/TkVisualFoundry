@@ -1,3 +1,9 @@
+# Versione 1.19
+
+191 test superati in italiano e inglese, 11 grafici saltati per esecuzione. Verificati spostamento dei gruppi/gerarchie, distribuzione/allineamento, posizioni degli errori, analisi senza esecuzione e gestione moduli. Ambiente .venv reale creato e riutilizzato senza installazioni di rete; verificati preservazione cartelle esistenti, pulizia dopo errore, isolamento delle preferenze globali e assenza di fallback silenzioso.
+
+I flussi grafici di selezione, navigazione dei problemi e wizard ambiente richiedono verifica interattiva.
+
 # Versione 1.18 — icone applicazione
 
 179 test superati per lingua, 11 grafici saltati. Conversione reale PNG/ICO/ICNS, lettura dei formati generati, sorgente runtime e passaggio icona ai comandi build Mac/Windows verificati. Controllati riferimento Setup, input non validi, pulizia dopo errore e aggiornamento riferimenti dopo rinomina/cestino. Nessuna build Windows reale o verifica visuale Dock/taskbar effettuata.

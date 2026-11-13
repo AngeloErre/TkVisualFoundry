@@ -1,8 +1,18 @@
-# VisualTk Studio 1.18
+# VisualTk Studio 1.19
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Tre miglioramenti del flusso di lavoro (1.19)
+
+**Selezione multipla:** Shift-clic aggiunge/rimuove i controlli; Ctrl/Cmd+A sul canvas seleziona quelli visibili. Trascina o sposta il gruppo da tastiera, duplicalo/eliminalo e usa Designer → Selezione per allineamento, dimensioni uniformi e distribuzione. Il controllo principale fornisce i valori di riferimento; l’ispettore continua a modificarlo singolarmente. Le operazioni di layout richiedono stesso parent/pagina; i figli selezionati seguono il genitore una sola volta. Solo il controllo principale mostra le maniglie.
+
+**Problemi:** da Esegui → Problemi avvia l’analisi statica. Il pannello mostra errori di sintassi, riferimenti `self` non riconosciuti e moduli non rilevati nell’interprete/progetto. Il doppio clic apre la posizione nel codice evento, avvio o import. Gli eventi del progetto non vengono eseguiti. Riferimenti/import sono avvisi: il codice dinamico può produrre falsi positivi. Ripeti l’analisi dopo le modifiche.
+
+**Ambiente Python per progetto:** salva e apri Progetto → Ambiente Python del progetto → Crea / usa .venv e prepara pacchetti. La creazione avviene in background e verifica Python stabile/Tkinter; ambienti validi vengono riusati, cartelle estranee non sovrascritte. Il wizard PIP prepara poi Jedi e requisiti del progetto. La scelta viene ricordata e ripristinata alla riapertura; le preferenze globali conservano il Python globale. Se manca l’ambiente, non si passa automaticamente al globale. Usa interprete globale disattiva la scelta. Le .venv non sono portabili: sposta progetto/sorgenti/risorse senza .venv e ricreala a destinazione. Non vengono incluse nei kit di deploy.
+
+[Piano e verifiche per tappa](WORK_PLAN.md). 191 test superati per lingua, 11 grafici saltati. Selezione, navigazione e creazione ambiente nell’interfaccia richiedono ancora verifica interattiva.
 
 ## Icona dell’applicazione (1.18)
 

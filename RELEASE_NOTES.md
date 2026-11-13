@@ -1,7 +1,7 @@
-# VisualTk Studio 1.18
+# VisualTk Studio 1.19
 
-Choose an application icon in Deploy. PNG/ICO/ICNS input is imported into the project, previewed and converted automatically for macOS app, Windows executable/Setup and Tk runtime windows. Square 256–4096 px input is accepted; transparent 1024 px PNG is recommended. Icon selection is optional and removable.
+Three completed work-plan steps: multiple control selection/group layout, navigable static Problems diagnostics and private project Python environments. Use Shift-click or canvas Ctrl/Cmd+A, Run → Problems, and Project → Project Python environment.
 
-Pillow is installed with the IDE. Generated runtime icon support needs only Tk. Build separately on each target OS.
+Property editing/resizing remains primary-control based; layout requires sibling controls. Import/reference warnings can have dynamic-code false positives. Virtual environments are not portable and are excluded from deployment; recreate them after moving projects. No event source is executed for static diagnostics.
 
-179 tests passed in each language, 11 graphical tests skipped. Real image conversions and decoding, exported source compilation and build/installer command wiring verified. Visual picker, native Dock/taskbar appearance and target-system installer behavior remain pending.
+191 tests passed per language, 11 graphical tests skipped. Real environment creation/reuse, static analysis and geometry checks passed. Interactive GUI and destination-platform acceptance remain pending.

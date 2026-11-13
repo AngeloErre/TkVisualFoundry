@@ -1,3 +1,10 @@
+# 1.19
+
+- Add canvas Shift-click/select-all, group movement, hierarchy-aware duplicate/delete and sibling alignment/equal-size/distribution commands.
+- Add a navigable Problems panel with non-executing syntax/self-reference/import inventory diagnostics and stale-report protection.
+- Add background project .venv creation/reuse, PIP preparation and interpreter restoration; preserve global preferences and exclude environments from deploy.
+- Protect existing folders and failed environment creation, validate project environment metadata and avoid flagging IDE-only dependencies in isolated project audits.
+
 # 1.18
 
 - Add deployment application-icon selection, preview, removal and project-relative artwork import.

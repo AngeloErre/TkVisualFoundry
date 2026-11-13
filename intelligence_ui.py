@@ -1,5 +1,6 @@
 """Inspector documentation and non-blocking environment health center."""
 import copy
+import sys
 import queue
 import subprocess
 import threading
@@ -69,7 +70,8 @@ class IntelligenceMixin:
         python=self.config_data['python'];project=copy.deepcopy(self.project)
         self.health_context=self.health_signature()
         self.audit_running=True;self.health_cancel.clear()
-        specs=requirements(project)+['pip','jedi>=0.19,<0.21','pyinstaller>=6.22.3,<7','packaging>=24,<27','certifi','Pillow>=10']
+        specs=requirements(project)+['pip','jedi>=0.19,<0.21']
+        if Path(python).absolute()==Path(sys.executable).absolute():specs+=['pyinstaller>=6.22.3,<7','packaging>=24,<27','certifi','Pillow>=10']
         urls=documentation_urls(project)
         self.health_text_value=tr('Controllo in background… Puoi continuare a lavorare.')
         self.health_button.configure(text=tr('Controllo in corso…'))

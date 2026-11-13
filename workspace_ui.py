@@ -129,6 +129,6 @@ class WorkspaceMixin:
                 data={k:v.get() for k,v in values.items()}
                 for color in data.values():self.winfo_rgb(color)
                 updated={**self.config_data,'appearance':data}
-                (Path.home()/'.visualtkstudio.json').write_text(json.dumps(updated,indent=2),encoding='utf-8');self.config_data=updated;self.apply_appearance();win.destroy()
+                self.save_ide_settings(updated);self.config_data=updated;self.apply_appearance();win.destroy()
             except Exception as exc:messagebox.showerror(tr('Aspetto'),str(exc),parent=win)
         ttk.Button(win,text=tr('Salva e applica'),command=save).grid(row=8,column=1,pady=16)

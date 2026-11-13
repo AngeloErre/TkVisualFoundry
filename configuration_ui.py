@@ -115,7 +115,9 @@ class ConfigurationMixin:
                 if selected_project_language!=self.project.get('language','it'):
                     self.commit_code();self.checkpoint();self.project['language']=selected_project_language;self.update_source()
                 language_changed=updated['language']!=get_language()
-                (Path.home()/'.visualtkstudio.json').write_text(json.dumps(updated,indent=2),encoding='utf-8');self.config_data=updated;self.code.configure(font=('Menlo',updated['font_size']));self.draw()
+                if updated['python']!=self.config_data['python']:
+                    self.commit_code();self.checkpoint();self.project.pop('environment',None);self.global_python=updated['python']
+                self.save_ide_settings(updated);self.config_data=updated;self.code.configure(font=('Menlo',updated['font_size']));self.draw()
                 if language_changed:messagebox.showinfo(tr('Lingua aggiornata',language=updated['language']),tr('La lingua è stata salvata. Riavvia VisualTk Studio per applicarla a tutte le finestre.',language=updated['language']),parent=win)
                 win.destroy()
             except Exception as exc:status.set(str(exc))

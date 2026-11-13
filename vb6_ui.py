@@ -79,7 +79,7 @@ class VB6Mixin:
         from tkinter import messagebox
         try:
             updated={**self.config_data,'appearance':dict(CLASSIC)}
-            (Path.home()/'.visualtkstudio.json').write_text(json.dumps(updated,indent=2),encoding='utf-8')
+            self.save_ide_settings(updated)
             self.config_data=updated;self.apply_appearance();self.draw()
         except OSError as exc:messagebox.showerror(tr('Aspetto'),str(exc),parent=self)
 
@@ -95,7 +95,7 @@ class VB6Mixin:
         except tk.TclError:self.canvas.configure(cursor='crosshair' if handle else 'arrow')
 
     def choose_designer_object(self,name,code=False):
-        self.commit_code()
+        self.selection_names=set();self.commit_code()
         for index,form in enumerate(self.project['forms']):
             for obj in [form]+form['widgets']:
                 if obj['name']==name:
