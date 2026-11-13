@@ -1,28 +1,19 @@
-# VisualTk Studio 1.7
+# VisualTk Studio 1.8
 
-La versione 1.7 rende visibili e guidate le operazioni di configurazione e preparazione dei componenti, e introduce un controllo database pronto all’uso.
+## Interfaccia
 
-## Miglioramenti principali
+La palette ora mostra icone e supporta l’inserimento con Invio. I comandi di inserimento e applicazione delle proprietà sono fissati sopra le rispettive aree di lavoro, mentre i comandi secondari si trovano nei menu. La barra in alto offre File, Modifica, Progetto, Esegui, PIP, Componenti, Vista e Help. Il log è richiudibile e non può espandersi fino a coprire i controlli del designer.
 
-- Centro Configurazione con Python, designer, preferenze PIP e accesso ai temi.
-- Wizard PIP con verifica automatica iniziale, requisiti espliciti, installazione in background, output, interruzione e verifica finale.
-- Requisiti mostrati prima dell’inserimento di un controllo; scelta Solo designer per rimandare l’installazione.
-- WebcamView include esplicitamente NumPy, OpenCV e Pillow.
-- Esploratore PyPI collegato allo stesso wizard per i pacchetti selezionati.
-- Installer base più leggero, con integrazioni opzionali predisposte dall’IDE.
-- DatabaseView: SQLite senza dipendenze aggiuntive; PostgreSQL e MySQL tramite SQLAlchemy e driver dedicati.
-- Griglia, elenco tabelle, editor record e operazioni parametrizzate in transazione. Password solo a runtime o da variabile ambiente.
-- Esempi CRUD nell’assistente, nuovo progetto Database e guide integrate nell’Help.
-- Palette informativa, ispettore proprietà scorrevole e toolbar su due righe.
+## Pacchetti automatici
 
-## Validazione
+Quando inserisci o avvii un componente con dipendenze, la preparazione controlla l’interprete configurato, installa ciò che manca e prosegue dopo la verifica. Se tutto è già pronto, continua senza richiedere altri clic. Una installazione fallita non provoca tentativi infiniti: log ed errori restano consultabili.
 
-50 test superati; 8 grafici saltati su Python 3.15.2. Test SQLite reali e simulazioni per flusso PIP/connessione remota. GUI, installazioni live, server PostgreSQL/MySQL, periferiche e packaging richiedono collaudo dedicato.
+Il menu PIP permette di preparare il progetto, il componente selezionato o un pacchetto per nome. La finestra riserva spazio ai pulsanti anche quando il log o i messaggi sono lunghi. PIP preferisce wheel disponibili ma può usare pacchetti sorgenti; l’opzione avanzata solo-wheel è disattivata di default.
 
 ## Aggiornamento
 
-Estrai i sorgenti ed esegui Install_Mac.command. Le preferenze esistenti vengono mantenute; le nuove opzioni hanno valori predefiniti. I progetti precedenti restano leggibili. I pacchetti già installati non vengono rimossi.
+Riesegui Install_Mac.command dal pacchetto 1.8. Le librerie già presenti vengono mantenute. Le nuove preferenze attivano la preparazione automatica e mantengono facoltativo il blocco dei pacchetti sorgenti.
 
-## Descrizione breve
+## Verifica
 
-IDE visuale Python/Tkinter per macOS con designer multi-form, assistente codice, wizard PIP, componenti multimediali e database SQLite/PostgreSQL/MySQL con tabella e CRUD.
+58 test superati, 10 grafici saltati. Testata una reale installazione PIP offline in un ambiente temporaneo, oltre alle decisioni automatiche e al controllo degli errori. Verificata in sola lettura la disponibilità della webcam nel Python configurato (OpenCV/NumPy/Pillow importabili); non verificato l’accesso alla fotocamera. GUI, download live e packaging richiedono ancora collaudo.

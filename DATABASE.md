@@ -5,8 +5,8 @@
 ## Configurazione
 
 1. Inserisci **DatabaseView** nel form.
-2. Selezionalo e premi **Configura componente / dipendenze…**.
-3. Scegli il backend e compila i campi. Salva; per un server remoto puoi premere **Salva e prepara dipendenze…**.
+2. Selezionalo e premi **Azioni → Configura componente…** nell’ispettore.
+3. Scegli il backend e compila i campi. Salva; per un server remoto puoi premere **Salva e prepara dipendenze…** per avviare la preparazione automatica.
 4. Avvia il progetto. **Connetti…** consente di confermare o cambiare la connessione e inserire la password.
 
 | Backend | Configurazione | PIP |

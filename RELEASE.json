@@ -1,12 +1,12 @@
 {
-  "version": "1.7",
+  "version": "1.8",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 50,
-  "tests_skipped_graphical": 8,
+  "tests_passed": 58,
+  "tests_skipped_graphical": 10,
   "validation_interpreter": "Python 3.15.2",
-  "sqlite_validation": "real CRUD and rollback tests passed",
-  "remote_database_validation": "mock connection test only; real servers pending",
+  "pip_validation": "real offline wheel installation in isolated temporary venv; automatic flow tested",
+  "configured_webcam_dependencies": "read-only check: OpenCV, NumPy and Pillow importable",
   "gui_and_packaging": "pending",
-  "pip_install_validation": "simulated pipeline; metadata checks real"
+  "remote_database_validation": "pending real servers"
 }

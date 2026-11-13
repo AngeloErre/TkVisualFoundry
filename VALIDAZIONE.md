@@ -1,3 +1,19 @@
+# Verifica corrente — 1.8
+
+68 test eseguiti con Python 3.15.2: **58 superati e 10 grafici saltati**.
+
+- Installazione PIP reale e offline di un wheel di prova creato dal test, in un ambiente virtuale temporaneo. Verificati metadati, pip check e import effettivo. Nessun pacchetto aggiunto all’ambiente di lavoro dell’utente.
+- Decisioni automatiche verificate: requisiti mancanti → installazione; requisiti pronti → continuazione; errore persistente → nessun ciclo infinito di reinstallazione.
+- Verificati isolamento degli import nativi, mancata dichiarazione di successo su errori PIP, prosecuzione automatica dopo la verifica e limite alla dimensione del log.
+- Test aggiunti per visibilità dei pulsanti alla dimensione minima della finestra e per il footer PIP: saltati perché la sessione grafica non è disponibile.
+- Controllo di sola lettura sul Python configurato del Mac: PIP funzionante; OpenCV, NumPy e Pillow già presenti e importabili. Non è stata necessaria la loro reinstallazione.
+
+Restano da collaudare visivamente palette/iconografia, menu, log, wizard e percorso completo di inserimento; non eseguiti download PIP da Internet, test hardware, database remoti o packaging in questa sessione.
+
+Le verifiche storiche sotto descrivono le rispettive versioni.
+
+---
+
 # Verifica corrente — 1.7
 
 Eseguiti 58 test con Python 3.15.2: **50 superati, 8 grafici saltati**.

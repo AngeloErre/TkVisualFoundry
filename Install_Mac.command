@@ -35,7 +35,7 @@ fi
 INSTALL_DIR="$HOME/Applications/VisualTkStudio"
 mkdir -p "$INSTALL_DIR"
 # Copy only distribution files, never a previous environment.
-cp studio.py ux_theme.py workspace_ui.py code_assist.py assist_ui.py dependency_manager.py dependency_ui.py configuration_ui.py database_runtime.py support_ui.py runtime_requirements.py core.py components.py library_explorer.py visualtk_runtime.py build_project.py requirements.txt requirements-multimedia.txt requirements-integrations.txt Build_Mac.command Install_Optional_Legacy.command "$INSTALL_DIR/"
+cp studio.py component_palette.py ux_theme.py workspace_ui.py code_assist.py assist_ui.py dependency_manager.py dependency_ui.py configuration_ui.py database_runtime.py support_ui.py runtime_requirements.py core.py components.py library_explorer.py visualtk_runtime.py build_project.py requirements.txt requirements-multimedia.txt requirements-integrations.txt Build_Mac.command Install_Optional_Legacy.command "$INSTALL_DIR/"
 cp -R examples "$INSTALL_DIR/"
 cp README.md ESTENSIONI.md ESEMPI.md COMPATIBILITA.md VALIDAZIONE.md CHANGELOG.md RELEASE.json DATABASE.md PACCHETTI.md RELEASE_NOTES.md "$INSTALL_DIR/"
 if [ -x "$INSTALL_DIR/.venv/bin/python" ]; then
@@ -67,7 +67,7 @@ cat > "$APP_DIR/Contents/Info.plist" <<'PLIST'
 <key>CFBundleDisplayName</key><string>VisualTk Studio</string>
 <key>CFBundleExecutable</key><string>VisualTkStudio</string>
 <key>CFBundleIdentifier</key><string>it.visualtk.studio</string>
-<key>CFBundleVersion</key><string>1.7</string>
+<key>CFBundleVersion</key><string>1.8</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>NSHighResolutionCapable</key><true/>
 </dict></plist>

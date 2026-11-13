@@ -2,17 +2,24 @@
 import json
 from pathlib import Path
 import tkinter as tk
-from tkinter import ttk,filedialog,messagebox
-from components import registry
+from tkinter import ttk,filedialog,messagebox,simpledialog
+from components import registry,install_args
 from dependency_manager import dependency_plan,NOTES
 from dependency_ui import DependencyWizard
 from runtime_requirements import validate_interpreter
 
 class ConfigurationMixin:
-    def open_dependencies(self,kind=None,props=None,on_ready=None,allow_skip=False,specs=None):
+    def open_dependencies(self,kind=None,props=None,on_ready=None,allow_skip=False,specs=None,auto_install=None):
         previous=getattr(self,'dependency_window',None)
         if previous and previous.winfo_exists():previous.lift();return previous
-        self.dependency_window=DependencyWizard(self,kind,props,on_ready,allow_skip,specs);return self.dependency_window
+        self.dependency_window=DependencyWizard(self,kind,props,on_ready,allow_skip,specs,auto_install=bool(on_ready) and self.config_data.get('pip_auto_install',True) if auto_install is None else auto_install);return self.dependency_window
+
+    def install_package(self):
+        spec=simpledialog.askstring('Pacchetto PIP','Nome del pacchetto (anche con versione, es. Pillow>=10):',parent=self)
+        if not spec:return
+        try:install_args(self.config_data['python'],[spec.strip()])
+        except ValueError as exc:return messagebox.showerror('Pacchetto non valido',str(exc),parent=self)
+        self.open_dependencies(specs=[spec.strip()],auto_install=True)
 
     def palette_info(self,event=None):
         sel=self.palette.curselection()
@@ -21,9 +28,14 @@ class ConfigurationMixin:
         specs=dependency_plan(self.project,kind)
         self.palette_details.set(desc.get('description','Controllo Tkinter standard.')+'\n'+('PIP: '+', '.join(specs) if specs else 'Pronto con Python/Tkinter • nessun pacchetto PIP.'))
 
+    def palette_dependencies(self):
+        selection=self.palette.curselection()
+        if not selection:return messagebox.showinfo('Componente','Seleziona un componente nella palette.')
+        return self.open_dependencies(self.palette.get(selection[0]),auto_install=True)
+
     def selected_dependencies(self):
         obj=self.selected
-        return self.open_dependencies(obj['kind'],obj.get('props',{})) if obj else self.open_dependencies()
+        return self.open_dependencies(obj['kind'],obj.get('props',{}),auto_install=True) if obj else self.palette_dependencies()
 
     def configure_component(self):
         if self.selected and self.selected['kind']=='DatabaseView':return self.database_setup()
@@ -57,15 +69,15 @@ class ConfigurationMixin:
                 if not props['database']:raise ValueError('Indica un file SQLite o un nome database.')
                 if props['password_env'] and not props['password_env'].isidentifier():raise ValueError('Nome della variabile ambiente non valido.')
                 self.commit_code();self.checkpoint();obj['props'].update(props);self.refresh();win.destroy()
-                if install:self.open_dependencies('DatabaseView',props)
+                if install:self.open_dependencies('DatabaseView',props,auto_install=True)
             except Exception as exc:messagebox.showerror('Configurazione database',str(exc),parent=win)
         row=ttk.Frame(win,padding=12);row.pack(fill='x')
         ttk.Button(row,text='Salva configurazione',command=save).pack(side='right',padx=4);ttk.Button(row,text='Salva e prepara dipendenze…',command=lambda:save(True)).pack(side='right',padx=4)
 
     def settings(self):
-        win=tk.Toplevel(self);win.title('Configurazione • VisualTk Studio');win.geometry('740x490');win.transient(self)
-        ttk.Label(win,text='Configura il tuo ambiente di lavoro',style='Brand.TLabel',padding=15).pack(anchor='w')
-        tabs=ttk.Notebook(win);tabs.pack(fill='both',expand=True,padx=12,pady=8)
+        win=tk.Toplevel(self);win.title('Configurazione • VisualTk Studio');win.geometry('740x520');win.minsize(640,420);win.transient(self);win.columnconfigure(0,weight=1);win.rowconfigure(1,weight=1)
+        ttk.Label(win,text='Configura il tuo ambiente di lavoro',style='Brand.TLabel',padding=15).grid(row=0,column=0,sticky='w')
+        tabs=ttk.Notebook(win);tabs.grid(row=1,column=0,sticky='nsew',padx=12,pady=8)
         general=ttk.Frame(tabs,padding=15);packages=ttk.Frame(tabs,padding=15);appearance=ttk.Frame(tabs,padding=15)
         tabs.add(general,text='Python e designer');tabs.add(packages,text='Pacchetti e componenti');tabs.add(appearance,text='Aspetto')
         fields={}
@@ -77,12 +89,12 @@ class ConfigurationMixin:
         ttk.Button(general,text='Sfoglia…',command=browse).grid(row=0,column=2)
         ttk.Label(general,text='Tutti i pacchetti del wizard saranno installati in questo Python.\nPuoi scegliere il Python di un ambiente virtuale.',wraplength=650).grid(row=3,column=0,columnspan=3,sticky='w',pady=16)
         flags={}
-        for key,label,default in [('dependency_before_insert','Mostra i requisiti prima di aggiungere un componente esterno',True),('dependency_before_run','Verifica i pacchetti prima di Avvia / Debug',True),('pip_binary_only','Preferisci pacchetti precompilati nel wizard PIP',True)]:
+        for key,label,default in [('dependency_before_insert','Mostra i requisiti prima di aggiungere un componente esterno',True),('dependency_before_run','Verifica i pacchetti prima di Avvia / Debug',True),('pip_auto_install','Prepara automaticamente i pacchetti quando inserisci o avvii un componente',True),('pip_wheels_only','Escludi sorgenti e usa soltanto wheel (avanzato)',False)]:
             flags[key]=tk.BooleanVar(value=self.config_data.get(key,default));ttk.Checkbutton(packages,text=label,variable=flags[key]).pack(anchor='w',pady=10)
         ttk.Button(packages,text='Apri wizard PIP…',command=self.open_dependencies).pack(anchor='w',pady=12)
         ttk.Label(appearance,text='Scegli un preset oppure personalizza i colori dell’IDE.\nI colori delle finestre create si modificano nel designer.',wraplength=650).pack(anchor='w',pady=15)
         ttk.Button(appearance,text='Temi e colori…',command=self.appearance_settings).pack(anchor='w')
-        status=tk.StringVar();ttk.Label(win,textvariable=status,padding=8).pack(fill='x')
+        status=tk.StringVar();ttk.Label(win,textvariable=status,padding=8,wraplength=650).grid(row=2,column=0,sticky='ew')
         def save():
             try:
                 updated={**self.config_data,**{k:v.get() for k,v in fields.items()},**{k:v.get() for k,v in flags.items()}};updated['grid']=int(updated['grid']);updated['font_size']=int(updated['font_size'])
@@ -91,4 +103,4 @@ class ConfigurationMixin:
                 validate_interpreter(updated['python'])
                 (Path.home()/'.visualtkstudio.json').write_text(json.dumps(updated,indent=2),encoding='utf-8');self.config_data=updated;self.code.configure(font=('Menlo',updated['font_size']));self.draw();win.destroy()
             except Exception as exc:status.set(str(exc))
-        row=ttk.Frame(win,padding=12);row.pack(fill='x');ttk.Button(row,text='Salva configurazione',command=save,style='Accent.TButton').pack(side='right');ttk.Button(row,text='Annulla',command=win.destroy).pack(side='right',padx=8)
+        row=ttk.Frame(win,padding=12);row.grid(row=3,column=0,sticky='ew');ttk.Button(row,text='Salva configurazione',command=save,style='Accent.TButton').pack(side='right');ttk.Button(row,text='Annulla',command=win.destroy).pack(side='right',padx=8)

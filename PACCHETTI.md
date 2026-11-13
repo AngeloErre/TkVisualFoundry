@@ -1,47 +1,49 @@
-# Pacchetti PIP: configurazione guidata
+# PIP: preparazione automatica dei componenti
 
-## Webcam: percorso facilitato
+## Inserire un componente
 
-1. Nella palette seleziona **WebcamView**. La descrizione anticipa i requisiti: **opencv-python, NumPy e Pillow**.
-2. Doppio clic oppure **Inserisci nel form** apre il wizard, prima di creare il controllo.
-3. Il wizard mostra il Python di destinazione e verifica versioni e import. Se mancano pacchetti, premi **Installa / ripara**.
-4. Attendi l’output di PIP, il controllo dei conflitti (`pip check`) e la verifica finale. Il pulsante **Continua** si abilita solo se i requisiti risultano pronti.
-5. Inserisci il controllo e avvia il progetto. Nel componente premi **Avvia webcam**; autorizza la Fotocamera nelle impostazioni di macOS se richiesto.
+Doppio clic su WebcamView, oppure selezionalo e premi **Inserisci nel form** (anche Invio). La preparazione controlla **OpenCV, NumPy e Pillow** nel Python configurato:
 
-**Solo designer** consente di disegnare subito senza installare nulla. Non significa che il componente sia pronto per l’esecuzione. Avvia/Debug propone nuovamente il wizard quando il progetto contiene dipendenze esterne.
+- Se sono già presenti e importabili, continua automaticamente all’inserimento.
+- Se manca qualcosa, avvia PIP, prepara le dipendenze e ripete i controlli. Il designer riceve il componente dopo la verifica positiva.
+- Se l’operazione fallisce, rimane aperta la scheda **Log installazione**. Non avvengono reinstallazioni in ciclo.
 
-## Altri punti di accesso
+Prima di usare webcam, USB o audio servono anche il dispositivo e le autorizzazioni del sistema. PIP non attiva la fotocamera e non installa VLC/libusb. Le note del componente descrivono questi requisiti.
 
-- Pulsante **Pacchetti PIP…** in alto: intero progetto oppure un componente del catalogo.
-- **Configura componente / dipendenze…** nell’ispettore: requisiti del controllo selezionato.
-- **Librerie → Esplora PyPI**: consulta un pacchetto per nome esatto; **Installa versione selezionata** apre lo stesso wizard.
-- **Configurazione → Pacchetti e componenti**: scegli se mostrare i requisiti prima dell’inserimento, prima dell’avvio e se preferire distribuzioni precompilate.
+## Menu PIP
 
-I pacchetti vengono installati nel Python indicato dal wizard, che è lo stesso configurato per eseguire i progetti. Cambialo in **Configurazione → Python e designer**. L’installer iniziale prepara l’ambiente dell’IDE; i pacchetti opzionali sono installati su richiesta. Gli ambienti esistenti conservano i pacchetti già presenti.
-
-## Cosa verifica il wizard
-
-- Presenza della distribuzione e rispetto dei vincoli di versione.
-- Import effettivo per le librerie note (ad esempio NumPy, OpenCV, Pillow e driver database).
-- Per pacchetti sconosciuti: metadati/versione; il codice esterno non viene importato automaticamente.
-- Dopo un’installazione, esito del comando, `pip check` e nuovo controllo dei requisiti.
-- Se PIP manca, prova a predisporlo con `ensurepip` durante l’installazione.
-
-Le installazioni e le verifiche avvengono in background. Puoi interrompere l’installazione; i pacchetti già scritti restano installati e devono essere verificati nuovamente. Se un import risulta guasto, **Installa / ripara** forza la reinstallazione dei requisiti mostrati. Il wizard non disinstalla automaticamente pacchetti estranei per risolvere conflitti.
-
-## Errori comuni
-
-| Stato | Come procedere |
+| Voce | Azione |
 |---|---|
-| Mancante | Premi Installa / ripara |
-| Versione fuori requisito | Lascia che PIP risolva i vincoli dell’intero gruppo |
-| Import fallito | Prova Installa / ripara e rileggi il log |
-| Nessuna distribuzione compatibile | Cerca una versione compatibile con Python/architettura; se sai predisporre compilatori e librerie, disattiva “solo precompilati” |
-| `pip check` segnala conflitti | Usa un ambiente virtuale dedicato o correggi i vincoli; il wizard non dichiara riuscita l’installazione |
-| PIP assente e ensurepip non disponibile | Scegli un Python ufficiale con PIP oppure un ambiente virtuale funzionante |
-| Rete non disponibile | Ripristina la connessione e riprova |
-| Pacchetti pronti ma periferica non funziona | Verifica autorizzazioni, dispositivo e librerie native |
+| Prepara automaticamente il progetto | Controlla e installa i requisiti dei controlli inseriti |
+| Prepara il componente selezionato | Predispone i pacchetti del controllo selezionato nel designer |
+| Installa un pacchetto | Inserisci un nome come `Pillow` oppure `Pillow>=10` |
+| Verifica requisiti senza installare | Mostra lo stato e lascia manuale l’avvio dell’installazione |
+| Esplora PyPI | Consulta metadati e scegli un pacchetto/versione; Installa avvia la preparazione |
+| Impostazioni pacchetti | Scegli Python e preferenze della preparazione |
 
-USBExplorer richiede anche **libusb**; i componenti VLC richiedono **VLC/libVLC**. Queste dipendenze native sono indicate prima dell’uso e non sono installate dal wizard PIP. Il controllo dei pacchetti non equivale a un collaudo di webcam, USB, audio o server remoti.
+Per configurare l’ambiente usa **Progetto → Configurazione…**. Le installazioni usano il Python indicato nella finestra PIP, che è quello dei progetti. Non vengono eseguite su un altro interprete per errore né con sudo.
 
-Riferimenti tecnici: [OpenCV su PyPI](https://pypi.org/project/opencv-python/), [PIP](https://pip.pypa.io/en/stable/).
+## Finestra di preparazione
+
+- **Requisiti e opzioni** mostra pacchetti, versione e stato.
+- **Log installazione** contiene i comandi eseguiti e l’output completo.
+- **Installa / ripara**, **Verifica**, **Chiudi/Interrompi** e **Continua/Fine** occupano un’area fissa separata dal log.
+- **Solo designer**, quando disponibile, inserisce il controllo senza promettere che sia pronto all’esecuzione. L’avvio può prepararlo in seguito.
+
+Puoi disattivare la preparazione automatica nelle preferenze o nella finestra. Se i pacchetti sono già pronti, l’inserimento/avvio continua comunque senza un clic aggiuntivo. Dal menu PIP puoi sempre richiedere una preparazione esplicita.
+
+## Scelta dei pacchetti
+
+PIP preferisce distribuzioni precompilate compatibili, ma non esclude automaticamente le versioni distribuite come sorgenti. L’opzione **Solo wheel** è avanzata e disattivata di default: attivandola, un pacchetto senza wheel compatibile non potrà essere installato.
+
+Se serve compilare un pacchetto sorgente, devono essere disponibili gli strumenti e le librerie richiesti da quel progetto. Non vengono aggirati errori di compatibilità, certificati TLS o protezioni del Python di sistema. Il log distingue un errore PIP dall’esito dei controlli finali.
+
+## Verifiche ed errori
+
+Il controllo verifica metadati/versioni e, per i pacchetti noti, l’import in processi separati: un modulo nativo difettoso non interrompe l’intero controllo senza indicare il pacchetto. Per pacchetti sconosciuti vengono controllati i metadati senza importarne il codice arbitrariamente.
+
+Dopo l’installazione sono eseguiti `pip check` e una nuova verifica dei requisiti. Conflitti nuovi bloccano il successo; conflitti già presenti e invariati sono segnalati nel log. Se PIP manca, la preparazione prova prima `ensurepip`. Gli import guasti possono richiedere reinstallazione del gruppo di requisiti mostrato.
+
+Un’interruzione non disinstalla pacchetti già scritti: premi Verifica prima di continuare. Se l’errore riguarda rete, certificati, distribuzioni incompatibili o un Python non scrivibile, correggi la causa o scegli un ambiente virtuale funzionante in Configurazione.
+
+La versione 1.8 è stata provata con un’installazione PIP reale da un wheel di test locale in un ambiente temporaneo. Download da PyPI e percorso grafico completo richiedono una verifica sul Mac di destinazione.

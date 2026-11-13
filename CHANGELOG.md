@@ -1,3 +1,14 @@
+# 1.8 — UI compatta e preparazione PIP automatica
+
+- Icone native per la palette, ricerca e inserimento da tastiera.
+- Menu a tendina dentro la finestra; comandi File/Modifica/PIP raccolti per funzione.
+- Pulsanti di inserimento e applicazione proprietà sopra le aree espandibili.
+- Log richiudibile e limitato in altezza; ripristino pannelli.
+- Verifica/installazione/prosecuzione automatiche per i componenti con dipendenze.
+- Footer PIP riservato con layout a griglia, scheda log e stato breve.
+- Preferenza wheel con fallback sorgenti; solo-wheel facoltativo; import nativi isolati per pacchetto.
+- Prova PIP reale in ambiente temporaneo offline. 58 test superati, 10 grafici saltati.
+
 # 1.7 — Configurazione, wizard PIP e database
 
 Centro configurazione, dipendenze prima dell’uso, installazioni in background con esito verificato, NumPy esplicito per webcam, DatabaseView SQLite/PostgreSQL/MySQL con griglia e CRUD, guide/esempio database, ispettore scorrevole e toolbar riorganizzata. Installer base con pacchetti opzionali su richiesta.

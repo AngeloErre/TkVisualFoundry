@@ -73,7 +73,7 @@ class LibraryExplorer(tk.Toplevel):
     def install(self):
         try:spec=self.selected_spec();install_args(self.studio.config_data['python'],[spec])
         except ValueError as exc:return messagebox.showerror('Installazione',str(exc),parent=self)
-        self.studio.open_dependencies(specs=[spec])
+        self.studio.open_dependencies(specs=[spec],auto_install=True)
     def installed(self):
         python=self.studio.config_data['python']
         def fetch():

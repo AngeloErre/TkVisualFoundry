@@ -1,14 +1,16 @@
-# VisualTk Studio 1.7
+# VisualTk Studio 1.8
 
 Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
 
-## Novità 1.7
+## Novità 1.8
 
-- **Configurazione** accessibile in alto: interprete Python, griglia, carattere editor, preferenze pacchetti e colori.
-- **Wizard PIP** prima dell’uso dei componenti: requisiti, verifica, installazione in background, log ed esito finale.
-- **Webcam guidata**: OpenCV, NumPy e Pillow vengono mostrati prima dell’inserimento.
-- **DatabaseView** nella palette: SQLite locale o connessione PostgreSQL/MySQL, tabella dati e comandi CRUD già pronti.
-- Schede laterali Componenti/Progetto, ispettore proprietà scorrevole, descrizioni/requisiti nella palette e strumenti distribuiti in due righe più leggibili.
+- **Palette con icone** Tk native per i componenti, ricerca e inserimento con doppio clic o Invio.
+- **Barra compatta di menu a tendina**: File, Modifica, Progetto, Esegui, PIP, Componenti, Vista e Help, visibili dentro la finestra anche su Mac.
+- **Inserisci nel form** e **Applica proprietà** fissati sopra le rispettive aree scorrevoli.
+- **Log richiudibile**, nascosto all’apertura, con altezza limitata per preservare lo spazio del designer.
+- **PIP automatico**: controlla, installa se necessario, verifica e continua l’inserimento o l’avvio senza premere ogni volta Continua.
+- Preferenza per pacchetti precompilati senza escludere quelli sorgenti. La modalità “solo wheel” rimane un’opzione avanzata.
+- Finestra PIP a schede, pulsanti sempre riservati nel layout, log dettagliato e interruzione.
 
 ## Funzionalità
 
@@ -33,8 +35,8 @@ Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di l
 1. Scarica i sorgenti o estrai il pacchetto ZIP in una cartella scrivibile.
 2. Esegui `Install_Mac.command` con doppio clic oppure `bash Install_Mac.command` dal Terminale.
 3. L’installer individua **Python 3.15 stabile o successivo con Tkinter**, prepara l’ambiente virtuale dell’IDE e crea `VisualTk Studio.app` in `~/Applications`.
-4. Avvia l’app. Usa **Configurazione** per scegliere l’interprete dei progetti; l’installazione predefinita usa il proprio ambiente virtuale.
-5. Per un componente opzionale, scegli **Pacchetti PIP…** oppure segui il wizard proposto quando lo inserisci.
+4. Avvia l’app. Usa **Progetto → Configurazione…** per scegliere l’interprete dei progetti; l’installazione predefinita usa il proprio ambiente virtuale.
+5. Per un componente opzionale, scegli **PIP → Prepara automaticamente il progetto…** oppure segui il wizard proposto quando lo inserisci.
 
 Se manca Python compatibile e Homebrew è già disponibile, l’installer prova a installare Python e Tcl/Tk tramite Homebrew. Altrimenti apre il sito ufficiale Python. Alpha, beta e release candidate non sono accettate. Tkinter non si installa con PIP.
 
@@ -67,7 +69,7 @@ Seleziona WebcamView: il wizard mostra **opencv-python, numpy e Pillow**, verifi
 
 ## Database con tabella pronta
 
-Inserisci **DatabaseView**, selezionalo e scegli **Configura componente / dipendenze…**. SQLite non richiede PIP. Per PostgreSQL/MySQL la configurazione prepara il relativo gruppo SQLAlchemy/driver. In esecuzione, **Connetti…** apre la connessione; scegli la tabella e usa i comandi per i record.
+Inserisci **DatabaseView**, selezionalo e scegli **Azioni → Configura componente…** nell’ispettore. SQLite non richiede PIP. Per PostgreSQL/MySQL la configurazione prepara il relativo gruppo SQLAlchemy/driver. In esecuzione, **Connetti…** apre la connessione; scegli la tabella e usa i comandi per i record.
 
 [Guida database ed esempi CRUD](DATABASE.md). Progetto dimostrativo: `examples/Database.vtk.json`.
 
@@ -84,8 +86,14 @@ Inserisci **DatabaseView**, selezionalo e scegli **Configura componente / dipend
 
 ## Verifica e limiti
 
-Versione in sviluppo: **50 test superati, 8 grafici saltati**, con Python 3.15.2. Verificati SQLite reale, transazioni, chiavi, generazione, dipendenze e flusso di installazione simulato. Non sono stati eseguiti collaudi GUI, installazioni PIP live, connessioni a server remoti o build `.app` in questa sessione.
+Versione in sviluppo: **58 test superati, 10 grafici saltati**, con Python 3.15.2. Verificati SQLite reale, transazioni, chiavi, generazione, dipendenze e flusso di installazione simulato. Eseguita anche un’installazione PIP reale da un wheel di prova locale in un ambiente temporaneo isolato, con verifica finale dell’import. Non sono stati eseguiti collaudi GUI, download PIP da Internet, connessioni a server remoti o build `.app` in questa sessione.
 
 Il designer usa coordinate assolute. I contenitori non consentono ancora l’annidamento visuale dei controlli. Installare una libreria non crea automaticamente il relativo widget: occorre una classe Tkinter compatibile o un adattatore. Le funzioni hardware dipendono da driver, librerie native e autorizzazioni. DatabaseView copre tabelle dello schema predefinito e tipi comuni, senza amministrazione del server o migrazioni.
 
 Per eseguire i sorgenti: `python3 studio.py`. Per i test: `python3 -m unittest discover -s tests -v`. Per preparare l’app dell’IDE sul Mac: `Build_Mac.command` dalla cartella installata con `.venv`; il packaging deve essere collaudato sul sistema di destinazione.
+
+## Menu e pannelli
+
+I comandi Apri/Salva sono in **File**; Annulla/Ripeti in **Modifica**. In alto rimangono solo Avvia, Stop e Mostra/Nascondi log. **Vista → Ripristina pannelli** riporta palette e proprietà alle larghezze iniziali e richiude il log. Il log si apre per esecuzione e verifiche, senza poter occupare tutto il designer.
+
+Nell’ispettore **Azioni** raccoglie configurazione del controllo, colori e carattere. **Componenti** include la creazione/importazione di controlli esterni. **PIP** comprende preparazione automatica, verifica senza installare, installazione di un pacchetto per nome ed esplorazione PyPI.
