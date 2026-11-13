@@ -1,7 +1,7 @@
-# VisualTk Studio 1.13
+# VisualTk Studio 1.14
 
-Adds six default palette components for MIDI, Excel, PDF, printing, cloud storage and LLM APIs. Configure the component from the inspector, prepare its dependencies, then use its runtime controls or asynchronous methods/events.
+Adds guided property values and automatic paired quotes, enum/boolean suggestions and a Documentation tab in the property inspector. Offline examples remain available; official HTTPS links and isolated pydoc help expose component APIs.
 
-Cloud: Google Drive, S3/MinIO and WebDAV. LLMs: official OpenAI, Claude and Gemini APIs. Session dialogs keep credentials out of project JSON; Drive tokens remain outside the project. Credentials/accounts/consent and API billing must be supplied separately. No service calls are made by the designer.
+Background startup checks inspect installed distribution metadata, PIP and declared requirements, stable Python-compatible PyPI candidates, dependency consistency and documentation URLs. Updates are prepared through the existing PIP wizard and never silently applied. Missing optional libraries are not all installed. Network failures remain unverified; broken links are not rewritten.
 
-141 tests passed, 11 graphical tests skipped. Temporary documents, SDK imports and a native Mac Office build were verified. Remote services, devices, printing, graphical launch and Windows remain pending.
+151 tests passed; 11 graphical tests skipped. GUI typing/focus and native launch must still be verified interactively. See INTELLISENSE.md and its English counterpart for scope and controls.

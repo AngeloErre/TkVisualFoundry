@@ -1,3 +1,7 @@
+# Versione 1.14
+
+151 test superati; 11 test grafici saltati. Nuovi controlli: valori tipizzati, stringhe/commenti invariati, chiamate multilinea, descrittori esterni, riferimento locale per tutti i componenti, versioni stabili/Python compatibili, release ritirate e distinzione errori HTTP/rete. Nessun aggiornamento di pacchetti eseguito dal controllo di avvio. Verifica interattiva di digitazione/focus e avvio app ancora necessaria.
+
 # Validation — 1.13
 
 141 tests passed, 11 graphical tests skipped on macOS Python 3.15.2 / Jedi 0.20.0.

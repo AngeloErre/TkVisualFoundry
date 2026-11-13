@@ -1,2 +1,4 @@
 jedi>=0.19,<0.21
 pyinstaller>=6.22.3,<7
+packaging>=24,<27
+certifi

@@ -92,8 +92,8 @@ class ConfigurationMixin:
         ttk.Button(general,text=tr('Sfoglia…'),command=browse).grid(row=0,column=2)
         ttk.Label(general,text=tr('Tutti i pacchetti del wizard saranno installati in questo Python.\nPuoi scegliere il Python di un ambiente virtuale.'),wraplength=650).grid(row=3,column=0,columnspan=3,sticky='w',pady=16)
         flags={}
-        for key,label,default in [('dependency_before_insert',tr('Mostra i requisiti prima di aggiungere un componente esterno'),True),('dependency_before_run',tr('Verifica i pacchetti prima di Avvia / Debug'),True),('pip_auto_install',tr('Prepara automaticamente i pacchetti quando inserisci o avvii un componente'),True),('pip_wheels_only',tr('Escludi sorgenti e usa soltanto wheel (avanzato)'),False)]:
-            flags[key]=tk.BooleanVar(value=self.config_data.get(key,default));ttk.Checkbutton(packages,text=label,variable=flags[key]).pack(anchor='w',pady=10)
+        for key,label,default in [('guided_values',tr('Completa automaticamente le virgolette dei valori testuali'),True),('startup_checks',tr('Controlla librerie, PIP e documentazione all’avvio'),True),('dependency_before_insert',tr('Mostra i requisiti prima di aggiungere un componente esterno'),True),('dependency_before_run',tr('Verifica i pacchetti prima di Avvia / Debug'),True),('pip_auto_install',tr('Prepara automaticamente i pacchetti quando inserisci o avvii un componente'),True),('pip_wheels_only',tr('Escludi sorgenti e usa soltanto wheel (avanzato)'),False)]:
+            flags[key]=tk.BooleanVar(value=self.config_data.get(key,default));ttk.Checkbutton(packages,text=label,variable=flags[key]).pack(anchor='w',pady=6)
         ttk.Button(packages,text=tr('Apri wizard PIP…'),command=self.open_dependencies).pack(anchor='w',pady=12)
         ttk.Label(appearance,text=tr('Scegli un preset oppure personalizza i colori dell’IDE.\nI colori delle finestre create si modificano nel designer.'),wraplength=650).pack(anchor='w',pady=15)
         ttk.Button(appearance,text=tr('Temi e colori…'),command=self.appearance_settings).pack(anchor='w')

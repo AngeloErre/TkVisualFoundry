@@ -62,3 +62,21 @@ Il completamento è un’analisi di codice, non l’esecuzione del programma. At
 Il motore non modifica automaticamente gli import e non converte l’installazione di un pacchetto in un controllo visuale. Per riprovare dopo una modifica esterna all’ambiente, usa Motore.
 
 Riferimenti: [API Jedi](https://jedi.readthedocs.io/en/latest/docs/api.html), [completamenti e firme](https://jedi.readthedocs.io/en/latest/docs/api-classes.html).
+
+## Valori guidati, documentazione e controlli iniziali (1.14)
+
+Digitando `self.Button1.configure(text=` l’editor inserisce `''` con il cursore tra le virgolette. Funziona anche accettando `text=` dalla lista. Scrivi il testo e premi `'` per oltrepassare la chiusura già inserita; Backspace tra due virgolette vuote elimina la coppia. La funzione è disattivabile nella Configurazione.
+
+Il tipo viene ricavato dalle proprietà del componente e dai valori del designer/descrittore: testi, numeri, booleani e scelte note (`state`, `orient`, `anchor`, ecc.). I valori già presenti, i commenti e le stringhe non vengono riscritti. Per tipi sconosciuti e chiamate generiche resta l’analisi Jedi; non si inventano tipi o valori obbligatori. I descrittori esterni possono fornire valori iniziali tipizzati in `defaults`.
+
+Nell’ispettore, **Documentazione** offre un riferimento locale con metodi, esempi, proprietà e dipendenze, il sito ufficiale e **API installata (pydoc)**. Quest’ultimo pulsante importa il modulo del componente in un processo separato, con timeout; non esegue gli eventi del progetto. Le docstring dipendono dalla libreria installata e possono essere in inglese. Non viene incorporato un browser remoto nell’IDE. Per un componente esterno aggiungere al descrittore:
+
+```json
+"documentation": "https://example.org/documentation"
+```
+
+All’avvio un controllo in background verifica i metadati dei pacchetti nel Python configurato, i requisiti del progetto e i pacchetti dell’IDE, PIP compreso. Interroga PyPI per le versioni stabili compatibili con Python e con i vincoli dichiarati: esclude prerelease, release di sviluppo e file ritirati. Esegue anche `pip check`. Le librerie opzionali non utilizzate non vengono installate. Le dipendenze transitive già installate vengono elencate, ma il pulsante di aggiornamento propone solo i requisiti dichiarati, lasciando a PIP la risoluzione delle dipendenze e la verifica delle wheel.
+
+Apri **PIP → Controlli iniziali** oppure il pulsante sotto l’ispettore. **Ricontrolla** usa il progetto e l’interprete correnti. **Aggiorna con wizard PIP…** prepara una procedura revisionabile, senza installazione automatica. Questo controllo non certifica import nativi, driver, funzionamento hardware o API remote: usa anche il wizard dei componenti e la diagnostica.
+
+I link documentali vengono verificati a ogni avvio. Redirect consentiti; 404/410 indicano link non validi. Errori di rete, certificati, blocchi 403, 429 e problemi temporanei sono indicati come non verificati, senza rimuovere o modificare i link. La guida locale resta disponibile offline. I controlli non bloccano l’editor e sono disattivabili nella Configurazione. Richiedono accesso HTTPS ai siti documentali e a PyPI; nessun codice, credenziale o file del progetto viene inviato.

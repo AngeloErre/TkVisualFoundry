@@ -67,6 +67,12 @@ def descriptor(data):
     if not isinstance(data.get('defaults',{}),dict):raise ValueError(tr('defaults deve essere un oggetto JSON'))
     req=data.get('requirements',[])
     if not isinstance(req,list) or any(not isinstance(r,str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.\-\[\],<>=!~ ]*',r) for r in req):raise ValueError(tr('requirements ammette solo nomi/versioni PyPI, senza URL o opzioni'))
+    if 'documentation' in data:
+        from urllib.parse import urlparse
+        url=data['documentation']
+        if not isinstance(url,str):raise ValueError('documentation must be an HTTPS URL')
+        parsed=urlparse(url)
+        if parsed.scheme!='https' or not parsed.hostname or parsed.username or parsed.password:raise ValueError('documentation must be an HTTPS URL')
     json.dumps(data); return copy.deepcopy(data)
 
 def registry(project):

@@ -32,6 +32,7 @@ from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from assist_ui import AssistMixin
+from intelligence_ui import IntelligenceMixin
 from configuration_ui import ConfigurationMixin
 from dependency_manager import dependency_plan
 from component_palette import ComponentPalette,LayoutMixin
@@ -45,7 +46,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -60,6 +61,7 @@ class Studio(ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,Lay
             if not isinstance(self.config_data.get(key),bool):self.config_data[key]=default
         self.saved_state=json.dumps(self.project,sort_keys=True); self.drag=None; self.breaks=set()
         self.build(); self.apply_appearance(); self.menus(); self.refresh(); self.after(70,self.poll)
+        if self.config_data.get('startup_checks',True):self.after(600,self.start_health)
         self.protocol('WM_DELETE_WINDOW',self.close)
         self.bind('<F1>',lambda e:self.help())
         for sequence, action in [('<Command-s>',self.save),('<Control-s>',self.save),('<Command-o>',self.open_project),('<Control-o>',self.open_project),('<Command-z>',self.undo),('<Control-z>',self.undo),('<F5>',self.run),('<Shift-F5>',self.stop),('<F9>',self.debug)]:
@@ -158,7 +160,7 @@ class Studio(ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,Lay
         actions=tk.Menu(inspector_actions,tearoff=False)
         for label,command in [(tr('Configura componente…'),self.configure_component),(tr('Colore sfondo…'),lambda:self.pick_color('bg')),(tr('Colore testo…'),lambda:self.pick_color('fg')),(tr('Carattere…'),self.choose_font)]:actions.add_command(label=label,command=command)
         ttk.Menubutton(inspector_actions,text=tr('Azioni ▾'),menu=actions).pack(side='right')
-        prop_area=ttk.Frame(right);prop_area.pack(fill='both',expand=True,pady=8)
+        prop_area=self.build_documentation(right)
         prop_canvas=tk.Canvas(prop_area,width=260,height=320,highlightthickness=0)
         prop_scroll=ttk.Scrollbar(prop_area,command=prop_canvas.yview);prop_scroll.pack(side='right',fill='y');prop_canvas.pack(side='left',fill='both',expand=True);prop_canvas.configure(yscrollcommand=prop_scroll.set)
         self.propbox=ttk.Frame(prop_canvas);prop_window=prop_canvas.create_window(0,0,window=self.propbox,anchor='nw')
@@ -253,6 +255,7 @@ class Studio(ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,Lay
         for w in self.propbox.winfo_children():w.destroy()
         self.propvars={}; obj=self.selected if self.selected is not None else self.form
         self.inspector_title.set(obj['name']+' • '+obj.get('kind',tr('Finestra')))
+        self.update_documentation(obj)
         values={k:obj[k] for k in ('name','x','y','width','height','title','bg') if k in obj}
         values=self.container_properties(obj,values)
         if self.selected is not None:values.update(obj['props'])

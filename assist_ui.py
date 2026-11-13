@@ -9,6 +9,7 @@ from tkinter import ttk
 from code_assist import examples
 from semantic_engine import local_analysis,in_literal
 from analysis_client import AnalysisClient
+from editor_guidance import quote_pair, value_items
 
 class AssistMixin:
     def build_assistant(self,parent):
@@ -30,6 +31,7 @@ class AssistMixin:
         ttk.Label(panel,textvariable=self.assist_detail,wraplength=660).pack(anchor='w')
         self.signature_var=tk.StringVar();ttk.Label(panel,textvariable=self.signature_var,wraplength=660).pack(anchor='w')
         self.code.bind('<KeyRelease>',self.assist_key)
+        self.code.bind('<KeyPress>',self.guided_closer,add='+')
         self.code.bind('<Down>',self.assist_down)
         self.code.bind('<Up>',self.assist_up)
         self.code.bind('<Escape>',lambda e:self.dismiss_completion())
@@ -39,6 +41,8 @@ class AssistMixin:
         self.code.pack(fill='both',expand=True)
 
     def update_assistant(self):
+        mark=getattr(self,'guided_quote_mark',None)
+        if mark and mark in self.code.mark_names():self.code.mark_unset(mark)
         self.dismiss_completion();self.assist_list.delete(0,'end');self.assist_items=[]
         if self.code_target and not self.code_target[2]:
             obj,event,_=self.code_target;self.assist_items=examples(obj,self.project)
@@ -68,10 +72,30 @@ class AssistMixin:
         snippet=snippet.replace('\n','\n'+base_indent)
         self.code.insert('insert',snippet);self.code.edit_separator();self.highlight();self.code.focus_set()
 
+    def guided_closer(self,event):
+        mark=getattr(self,'guided_quote_mark',None)
+        if event.keysym=='BackSpace' and mark and mark in self.code.mark_names() and not self.code.tag_ranges('sel'):
+            if self.code.compare('insert','==',mark) and self.code.get('insert-1c','insert+1c') in ("''", '\"\"'):
+                self.code.delete('insert-1c','insert+1c');self.code.mark_unset(mark);return 'break'
+        if event.char not in ("'", '"'):return
+        if self.code.tag_ranges('sel'):return
+        mark=getattr(self,'guided_quote_mark',None)
+        if mark and mark in self.code.mark_names() and self.code.compare('insert','==',mark) and self.code.get('insert','insert+1c')==event.char:
+            self.code.mark_set('insert','insert+1c');self.code.mark_unset(mark);return 'break'
+
     def assist_key(self,event):
         self.highlight()
         if event.keysym in ('Up','Down','Return','Tab','Escape','Control_L','Control_R','Shift_L','Shift_R'):return
         self.dismiss_completion();before=self.code.get('1.0','insert')
+        if event.char=='=' and self.config_data.get('guided_values',True):
+            pair=quote_pair(before,self.code.get('insert','end-1c'),self.project)
+            if pair:
+                self.code.insert('insert',pair);self.code.mark_set('insert','insert-1c')
+                self.guided_quote_mark='vts_guided_quote';self.code.mark_set(self.guided_quote_mark,'insert');self.code.mark_gravity(self.guided_quote_mark,'right')
+                before=self.code.get('1.0','insert')
+        values=value_items(before,self.project)
+        if values:
+            self.local_items=values;self.show_completions(values);return
         if in_literal(before):
             self.assist_timer=self.after(160,lambda:self.complete(automatic=True,show_popup=False));return
         popup=event.keysym not in ('Left','Right') and (event.char=='.' or bool(re.search(r'(?:\.\w*|\w{2,})$',before)))
@@ -116,7 +140,13 @@ class AssistMixin:
         selected=self.completion_box.curselection()
         if selected:
             item=self.completion_items[selected[0]];text=item['insert'];length=item['prefix_len'];self.code.edit_separator()
-            self.code.delete(f'insert-{length}c','insert');self.code.insert('insert',text);self.code.edit_separator()
+            self.code.delete(f'insert-{length}c','insert');self.code.insert('insert',text)
+            if text.endswith('=') and getattr(self,'config_data',{}).get('guided_values',True):
+                pair=quote_pair(self.code.get('1.0','insert'),self.code.get('insert','end-1c'),self.project)
+                if pair:
+                    self.code.insert('insert',pair);self.code.mark_set('insert','insert-1c')
+                    self.guided_quote_mark='vts_guided_quote';self.code.mark_set(self.guided_quote_mark,'insert');self.code.mark_gravity(self.guided_quote_mark,'right')
+            self.code.edit_separator()
         self.dismiss_completion();self.highlight();self.code.focus_set()
         self.assist_timer=self.after(80,lambda:self.complete(automatic=True,show_popup=False))
         return 'break'
@@ -141,6 +171,11 @@ class AssistMixin:
         if automatic and (self.code.focus_get()!=self.code or self.code.tag_ranges('sel')):return 'break'
         if not automatic:self.code.focus_set()
         before=self.code.get('1.0','insert')
+        values=value_items(before,self.project)
+        if values:
+            self.local_items=values
+            if show_popup:self.show_completions(values)
+            return 'break'
         if in_literal(before):
             self.local_items=[];self.queue_analysis('signature',False);return 'break'
         local=local_analysis(before,self.project,self.code.get('1.0','end-1c'));self.local_items=local['items'];self.signature_var.set(local['calltip'][:350])

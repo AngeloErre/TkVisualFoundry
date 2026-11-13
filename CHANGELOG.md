@@ -1,3 +1,10 @@
+# 1.14
+
+- Add token-aware property value guidance, paired text quotes and enum/boolean suggestions across registered component defaults.
+- Add an inspector Documentation tab with offline reference/examples, validated descriptor HTTPS links, official URLs and isolated installed API help through pydoc.
+- Add non-blocking startup distribution/PIP checks, compatible stable PyPI candidates, pip check and documentation link verification; keep failures actionable and preserve offline help.
+- Route declared requirement updates through the existing PIP wizard with extras and constraints preserved. Add opt-out settings and installer modules/CA resources.
+
 # 1.13
 
 - Add built-in MIDIPlayer, ExcelWorkbook, PDFDocument, PrintDocument, CloudStorage and LLMClient controls with guided setup and asynchronous events.

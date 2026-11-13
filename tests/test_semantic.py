@@ -11,6 +11,7 @@ import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from core import new_project
+from i18n import tr
 from semantic_engine import SemanticEngine,local_analysis,in_literal,editor_source
 from analysis_client import AnalysisClient
 
@@ -65,7 +66,7 @@ class SemanticTests(unittest.TestCase):
         self.assertIn('showinfo',self.names('messagebox.'))
         self.assertIn('title=',self.names('messagebox.showinfo(ti'))
         result=self.engine.analyze(request('messagebox.showinfo("Title", ',action='signature'))
-        self.assertIn('showinfo',result['calltip']);self.assertIn('argomento: message',result['calltip'])
+        self.assertIn('showinfo',result['calltip']);self.assertIn(tr('   • argomento: ')+'message',result['calltip'])
         partial=self.engine.analyze(request('messagebox.showinfo("Title", "Operazione',action='signature'))
         self.assertIn('showinfo',partial['calltip'])
     def test_python_variables_and_chained_calls(self):

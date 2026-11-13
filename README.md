@@ -1,8 +1,12 @@
-# VisualTk Studio 1.13
+# VisualTk Studio 1.14
 
 A visual Python/Tkinter IDE for macOS, inspired by the Visual Basic 6 workflow. Design multiple forms, edit control properties, write event handlers and run your application from one workspace.
 
 [Guida italiana](README_IT.md) · [Changelog](CHANGELOG.md)
+
+## New in 1.14
+
+Guided property values with automatic paired quotes, enum/boolean suggestions, and an inspector Documentation tab with offline examples, official links and installed API help via pydoc. Non-blocking startup checks cover documentation links, PIP, installed distributions and compatible stable PyPI updates. Updates remain reviewable in the PIP wizard. See [IntelliSense and startup checks](docs/en/INTELLISENSE.md).
 
 ## New in 1.13
 

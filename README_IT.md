@@ -1,6 +1,10 @@
-# VisualTk Studio 1.13
+# VisualTk Studio 1.14
 
 Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
+
+## Novità 1.14
+
+Valori guidati con virgolette automatiche, suggerimenti per scelte e booleani, scheda Documentazione nell’ispettore e API installate tramite pydoc. Controlli in background su link, PIP, pacchetti e aggiornamenti stabili compatibili. Aggiornamento revisionabile nel wizard PIP. [Guida completa](INTELLISENSE.md).
 
 ## Novità 1.9 — IntelliSense semantico
 
