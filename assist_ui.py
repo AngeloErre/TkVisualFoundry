@@ -1,4 +1,5 @@
 """Non-modal completions and a contextual examples panel."""
+from i18n import tr
 import copy
 import queue
 from pathlib import Path
@@ -16,15 +17,15 @@ class AssistMixin:
         self.bind('<Destroy>',self.assist_destroy,add='+')
         self.code.pack_forget()
         panel=ttk.Frame(parent,padding=(10,6));panel.pack(side='bottom',fill='x')
-        self.assist_title=tk.StringVar(value='Assistente codice • seleziona un componente e apri un evento')
+        self.assist_title=tk.StringVar(value=tr('Assistente codice • seleziona un componente e apri un evento'))
         ttk.Label(panel,textvariable=self.assist_title,style='Title.TLabel').pack(anchor='w')
         row=ttk.Frame(panel);row.pack(fill='x',pady=4)
         self.assist_list=tk.Listbox(row,height=4,exportselection=False,font=('Menlo',11));self.assist_list.pack(side='left',fill='x',expand=True)
         self.assist_list.bind('<<ListboxSelect>>',self.assist_describe)
         self.assist_list.bind('<Double-Button-1>',lambda e:self.insert_example())
-        ttk.Button(row,text='Inserisci esempio',command=self.insert_example).pack(side='left',padx=10)
-        ttk.Button(row,text='Ctrl+Spazio',command=self.complete).pack(side='left',padx=2)
-        ttk.Button(row,text='Motore…',command=self.setup_intellisense).pack(side='left',padx=2)
+        ttk.Button(row,text=tr('Inserisci esempio'),command=self.insert_example).pack(side='left',padx=10)
+        ttk.Button(row,text=tr('Ctrl+Spazio'),command=self.complete).pack(side='left',padx=2)
+        ttk.Button(row,text=tr('Motore…'),command=self.setup_intellisense).pack(side='left',padx=2)
         self.assist_detail=tk.StringVar(value='Scrivi self. per vedere i controlli; dopo il nome scrivi . per i metodi.')
         ttk.Label(panel,textvariable=self.assist_detail,wraplength=660).pack(anchor='w')
         self.signature_var=tk.StringVar();ttk.Label(panel,textvariable=self.signature_var,wraplength=660).pack(anchor='w')
@@ -41,7 +42,7 @@ class AssistMixin:
         self.dismiss_completion();self.assist_list.delete(0,'end');self.assist_items=[]
         if self.code_target and not self.code_target[2]:
             obj,event,_=self.code_target;self.assist_items=examples(obj,self.project)
-            self.assist_title.set(obj['name']+' • '+event+' — cosa puoi fare')
+            self.assist_title.set(obj['name']+' • '+event+tr(' — cosa puoi fare'))
             for label,code,doc in self.assist_items:self.assist_list.insert('end',label+'   →   '+code)
             if self.assist_items:self.assist_list.selection_set(0);self.assist_describe()
         else:self.assist_title.set('Codice progetto • usa self. per esplorare i componenti')
@@ -180,8 +181,8 @@ class AssistMixin:
                 snapshot,show_popup,detail_name=context
                 if result.get('error'):
                     self.semantic_state=result['error']
-                    if result.get('missing_jedi'):self.assist_detail.set('Attiva Jedi dal pulsante Motore… per analizzare le librerie esterne. I suggerimenti standard restano disponibili.')
-                    elif not self.local_items:self.assist_detail.set('Analisi semantica: '+result['error'][:250])
+                    if result.get('missing_jedi'):self.assist_detail.set(tr('Attiva Jedi dal pulsante Motore… per analizzare le librerie esterne. I suggerimenti standard restano disponibili.'))
+                    elif not self.local_items:self.assist_detail.set(tr('Analisi semantica: ')+result['error'][:250])
                     continue
                 self.semantic_state=result.get('engine','Jedi')
                 if detail_name:
@@ -207,7 +208,7 @@ class AssistMixin:
 
     def restart_intellisense(self):
         self.dismiss_completion();self.analysis_client.close();self.analysis_client=AnalysisClient();self.semantic_state=''
-        self.assist_detail.set('Motore ricaricato: digita un punto oppure premi Ctrl+Spazio.')
+        self.assist_detail.set(tr('Motore ricaricato: digita un punto oppure premi Ctrl+Spazio.'))
     def setup_intellisense(self):self.open_dependencies(specs=['jedi>=0.19,<0.21'],auto_install=True,on_ready=self.restart_intellisense)
     def assist_destroy(self,event):
         if event.widget is self:

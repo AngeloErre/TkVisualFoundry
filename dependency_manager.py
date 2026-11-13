@@ -1,4 +1,5 @@
 """Dependency plans and interpreter-scoped checks; no Tk or shell required."""
+from i18n import tr
 import json
 import re
 import subprocess
@@ -8,12 +9,12 @@ from components import registry, requirements, install_args
 
 PACKAGE_MODULES = {'jedi':'jedi','pillow':'PIL','opencv-python':'cv2','numpy':'numpy','pygame-ce':'pygame','pyusb':'usb','pyserial':'serial','sqlalchemy':'sqlalchemy','psycopg':'psycopg','pymysql':'pymysql','python-vlc':'vlc','yt-dlp':'yt_dlp','pywebview':'webview','tkvideoplayer':'tkVideoPlayer','pyinstaller':'PyInstaller'}
 NOTES = {
- 'WebcamView':'OpenCV acquisisce il video e richiede NumPy; Pillow converte e visualizza i fotogrammi. Dopo l’installazione macOS deve autorizzare la Fotocamera per Python o l’app avviata.',
- 'USBExplorer':'PyUSB richiede anche la libreria nativa libusb (su Mac: brew install libusb). Il wizard PIP non installa driver di sistema.',
- 'VideoPlayer':'Il pacchetto python-vlc richiede VLC/libVLC della stessa architettura di Python, installato separatamente.',
- 'YouTubePlayer':'Servono anche VLC/libVLC. La disponibilità dei flussi dipende dal servizio video.',
- 'DatabaseView':'SQLite è incluso in Python. PostgreSQL richiede SQLAlchemy e psycopg; MySQL richiede SQLAlchemy e PyMySQL. Nessuna password viene salvata nel progetto.',
- 'LegacyVideoPlayer':'Componente legacy: la disponibilità di pacchetti per questo Python va verificata.',
+ 'WebcamView':tr('OpenCV acquisisce il video e richiede NumPy; Pillow converte e visualizza i fotogrammi. Dopo l’installazione macOS deve autorizzare la Fotocamera per Python o l’app avviata.'),
+ 'USBExplorer':tr('PyUSB richiede anche la libreria nativa libusb (su Mac: brew install libusb). Il wizard PIP non installa driver di sistema.'),
+ 'VideoPlayer':tr('Il pacchetto python-vlc richiede VLC/libVLC della stessa architettura di Python, installato separatamente.'),
+ 'YouTubePlayer':tr('Servono anche VLC/libVLC. La disponibilità dei flussi dipende dal servizio video.'),
+ 'DatabaseView':tr('SQLite è incluso in Python. PostgreSQL richiede SQLAlchemy e psycopg; MySQL richiede SQLAlchemy e PyMySQL. Nessuna password viene salvata nel progetto.'),
+ 'LegacyVideoPlayer':tr('Componente legacy: la disponibilità di pacchetti per questo Python va verificata.'),
 }
 
 def component_requirements(project, kind, props=None):
@@ -57,19 +58,22 @@ for spec in json.loads(sys.argv[1]):
 print('VISUALTK_DEPENDENCIES='+json.dumps(out))
 '''
     result=subprocess.run([python,'-c',script,json.dumps(specs)],capture_output=True,text=True,timeout=30)
-    if result.returncode:raise RuntimeError('Verifica non riuscita: '+(result.stderr or result.stdout)[-1000:])
+    if result.returncode:raise RuntimeError(tr('Verifica non riuscita: ')+(result.stderr or result.stdout)[-1000:])
     try:
         payload=next(line.split('=',1)[1] for line in result.stdout.splitlines() if line.startswith('VISUALTK_DEPENDENCIES='))
         items=json.loads(payload)
-    except (ValueError,StopIteration):raise RuntimeError('L’interprete non ha restituito una verifica leggibile.') from None
+    except (ValueError,StopIteration):raise RuntimeError(tr('L’interprete non ha restituito una verifica leggibile.')) from None
     for item in items:
+        detail=item.get('detail','')
+        prefix='Versione fuori dal requisito '
+        item['detail']=tr(prefix)+detail[len(prefix):] if detail.startswith(prefix) else tr(detail)
         module=PACKAGE_MODULES.get(item['package'].lower().replace('_','-'))
         if item['state']!='ready' or not module:continue
         try:
             check=subprocess.run([python,'-c','import importlib,sys; importlib.import_module(sys.argv[1]); print("VISUALTK_IMPORT_OK")',module],capture_output=True,text=True,timeout=25)
-            if check.returncode==0 and 'VISUALTK_IMPORT_OK' in check.stdout:item['detail']='Import verificato'
-            else:item.update(state='broken',detail=(check.stderr or check.stdout or 'Import terminato con codice '+str(check.returncode))[-240:])
-        except subprocess.TimeoutExpired:item.update(state='broken',detail='Import bloccato: tempo massimo superato')
+            if check.returncode==0 and 'VISUALTK_IMPORT_OK' in check.stdout:item['detail']=tr('Import verificato')
+            else:item.update(state='broken',detail=(check.stderr or check.stdout or tr('Import terminato con codice ')+str(check.returncode))[-240:])
+        except subprocess.TimeoutExpired:item.update(state='broken',detail=tr('Import bloccato: tempo massimo superato'))
     return items
 
 
@@ -92,7 +96,7 @@ def install_dependencies(python,specs,binary_only=False,repair=False,on_output=N
     if not specs:return []
     install_args(python,specs)
     def run(args,timeout=600):
-        if cancelled():raise DependencyInstallError('Operazione interrotta. I pacchetti già installati vengono conservati.')
+        if cancelled():raise DependencyInstallError(tr('Operazione interrotta. I pacchetti già installati vengono conservati.'))
         output('$ '+' '.join(args)+'\n');tail=[]
         process=subprocess.Popen(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,encoding='utf-8',errors='replace',bufsize=1,env={**os.environ,'PYTHONUNBUFFERED':'1','PIP_PROGRESS_BAR':'off'})
         process_changed(process)
@@ -104,12 +108,12 @@ def install_dependencies(python,specs,binary_only=False,repair=False,on_output=N
                 if len(tail)>80:tail.pop(0)
             code=process.wait()
         finally:timer.cancel();process.stdout.close();process_changed(None)
-        if cancelled():raise DependencyInstallError('Installazione interrotta. Ripeti la verifica prima di usare il componente.')
+        if cancelled():raise DependencyInstallError(tr('Installazione interrotta. Ripeti la verifica prima di usare il componente.'))
         return code,''.join(tail)
     available=subprocess.run([python,'-m','pip','--version'],capture_output=True,timeout=15)
     if available.returncode:
         code,tail=run([python,'-m','ensurepip','--upgrade'])
-        if code:raise DependencyInstallError('PIP non disponibile: scegli un ambiente Python con PIP.\n'+tail)
+        if code:raise DependencyInstallError(tr('PIP non disponibile: scegli un ambiente Python con PIP.\n')+tail)
     # Pre-existing conflicts must not be misreported as a new failure caused by this install.
     baseline=subprocess.run([python,'-m','pip','check'],capture_output=True,text=True,timeout=40)
     old_conflicts=set(baseline.stdout.splitlines()) if baseline.returncode else set()
@@ -117,16 +121,16 @@ def install_dependencies(python,specs,binary_only=False,repair=False,on_output=N
     if repair:command.append('--force-reinstall')
     code,tail=run(command)
     if code:
-        raise DependencyInstallError('PIP non ha completato l’installazione. Leggi il log per il dettaglio. Nessun requisito viene dichiarato pronto.\n'+tail)
+        raise DependencyInstallError(tr('PIP non ha completato l’installazione. Leggi il log per il dettaglio. Nessun requisito viene dichiarato pronto.\n')+tail)
     code,tail=run([python,'-m','pip','check'],timeout=40)
     if code:
         # Extract the result separately from informational warnings emitted on stderr.
         current=subprocess.run([python,'-m','pip','check'],capture_output=True,text=True,timeout=40)
         conflicts=set(current.stdout.splitlines())
-        if not conflicts or not conflicts.issubset(old_conflicts):raise DependencyInstallError('Conflitti di dipendenze dopo l’installazione.\n'+tail)
-        output('AVVISO: conflitti già presenti nell’ambiente prima dell’installazione; controlla il log.\n')
-    output('Verifica finale delle versioni e degli import…\n')
-    if cancelled():raise DependencyInstallError('Operazione interrotta prima della verifica finale.')
+        if not conflicts or not conflicts.issubset(old_conflicts):raise DependencyInstallError(tr('Conflitti di dipendenze dopo l’installazione.\n')+tail)
+        output(tr('AVVISO: conflitti già presenti nell’ambiente prima dell’installazione; controlla il log.\n'))
+    output(tr('Verifica finale delle versioni e degli import…\n'))
+    if cancelled():raise DependencyInstallError(tr('Operazione interrotta prima della verifica finale.'))
     return probe_interpreter(python,specs)
 
 

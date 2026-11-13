@@ -2,6 +2,7 @@
 
 No connection is opened during construction; credentials are never component options.
 """
+from i18n import tr
 import datetime
 import decimal
 import os
@@ -19,7 +20,7 @@ class DatabaseSession:
     def connect(self,backend='sqlite',database='visualtk.sqlite',host='localhost',port=0,username='',password='',**ignored):
         self.disconnect();self.backend=backend
         if backend=='sqlite':
-            if not database:raise ValueError('Scegli il percorso del database SQLite.')
+            if not database:raise ValueError(tr('Scegli il percorso del database SQLite.'))
             self.connection=sqlite3.connect(database,timeout=8)
             self.connection.row_factory=sqlite3.Row
             self.connection.execute('PRAGMA foreign_keys = ON')
@@ -33,9 +34,9 @@ class DatabaseSession:
             try:
                 with engine.connect() as connection:connection.exec_driver_sql('SELECT 1')
             except Exception:
-                engine.dispose();raise RuntimeError('Connessione remota non riuscita: verifica server, database, credenziali, rete e driver.') from None
+                engine.dispose();raise RuntimeError(tr('Connessione remota non riuscita: verifica server, database, credenziali, rete e driver.')) from None
             self.engine=engine
-        else:raise ValueError('Backend supportati: sqlite, postgresql, mysql.')
+        else:raise ValueError(tr('Backend supportati: sqlite, postgresql, mysql.'))
         return self.tables()
 
     def disconnect(self):
@@ -49,13 +50,13 @@ class DatabaseSession:
         if self.engine:
             from sqlalchemy import inspect
             return inspect(self.engine).get_table_names()
-        raise RuntimeError('Connetti prima il database.')
+        raise RuntimeError(tr('Connetti prima il database.'))
 
     @staticmethod
     def quote(name):return '"'+str(name).replace('"','""')+'"'
 
     def use_table(self,name):
-        if name not in self.tables():raise ValueError('Tabella non presente nel database.')
+        if name not in self.tables():raise ValueError(tr('Tabella non presente nel database.'))
         self.table_name=name
         if self.connection:
             self.column_info=[{'name':r['name'],'type':r['type'],'pk':bool(r['pk']),'nullable':not r['notnull'],'default':r['dflt_value']} for r in self.connection.execute('PRAGMA table_info('+self.quote(name)+')')]
@@ -70,22 +71,22 @@ class DatabaseSession:
 
     def fetch(self,table=None,limit=200):
         if table is not None:self.use_table(table)
-        if not self.table_name:raise ValueError('Seleziona una tabella.')
+        if not self.table_name:raise ValueError(tr('Seleziona una tabella.'))
         limit=max(1,min(5000,int(limit)))
         if self.connection:return [dict(r) for r in self.connection.execute('SELECT * FROM '+self.quote(self.table_name)+' LIMIT ?', (limit,))]
         from sqlalchemy import select
         with self.engine.connect() as connection:return [dict(r) for r in connection.execute(select(self.meta).limit(limit)).mappings()]
 
     def _values(self,values):
-        if not self.table_name:raise ValueError('Seleziona una tabella.')
+        if not self.table_name:raise ValueError(tr('Seleziona una tabella.'))
         names={c['name'] for c in self.column_info}
-        if not isinstance(values,dict) or any(k not in names for k in values):raise ValueError('Colonne non valide.')
+        if not isinstance(values,dict) or any(k not in names for k in values):raise ValueError(tr('Colonne non valide.'))
         return values
 
     def _key(self,key):
         pks=self.primary_keys
-        if not pks:raise ValueError('La tabella non ha una chiave primaria: modifica ed eliminazione sono disabilitate.')
-        if not isinstance(key,dict) or set(key)!=set(pks) or any(v is None for v in key.values()):raise ValueError('È necessaria la chiave primaria completa e non NULL.')
+        if not pks:raise ValueError(tr('La tabella non ha una chiave primaria: modifica ed eliminazione sono disabilitate.'))
+        if not isinstance(key,dict) or set(key)!=set(pks) or any(v is None for v in key.values()):raise ValueError(tr('È necessaria la chiave primaria completa e non NULL.'))
         return key
 
     def insert(self,values):
@@ -100,18 +101,18 @@ class DatabaseSession:
 
     def update(self,key,values):
         key=self._key(key);values=self._values(values)
-        if not values:raise ValueError('Nessuna modifica da salvare.')
-        if any(k in self.primary_keys for k in values):raise ValueError('Le chiavi primarie non si modificano dall’editor.')
+        if not values:raise ValueError(tr('Nessuna modifica da salvare.'))
+        if any(k in self.primary_keys for k in values):raise ValueError(tr('Le chiavi primarie non si modificano dall’editor.'))
         if self.connection:
             sql='UPDATE '+self.quote(self.table_name)+' SET '+', '.join(self.quote(k)+'=?' for k in values)+' WHERE '+' AND '.join(self.quote(k)+'=?' for k in key)
             with self.connection:
                 result=self.connection.execute(sql,tuple(values.values())+tuple(key.values()))
-                if result.rowcount!=1:raise ValueError('Riga non trovata o chiave non univoca; transazione annullata.')
+                if result.rowcount!=1:raise ValueError(tr('Riga non trovata o chiave non univoca; transazione annullata.'))
         else:
             from sqlalchemy import update,and_
             with self.engine.begin() as connection:
                 result=connection.execute(update(self.meta).where(and_(*(self.meta.c[k]==v for k,v in key.items()))).values(**values))
-                if result.rowcount!=1:raise ValueError('Riga non trovata o chiave non univoca; transazione annullata.')
+                if result.rowcount!=1:raise ValueError(tr('Riga non trovata o chiave non univoca; transazione annullata.'))
         return 1
 
     def delete(self,key):
@@ -119,16 +120,16 @@ class DatabaseSession:
         if self.connection:
             with self.connection:
                 result=self.connection.execute('DELETE FROM '+self.quote(self.table_name)+' WHERE '+' AND '.join(self.quote(k)+'=?' for k in key),tuple(key.values()))
-                if result.rowcount!=1:raise ValueError('Riga non trovata o chiave non univoca; transazione annullata.')
+                if result.rowcount!=1:raise ValueError(tr('Riga non trovata o chiave non univoca; transazione annullata.'))
         else:
             from sqlalchemy import delete,and_
             with self.engine.begin() as connection:
                 result=connection.execute(delete(self.meta).where(and_(*(self.meta.c[k]==v for k,v in key.items()))))
-                if result.rowcount!=1:raise ValueError('Riga non trovata o chiave non univoca; transazione annullata.')
+                if result.rowcount!=1:raise ValueError(tr('Riga non trovata o chiave non univoca; transazione annullata.'))
         return 1
 
     def create_demo(self):
-        if not self.connection:raise ValueError('L’esempio è disponibile solo con SQLite.')
+        if not self.connection:raise ValueError(tr('L’esempio è disponibile solo con SQLite.'))
         with self.connection:self.connection.execute('CREATE TABLE IF NOT EXISTS contatti (id INTEGER PRIMARY KEY, nome TEXT NOT NULL, email TEXT, note TEXT)')
         return self.tables()
 
@@ -137,14 +138,14 @@ def parse_database_value(text,type_name):
     """Typed fields; NULL is handled by an explicit switch, not empty text."""
     kind=type_name.upper()
     if 'BOOL' in kind:
-        if text.lower() not in ('true','false','1','0'):raise ValueError('Booleano: usa true, false, 1 o 0.')
+        if text.lower() not in ('true','false','1','0'):raise ValueError(tr('Booleano: usa true, false, 1 o 0.'))
         return text.lower() in ('true','1')
     if 'INT' in kind:return int(text)
     if any(s in kind for s in ('REAL','FLOAT','DOUBLE')):return float(text)
     if any(s in kind for s in ('DECIMAL','NUMERIC')):return decimal.Decimal(text)
     if 'TIMESTAMP' in kind or 'DATETIME' in kind:return datetime.datetime.fromisoformat(text)
     if kind=='DATE':return datetime.date.fromisoformat(text)
-    if 'BLOB' in kind or 'BINARY' in kind:raise ValueError('I campi binari vanno gestiti da codice.')
+    if 'BLOB' in kind or 'BINARY' in kind:raise ValueError(tr('I campi binari vanno gestiti da codice.'))
     return text
 
 
@@ -156,15 +157,15 @@ class DatabaseView(tk.Frame):
         self.tasks=queue.Queue();self.results=queue.Queue();self.session=DatabaseSession()
         # A single worker owns the DB connection (including SQLite's thread affinity).
         threading.Thread(target=self.worker,daemon=True).start()
-        bar=ttk.Frame(self);bar.pack(fill='x');self.connect_button=ttk.Button(bar,text='Connetti…',command=self.connection_dialog);self.connect_button.pack(side='left')
+        bar=ttk.Frame(self);bar.pack(fill='x');self.connect_button=ttk.Button(bar,text=tr('Connetti…'),command=self.connection_dialog);self.connect_button.pack(side='left')
         self.tables_box=ttk.Combobox(bar,state='readonly',width=20);self.tables_box.pack(side='left',padx=4);self.tables_box.bind('<<ComboboxSelected>>',lambda e:self.refresh())
-        self.refresh_button=ttk.Button(bar,text='Aggiorna',command=self.refresh);self.refresh_button.pack(side='left')
-        self.demo_button=ttk.Button(bar,text='Crea tabella esempio',command=self.create_demo);self.demo_button.pack(side='left')
+        self.refresh_button=ttk.Button(bar,text=tr('Aggiorna'),command=self.refresh);self.refresh_button.pack(side='left')
+        self.demo_button=ttk.Button(bar,text=tr('Crea tabella esempio'),command=self.create_demo);self.demo_button.pack(side='left')
         actions=ttk.Frame(self);actions.pack(fill='x')
-        self.add_button=ttk.Button(actions,text='+ Nuovo record',command=lambda:self.edit_record(False));self.add_button.pack(side='left')
-        self.edit_button=ttk.Button(actions,text='Modifica selezionato',command=lambda:self.edit_record(True));self.edit_button.pack(side='left')
-        self.delete_button=ttk.Button(actions,text='Elimina selezionato',command=self.delete_selected);self.delete_button.pack(side='left')
-        self.state=tk.StringVar(value='Disconnesso • SQLite non richiede PIP. Premi Connetti per iniziare.');ttk.Label(self,textvariable=self.state,wraplength=680).pack(fill='x')
+        self.add_button=ttk.Button(actions,text=tr('+ Nuovo record'),command=lambda:self.edit_record(False));self.add_button.pack(side='left')
+        self.edit_button=ttk.Button(actions,text=tr('Modifica selezionato'),command=lambda:self.edit_record(True));self.edit_button.pack(side='left')
+        self.delete_button=ttk.Button(actions,text=tr('Elimina selezionato'),command=self.delete_selected);self.delete_button.pack(side='left')
+        self.state=tk.StringVar(value=tr('Disconnesso • SQLite non richiede PIP. Premi Connetti per iniziare.'));ttk.Label(self,textvariable=self.state,wraplength=680).pack(fill='x')
         frame=ttk.Frame(self);frame.pack(fill='both',expand=True)
         self.gridview=ttk.Treeview(frame,show='headings',selectmode='browse');self.gridview.grid(row=0,column=0,sticky='nsew')
         ys=ttk.Scrollbar(frame,orient='vertical',command=self.gridview.yview);ys.grid(row=0,column=1,sticky='ns');xs=ttk.Scrollbar(frame,orient='horizontal',command=self.gridview.xview);xs.grid(row=1,column=0,sticky='ew')
@@ -191,8 +192,8 @@ class DatabaseView(tk.Frame):
 
     def submit(self,kind,callback):
         if self.closed:return False
-        if self.busy:self.state.set('Attendi il completamento dell’operazione corrente.');return False
-        self.busy=True;self.state.set('Operazione in corso…');self.controls();self.tasks.put((self.generation,kind,callback));return True
+        if self.busy:self.state.set(tr('Attendi il completamento dell’operazione corrente.'));return False
+        self.busy=True;self.state.set(tr('Operazione in corso…'));self.controls();self.tasks.put((self.generation,kind,callback));return True
 
     def connect(self,password=None):
         if self.busy:return False
@@ -228,11 +229,11 @@ class DatabaseView(tk.Frame):
                 if generation!=self.generation:continue
                 self.busy=False
                 if not ok:
-                    self.last_error=data;self.state.set('Errore: '+data);self.controls();self.event_generate('<<DatabaseError>>',when='tail');continue
+                    self.last_error=data;self.state.set(tr('Errore: ')+data);self.controls();self.event_generate('<<DatabaseError>>',when='tail');continue
                 if kind in ('connect','demo'):
                     self.connected=True;self.tables_box['values']=data
                     self.tables_box.set(self.table_name if self.table_name in data else (data[0] if data else ''));self.table_name=self.tables_box.get()
-                    self.state.set('Connesso • scegli una tabella.' if data else 'Database vuoto. Puoi creare la tabella esempio.')
+                    self.state.set(tr('Connesso • scegli una tabella.') if data else tr('Database vuoto. Puoi creare la tabella esempio.'))
                     self.controls()
                     if kind=='connect':self.event_generate('<<DatabaseConnected>>',when='tail')
                     if data:self.refresh()
@@ -240,38 +241,38 @@ class DatabaseView(tk.Frame):
                     self.columns,self.rows=data;self.selected_record=None;self.gridview.delete(*self.gridview.get_children());names=[c['name'] for c in self.columns];self.gridview['columns']=names
                     for c in self.columns:self.gridview.heading(c['name'],text=c['name']+(' 🔑' if c['pk'] else ''));self.gridview.column(c['name'],width=150,stretch=False)
                     for i,row in enumerate(self.rows):self.gridview.insert('','end',iid=str(i),values=['NULL' if row.get(k) is None else str(row[k]) for k in names])
-                    self.state.set(f'{len(self.rows)} righe visualizzate • limite {self.limit}'+(' • Senza chiave primaria: modifica/eliminazione disabilitate.' if not any(c['pk'] for c in self.columns) else ''));self.controls();self.event_generate('<<DataLoaded>>',when='tail')
+                    self.state.set(tr('{v0} righe visualizzate • limite {v1}', v0=f'{len(self.rows)}', v1=f'{self.limit}')+(tr(' • Senza chiave primaria: modifica/eliminazione disabilitate.') if not any(c['pk'] for c in self.columns) else ''));self.controls();self.event_generate('<<DataLoaded>>',when='tail')
                 elif kind=='write':self.event_generate('<<DataChanged>>',when='tail');self.refresh()
         except queue.Empty:pass
         self.timer=self.after(80,self.poll)
 
     def connection_dialog(self):
         if self.busy:return
-        win=tk.Toplevel(self);win.title('Connessione database');win.transient(self.winfo_toplevel());vars={}
-        fields=[('backend','Tipo',self.backend),('database','File SQLite / nome database',self.database),('host','Host (remoto)',self.host),('port','Porta (0 = predefinita)',self.port),('username','Utente (remoto)',self.username)]
+        win=tk.Toplevel(self);win.title(tr('Connessione database'));win.transient(self.winfo_toplevel());vars={}
+        fields=[('backend',tr('Tipo'),self.backend),('database',tr('File SQLite / nome database'),self.database),('host',tr('Host (remoto)'),self.host),('port',tr('Porta (0 = predefinita)'),self.port),('username',tr('Utente (remoto)'),self.username)]
         for i,(key,label,value) in enumerate(fields):
             ttk.Label(win,text=label).grid(row=i,column=0,padx=10,pady=7,sticky='w');vars[key]=tk.StringVar(value=value)
             control=ttk.Combobox(win,textvariable=vars[key],values=['sqlite','postgresql','mysql'],state='readonly') if key=='backend' else ttk.Entry(win,textvariable=vars[key],width=38)
             control.grid(row=i,column=1,padx=10,pady=7,sticky='ew')
         def browse():
-            path=filedialog.asksaveasfilename(parent=win,defaultextension='.sqlite',filetypes=[('SQLite','*.sqlite *.db'),('Tutti','*')])
+            path=filedialog.asksaveasfilename(parent=win,defaultextension='.sqlite',filetypes=[('SQLite','*.sqlite *.db'),(tr('Tutti'),'*')])
             if path:vars['database'].set(path)
-        ttk.Button(win,text='Scegli file SQLite…',command=browse).grid(row=1,column=2,padx=5)
-        password=tk.StringVar();ttk.Label(win,text='Password (non salvata)').grid(row=5,column=0,padx=10,pady=7);ttk.Entry(win,textvariable=password,show='•').grid(row=5,column=1,sticky='ew',padx=10)
-        ttk.Label(win,text='SQLite: nessuna installazione. Remoto: SQLAlchemy + psycopg o PyMySQL.\nLa connessione usa l’ambiente Python dell’app. Password vuota: variabile '+self.password_env,wraplength=560).grid(row=6,column=0,columnspan=3,padx=10,pady=10)
+        ttk.Button(win,text=tr('Scegli file SQLite…'),command=browse).grid(row=1,column=2,padx=5)
+        password=tk.StringVar();ttk.Label(win,text=tr('Password (non salvata)')).grid(row=5,column=0,padx=10,pady=7);ttk.Entry(win,textvariable=password,show='•').grid(row=5,column=1,sticky='ew',padx=10)
+        ttk.Label(win,text=tr('SQLite: nessuna installazione. Remoto: SQLAlchemy + psycopg o PyMySQL.\nLa connessione usa l’ambiente Python dell’app. Password vuota: variabile ')+self.password_env,wraplength=560).grid(row=6,column=0,columnspan=3,padx=10,pady=10)
         def apply():
             try:port=int(vars['port'].get());assert 0<=port<=65535
-            except (ValueError,AssertionError):return messagebox.showerror('Porta','Inserisci una porta tra 0 e 65535.',parent=win)
+            except (ValueError,AssertionError):return messagebox.showerror(tr('Porta'),tr('Inserisci una porta tra 0 e 65535.'),parent=win)
             for key,var in vars.items():setattr(self,key,port if key=='port' else var.get())
             secret=password.get() or None;password.set('');win.destroy();self.connect(secret)
-        ttk.Button(win,text='Connetti',command=apply).grid(row=7,column=1,pady=12)
+        ttk.Button(win,text=tr('Connetti'),command=apply).grid(row=7,column=1,pady=12)
 
     def edit_record(self,editing):
         if self.busy or not self.connected or not self.table_name:return
         if editing and (self.selected_record is None or not any(c['pk'] for c in self.columns)):return
         record=dict(self.selected_record) if editing else {};key={c['name']:record.get(c['name']) for c in self.columns if c['pk']}
-        win=tk.Toplevel(self);win.title('Modifica record' if editing else 'Nuovo record');win.geometry('640x480');win.transient(self.winfo_toplevel())
-        ttk.Label(win,text='Attiva i campi da scrivere. NULL è distinto dal testo vuoto. Le chiavi esistenti non si modificano.',wraplength=600,padding=10).pack(fill='x')
+        win=tk.Toplevel(self);win.title(tr('Modifica record') if editing else tr('Nuovo record'));win.geometry('640x480');win.transient(self.winfo_toplevel())
+        ttk.Label(win,text=tr('Attiva i campi da scrivere. NULL è distinto dal testo vuoto. Le chiavi esistenti non si modificano.'),wraplength=600,padding=10).pack(fill='x')
         canvas=tk.Canvas(win,highlightthickness=0);scroll=ttk.Scrollbar(win,command=canvas.yview);scroll.pack(side='right',fill='y');canvas.pack(fill='both',expand=True);canvas.configure(yscrollcommand=scroll.set);body=ttk.Frame(canvas);canvas.create_window(0,0,window=body,anchor='nw');body.bind('<Configure>',lambda e:canvas.configure(scrollregion=canvas.bbox('all')))
         fields=[]
         for i,c in enumerate(self.columns):
@@ -283,15 +284,15 @@ class DatabaseView(tk.Frame):
                 values={c['name']:None if null.get() else parse_database_value(text.get(),c['type']) for c,enabled,null,text in fields if enabled.get()}
                 # SQLite does not natively bind Decimal/date objects.
                 if self.backend=='sqlite':values={k:str(v) if isinstance(v,(decimal.Decimal,datetime.date)) else v for k,v in values.items()}
-            except (ValueError,decimal.InvalidOperation) as exc:return messagebox.showerror('Valore non valido',str(exc),parent=win)
+            except (ValueError,decimal.InvalidOperation) as exc:return messagebox.showerror(tr('Valore non valido'),str(exc),parent=win)
             accepted=self.update_record(key,values) if editing else self.insert_record(values)
             if accepted:win.destroy()
-        ttk.Button(win,text='Salva modifiche' if editing else 'Aggiungi record',command=save).pack(pady=10)
+        ttk.Button(win,text=tr('Salva modifiche') if editing else tr('Aggiungi record'),command=save).pack(pady=10)
 
     def delete_selected(self):
         if self.selected_record is None:return
         key={c['name']:self.selected_record[c['name']] for c in self.columns if c['pk']}
-        if key and messagebox.askyesno('Elimina record','Eliminare definitivamente la riga selezionata?\n'+str(key),parent=self):self.delete_record(key)
+        if key and messagebox.askyesno(tr('Elimina record'),tr('Eliminare definitivamente la riga selezionata?\n')+str(key),parent=self):self.delete_record(key)
 
     def cleanup(self,event):
         if event.widget is self:

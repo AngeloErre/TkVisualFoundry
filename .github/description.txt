@@ -1,0 +1,1 @@
+Visual Python/Tkinter IDE for macOS with a multi-form designer, IntelliSense, automatic PIP setup and database CRUD. Italian and English interface.

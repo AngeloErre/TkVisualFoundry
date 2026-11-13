@@ -1,3 +1,9 @@
+# 1.10
+
+- Italian/English interface with a persistent language selector and restart notice.
+- Project-specific language for exported component controls; existing content preserved.
+- English README and in-app documentation with a separate Italian guide.
+
 # 1.9 — IntelliSense Python e librerie
 
 Motore semantico Jedi collegato automaticamente al punto, analisi nel Python dei progetti, import/alias/variabili, metodi dei componenti e firme con argomento attivo. Worker persistente con timeout e scarto delle risposte obsolete; documentazione selezionata su richiesta. Fallback stdlib, comando Motore per preparare Jedi e riavvio dell’analisi dopo installazioni PIP.

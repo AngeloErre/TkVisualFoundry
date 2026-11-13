@@ -1,4 +1,5 @@
 """Scrollable component palette with native Tk icons and Listbox-compatible access."""
+from i18n import tr
 import tkinter as tk
 from tkinter import ttk
 
@@ -107,7 +108,7 @@ class LayoutMixin:
             self.vertical.add(self.log_panel,weight=0);self.log_visible=True;self.after_idle(self.position_log)
         elif not visible and self.log_visible:
             self.vertical.forget(self.log_panel);self.log_visible=False
-        self.log_toggle_text.set('Nascondi log' if visible else 'Mostra log')
+        self.log_toggle_text.set(tr('Nascondi log') if visible else tr('Mostra log'))
     def position_log(self):
         if self.log_visible:self.vertical.sashpos(0,max(1,int(self.vertical.winfo_height()*.76)));self.clamp_log()
     def clamp_log(self):
@@ -128,14 +129,14 @@ class LayoutMixin:
         from library_explorer import LibraryExplorer
         bar=tk.Menu(self);self.config(menu=bar);self.menu_buttons=[]
         definitions=[
-            ('File',[('Nuovo progetto',self.new),('Apri progetto…',self.open_project),('Salva',self.save),('Salva con nome…',lambda:self.save(True)),('Esporta Python…',self.export),('Esci',self.close)]),
-            ('Modifica',[('Annulla',self.undo),('Ripeti',self.redo),('Duplica componente',self.duplicate),('Elimina selezione',self.delete),('Allinea X',lambda:self.align('x')),('Allinea Y',lambda:self.align('y'))]),
-            ('Progetto',[('Gestione form…',self.manage_forms),('Aggiungi finestra',self.add_form),('Codice evento',self.edit_event),('Codice avvio',lambda:self.global_code('startup')),('Import e funzioni globali',lambda:self.global_code('imports')),('Configurazione…',self.settings)]),
-            ('Esegui',[('Avvia — F5',self.run),('Debug — F9',self.debug),('Ferma — Shift+F5',self.stop),('Verifica sintassi',self.check),('Crea applicazione',self.package)]),
-            ('PIP',[('Prepara automaticamente il progetto…',lambda:self.open_dependencies(auto_install=True)),('Componente del designer…',self.selected_dependencies),('Componente della palette…',self.palette_dependencies),('Installa un pacchetto…',self.install_package),('Verifica requisiti senza installare…',lambda:self.open_dependencies(auto_install=False)),('Esplora PyPI…',lambda:LibraryExplorer(self)),('Impostazioni pacchetti…',self.settings)]),
-            ('Componenti',[('Inserisci selezionato',self.add_widget),('Crea componente esterno…',self.component_wizard),('Importa descrittore…',self.import_component),('Componenti del progetto…',self.component_manager),('Configura selezionato…',self.configure_component)]),
-            ('Vista',[('Mostra / nascondi log',self.toggle_log),('Ripristina pannelli',self.reset_layout),('Colori ambiente…',self.appearance_settings),('Tema applicazione…',self.choose_theme)]),
-            ('Help',[('IntelliSense e completamento',lambda:self.help_topic('IntelliSense')),('Guida rapida — F1',self.help),('Pacchetti PIP',lambda:self.help_topic('Pacchetti PIP')),('Database',lambda:self.help_topic('Database')),('Manuale',lambda:self.help_topic('Manuale')),('Estensioni',lambda:self.help_topic('Estensioni')),('Esempi',self.open_examples),('Compatibilità',lambda:self.help_topic('Compatibilità')),('Diagnostica',self.diagnostics),('Documentazione Tkinter',lambda:webbrowser.open('https://docs.python.org/3/library/tkinter.html')),('Informazioni',lambda:messagebox.showinfo('VisualTk Studio','VisualTk Studio 1.9\nDesigner visuale Python / Tkinter'))]),
+            ('File',[(tr('Nuovo progetto'),self.new),(tr('Apri progetto…'),self.open_project),(tr('Salva'),self.save),(tr('Salva con nome…'),lambda:self.save(True)),(tr('Esporta Python…'),self.export),(tr('Esci'),self.close)]),
+            (tr('Modifica'),[(tr('Annulla'),self.undo),(tr('Ripeti'),self.redo),(tr('Duplica componente'),self.duplicate),(tr('Elimina selezione'),self.delete),(tr('Allinea X'),lambda:self.align('x')),(tr('Allinea Y'),lambda:self.align('y'))]),
+            (tr('Progetto'),[(tr('Gestione form…'),self.manage_forms),(tr('Aggiungi finestra'),self.add_form),(tr('Codice evento'),self.edit_event),(tr('Codice avvio'),lambda:self.global_code('startup')),(tr('Import e funzioni globali'),lambda:self.global_code('imports')),('Configurazione…',self.settings)]),
+            (tr('Esegui'),[(tr('Avvia — F5'),self.run),('Debug — F9',self.debug),(tr('Ferma — Shift+F5'),self.stop),(tr('Verifica sintassi'),self.check),(tr('Crea applicazione'),self.package)]),
+            ('PIP',[(tr('Prepara automaticamente il progetto…'),lambda:self.open_dependencies(auto_install=True)),(tr('Componente del designer…'),self.selected_dependencies),(tr('Componente della palette…'),self.palette_dependencies),(tr('Installa un pacchetto…'),self.install_package),(tr('Verifica requisiti senza installare…'),lambda:self.open_dependencies(auto_install=False)),(tr('Esplora PyPI…'),lambda:LibraryExplorer(self)),(tr('Impostazioni pacchetti…'),self.settings)]),
+            (tr('Componenti'),[(tr('Inserisci selezionato'),self.add_widget),(tr('Crea componente esterno…'),self.component_wizard),(tr('Importa descrittore…'),self.import_component),(tr('Componenti del progetto…'),self.component_manager),(tr('Configura selezionato…'),self.configure_component)]),
+            (tr('Vista'),[(tr('Mostra / nascondi log'),self.toggle_log),(tr('Ripristina pannelli'),self.reset_layout),(tr('Colori ambiente…'),self.appearance_settings),(tr('Tema applicazione…'),self.choose_theme)]),
+            ('Help',[(tr('IntelliSense e completamento'),lambda:self.help_topic('IntelliSense')),(tr('Guida rapida — F1'),self.help),(tr('Pacchetti PIP'),lambda:self.help_topic(tr('Pacchetti PIP'))),('Database',lambda:self.help_topic('Database')),(tr('Manuale'),lambda:self.help_topic(tr('Manuale'))),(tr('Estensioni'),lambda:self.help_topic(tr('Estensioni'))),(tr('Esempi'),self.open_examples),(tr('Compatibilità'),lambda:self.help_topic(tr('Compatibilità'))),(tr('Diagnostica'),self.diagnostics),(tr('Documentazione Tkinter'),lambda:webbrowser.open('https://docs.python.org/3/library/tkinter.html')),(tr('Informazioni'),lambda:messagebox.showinfo('VisualTk Studio','VisualTk Studio 1.9\nDesigner visuale Python / Tkinter'))]),
         ]
         for title,items in definitions:
             menu=tk.Menu(bar,tearoff=False);bar.add_cascade(label=title,menu=menu)

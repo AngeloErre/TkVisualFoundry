@@ -1,4 +1,5 @@
 """Persistent static analysis in the configured project interpreter."""
+from i18n import tr
 import json
 import sys
 import signal
@@ -12,7 +13,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='visualtk-jedi-') as cache:
         engine=None;failure=None
         try:engine=SemanticEngine(cache)
-        except ImportError as exc:failure='Motore Jedi non disponibile: '+str(exc)
+        except ImportError as exc:failure=tr('Motore Jedi non disponibile: ')+str(exc)
         for line in sys.stdin:
             request={}
             try:

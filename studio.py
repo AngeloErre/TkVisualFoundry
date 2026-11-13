@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """VisualTk Studio: visual Tkinter designer, event IDE and process debugger."""
+from i18n import tr,get_language
 from runtime_requirements import ensure_current, validate_interpreter
 
 if __name__ == "__main__":
@@ -46,7 +47,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         self.geometry('1400x900'); self.minsize(1050,650)
         self.project=new_project(); self.path=None; self.selected=None; self.form_index=0
         self.history=[]; self.future=[]; self.proc=None; self.messages=queue.Queue(); self.code_target=None
-        self.temp=tempfile.TemporaryDirectory(prefix='visualtk-'); self.config_data={'grid':10,'font_size':13,'python':str(Path.home()/'Applications/VisualTkStudio/.venv/bin/python') if getattr(sys,'frozen',False) else sys.executable}
+        self.temp=tempfile.TemporaryDirectory(prefix='visualtk-'); self.config_data={'language':get_language(),'grid':10,'font_size':13,'python':str(Path.home()/'Applications/VisualTkStudio/.venv/bin/python') if getattr(sys,'frozen',False) else sys.executable}
         try: self.config_data.update(json.loads(SETTINGS.read_text()))
         except (OSError,ValueError): pass
         for key,default in {'dependency_before_insert':True,'dependency_before_run':True,'pip_auto_install':True,'pip_wheels_only':False}.items():
@@ -72,29 +73,29 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
     def build(self):
         apply_theme(self)
         self.menu_bar=ttk.Frame(self,padding=(6,6));self.menu_bar.pack(fill='x')
-        self.log_visible=False;self.log_toggle_text=tk.StringVar(value='Mostra log')
+        self.log_visible=False;self.log_toggle_text=tk.StringVar(value=tr('Mostra log'))
         ttk.Button(self.menu_bar,textvariable=self.log_toggle_text,command=self.toggle_log).pack(side='right',padx=2)
         ttk.Button(self.menu_bar,text='■',width=3,command=self.stop).pack(side='right',padx=2)
         ttk.Button(self.menu_bar,text='▶ F5',command=self.run,style='Accent.TButton',width=6).pack(side='right',padx=2)
-        self.status=tk.StringVar(value='Pronto'); ttk.Label(self,textvariable=self.status,anchor='w',padding=(16,8),style='Muted.TLabel').pack(side='bottom',fill='x')
+        self.status=tk.StringVar(value=tr('Pronto')); ttk.Label(self,textvariable=self.status,anchor='w',padding=(16,8),style='Muted.TLabel').pack(side='bottom',fill='x')
         self.vertical=vertical=ttk.Panedwindow(self,orient='vertical'); vertical.pack(fill='both',expand=True)
         self.main_panes=main=ttk.Panedwindow(vertical,orient='horizontal'); vertical.add(main,weight=5)
         left=ttk.Frame(main,width=190,padding=8); main.add(left,weight=0)
         sidebar=ttk.Notebook(left);sidebar.pack(fill='both',expand=True)
         palette_area=ttk.Frame(sidebar,padding=4);project_area=ttk.Frame(sidebar,padding=4)
-        sidebar.add(palette_area,text='Componenti');sidebar.add(project_area,text='Progetto')
+        sidebar.add(palette_area,text=tr('Componenti'));sidebar.add(project_area,text=tr('Progetto'))
         # Reserve the actions before allocating expandable content.
         palette_actions=ttk.Frame(palette_area);palette_actions.pack(side='top',fill='x',pady=(3,5))
-        self.insert_button=ttk.Button(palette_actions,text='＋ Inserisci nel form',command=self.add_widget,style='Accent.TButton');self.insert_button.pack(fill='x')
+        self.insert_button=ttk.Button(palette_actions,text=tr('＋ Inserisci nel form'),command=self.add_widget,style='Accent.TButton');self.insert_button.pack(fill='x')
         other=tk.Menu(palette_actions,tearoff=False)
-        other.add_command(label='Crea componente esterno…',command=self.component_wizard)
-        other.add_command(label='Importa descrittore…',command=self.import_component)
-        other.add_command(label='Prepara pacchetti del componente…',command=self.palette_dependencies)
-        ttk.Menubutton(palette_actions,text='Altre opzioni ▾',menu=other).pack(fill='x',pady=(3,0))
+        other.add_command(label=tr('Crea componente esterno…'),command=self.component_wizard)
+        other.add_command(label=tr('Importa descrittore…'),command=self.import_component)
+        other.add_command(label=tr('Prepara pacchetti del componente…'),command=self.palette_dependencies)
+        ttk.Menubutton(palette_actions,text=tr('Altre opzioni ▾'),menu=other).pack(fill='x',pady=(3,0))
         self.palette_query=tk.StringVar()
         search=ttk.Entry(palette_area,textvariable=self.palette_query);search.pack(side='top',fill='x',pady=(2,5))
         self.palette_query.trace_add('write',lambda *_:self.filter_palette())
-        self.palette_details=tk.StringVar(value='Seleziona un componente. Doppio clic o Invio per inserirlo.')
+        self.palette_details=tk.StringVar(value=tr('Seleziona un componente. Doppio clic o Invio per inserirlo.'))
         ttk.Label(palette_area,textvariable=self.palette_details,wraplength=210,style='Muted.TLabel').pack(side='bottom',fill='x',pady=5)
         self.palette=ComponentPalette(palette_area);self.palette.pack(fill='both',expand=True)
         self.kinds=list(KINDS)+list(registry(self.project))
@@ -102,7 +103,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         self.palette.bind('<Double-Button-1>',lambda e:self.add_widget())
         self.palette.bind('<Return>',lambda e:self.add_widget())
         self.palette.bind('<<ListboxSelect>>',self.palette_info)
-        ttk.Label(project_area,text='Esplora progetto',style='Title.TLabel').pack(anchor='w',pady=(20,5))
+        ttk.Label(project_area,text=tr('Esplora progetto'),style='Title.TLabel').pack(anchor='w',pady=(20,5))
         self.tree=ttk.Treeview(project_area,show='tree',selectmode='browse'); self.tree.pack(fill='both',expand=True)
         self.tree.bind('<<TreeviewSelect>>',self.tree_select)
         center=ttk.Frame(main); main.add(center,weight=4)
@@ -112,8 +113,8 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         self.formvar=tk.StringVar(); self.formbox=ttk.Combobox(row,textvariable=self.formvar,state='readonly',width=22); self.formbox.pack(side='left'); self.formbox.bind('<<ComboboxSelected>>',self.switch_form)
         ttk.Button(row,text='Form…',command=self.manage_forms).pack(side='left',padx=4)
         edit_menu=tk.Menu(row,tearoff=False)
-        for label,cmd in [('Codice evento',self.edit_event),('Duplica',self.duplicate),('Elimina',self.delete),('Allinea X',lambda:self.align('x')),('Allinea Y',lambda:self.align('y'))]:edit_menu.add_command(label=label,command=cmd)
-        ttk.Menubutton(row,text='Selezione ▾',menu=edit_menu).pack(side='left',padx=4)
+        for label,cmd in [(tr('Codice evento'),self.edit_event),(tr('Duplica'),self.duplicate),(tr('Elimina'),self.delete),(tr('Allinea X'),lambda:self.align('x')),(tr('Allinea Y'),lambda:self.align('y'))]:edit_menu.add_command(label=label,command=cmd)
+        ttk.Menubutton(row,text=tr('Selezione ▾'),menu=edit_menu).pack(side='left',padx=4)
         self.canvas=tk.Canvas(design,bg='#e8edf5',highlightthickness=0,scrollregion=(0,0,2000,1600))
         xs=ttk.Scrollbar(design,orient='horizontal',command=self.canvas.xview); xs.pack(side='bottom',fill='x')
         ys=ttk.Scrollbar(design,orient='vertical',command=self.canvas.yview); ys.pack(side='right',fill='y')
@@ -121,29 +122,29 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         self.canvas.bind('<Button-1>',self.press); self.canvas.bind('<B1-Motion>',self.motion); self.canvas.bind('<ButtonRelease-1>',self.release); self.canvas.bind('<Double-Button-1>',lambda e:self.edit_event())
         self.canvas.bind('<Delete>',lambda e:self.delete()); self.canvas.bind('<BackSpace>',lambda e:self.delete())
         for key,dx,dy in [('Left',-1,0),('Right',1,0),('Up',0,-1),('Down',0,1)]: self.canvas.bind('<'+key+'>',lambda e,x=dx,y=dy:self.nudge(x,y))
-        codeframe=ttk.Frame(self.tabs); self.tabs.add(codeframe,text='Codice eventi')
+        codeframe=ttk.Frame(self.tabs); self.tabs.add(codeframe,text=tr('Codice eventi'))
         cr=ttk.Frame(codeframe,padding=5); cr.pack(fill='x')
-        self.code_label=tk.StringVar(value='Seleziona un componente e un evento')
+        self.code_label=tk.StringVar(value=tr('Seleziona un componente e un evento'))
         ttk.Label(cr,textvariable=self.code_label).pack(side='left')
         self.evvar=tk.StringVar(value='Click'); self.evbox=ttk.Combobox(cr,textvariable=self.evvar,values=['Load']+list(EVENTS),state='readonly',width=14); self.evbox.pack(side='right'); self.evbox.bind('<<ComboboxSelected>>',lambda e:self.edit_event())
-        ttk.Button(cr,text='Applica codice',command=self.commit_code).pack(side='right',padx=5)
+        ttk.Button(cr,text=tr('Applica codice'),command=self.commit_code).pack(side='right',padx=5)
         self.code=ScrolledText(codeframe,undo=True,bg='#202633',fg='#e2e8f0',insertbackground='white',font=('Menlo',self.config_data['font_size']),tabs=('32',)); self.code.pack(fill='both',expand=True)
         self.build_assistant(codeframe); self.code.bind('<Control-space>',self.complete); self.code.bind('<Tab>',self.tab_indent); self.code.bind('<Return>',self.autoindent)
         for tag,color in [('kw','#c792ea'),('str','#c3e88d'),('comment','#8796a8'),('num','#f78c6c')]:self.code.tag_configure(tag,foreground=color)
-        self.generated=ScrolledText(self.tabs,font=('Menlo',12),wrap='none',undo=False); self.tabs.add(self.generated,text='Python generato / breakpoint')
+        self.generated=ScrolledText(self.tabs,font=('Menlo',12),wrap='none',undo=False); self.tabs.add(self.generated,text=tr('Python generato / breakpoint'))
         style_editor(self.code)
         style_editor(self.generated)
         self.generated.bind('<Double-Button-1>',self.toggle_break)
         self.generated.tag_configure('break',background='#f6a0a0',foreground='#111111')
         right=ttk.Frame(main,width=260,padding=8); main.add(right,weight=0)
-        ttk.Label(right,text='Proprietà',style='Title.TLabel').pack(anchor='w')
-        self.inspector_title=tk.StringVar(value='Finestra corrente')
+        ttk.Label(right,text=tr('Proprietà'),style='Title.TLabel').pack(anchor='w')
+        self.inspector_title=tk.StringVar(value=tr('Finestra corrente'))
         ttk.Label(right,textvariable=self.inspector_title,style='Muted.TLabel',wraplength=250).pack(anchor='w',pady=4)
         inspector_actions=ttk.Frame(right);inspector_actions.pack(side='top',fill='x',pady=4)
-        self.apply_button=ttk.Button(inspector_actions,text='Applica proprietà',command=self.apply_props);self.apply_button.pack(side='left')
+        self.apply_button=ttk.Button(inspector_actions,text=tr('Applica proprietà'),command=self.apply_props);self.apply_button.pack(side='left')
         actions=tk.Menu(inspector_actions,tearoff=False)
-        for label,command in [('Configura componente…',self.configure_component),('Colore sfondo…',lambda:self.pick_color('bg')),('Colore testo…',lambda:self.pick_color('fg')),('Carattere…',self.choose_font)]:actions.add_command(label=label,command=command)
-        ttk.Menubutton(inspector_actions,text='Azioni ▾',menu=actions).pack(side='right')
+        for label,command in [(tr('Configura componente…'),self.configure_component),(tr('Colore sfondo…'),lambda:self.pick_color('bg')),(tr('Colore testo…'),lambda:self.pick_color('fg')),(tr('Carattere…'),self.choose_font)]:actions.add_command(label=label,command=command)
+        ttk.Menubutton(inspector_actions,text=tr('Azioni ▾'),menu=actions).pack(side='right')
         prop_area=ttk.Frame(right);prop_area.pack(fill='both',expand=True,pady=8)
         prop_canvas=tk.Canvas(prop_area,width=260,height=320,highlightthickness=0)
         prop_scroll=ttk.Scrollbar(prop_area,command=prop_canvas.yview);prop_scroll.pack(side='right',fill='y');prop_canvas.pack(side='left',fill='both',expand=True);prop_canvas.configure(yscrollcommand=prop_scroll.set)
@@ -156,10 +157,10 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         br=ttk.Frame(bottom,padding=(6,3));br.grid(row=0,column=0,sticky='ew')
         ttk.Label(br,text='OUTPUT / DEBUG',style='Title.TLabel').pack(side='left',padx=5)
         debug_menu=tk.Menu(br,tearoff=False)
-        for label,cmd in [('Continua',lambda:self.debug_cmd('continue')),('Passo',lambda:self.debug_cmd('next')),('Entra',lambda:self.debug_cmd('step')),('Stack',lambda:self.debug_cmd('where')),('Locali',lambda:self.debug_cmd('pp locals()'))]:debug_menu.add_command(label=label,command=cmd)
+        for label,cmd in [(tr('Continua'),lambda:self.debug_cmd('continue')),(tr('Passo'),lambda:self.debug_cmd('next')),(tr('Entra'),lambda:self.debug_cmd('step')),('Stack',lambda:self.debug_cmd('where')),(tr('Locali'),lambda:self.debug_cmd('pp locals()'))]:debug_menu.add_command(label=label,command=cmd)
         ttk.Menubutton(br,text='Debug ▾',menu=debug_menu).pack(side='left')
-        ttk.Button(br,text='Chiudi log',command=lambda:self.show_log(False)).pack(side='right')
-        ttk.Button(br,text='Pulisci',command=self.clear_log).pack(side='right',padx=4)
+        ttk.Button(br,text=tr('Chiudi log'),command=lambda:self.show_log(False)).pack(side='right')
+        ttk.Button(br,text=tr('Pulisci'),command=self.clear_log).pack(side='right',padx=4)
         self.log=ScrolledText(bottom,height=5,bg='#151a23',fg='#dbe6ef',font=('Menlo',11));self.log.grid(row=1,column=0,sticky='nsew');style_editor(self.log)
         self.command=ttk.Entry(bottom);self.command.grid(row=2,column=0,sticky='ew');self.command.bind('<Return>',self.console_command)
         for sequence in ('<Configure>','<B1-Motion>','<ButtonRelease-1>'):vertical.bind(sequence,lambda e:self.after_idle(self.clamp_log),add='+')
@@ -203,12 +204,12 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
             except tk.TclError: pass
             if k=='DatabaseView':
                 c.create_rectangle(x,y,x+width,y+32,fill='#dce8ff',outline='#8190a1')
-                c.create_text(x+8,y+16,text='Database • '+str(p.get('backend','sqlite')).upper()+' • anteprima',anchor='w',fill='#243b63')
+                c.create_text(x+8,y+16,text='Database • '+str(p.get('backend','sqlite')).upper()+tr(' • anteprima'),anchor='w',fill='#243b63')
                 for col,title in enumerate(('id','nome','valore')):
                     cx=x+col*width/3;c.create_text(cx+8,y+48,text=title,anchor='w',fill='#455574')
                     c.create_line(cx,y+32,cx,y+height,fill='#c8d2df')
                 for row in range(3):c.create_line(x,y+62+row*28,x+width,y+62+row*28,fill='#c8d2df')
-                c.create_text(x+8,y+height-15,text='Connetti e scegli la tabella durante l’esecuzione',anchor='w',width=max(1,width-16),fill='#62718a')
+                c.create_text(x+8,y+height-15,text=tr('Connetti e scegli la tabella durante l’esecuzione'),anchor='w',width=max(1,width-16),fill='#62718a')
             if self.selected is w:
                 c.create_rectangle(x-2,y-2,x+width+2,y+height+2,outline='#1677ff',width=2)
                 c.create_rectangle(x+width-5,y+height-5,x+width+5,y+height+5,fill='#1677ff',outline='white',tags='handle')
@@ -227,7 +228,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
     def properties(self):
         for w in self.propbox.winfo_children():w.destroy()
         self.propvars={}; obj=self.selected if self.selected is not None else self.form
-        self.inspector_title.set(obj['name']+' • '+obj.get('kind','Finestra'))
+        self.inspector_title.set(obj['name']+' • '+obj.get('kind',tr('Finestra')))
         values={k:obj[k] for k in ('name','x','y','width','height','title','bg') if k in obj}
         if self.selected is not None:values.update(obj['props'])
         for i,(key,val) in enumerate(values.items()):
@@ -253,7 +254,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
                     candidate['props'][k]=value
             if 'bg' in candidate:self.winfo_rgb(candidate['bg'])
             if candidate['name']!=obj['name']:
-                raise ValueError('Il nome si assegna alla creazione; rinominare richiede aggiornare il codice utente.')
+                raise ValueError(tr('Il nome si assegna alla creazione; rinominare richiede aggiornare il codice utente.'))
             probe=copy.deepcopy(self.project)
             if self.selected is None:probe['forms'][self.form_index]=candidate
             else:probe['forms'][self.form_index]['widgets'][self.form['widgets'].index(obj)]=candidate
@@ -262,7 +263,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
                 cls=getattr(ttk if candidate['kind'] in ('Combobox','Progressbar') else tk,candidate['kind'])
                 test=cls(self,**candidate['props']); test.destroy()
             self.checkpoint(); obj.clear(); obj.update(candidate); self.refresh()
-        except Exception as exc:messagebox.showerror('Proprietà non valide',str(exc))
+        except Exception as exc:messagebox.showerror(tr('Proprietà non valide'),str(exc))
     def pick_color(self,key):
         if key in self.propvars:
             value=colorchooser.askcolor(parent=self)[1]
@@ -277,24 +278,24 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         k=kind_override or self.palette.get(selection[0])
         if not dependencies_checked and self.config_data.get('dependency_before_insert',True) and dependency_plan(self.project,k):
             return self.open_dependencies(k,on_ready=lambda:self.add_widget(True,k),allow_skip=True)
-        name=simpledialog.askstring('Nome componente','Nome Python del componente:',initialvalue=self.unique(k),parent=self)
+        name=simpledialog.askstring(tr('Nome componente'),tr('Nome Python del componente:'),initialvalue=self.unique(k),parent=self)
         if name is None:return
         names={o['name'] for f in self.project['forms'] for o in [f]+f['widgets']}
-        if not identifier(name) or name in names:return messagebox.showerror('Nome','Nome Python non valido o già utilizzato.')
+        if not identifier(name) or name in names:return messagebox.showerror(tr('Nome'),tr('Nome Python non valido o già utilizzato.'))
         props={}
         if k in ('Button','Label','Checkbutton','Radiobutton'):props['text']=name
         if k not in ('Combobox','Progressbar'):props.update(bg='#ffffff' if k in ('Entry','Text','Listbox','Spinbox') else '#e4e8ee')
         if k not in ('Frame','Canvas','Progressbar','Combobox'):props.update(fg='#182230',font='Helvetica 12')
-        if k=='Combobox':props={'values':['Prima','Seconda'],'state':'readonly'}
+        if k=='Combobox':props={'values':[tr('Prima'),tr('Seconda')],'state':'readonly'}
         if k=='Progressbar':props={'value':40,'maximum':100}
         if k in ('Button','Entry','Text','Checkbutton','Radiobutton','Listbox','Combobox','Scale','Spinbox'):props['state']='normal' if k!='Combobox' else 'readonly'
         if k in registry(self.project):props=copy.deepcopy(registry(self.project)[k].get('defaults',{}))
         self.checkpoint(); self.selected={'name':name,'kind':k,'x':30,'y':30,'width':480 if k in registry(self.project) else 140,'height':280 if k in registry(self.project) else (90 if k in ('Text','Listbox','Canvas','Frame') else 35),'props':props,'events':{}}
         self.form['widgets'].append(self.selected); self.refresh()
     def add_form(self):
-        name=simpledialog.askstring('Nuova finestra','Nome Python:',initialvalue=self.unique('Form'),parent=self)
+        name=simpledialog.askstring(tr('Nuova finestra'),tr('Nome Python:'),initialvalue=self.unique('Form'),parent=self)
         if name is None:return
-        if not identifier(name) or any(name==o['name'] for f in self.project['forms'] for o in [f]+f['widgets']):return messagebox.showerror('Nome','Nome non valido o duplicato')
+        if not identifier(name) or any(name==o['name'] for f in self.project['forms'] for o in [f]+f['widgets']):return messagebox.showerror(tr('Nome'),tr('Nome non valido o duplicato'))
         self.commit_code(); self.checkpoint(); self.project['forms'].append({'name':name,'title':name,'width':640,'height':440,'bg':'#f0f0f0','widgets':[],'events':{}}); self.form_index=len(self.project['forms'])-1; self.selected=None; self.refresh()
     def press(self,e):
         self.canvas.focus_set(); self.commit_code(); x=self.canvas.canvasx(e.x)-30; y=self.canvas.canvasy(e.y)-45
@@ -325,7 +326,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
     def delete(self):
         if self.selected:
             self.commit_code(); self.checkpoint(); self.form['widgets'].remove(self.selected); self.selected=None; self.code_target=None; self.code.delete('1.0','end'); self.refresh()
-        elif len(self.project['forms'])>1 and messagebox.askyesno('Elimina finestra','Eliminare la finestra e tutti i suoi componenti?'):
+        elif len(self.project['forms'])>1 and messagebox.askyesno(tr('Elimina finestra'),tr('Eliminare la finestra e tutti i suoi componenti?')):
             self.commit_code(); self.checkpoint(); del self.project['forms'][self.form_index]; self.form_index=0; self.code_target=None; self.refresh()
     def align(self,axis):
         if self.selected:
@@ -342,7 +343,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         self.code_target=(obj,event,False); self.code_label.set(obj['name']+' → '+event+'(self, event=None)')
         self.code.delete('1.0','end'); self.code.insert('1.0',obj.get('events',{}).get(event,'pass')); self.tabs.select(1); self.highlight(); self.code.focus_set(); self.update_assistant()
     def global_code(self,key):
-        self.commit_code(); self.code_target=(self.project,key,True); self.code_label.set('Progetto → '+key); self.code.delete('1.0','end'); self.code.insert('1.0',self.project.get(key,'')); self.tabs.select(1); self.highlight(); self.update_assistant()
+        self.commit_code(); self.code_target=(self.project,key,True); self.code_label.set(tr('Progetto → ')+key); self.code.delete('1.0','end'); self.code.insert('1.0',self.project.get(key,'')); self.tabs.select(1); self.highlight(); self.update_assistant()
     def highlight(self):
         for tag in ('kw','str','comment','num'):self.code.tag_remove(tag,'1.0','end')
         try:
@@ -360,8 +361,8 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         try:
             source=generate(self.project); self.generated.configure(state='normal'); self.generated.delete('1.0','end'); self.generated.insert('1.0',source)
             for line in self.breaks:self.generated.tag_add('break',f'{line}.0',f'{line}.end')
-            self.generated.configure(state='disabled'); self.status.set('Pronto • '+('* modificato • ' if json.dumps(self.project,sort_keys=True)!=self.saved_state else '')+(str(self.path) if self.path else 'Progetto senza nome'))
-        except Exception as exc:self.status.set('Codice da correggere: '+str(exc))
+            self.generated.configure(state='disabled'); self.status.set(tr('Pronto • ')+(tr('* modificato • ') if json.dumps(self.project,sort_keys=True)!=self.saved_state else '')+(str(self.path) if self.path else tr('Progetto senza nome')))
+        except Exception as exc:self.status.set(tr('Codice da correggere: ')+str(exc))
     def toggle_break(self,e):
         line=int(self.generated.index('@%s,%s'%(e.x,e.y)).split('.')[0])
         if line in self.breaks:self.breaks.remove(line)
@@ -370,7 +371,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
     def dirty_guard(self):
         self.commit_code()
         if json.dumps(self.project,sort_keys=True)==self.saved_state:return True
-        answer=messagebox.askyesnocancel('Modifiche non salvate','Salvare le modifiche prima di proseguire?')
+        answer=messagebox.askyesnocancel(tr('Modifiche non salvate'),tr('Salvare le modifiche prima di proseguire?'))
         if answer is None:return False
         return self.save() if answer else True
     def new(self):
@@ -381,7 +382,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         path=filedialog.askopenfilename(filetypes=[('VisualTk project','*.vtk.json'),('JSON','*.json')])
         if not path:return
         try:p=load(path)
-        except Exception as exc:return messagebox.showerror('Apertura',str(exc))
+        except Exception as exc:return messagebox.showerror(tr('Apertura'),str(exc))
         self.project=p; self.path=Path(path); self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(p,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
     def save(self,as_new=False):
         self.commit_code()
@@ -393,27 +394,27 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
             # Save even unfinished code, allowing recovery after syntax errors.
             temp=path.with_name(path.name+'.tmp'); temp.write_text(json.dumps(self.project,indent=2,ensure_ascii=False),encoding='utf-8'); temp.replace(path)
             self.path=path; self.saved_state=json.dumps(self.project,sort_keys=True); self.update_source(); return True
-        except OSError as exc:messagebox.showerror('Salvataggio',str(exc)); return False
+        except OSError as exc:messagebox.showerror(tr('Salvataggio'),str(exc)); return False
     def check(self):
         self.show_log(True)
         self.commit_code()
-        try:compile(generate(self.project),'application.py','exec'); self.write_log('✓ Sintassi e modello validi.\n'); return True
-        except Exception as exc:self.write_log('ERRORE: '+str(exc)+'\n'); messagebox.showerror('Verifica',str(exc)); return False
+        try:compile(generate(self.project),'application.py','exec'); self.write_log(tr('✓ Sintassi e modello validi.\n')); return True
+        except Exception as exc:self.write_log(tr('ERRORE: ')+str(exc)+'\n'); messagebox.showerror(tr('Verifica'),str(exc)); return False
     def export(self):
         if not self.check():return
         p=filedialog.asksaveasfilename(defaultextension='.py',initialfile='application.py')
         if p:
             try:
-                Path(p).write_text(generate(self.project),encoding='utf-8'); self.write_requirements(Path(p).parent); self.write_log('Esportato: '+p+'\n')
-            except OSError as exc:messagebox.showerror('Esportazione',str(exc))
+                Path(p).write_text(generate(self.project),encoding='utf-8'); self.write_requirements(Path(p).parent); self.write_log(tr('Esportato: ')+p+'\n')
+            except OSError as exc:messagebox.showerror(tr('Esportazione'),str(exc))
     def write_log(self,s):self.log.insert('end',s); self.log.see('end')
     def clear_log(self):self.log.delete('1.0','end')
     def launch(self,args,cwd=None):
-        if self.proc and self.proc.poll() is None:return messagebox.showwarning('Processo attivo','Arresta il processo corrente prima di avviarne un altro.')
+        if self.proc and self.proc.poll() is None:return messagebox.showwarning(tr('Processo attivo'),tr('Arresta il processo corrente prima di avviarne un altro.'))
         try:
             validate_interpreter(args[0])
             self.proc=subprocess.Popen(args,cwd=cwd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,bufsize=0,env={**os.environ,'PYTHONUNBUFFERED':'1'})
-        except (OSError,ValueError) as exc:return messagebox.showerror('Avvio',str(exc))
+        except (OSError,ValueError) as exc:return messagebox.showerror(tr('Avvio'),str(exc))
         self.show_log(True)
         proc=self.proc; self.write_log('\n$ '+ ' '.join(map(str,args))+'\n')
         def read():
@@ -423,7 +424,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
                 data=os.read(proc.stdout.fileno(),4096)
                 if not data:break
                 self.messages.put(decoder.decode(data))
-            self.messages.put(decoder.decode(b'',final=True)); self.messages.put(f'\n[Processo terminato: {proc.wait()}]\n')
+            self.messages.put(decoder.decode(b'',final=True)); self.messages.put(tr('\n[Processo terminato: {v0}]\n', v0=f'{proc.wait()}'))
         threading.Thread(target=read,daemon=True).start()
     def poll(self):
         try:
@@ -435,16 +436,16 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
     def run(self,dependencies_checked=False):
         if not dependencies_checked and self.config_data.get('dependency_before_run',True) and dependency_plan(self.project):
             return self.open_dependencies(on_ready=lambda:self.run(True))
-        if self.proc and self.proc.poll() is None:return messagebox.showwarning('Processo attivo','Arresta prima il processo corrente.')
+        if self.proc and self.proc.poll() is None:return messagebox.showwarning(tr('Processo attivo'),tr('Arresta prima il processo corrente.'))
         if self.check():self.launch([self.config_data['python'],'-u',str(self.runtime_file())],cwd=str(self.path.parent if self.path else BASE))
     def debug(self,dependencies_checked=False):
         if not dependencies_checked and self.config_data.get('dependency_before_run',True) and dependency_plan(self.project):
             return self.open_dependencies(on_ready=lambda:self.debug(True))
-        if self.proc and self.proc.poll() is None:return messagebox.showwarning('Processo attivo','Arresta prima il processo corrente.')
+        if self.proc and self.proc.poll() is None:return messagebox.showwarning(tr('Processo attivo'),tr('Arresta prima il processo corrente.'))
         if not self.check():return
         args=[self.config_data['python'],'-u','-m','pdb']
         for line in sorted(self.breaks):args+=['-c',f'break {line}']
-        args.append(str(self.runtime_file())); self.launch(args,cwd=str(self.path.parent if self.path else BASE)); self.write_log('Debug pdb: continue, next, step, pp espressione, where, break N, quit.\nLa GUI si blocca intenzionalmente ai breakpoint.\n'); self.command.focus_set()
+        args.append(str(self.runtime_file())); self.launch(args,cwd=str(self.path.parent if self.path else BASE)); self.write_log(tr('Debug pdb: continue, next, step, pp espressione, where, break N, quit.\nLa GUI si blocca intenzionalmente ai breakpoint.\n')); self.command.focus_set()
     def debug_cmd(self,text):
         if self.proc and self.proc.poll() is None:
             try:self.proc.stdin.write((text+'\n').encode()); self.proc.stdin.flush()
@@ -460,9 +461,9 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
     def package(self,dependencies_checked=False):
         if not dependencies_checked and self.config_data.get('dependency_before_run',True) and dependency_plan(self.project):
             return self.open_dependencies(on_ready=lambda:self.package(True))
-        if self.proc and self.proc.poll() is None:return messagebox.showwarning('Processo attivo','Arresta prima il processo corrente.')
+        if self.proc and self.proc.poll() is None:return messagebox.showwarning(tr('Processo attivo'),tr('Arresta prima il processo corrente.'))
         if not self.check():return
-        out=filedialog.askdirectory(title='Cartella di destinazione build')
+        out=filedialog.askdirectory(title=tr('Cartella di destinazione build'))
         if not out:return
         try:
             source=Path(out)/'application.py'; source.write_text(generate(self.project),encoding='utf-8'); self.write_requirements(Path(out))
@@ -473,26 +474,26 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
     def install_project_dependencies(self):
         self.commit_code();return self.open_dependencies()
     def import_component(self):
-        path=filedialog.askopenfilename(title='Descrittore componente visuale',filetypes=[('VisualTk component','*.vtk-component.json'),('JSON','*.json')])
+        path=filedialog.askopenfilename(title=tr('Descrittore componente visuale'),filetypes=[('VisualTk component','*.vtk-component.json'),('JSON','*.json')])
         if not path:return
         try:
             data=json.loads(Path(path).read_text(encoding='utf-8'));name=data['name'];desc=descriptor(data)
-            if name in registry(self.project):return messagebox.showinfo('Componente','Componente già disponibile nella palette.')
-            if not identifier(name) or name in KINDS:raise ValueError('Nome componente non valido')
+            if name in registry(self.project):return messagebox.showinfo(tr('Componente'),tr('Componente già disponibile nella palette.'))
+            if not identifier(name) or name in KINDS:raise ValueError(tr('Nome componente non valido'))
             self.commit_code();self.checkpoint();self.project.setdefault('components',{})[name]=desc;self.refresh()
-            messagebox.showinfo('Componente aggiunto','Il componente è nella palette. Installa le sue dipendenze prima di avviarlo. Il modulo non viene importato durante il design.')
-        except Exception as exc:messagebox.showerror('Importazione componente',str(exc))
+            messagebox.showinfo(tr('Componente aggiunto'),tr('Il componente è nella palette. Installa le sue dipendenze prima di avviarlo. Il modulo non viene importato durante il design.'))
+        except Exception as exc:messagebox.showerror(tr('Importazione componente'),str(exc))
     def component_manager(self):
-        win=tk.Toplevel(self);win.title('Componenti visuali');win.geometry('720x450');text=ScrolledText(win,wrap='word');text.pack(fill='both',expand=True)
+        win=tk.Toplevel(self);win.title(tr('Componenti visuali'));win.geometry('720x450');text=ScrolledText(win,wrap='word');text.pack(fill='both',expand=True)
         for name,desc in registry(self.project).items():
-            text.insert('end',name+' — '+desc.get('description','')+'\n'+desc['module']+'.'+desc['class']+'\nDipendenze: '+', '.join(desc.get('requirements',[]))+'\n\n')
-        text.insert('end','Per aggiungere un widget di una libreria esterna importa un descrittore JSON. Esempio in examples/CTkButton.vtk-component.json. La classe deve accettare master e le proprietà defaults, e supportare place e bind. Le dipendenze sono installate solo su richiesta.');text.configure(state='disabled')
+            text.insert('end',name+' — '+desc.get('description','')+'\n'+desc['module']+'.'+desc['class']+tr('\nDipendenze: ')+', '.join(desc.get('requirements',[]))+'\n\n')
+        text.insert('end',tr('Per aggiungere un widget di una libreria esterna importa un descrittore JSON. Esempio in examples/CTkButton.vtk-component.json. La classe deve accettare master e le proprietà defaults, e supportare place e bind. Le dipendenze sono installate solo su richiesta.'));text.configure(state='disabled')
 
-    def help(self):self.help_topic('Guida rapida')
+    def help(self):self.help_topic(tr('Guida rapida'))
     def close(self):
         wizard=getattr(self,'dependency_window',None)
         if wizard and wizard.winfo_exists() and wizard.busy:
-            wizard.lift();return messagebox.showinfo('Installazione in corso','Interrompi o attendi il wizard PIP prima di chiudere l’IDE.')
+            wizard.lift();return messagebox.showinfo(tr('Installazione in corso'),tr('Interrompi o attendi il wizard PIP prima di chiudere l’IDE.'))
         if not self.dirty_guard():return
         self.stop()
         if self.proc and self.proc.poll() is None:
@@ -500,53 +501,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
             except subprocess.TimeoutExpired:self.proc.kill(); self.proc.wait()
         self.temp.cleanup(); self.destroy()
 
-HELP='''VISUALTK STUDIO 1.3.1 — Guida rapida
-
-Novità: 36 controlli/descrittori in palette. Per web/video, drag & drop,
-calendari, temi e dipendenze consulta le sezioni Estensioni e Compatibilità.
-Help offre esempi di codice, diagnostica e ricerca nei documenti.
-
-
-1. Doppio clic su un componente nella palette per inserirlo.
-2. Trascina sul designer; usa il quadratino blu per ridimensionare.
-3. Modifica le proprietà e premi Applica. I colori si scelgono anche dal dialogo.
-4. Doppio clic sul componente apre il codice. Seleziona Click, DoubleClick,
-   Enter, Leave, KeyPress, FocusIn, FocusOut, Change o Load.
-5. Scrivi soltanto il corpo del metodo (senza def). self è l'applicazione;
-   ogni controllo è accessibile come self.Button1, self.Entry1, ecc.
-
-Esempio Click di Button1:
-    nome = self.Entry1.get()
-    self.Label1.configure(text="Ciao " + nome)
-    self.show("Form2")
-
-Load viene eseguito dopo la creazione di tutte le finestre e all'avvio del loop.
-Change è l'evento di selezione dei Combobox; KeyPress offre event.keysym.
-Click usa il mouse, non l'attivazione da tastiera del Button.
-Import e funzioni globali: codice a livello modulo. Codice avvio: corpo metodo.
-Il codice eventi non è eseguito durante il disegno.
-
-F5 avvia un processo separato; Shift-F5 lo termina. F9 avvia pdb.
-Nel Python generato, doppio clic su una riga per impostare/togliere breakpoint.
-I breakpoint sono numeri di riga: ricontrollali dopo modifiche al progetto.
-Usa Continua per entrare nel mainloop, quindi interagisci con la finestra.
-Quando scatta un breakpoint, usa Passo, Entra, Stack, Locali o la console.
-Nella console: p self.Entry1.get(), pp locals(), break N, continue, quit.
-Gli errori nei callback sono mostrati a video e nell'output con traceback.
-
-Ctrl+Spazio apre i suggerimenti (Jedi se installato e nomi del progetto).
-Tab inserisce 4 spazi, Invio mantiene l'indentazione, sintassi colorata.
-Annulla/Ripeti riguardano il progetto; l'editor ha anche undo nativo Tk.
-Il salvataggio e la riapertura JSON conservano anche codice incompleto;
-la verifica sintattica è obbligatoria prima di esecuzione ed esportazione.
-
-Build usa PyInstaller nell'interprete configurato. Su Mac crea .app sul Mac;
-non è cross-compilazione. Firma e notarizzazione Apple sono passaggi esterni.
-Le risorse esterne e le dipendenze specifiche del progetto vanno gestite
-separatamente. Il designer usa posizionamento assoluto, non pack/grid.
-Frame e Canvas non contengono controlli annidati in questa versione.
-Il codice utente viene eseguito con i permessi dell'utente: apri progetti fidati.
-'''
+HELP=tr('VISUALTK STUDIO — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.')
 
 if __name__=='__main__':
     Studio().mainloop()

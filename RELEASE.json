@@ -1,10 +1,10 @@
 {
-  "version": "1.9",
+  "version": "1.10",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 77,
+  "tests_passed": 83,
   "tests_skipped_graphical": 11,
-  "validation_interpreter": "Python 3.12.14 Linux",
+  "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
   "semantic_validation": "stdlib, Tkinter, NumPy, target environment, external component and static non-execution passed",
   "gui_and_mac_packaging": "pending",

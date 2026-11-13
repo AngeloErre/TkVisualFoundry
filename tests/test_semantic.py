@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import queue
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -97,6 +98,7 @@ class SemanticTests(unittest.TestCase):
 
 
 class AnalysisTransportTests(unittest.TestCase):
+    @unittest.skipUnless(importlib.util.find_spec('jedi'),'Jedi not installed')
     def test_persistent_worker_and_clean_shutdown(self):
         client=AnalysisClient(timeout=25)
         try:
@@ -137,13 +139,18 @@ class AnalysisTransportTests(unittest.TestCase):
         AssistMixin.accept_completion(fake);self.assertEqual(code.value,'messagebox.showinfo')
 
 class TargetEnvironmentTests(unittest.TestCase):
+    @unittest.skipUnless(importlib.util.find_spec('jedi'),'Jedi not installed')
     def test_library_in_selected_environment_is_visible(self):
         with tempfile.TemporaryDirectory() as directory:
             env=Path(directory)/'environment'
             result=subprocess.run([sys.executable,'-m','venv','--system-site-packages',str(env)],capture_output=True,text=True,timeout=40)
             self.assertEqual(result.returncode,0,result.stderr)
             python=str(env/'bin/python')
-            target=subprocess.check_output([python,'-c','import site; print(site.getsitepackages()[0])'],text=True).strip();self.assertTrue(Path(target).is_relative_to(env))
+            target=subprocess.check_output([python,'-c','import site,sys; from pathlib import Path; print(next(p for p in site.getsitepackages() if Path(p).is_relative_to(sys.prefix)))'],text=True).strip();self.assertTrue(Path(target).resolve().is_relative_to(env.resolve()))
+            # A nested venv inherits the base interpreter, not its parent venv's packages.
+            for dependency in ('jedi','parso'):
+                spec=importlib.util.find_spec(dependency)
+                shutil.copytree(Path(spec.origin).parent,Path(target)/dependency,dirs_exist_ok=True)
             package=Path(target)/'vts_selected_only';package.mkdir();(package/'__init__.py').write_text('def unique_operation(value: str = "hello") -> str:\n    """Only installed in selected environment."""\n    return value\n')
             self.assertIsNone(importlib.util.find_spec('vts_selected_only'))
             client=AnalysisClient(timeout=20)

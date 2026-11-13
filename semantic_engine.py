@@ -1,4 +1,5 @@
 """Project-aware static completion; never evaluate submitted editor code."""
+from i18n import tr
 import ast
 import builtins
 import importlib
@@ -100,7 +101,7 @@ def _entry(name,obj,prefix_len):
 
 
 def local_analysis(before,project,body=''):
-    result={'items':[],'calltip':'','engine':'Locale'}
+    result={'items':[],'calltip':'','engine':tr('Locale')}
     if in_literal(before):return result
     prefix,values=completions(before,project);word=word_prefix(before);receiver=prefix[:-len(word)] if word else prefix
     for text,doc in values:
@@ -137,7 +138,7 @@ class SemanticEngine:
         signatures=script.get_signatures(row,column)
         if signatures:
             sig=signatures[0];tip=sig.to_string()
-            if sig.index is not None and sig.index<len(sig.params):tip+='   • argomento: '+sig.params[sig.index].name
+            if sig.index is not None and sig.index<len(sig.params):tip+=tr('   • argomento: ')+sig.params[sig.index].name
             result['calltip']=tip
         if request.get('action')=='signature':return result
         candidates=script.complete(row,column);detail=request.get('detail_name')

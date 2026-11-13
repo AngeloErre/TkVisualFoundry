@@ -1,103 +1,51 @@
-# VisualTk Studio 1.9
+# VisualTk Studio 1.10
 
-Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
+A visual Python/Tkinter IDE for macOS, inspired by the Visual Basic 6 workflow. Design multiple forms, edit control properties, write event handlers and run your application from one workspace.
 
-## Novità 1.9 — IntelliSense semantico
+[Guida italiana](README_IT.md) · [Changelog](CHANGELOG.md)
 
-- Suggerimenti automatici dopo il punto per moduli Python/Tkinter, oggetti, variabili e librerie importate.
-- `messagebox.` elenca funzioni e costanti pubbliche; `messagebox.showinfo(` mostra firma e argomento attivo.
-- Riconoscimento degli import del progetto e dell’editor, inclusi alias come `import numpy as np`.
-- Metodi ereditati dei controlli e analisi delle classi dei componenti esterni.
-- Analisi Jedi in un processo separato, eseguito nel Python configurato per il progetto.
-- Descrizione del simbolo selezionato, firme, completamento degli argomenti nominati e filtraggio durante la digitazione.
-- Risposte obsolete scartate dopo modifiche, cambio contesto o Esc; cache temporanea dedicata.
-- Pulsante **Motore…** per predisporre Jedi con il wizard PIP quando manca nell’interprete scelto.
+## Features
 
-## Funzionalità
+- Multi-form designer with component icons, drag, resize, property editing and undo/redo.
+- Event editor with syntax highlighting, Python/Tkinter completion, signatures and contextual examples.
+- Jedi analysis in a separate process using the project's selected Python interpreter.
+- Automatic PIP dependency setup, package inspection and external component descriptors.
+- DatabaseView with SQLite, PostgreSQL and MySQL connections, tables and CRUD operations.
+- Optional webcam, image, audio, video, web, USB and serial components.
+- Separate execution, logs, debugging and standalone Python export.
+- Persistent themes, custom colors and Italian/English interface.
 
-| Area | Contenuto |
-|---|---|
-| Designer | Form multipli, palette, spostamento, ridimensionamento, colori e font |
-| Editor eventi | Doppio clic sul controllo, sintassi colorata, indentazione e completamento |
-| Assistente codice | Suggerimenti per componente/evento, metodi, proprietà e frammenti spiegati in italiano |
-| Form | Creazione, apertura, duplicazione ed eliminazione; `self.show` e `self.hide` |
-| Componenti esterni | Procedura guidata, descrittori JSON ed esploratore PyPI |
-| Pacchetti | Wizard nell’interprete dei progetti, controllo versioni/import e conflitti |
-| Dati | DatabaseView con tabella, inserimento, modifica, eliminazione e rilettura |
-| Multimedia e periferiche | Immagini, audio, webcam, USB e seriale tramite pacchetti opzionali |
-| Web e video | Adattatori HTML/web, VLC e risoluzione stream YouTube |
-| Esecuzione | Avvio separato, output, arresto, breakpoint e comandi pdb |
-| Esportazione | Sorgente Python indipendente e packaging con PyInstaller |
-| Ambiente | Preset Chiaro, Scuro, Seppia e colori personalizzati persistenti |
-| Help | Guida, esempi, diagnostica, pacchetti e database |
+## Install on macOS
 
-## Installazione e aggiornamento su Mac
+1. Download and extract the source archive into a writable folder.
+2. Run `Install_Mac.command` (double-click, or `bash Install_Mac.command` in Terminal).
+3. The installer requires stable **Python 3.15 or later with Tkinter**, prepares the IDE environment and creates `VisualTk Studio.app` in `~/Applications`.
+4. Open the app. Choose the project interpreter in **Project → Configuration**.
+5. Add an optional component and follow the automatic PIP wizard, or use the **PIP** menu.
 
-1. Scarica i sorgenti o estrai il pacchetto ZIP in una cartella scrivibile.
-2. Esegui `Install_Mac.command` con doppio clic oppure `bash Install_Mac.command` dal Terminale.
-3. L’installer individua **Python 3.15 stabile o successivo con Tkinter**, prepara l’ambiente virtuale dell’IDE e crea `VisualTk Studio.app` in `~/Applications`.
-4. Avvia l’app. Usa **Progetto → Configurazione…** per scegliere l’interprete dei progetti; l’installazione predefinita usa il proprio ambiente virtuale.
-5. Per un componente opzionale, scegli **PIP → Prepara automaticamente il progetto…** oppure segui il wizard proposto quando lo inserisci.
+If a compatible interpreter is missing, the installer attempts Homebrew setup when Homebrew is available; otherwise it opens the Python website. Prerelease interpreters are not accepted. Tkinter is not a PIP package. Re-run the new installer to update; projects remain separate `.vtk.json` files.
 
-Se manca Python compatibile e Homebrew è già disponibile, l’installer prova a installare Python e Tcl/Tk tramite Homebrew. Altrimenti apre il sito ufficiale Python. Alpha, beta e release candidate non sono accettate. Tkinter non si installa con PIP.
+## Choose your language
 
-L’installazione iniziale comprende gli strumenti dell’IDE (Jedi e PyInstaller), senza imporre tutti i pacchetti multimediali. Gli ambienti precedenti conservano le librerie già installate. Per aggiornare riesegui l’installer della nuova versione. I progetti sono file `.vtk.json` separati.
+Open **Progetto → Configurazione → Aspetto**, select **English**, save and restart the app. In English, this is **Project → Configuration → Appearance**. Italian is the default. The setting is stored locally; `VTS_LANGUAGE=it` or `VTS_LANGUAGE=en` overrides it for a launch.
 
-Serve una sessione grafica macOS. Apple Silicon e Intel richiedono Python, librerie e dipendenze native compatibili con l’architettura. Installer e applicazione non sono firmati o notarizzati per la distribuzione Apple.
+The language of generated component controls is stored separately in each project. Existing project text, identifiers, event code and data are preserved. Legacy projects default to Italian component labels.
 
-## Inizia dal designer
+## Code completion
 
-1. Apri `examples/Saluto.vtk.json` oppure crea un progetto.
-2. Seleziona un componente: la palette ne mostra funzioni e requisiti. Doppio clic lo inserisce.
-3. Trascina per spostare; il quadrato blu ridimensiona. Le proprietà si applicano dall’ispettore.
-4. Doppio clic sul componente apre il codice dell’evento. Scrivi il corpo del metodo senza `def`.
-5. Salva e premi **F5**. Con dipendenze esterne, il wizard verifica l’ambiente prima dell’avvio.
+Type `messagebox.` after `from tkinter import messagebox` to see available members. Type `messagebox.showinfo(` for its signature. Imported libraries and aliases are analyzed in the selected project environment. Use the engine setup action if Jedi is missing. Completion depends on available type information and packages; dynamic APIs may provide fewer suggestions. User code is analyzed statically rather than executed for completion.
 
-Nell’evento Click di Button1:
+## Guides
 
-```python
-self.Button1.configure(text="Operazione completata")
-self.show("Form2")
-```
+- [Packages and environment](docs/en/PACKAGES.md)
+- [IntelliSense](docs/en/INTELLISENSE.md)
+- [Database connections and CRUD](docs/en/DATABASE.md)
+- [External components](docs/en/EXTENSIONS.md)
+- [Examples](docs/en/EXAMPLES.md)
+- [Compatibility](docs/en/COMPATIBILITY.md)
 
-Scrivi `self.`, `self.Button1.` o `self.Button1.configure(` per esplorare nomi, metodi e proprietà. Ctrl+Spazio richiama i suggerimenti; Invio/Tab accetta, Esc chiude. Il pannello “cosa puoi fare” inserisce esempi al cursore. Jedi, incluso nell’installazione dell’IDE, abilita l’analisi delle librerie nell’interprete scelto. Senza Jedi rimane un fallback per Python, Tkinter standard e controlli del progetto. [Guida IntelliSense](INTELLISENSE.md).
+## Development
 
-## Webcam e pacchetti
+Run `VTS_LANGUAGE=it python3 -m unittest discover -s tests -q` from the repository directory. Graphical tests require a usable Tk display. Launch `python3 studio.py` with a supported Python/Tkinter installation. Use `Build_Mac.command` for macOS packaging.
 
-Seleziona WebcamView: il wizard mostra **opencv-python, numpy e Pillow**, verifica il Python configurato e guida all’installazione. **Solo designer** rimanda la preparazione all’avvio del progetto. PIP non sostituisce le autorizzazioni Fotocamera né installa VLC o libusb.
-
-[Guida completa ai pacchetti](PACCHETTI.md).
-
-## Database con tabella pronta
-
-Inserisci **DatabaseView**, selezionalo e scegli **Azioni → Configura componente…** nell’ispettore. SQLite non richiede PIP. Per PostgreSQL/MySQL la configurazione prepara il relativo gruppo SQLAlchemy/driver. In esecuzione, **Connetti…** apre la connessione; scegli la tabella e usa i comandi per i record.
-
-[Guida database ed esempi CRUD](DATABASE.md). Progetto dimostrativo: `examples/Database.vtk.json`.
-
-## Documentazione
-
-- [IntelliSense Python e librerie](INTELLISENSE.md)
-- [Pacchetti e configurazione guidata](PACCHETTI.md)
-- [Database locali/remoti](DATABASE.md)
-- [Componenti ed estensioni](ESTENSIONI.md)
-- [Esempi](ESEMPI.md)
-- [Compatibilità](COMPATIBILITA.md)
-- [Verifiche e limiti](VALIDAZIONE.md)
-- [Note della versione](RELEASE_NOTES.md)
-- [Cronologia](CHANGELOG.md)
-
-## Verifica e limiti
-
-Versione in sviluppo: **77 test superati, 11 grafici saltati**, nel runtime Linux Python 3.12.14 con Jedi 0.20.0. Il requisito dell’app macOS resta Python 3.15 stabile o successivo; la policy è verificata da test dedicati. Verificati semanticamente moduli, firme, alias, variabili, NumPy, componenti esterni e librerie disponibili soltanto nell’ambiente scelto. I test confermano che l’analisi non esegue il codice Python di esempio. Il percorso grafico sul Mac e la build `.app` richiedono ancora collaudo; il precedente ambiente Mac non è disponibile in questa sessione.
-
-I membri creati dinamicamente e alcune estensioni native possono avere suggerimenti parziali, in base ai sorgenti e alle informazioni di tipo disponibili. Per completare una libreria esterna deve essere importata nel codice o negli import del progetto, oltre che installata nel Python configurato.
-
-Il designer usa coordinate assolute. I contenitori non consentono ancora l’annidamento visuale dei controlli. Installare una libreria non crea automaticamente il relativo widget: occorre una classe Tkinter compatibile o un adattatore. Le funzioni hardware dipendono da driver, librerie native e autorizzazioni. DatabaseView copre tabelle dello schema predefinito e tipi comuni, senza amministrazione del server o migrazioni.
-
-Per eseguire i sorgenti: `python3 studio.py`. Per i test: `python3 -m unittest discover -s tests -v`. Per preparare l’app dell’IDE sul Mac: `Build_Mac.command` dalla cartella installata con `.venv`; il packaging deve essere collaudato sul sistema di destinazione.
-
-## Menu e pannelli
-
-I comandi Apri/Salva sono in **File**; Annulla/Ripeti in **Modifica**. In alto rimangono solo Avvia, Stop e Mostra/Nascondi log. **Vista → Ripristina pannelli** riporta palette e proprietà alle larghezze iniziali e richiude il log. Il log si apre per esecuzione e verifiche, senza poter occupare tutto il designer.
-
-Nell’ispettore **Azioni** raccoglie configurazione del controllo, colori e carattere. **Componenti** include la creazione/importazione di controlli esterni. **PIP** comprende preparazione automatica, verifica senza installare, installazione di un pacchetto per nome ed esplorazione PyPI.
+GUI behavior and the packaged macOS application require local graphical validation. Optional drivers and native libraries must be installed in the environment used to run the application.

@@ -1,0 +1,1 @@
+python tkinter gui-builder visual-programming ide macos code-completion jedi sqlite postgresql mysql i18n italian english

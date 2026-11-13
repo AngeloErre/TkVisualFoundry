@@ -1,4 +1,5 @@
 """Optional visual components. Dependencies and hardware are loaded on explicit use."""
+from i18n import tr
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
@@ -8,7 +9,7 @@ import threading
 class ImageGallery(tk.Frame):
     def __init__(self, master, directory='', thumbnail_size=110, columns=3, **kw):
         super().__init__(master,**kw); self.directory=directory; self.thumbnail_size=int(thumbnail_size); self.columns=max(1,int(columns)); self.selected_path=None; self.photos=[]
-        ttk.Button(self,text='Apri cartella immagini',command=self.choose).pack(fill='x')
+        ttk.Button(self,text=tr('Apri cartella immagini'),command=self.choose).pack(fill='x')
         self.canvas=tk.Canvas(self,highlightthickness=0); scroll=ttk.Scrollbar(self,command=self.canvas.yview); scroll.pack(side='right',fill='y'); self.canvas.pack(fill='both',expand=True); self.canvas.configure(yscrollcommand=scroll.set)
         self.inner=ttk.Frame(self.canvas); self.canvas.create_window(0,0,window=self.inner,anchor='nw'); self.inner.bind('<Configure>',lambda e:self.canvas.configure(scrollregion=self.canvas.bbox('all')))
         if directory:self.after_idle(lambda:self.load_directory(directory))
@@ -28,17 +29,17 @@ class ImageGallery(tk.Frame):
                         thumbnail=ImageOps.exif_transpose(image); thumbnail.thumbnail((self.thumbnail_size,self.thumbnail_size)); photo=ImageTk.PhotoImage(thumbnail.copy())
                     self.photos.append(photo); button=ttk.Button(self.inner,image=photo,text=path.name,compound='top',command=lambda p=str(path):self.select(p)); button.grid(row=i//self.columns,column=i%self.columns,padx=3,pady=3)
                 except (OSError,ValueError):continue
-        except Exception as exc:messagebox.showerror('Galleria',str(exc),parent=self)
+        except Exception as exc:messagebox.showerror(tr('Galleria'),str(exc),parent=self)
     def select(self,path):self.selected_path=path; self.event_generate('<<ImageSelected>>',when='tail')
 
 class AudioPlayer(tk.Frame):
     def __init__(self,master,source='',volume=0.7,**kw):
-        super().__init__(master,**kw); self.source=source; self.volume=float(volume); self.mixer=None; self.status=tk.StringVar(value=Path(source).name if source else 'Nessun file audio'); ttk.Label(self,textvariable=self.status).pack(fill='x')
+        super().__init__(master,**kw); self.source=source; self.volume=float(volume); self.mixer=None; self.status=tk.StringVar(value=Path(source).name if source else tr('Nessun file audio')); ttk.Label(self,textvariable=self.status).pack(fill='x')
         row=ttk.Frame(self);row.pack(fill='x')
-        for label,cmd in [('Apri',self.choose),('▶',self.play),('Ⅱ',self.pause),('Riprendi',self.resume),('■',self.stop)]:ttk.Button(row,text=label,command=cmd,width=7).pack(side='left')
+        for label,cmd in [(tr('Apri'),self.choose),('▶',self.play),('Ⅱ',self.pause),(tr('Riprendi'),self.resume),('■',self.stop)]:ttk.Button(row,text=label,command=cmd,width=7).pack(side='left')
         ttk.Scale(self,from_=0,to=1,value=self.volume,command=self.set_volume).pack(fill='x');self.bind('<Destroy>',self.cleanup,add='+')
     def choose(self):
-        path=filedialog.askopenfilename(parent=self,filetypes=[('Audio','*.mp3 *.wav *.ogg'),('Tutti','*')])
+        path=filedialog.askopenfilename(parent=self,filetypes=[('Audio','*.mp3 *.wav *.ogg'),(tr('Tutti'),'*')])
         if path:self.source=path;self.status.set(Path(path).name)
     def play(self):
         try:
@@ -63,11 +64,11 @@ class AudioPlayer(tk.Frame):
 class WebcamView(tk.Frame):
     def __init__(self,master,camera_index=0,fps=20,**kw):
         super().__init__(master,**kw); self.camera_index=int(camera_index);self.fps=max(1,min(60,int(fps)));self.frames=queue.Queue(maxsize=1);self.capture=None;self.last_frame=None;self.running=False;self.generation=0;self.timer=None
-        row=ttk.Frame(self);row.pack(fill='x');ttk.Button(row,text='Avvia webcam',command=self.start).pack(side='left');ttk.Button(row,text='Stop',command=self.stop).pack(side='left');ttk.Button(row,text='Snapshot',command=self.snapshot).pack(side='left')
-        self.preview=ttk.Label(self,text='Webcam inattiva');self.preview.pack(fill='both',expand=True);self.bind('<Destroy>',self.cleanup,add='+')
+        row=ttk.Frame(self);row.pack(fill='x');ttk.Button(row,text=tr('Avvia webcam'),command=self.start).pack(side='left');ttk.Button(row,text='Stop',command=self.stop).pack(side='left');ttk.Button(row,text='Snapshot',command=self.snapshot).pack(side='left')
+        self.preview=ttk.Label(self,text=tr('Webcam inattiva'));self.preview.pack(fill='both',expand=True);self.bind('<Destroy>',self.cleanup,add='+')
     def start(self):
         if self.running:return
-        self.running=True;self.generation+=1;generation=self.generation;self.preview.configure(text='Apertura webcam…')
+        self.running=True;self.generation+=1;generation=self.generation;self.preview.configure(text=tr('Apertura webcam…'))
         while not self.frames.empty():
             try:self.frames.get_nowait()
             except queue.Empty:break
@@ -76,10 +77,10 @@ class WebcamView(tk.Frame):
             try:
                 import cv2
                 cap=cv2.VideoCapture(self.camera_index)
-                if not cap.isOpened():raise RuntimeError('Webcam non disponibile. Controlla i permessi Fotocamera di macOS.')
+                if not cap.isOpened():raise RuntimeError(tr('Webcam non disponibile. Controlla i permessi Fotocamera di macOS.'))
                 while self.running and self.generation==generation:
                     ok,frame=cap.read()
-                    if not ok:raise RuntimeError('Impossibile leggere dalla webcam')
+                    if not ok:raise RuntimeError(tr('Impossibile leggere dalla webcam'))
                     if self.frames.empty():self.frames.put(('frame',frame))
                     # Wait without Tk calls from this worker.
                     threading.Event().wait(1/self.fps)
@@ -116,7 +117,7 @@ class WebcamView(tk.Frame):
 class USBExplorer(tk.Frame):
     def __init__(self,master,**kw):
         super().__init__(master,**kw);self.devices=[];self.selected_device=None;self.results=queue.Queue();self.timer=None;self.busy=False;self.closed=False
-        ttk.Button(self,text='Scansiona USB',command=self.refresh).pack(fill='x');self.list= tk.Listbox(self,exportselection=False);self.list.pack(fill='both',expand=True);self.list.bind('<<ListboxSelect>>',self.select);self.bind('<Destroy>',self.cleanup,add='+')
+        ttk.Button(self,text=tr('Scansiona USB'),command=self.refresh).pack(fill='x');self.list= tk.Listbox(self,exportselection=False);self.list.pack(fill='both',expand=True);self.list.bind('<<ListboxSelect>>',self.select);self.bind('<Destroy>',self.cleanup,add='+')
     def refresh(self):
         if self.busy:return
         self.busy=True;self.devices=[];self.selected_device=None;self.list.delete(0,'end');self.list.insert('end','Scansione…')
@@ -138,7 +139,7 @@ class USBExplorer(tk.Frame):
         if kind=='error':self.list.insert('end',data);self.event_generate('<<DeviceError>>',when='tail');return
         self.devices=data
         for d in data:self.list.insert('end',f'VID {d.idVendor:04X}  PID {d.idProduct:04X}  bus {d.bus} / {d.address}')
-        if not data:self.list.insert('end','Nessun dispositivo USB rilevato')
+        if not data:self.list.insert('end',tr('Nessun dispositivo USB rilevato'))
     def select(self,event=None):
         sel=self.list.curselection()
         if sel and sel[0]<len(self.devices):self.selected_device=self.devices[sel[0]];self.event_generate('<<DeviceSelected>>',when='tail')
@@ -150,19 +151,19 @@ class USBExplorer(tk.Frame):
 class SerialMonitor(tk.Frame):
     def __init__(self,master,port='',baudrate=9600,**kw):
         super().__init__(master,**kw);self.connection=None;self.port=port;self.baudrate=int(baudrate);self.last_data=b'';self.timer=None
-        row=ttk.Frame(self);row.pack(fill='x');self.ports=ttk.Combobox(row,width=23);self.ports.set(port);self.ports.pack(side='left');ttk.Button(row,text='Porte',command=self.refresh_ports).pack(side='left');ttk.Button(row,text='Connetti',command=self.connect).pack(side='left');ttk.Button(row,text='Chiudi',command=self.disconnect).pack(side='left')
-        self.output=tk.Text(self,height=5);self.output.pack(fill='both',expand=True);row=ttk.Frame(self);row.pack(fill='x');self.input=ttk.Entry(row);self.input.pack(side='left',fill='x',expand=True);ttk.Button(row,text='Invia',command=self.send).pack(side='left');self.bind('<Destroy>',self.cleanup,add='+')
+        row=ttk.Frame(self);row.pack(fill='x');self.ports=ttk.Combobox(row,width=23);self.ports.set(port);self.ports.pack(side='left');ttk.Button(row,text=tr('Porte'),command=self.refresh_ports).pack(side='left');ttk.Button(row,text=tr('Connetti'),command=self.connect).pack(side='left');ttk.Button(row,text=tr('Chiudi'),command=self.disconnect).pack(side='left')
+        self.output=tk.Text(self,height=5);self.output.pack(fill='both',expand=True);row=ttk.Frame(self);row.pack(fill='x');self.input=ttk.Entry(row);self.input.pack(side='left',fill='x',expand=True);ttk.Button(row,text=tr('Invia'),command=self.send).pack(side='left');self.bind('<Destroy>',self.cleanup,add='+')
     def refresh_ports(self):
         try:
             from serial.tools import list_ports
             self.ports['values']=[p.device for p in list_ports.comports()]
-        except Exception as exc:messagebox.showerror('Seriale',str(exc),parent=self)
+        except Exception as exc:messagebox.showerror(tr('Seriale'),str(exc),parent=self)
     def connect(self):
         self.disconnect()
         try:
             import serial
             self.connection=serial.Serial(self.ports.get(),self.baudrate,timeout=0,write_timeout=0.2);self.poll()
-        except Exception as exc:messagebox.showerror('Seriale',str(exc),parent=self)
+        except Exception as exc:messagebox.showerror(tr('Seriale'),str(exc),parent=self)
     def poll(self):
         if not self.connection:return
         try:
@@ -185,24 +186,24 @@ class SerialMonitor(tk.Frame):
 class NotebookView(ttk.Notebook):
     def __init__(self,master,pages=None,**kw):
         super().__init__(master,**kw);self.pages={}
-        for title in (pages or ['Pagina 1','Pagina 2']):self.add_page(title)
+        for title in (pages or [tr('Pagina 1'),tr('Pagina 2')]):self.add_page(title)
     def add_page(self,title):
         frame=ttk.Frame(self);self.add(frame,text=title);self.pages[title]=frame;return frame
 
 class FileDropZone(tk.Frame):
-    def __init__(self,master,text='Trascina qui file dal Finder',**kw):
+    def __init__(self,master,text=tr('Trascina qui file dal Finder'),**kw):
         super().__init__(master,**kw);self.paths=[];self.caption=ttk.Label(self,text=text,anchor='center');self.caption.pack(fill='both',expand=True)
         try:
             from tkinterdnd2 import TkinterDnD,DND_FILES
             root=self.winfo_toplevel()._root()
             if not getattr(root,'_visualtk_dnd_loaded',False):TkinterDnD._require(root);root._visualtk_dnd_loaded=True
             self.drop_target_register(DND_FILES);self.dnd_bind('<<Drop>>',self.receive)
-        except Exception as exc:self.caption.configure(text='Drag & drop non disponibile: '+str(exc))
+        except Exception as exc:self.caption.configure(text=tr('Drag & drop non disponibile: ')+str(exc))
     def receive(self,event):
         self.paths=list(self.tk.splitlist(event.data));self.caption.configure(text='\n'.join(self.paths));self.event_generate('<<FilesDropped>>',when='tail');return event.action
 
 class FileBrowserButton(tk.Frame):
-    def __init__(self,master,text='Sfoglia file…',mode='open',advanced=False,**kw):
+    def __init__(self,master,text=tr('Sfoglia file…'),mode='open',advanced=False,**kw):
         super().__init__(master,**kw);self.mode=mode;self.advanced=advanced;self.paths=[];ttk.Button(self,text=text,command=self.choose).pack(fill='both',expand=True)
     def choose(self):
         try:
@@ -212,10 +213,10 @@ class FileBrowserButton(tk.Frame):
             else:functions={'open':filedialog.askopenfilename,'multiple':filedialog.askopenfilenames,'directory':filedialog.askdirectory,'save':filedialog.asksaveasfilename}
             result=functions[self.mode](parent=self);self.paths=list(result) if isinstance(result,(tuple,list)) else ([result] if result else [])
             if self.paths:self.event_generate('<<FileSelected>>',when='tail')
-        except Exception as exc:messagebox.showerror('Selezione file',str(exc),parent=self)
+        except Exception as exc:messagebox.showerror(tr('Selezione file'),str(exc),parent=self)
 
 class MessageButton(tk.Frame):
-    def __init__(self,master,text='Messaggio',title='Informazione',message='Ciao!',mode='info',**kw):
+    def __init__(self,master,text=tr('Messaggio'),title=tr('Informazione'),message=tr('Ciao!'),mode='info',**kw):
         super().__init__(master,**kw);self.title=title;self.message=message;self.mode=mode;self.result=None;ttk.Button(self,text=text,command=self.show).pack(fill='both',expand=True)
     def show(self):
         from tkinter import simpledialog,colorchooser
@@ -235,7 +236,7 @@ class HtmlView(tk.Frame):
 
 class WebView(tk.Frame):
     def __init__(self,master,url='https://www.python.org',**kw):
-        super().__init__(master,**kw);self.url=url;row=ttk.Frame(self);row.pack(fill='x');self.address=ttk.Entry(row);self.address.insert(0,url);self.address.pack(side='left',fill='x',expand=True);ttk.Button(row,text='Apri',command=self.navigate).pack(side='left')
+        super().__init__(master,**kw);self.url=url;row=ttk.Frame(self);row.pack(fill='x');self.address=ttk.Entry(row);self.address.insert(0,url);self.address.pack(side='left',fill='x',expand=True);ttk.Button(row,text=tr('Apri'),command=self.navigate).pack(side='left')
         self.view=None
         try:
             from tkinterweb import HtmlFrame
@@ -251,7 +252,7 @@ class WebView(tk.Frame):
             except Exception as exc:messagebox.showerror('Web',str(exc),parent=self)
 
 class NativeWebButton(tk.Frame):
-    def __init__(self,master,url='https://www.python.org',text='Apri browser nativo',title='Web',**kw):
+    def __init__(self,master,url='https://www.python.org',text=tr('Apri browser nativo'),title='Web',**kw):
         super().__init__(master,**kw);self.url=url;self.title=title;self.children_processes=[];ttk.Button(self,text=text,command=self.open).pack(fill='both',expand=True);self.bind('<Destroy>',self.cleanup,add='+')
     def open(self):
         # A spawned process has its own main thread and GUI loop, also in frozen apps.
@@ -270,10 +271,10 @@ class VideoPlayer(tk.Frame):
     def __init__(self,master,source='',volume=70,**kw):
         super().__init__(master,**kw);self.source=source;self.volume=int(volume);self.instance=None;self.player=None
         row=ttk.Frame(self);row.pack(fill='x')
-        for text,cmd in [('Apri',self.choose),('▶',self.play),('Ⅱ',self.pause),('■',self.stop)]:ttk.Button(row,text=text,command=cmd).pack(side='left')
+        for text,cmd in [(tr('Apri'),self.choose),('▶',self.play),('Ⅱ',self.pause),('■',self.stop)]:ttk.Button(row,text=text,command=cmd).pack(side='left')
         self.screen=tk.Frame(self,bg='black');self.screen.pack(fill='both',expand=True);self.bind('<Destroy>',self.cleanup,add='+')
     def choose(self):
-        source=filedialog.askopenfilename(parent=self,filetypes=[('Video','*.mp4 *.avi *.mkv *.mov *.webm'),('Tutti','*')])
+        source=filedialog.askopenfilename(parent=self,filetypes=[('Video','*.mp4 *.avi *.mkv *.mov *.webm'),(tr('Tutti'),'*')])
         if source:self.source=source
     def play(self,source=None,headers=None):
         if source:self.source=source
@@ -291,7 +292,7 @@ class VideoPlayer(tk.Frame):
             for key,option in [('User-Agent','http-user-agent'),('Referer','http-referrer')]:
                 if (headers or {}).get(key):media.add_option(':'+option+'='+headers[key])
             self.player.set_media(media);self.player.audio_set_volume(self.volume);self.player.play();self.event_generate('<<PlaybackStarted>>',when='tail')
-        except Exception as exc:messagebox.showerror('Video / VLC',str(exc)+'\nInstalla VLC/libVLC per la stessa architettura di Python.',parent=self)
+        except Exception as exc:messagebox.showerror('Video / VLC',str(exc)+tr('\nInstalla VLC/libVLC per la stessa architettura di Python.'),parent=self)
     def pause(self):
         if self.player:self.player.pause()
     def stop(self):
@@ -305,7 +306,7 @@ class VideoPlayer(tk.Frame):
 class LegacyVideoPlayer(tk.Frame):
     def __init__(self,master,source='',**kw):
         super().__init__(master,**kw);self.source=source;self.player=None
-        ttk.Button(self,text='Apri video (tkVideoPlayer)',command=self.play).pack(fill='x')
+        ttk.Button(self,text=tr('Apri video (tkVideoPlayer)'),command=self.play).pack(fill='x')
         try:
             from tkVideoPlayer import TkinterVideo
             self.player=TkinterVideo(master=self,scaled=True);self.player.pack(fill='both',expand=True)
@@ -321,15 +322,15 @@ class LegacyVideoPlayer(tk.Frame):
 class YouTubePlayer(tk.Frame):
     def __init__(self,master,url='',backend='yt-dlp',**kw):
         super().__init__(master,**kw);self.backend=backend;self.results=queue.Queue();self.busy=False;self.timer=None;self.closed=False;self.stream_url=None
-        row=ttk.Frame(self);row.pack(fill='x');self.address=ttk.Entry(row);self.address.insert(0,url);self.address.pack(side='left',fill='x',expand=True);ttk.Button(row,text='Apri YouTube',command=self.play).pack(side='left')
-        self.status=tk.StringVar(value='Inserisci URL video');ttk.Label(self,textvariable=self.status).pack(fill='x');self.video=VideoPlayer(self);self.video.pack(fill='both',expand=True);self.bind('<Destroy>',self.cleanup,add='+')
+        row=ttk.Frame(self);row.pack(fill='x');self.address=ttk.Entry(row);self.address.insert(0,url);self.address.pack(side='left',fill='x',expand=True);ttk.Button(row,text=tr('Apri YouTube'),command=self.play).pack(side='left')
+        self.status=tk.StringVar(value=tr('Inserisci URL video'));ttk.Label(self,textvariable=self.status).pack(fill='x');self.video=VideoPlayer(self);self.video.pack(fill='both',expand=True);self.bind('<Destroy>',self.cleanup,add='+')
     def play(self):
         if self.busy:return
         url=self.address.get().strip()
         from urllib.parse import urlparse
         host=(urlparse(url).hostname or '').lower()
-        if urlparse(url).scheme not in ('https','http') or not (host=='youtu.be' or host=='youtube.com' or host.endswith('.youtube.com')):return messagebox.showerror('YouTube','Inserisci un URL YouTube valido',parent=self)
-        self.busy=True;backend=self.backend;self.status.set('Estrazione stream in corso…')
+        if urlparse(url).scheme not in ('https','http') or not (host=='youtu.be' or host=='youtube.com' or host.endswith('.youtube.com')):return messagebox.showerror('YouTube',tr('Inserisci un URL YouTube valido'),parent=self)
+        self.busy=True;backend=self.backend;self.status.set(tr('Estrazione stream in corso…'))
         def resolve():
             try:
                 if backend=='yt-dlp':
@@ -339,11 +340,11 @@ class YouTubePlayer(tk.Frame):
                 else:
                     if backend=='pytubefix':from pytubefix import YouTube
                     elif backend=='pytube':from pytube import YouTube
-                    else:raise ValueError('Backend non supportato')
+                    else:raise ValueError(tr('Backend non supportato'))
                     stream=YouTube(url).streams.filter(progressive=True,file_extension='mp4').order_by('resolution').desc().first()
-                    if stream is None:raise RuntimeError('Stream audio/video combinato non disponibile')
+                    if stream is None:raise RuntimeError(tr('Stream audio/video combinato non disponibile'))
                     stream=stream.url;headers={}
-                if not stream:raise RuntimeError('Nessuno stream diretto disponibile')
+                if not stream:raise RuntimeError(tr('Nessuno stream diretto disponibile'))
                 self.results.put(('ok',(stream,headers)))
             except Exception as exc:self.results.put(('error',str(exc)))
         threading.Thread(target=resolve,daemon=True).start();self.poll()
@@ -353,7 +354,7 @@ class YouTubePlayer(tk.Frame):
         except queue.Empty:self.timer=self.after(100,self.poll);return
         self.busy=False
         if kind=='error':self.status.set(result);self.event_generate('<<DeviceError>>',when='tail');return
-        self.stream_url,headers=result;self.status.set('Stream risolto: avvio VLC');self.video.play(self.stream_url,headers=headers)
+        self.stream_url,headers=result;self.status.set(tr('Stream risolto: avvio VLC'));self.video.play(self.stream_url,headers=headers)
         self.event_generate('<<StreamResolved>>',when='tail')
     def cleanup(self,event):
         if event.widget is self:

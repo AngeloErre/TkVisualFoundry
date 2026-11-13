@@ -1,4 +1,5 @@
 """Latest-request client. Analysis and subprocess reads never run on Tk's thread."""
+from i18n import tr
 import json
 from pathlib import Path
 import queue
@@ -40,7 +41,7 @@ class AnalysisClient:
                 except (OSError,ValueError):pass
                 try:process.wait(timeout=2)
                 except subprocess.TimeoutExpired:pass
-                responses.put({'transport_error':'Motore di analisi terminato.'})
+                responses.put({'transport_error':tr('Motore di analisi terminato.')})
         threading.Thread(target=read,daemon=True).start();self.responses=responses
         if self.closed:self.stop_process()
     def run(self):
@@ -57,7 +58,7 @@ class AnalysisClient:
                 if 'transport_error' in result:raise RuntimeError(result['transport_error'])
                 self.results.put(result)
             except Exception as exc:
-                self.stop_process();self.results.put({'id':request['id'],'action':request.get('action','complete'),'error':'Analisi non disponibile o troppo lenta: '+str(exc),'items':[]})
+                self.stop_process();self.results.put({'id':request['id'],'action':request.get('action','complete'),'error':tr('Analisi non disponibile o troppo lenta: ')+str(exc),'items':[]})
         self.stop_process()
     def close(self):
         if self.closed:return
