@@ -34,6 +34,8 @@ from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
+from breakpoint_ui import BreakpointMixin
+from event_breakpoints import resolve_breakpoints
 from inspector_ui import InspectorMixin
 from debug_ui import DebugViewMixin
 from adaptive_ui import AdaptiveMixin
@@ -61,7 +63,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -172,7 +174,11 @@ class Studio(InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMi
         ttk.Label(codeframe,textvariable=self.code_label,style='Muted.TLabel',padding=(6,2)).pack(fill='x')
         self.evvar=tk.StringVar(value='Click'); self.evbox=ttk.Combobox(cr,textvariable=self.evvar,values=['Load']+list(EVENTS),state='readonly',width=14); self.evbox.pack(side='right'); self.evbox.bind('<<ComboboxSelected>>',lambda e:self.edit_event())
         ttk.Button(cr,text=tr('Applica codice'),command=self.commit_code).pack(side='right',padx=5)
+        breakpoint_menu=tk.Menu(cr,tearoff=False);breakpoint_menu.add_command(label=tr('Attiva/disattiva riga · ⇧F9'),command=self.toggle_event_breakpoint);breakpoint_menu.add_command(label=tr('Rimuovi breakpoint di questo codice'),command=self.clear_event_breakpoints)
+        ttk.Menubutton(cr,text=tr('Breakpoint'),menu=breakpoint_menu).pack(side='right')
         self.code=ScrolledText(codeframe,undo=True,bg='#202633',fg='#e2e8f0',insertbackground='white',font=('Menlo',self.config_data['font_size']),tabs=('32',)); self.code.pack(fill='both',expand=True)
+        self.code.tag_configure('event_break',background='#f6a0a0',foreground='#111111')
+        self.code.bind('<Shift-F9>',self.toggle_event_breakpoint)
         self.build_assistant(codeframe); self.code.bind('<Control-space>',self.complete); self.code.bind('<Tab>',self.tab_indent); self.code.bind('<Return>',self.autoindent)
         for tag,color in [('kw','#c792ea'),('str','#c3e88d'),('comment','#8796a8'),('num','#f78c6c')]:self.code.tag_configure(tag,foreground=color)
         self.generated=ScrolledText(self.tabs,font=('Menlo',12),wrap='none',undo=False); self.tabs.add(self.generated,text=tr('Python generato / breakpoint'))
@@ -473,8 +479,8 @@ class Studio(InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMi
         obj,key,global_=self.code_target; value=self.code.get('1.0','end-1c')
         dest=obj if global_ else obj.setdefault('events',{})
         if value!=dest.get(key,''):
-            self.checkpoint(); dest[key]=value
-        self.update_source()
+            self.checkpoint();self.remap_event_breakpoints(obj,key,global_,dest.get(key,''),value);dest[key]=value
+        self.paint_event_breakpoints();self.update_source()
     def edit_event(self):
         self.commit_code(); obj=self.selected if self.selected is not None else self.form; event=self.evvar.get()
         self.code.configure(state='normal');self.code_target=(obj,event,False);self.code_object_var.set(obj['name']); self.code_label.set(obj['name']+' → '+event+'(self, event=None)')
@@ -488,6 +494,7 @@ class Studio(InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMi
                 tag='kw' if keyword.iskeyword(tok.string) else {tokenize.STRING:'str',tokenize.COMMENT:'comment',tokenize.NUMBER:'num'}.get(tok.type)
                 if tag:self.code.tag_add(tag,f'{tok.start[0]}.{tok.start[1]}',f'{tok.end[0]}.{tok.end[1]}')
         except (tokenize.TokenError,IndentationError,SyntaxError):pass
+        self.paint_event_breakpoints()
     def tab_indent(self,event):
         if self.assist_popup:return self.accept_completion()
         self.code.insert('insert','    '); return 'break'
@@ -497,7 +504,8 @@ class Studio(InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMi
     def update_source(self):
         try:
             source=getattr(self,'debug_source',None) or generate(self.project); self.generated.configure(state='normal'); self.generated.delete('1.0','end'); self.generated.insert('1.0',source)
-            for line in self.breaks:self.generated.tag_add('break',f'{line}.0',f'{line}.end')
+            markers=getattr(self,'session_breaks',self.breaks) if getattr(self,'debug_source',None) else set(self.breaks)|resolve_breakpoints(self.project,source)[0]
+            for line in markers:self.generated.tag_add('break',f'{line}.0',f'{line}.end')
             self.generated.configure(state='disabled');self.paint_debug_position(); self.status.set(tr('Pronto • ')+(tr('* modificato • ') if json.dumps(self.project,sort_keys=True)!=self.saved_state else '')+(str(self.path) if self.path else tr('Progetto senza nome')))
         except Exception as exc:self.status.set(tr('Codice da correggere: ')+str(exc))
     def toggle_break(self,e):
@@ -605,9 +613,9 @@ class Studio(InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMi
         if self.proc and self.proc.poll() is None:return messagebox.showwarning(tr('Processo attivo'),tr('Arresta prima il processo corrente.'))
         if not self.check():return
         args=[self.config_data['python'],'-u','-m','pdb']
-        for line in sorted(self.breaks):args+=['-c',f'break {line}']
         try:
-            path=self.runtime_file();instrumented=self.inspector_args(path,debug=True)
+            path=self.runtime_file();self.prepare_session_breakpoints(path.read_text(encoding='utf-8'));instrumented=self.inspector_args(path,debug=True)
+            for line in sorted(self.session_breaks):args+=['-c',f'break {line}']
         except (OSError,ValueError) as exc:return messagebox.showerror(tr('Ispettore'),str(exc))
         self.start_debug_view(path);args.append(str(path));self.launch(instrumented or args,cwd=str(self.path.parent if self.path else BASE));self.debug_process=self.proc;self.inspector_launched(self.proc)
         if self.proc is None or self.proc.poll() is not None:

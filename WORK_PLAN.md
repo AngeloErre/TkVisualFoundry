@@ -66,3 +66,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Read-only expandable/filterable tree, changed values and bounded non-evaluating serialization.
 - [x] Private per-session files, lifecycle isolation, real subprocess regressions and limits documentation.
 - [ ] Interactive graphical acceptance, frame switching, explicit watch expressions and event-relative breakpoints.
+
+## Phase 11 — event-relative breakpoints (1.27)
+
+- [x] Persisted event/startup/import markers and editor Shift+F9 control.
+- [x] Executable generated-source mapping, edit remapping and rename/save/load preservation.
+- [x] Real pdb event-stop regression and bilingual docs; graphical acceptance pending.
+- [ ] Next: explicit watches, graphical stack frame selection and broader UI acceptance.

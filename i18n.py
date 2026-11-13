@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.26\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.26\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.27\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.27\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -645,3 +645,10 @@ EN_MESSAGES.update({'Debug: in attesa del programma':'Debug: waiting for program
 EN_MESSAGES.update({'Variabili / Ispettore':'Variables / Inspector','Monitoraggio per il prossimo avvio':'Monitor next launch','Filtra':'Filter','Avvia con F5 o F9 per osservare le variabili.':'Launch with F5 or F9 to inspect variables.','Variabile / ambito':'Variable / scope','Valore':'Value','Campioni ogni 0,5 s. Locali attive o ultima funzione osservata; valori e contenitori limitati. Nessuna espressione o proprietà viene eseguita.':'Samples every 0.5 s. Active locals or last observed function; bounded values and containers. No expressions or properties are executed.','In attesa del primo campione…':'Waiting for the first sample…','Locali':'Locals','Ultime locali':'Last locals','Globali':'Globals','Attributi self':'self attributes','Stack delle chiamate':'Call stack','In pausa: valori del punto di arresto':'Paused: values at the stopping point','In esecuzione: valori campionati':'Running: sampled values','Terminato: ultimi valori disponibili':'Finished: last available values','Valori campionati':'Sampled values','Ispettore':'Inspector','Monitoraggio disattivato per questo avvio.':'Monitoring disabled for this launch.'})
 
 EN_MESSAGES.update({'Monitoraggio non avviato':'Monitoring not started','Terminato prima del primo campione':'Finished before the first sample'})
+
+EN_MESSAGES.update({'Breakpoint · ⇧F9':'Breakpoint · ⇧F9','Scegli una riga di codice, non vuota o di solo commento.':'Choose a code line, not an empty or comment-only line.','Breakpoint non eseguibile: ':'Non-executable breakpoint: '})
+
+EN_MESSAGES.update({'Breakpoint rimossi da righe eliminate: ':'Breakpoints removed from deleted lines: '})
+EN_MESSAGES.update({'Breakpoint':'Breakpoint'})
+
+EN_MESSAGES.update({'Attiva/disattiva riga · ⇧F9':'Toggle line · ⇧F9','Rimuovi breakpoint di questo codice':'Clear breakpoints in this code'})

@@ -1,3 +1,10 @@
+# 1.27
+
+- Add persistent event/startup/import breakpoints with editor markers and Shift+F9.
+- Resolve to executable generated-source lines across embedded runtime changes; report unresolved points.
+- Remap edited source and preserve metadata through smart rename/save/load.
+- Add real pdb event-stop and mapping regressions; update the inspector demo and bilingual docs.
+
 # 1.26
 
 - Add read-only Variables / Inspector for F5/F9 with globals, active/last locals, self fields and stack.

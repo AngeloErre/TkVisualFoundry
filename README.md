@@ -1,4 +1,4 @@
-# VisualTk Studio 1.26
+# VisualTk Studio 1.27
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
@@ -27,6 +27,14 @@ Extended component palette and integrated reference for the LLM client component
 *Screenshots show the Italian interface on macOS. The IDE also supports English.*
 
 Startup layout fix: Project Explorer and Properties initialize after pane geometry is available, with a wider right dock and minimum visible areas. Valid manual pane sizes are preserved.
+
+## Breakpoints in event code (1.27)
+
+Place the cursor on an event-code line and choose **Breakpoint → Toggle line · ⇧F9**, or press **Shift+F9** inside the editor. A red background marks it. The same controls support project startup/import code. Save the project to retain breakpoint metadata. The same menu clears all markers for the current code scope.
+
+**F9** resolves these positions into the current generated source, including code with embedded component runtimes. Click Continue at the initial pdb stop, then trigger the event. The variable inspector shows the stopping point's values. Inserted lines shift markers, edited lines retain their relative position, deleted lines remove their markers with a log notice. Smart rename preserves metadata. Mapping is a text-diff approximation for larger rewrites: review markers after rearranging code. Non-executable/unresolved points are logged and skipped, never moved silently to the next statement. Stop the active debug session before changing markers. Legacy generated-source breakpoints remain session-only; F5/export/deploy do not activate breakpoints.
+
+Try `examples/Debugging/VariableInspectorDemo.vtk.json`, which includes a breakpoint before incrementing the counter.
 
 ## Live variable inspector (1.26)
 

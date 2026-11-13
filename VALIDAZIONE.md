@@ -1,3 +1,7 @@
+# Versione 1.27
+
+235 test superati per lingua, 11 grafici saltati. Verificati offset dei runtime incorporati, posizioni evento/startup/import, righe non eseguibili, inserimento/sostituzione/eliminazione, rinomina e salvataggio/caricamento. Un processo pdb reale si è fermato nel metodo evento generato senza creare Tk. Marcatori e scorciatoia grafica ancora da collaudare.
+
 # Versione 1.26
 
 230 test superati per lingua, 11 grafici saltati. Verificati aggiornamento reale di globali/attributi self, locali all’uscita dalle funzioni, pausa/next di pdb, breakpoint con variabili locali e stack, limiti/cicli, assenza di repr/proprietà personalizzate e chiusura sessioni obsolete. Campionamento circa ogni 0,5 s, non traccia completa delle assegnazioni. Collaudo grafico ancora da eseguire.

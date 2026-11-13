@@ -36,6 +36,11 @@
           },
           "events": {
             "Click": "previous = self.counter\nself.counter += 1\nself.samples.append(self.counter)\nself.CounterLabel.configure(text=f\"Counter: {self.counter}\")"
+          },
+          "breakpoints": {
+            "Click": [
+              2
+            ]
           }
         },
         {

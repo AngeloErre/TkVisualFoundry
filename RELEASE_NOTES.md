@@ -1,7 +1,7 @@
-# VisualTk Studio 1.26
+# VisualTk Studio 1.27
 
-Add Variables / Inspector for F5/F9: read-only sampled locals, globals, Application self attributes and stack, expandable standard containers, name filtering and changed-value accents. Updates run about every 0.5 seconds; paused pdb captures selected-frame scopes. Last returning-function locals are labeled historical. Each launch has a private temporary snapshot; normal exit/Stop preserves last values as finished.
+Set persisted event-local breakpoints with the Breakpoint button or Shift+F9 inside the code editor; project startup/import code is supported too. F9 maps markers to exact executable generated-source lines, while unresolved/comment points are reported and skipped. Existing inspector and debugger positions remain available.
 
-Values and scope counts are bounded; complex objects use type summaries without user repr/property evaluation. Sampling can miss short-lived locals and adds development overhead. Disable monitoring for the next launch when needed. Export, preview and deployment remain uninstrumented.
+Text insertion/replacement/deletion remaps points; smart rename preserves metadata and deleted objects naturally remove their own points. Review markers after large rewrites because text diff is approximate. Stop debug before changing markers. Generated-source manual breakpoints remain transient; F5/export/deploy never activate project markers.
 
-230 tests passed per language, 11 graphical tests skipped. Real live/debug subprocess tests passed; graphical acceptance pending. See docs/VARIABLE_INSPECTOR.md for full limits.
+235 tests passed per language, 11 graphical tests skipped. A real pdb process stopped on a generated event method without creating Tk. Graphical marker/shortcut acceptance remains pending.

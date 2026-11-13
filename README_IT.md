@@ -1,4 +1,4 @@
-# VisualTk Studio 1.26
+# VisualTk Studio 1.27
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
@@ -27,6 +27,14 @@ Catalogo dei componenti estesi e documentazione integrata del componente client 
 *Le immagini mostrano l’interfaccia italiana su macOS. L’IDE supporta anche l’inglese.*
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Breakpoint nel codice degli eventi (1.27)
+
+Posiziona il cursore su una riga dell’evento e scegli **Breakpoint → Attiva/disattiva riga · ⇧F9**, oppure **Maiusc+F9** nell’editor. La riga diventa rossa. Funziona anche nel codice startup/import del progetto. Salva il progetto per conservare i breakpoint. Lo stesso menu permette di rimuovere tutti i marcatori del codice corrente.
+
+**F9** traduce queste posizioni nelle righe del sorgente generato, anche quando contiene runtime dei componenti. Premi Continua al primo arresto di pdb, poi attiva l’evento: l’ispettore mostra i valori del punto di arresto. L’inserimento di righe sposta i marcatori; le righe modificate mantengono la posizione relativa; eliminare una riga ne rimuove il breakpoint con avviso nel log. La rinomina guidata conserva i metadati. Per riscritture ampie il confronto testuale è approssimativo: ricontrolla i marcatori dopo aver riorganizzato il codice. Punti non eseguibili o non risolti sono segnalati e ignorati, senza spostarli alla prossima istruzione. Arresta il debug prima di cambiare marcatori. I vecchi breakpoint nel Python generato restano temporanei; F5/export/deploy non li attivano.
+
+L’esempio `examples/Debugging/VariableInspectorDemo.vtk.json` include un breakpoint prima dell’incremento del contatore.
 
 ## Ispettore delle variabili durante l’esecuzione (1.26)
 

@@ -33,7 +33,7 @@ class InspectorMixin:
             tracked=[str(p.resolve()) for p in included_files(self.project,self.path.parent).values() if p.suffix=='.py']
         config=folder/'config.json';config.write_text(json.dumps({'output':str(output),'tracked':tracked}),encoding='utf-8')
         self.inspector_file=output;self.inspector_sequence=None;self.inspector_data=None;self.inspector_previous={};self.inspector_tree.delete(*self.inspector_tree.get_children());self.inspector_status.set(tr('In attesa del primo campione…'))
-        return [self.config_data['python'],'-u',str(folder/'inspector_runner.py'),'--config',str(config)]+(['--debug'] if debug else [])+[part for line in (sorted(self.breaks) if debug else []) for part in ('--break',str(line))]+[str(path)]
+        return [self.config_data['python'],'-u',str(folder/'inspector_runner.py'),'--config',str(config)]+(['--debug'] if debug else [])+[part for line in (sorted(getattr(self,'session_breaks',self.breaks)) if debug else []) for part in ('--break',str(line))]+[str(path)]
     def inspector_launched(self,process):
         if not self.inspector_file:return
         if process is None or process.poll() is not None:

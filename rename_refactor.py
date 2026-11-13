@@ -1,4 +1,5 @@
 """Reviewed, source-preserving object rename. Never executes submitted project code."""
+from event_breakpoints import remap_lines
 import ast
 import copy
 import unicodedata
@@ -85,5 +86,11 @@ def rename_project(project,old,new):
             for event in obj.get('events',{}):rewrite(obj['events'],event,original_name+'/'+event,True)
             if original_name==old:obj['name']=new;changes.append({'scope':original_name,'line':0,'before':old,'after':new})
             if obj.get('parent')==old:obj['parent']=new;changes.append({'scope':original_name+'/parent','line':0,'before':old,'after':new})
+    for key,lines in list(snapshot.get('code_breakpoints',{}).items()):
+        snapshot['code_breakpoints'][key]=remap_lines(project.get(key,''),snapshot.get(key,''),lines)
+    for old_form,new_form in zip(project['forms'],snapshot['forms']):
+        for old_obj,new_obj in zip([old_form]+old_form['widgets'],[new_form]+new_form['widgets']):
+            for event,lines in list(new_obj.get('breakpoints',{}).items()):
+                new_obj['breakpoints'][event]=remap_lines(old_obj.get('events',{}).get(event,''),new_obj.get('events',{}).get(event,''),lines)
     validate(snapshot)
     return {'project':snapshot,'changes':changes,'warnings':warnings}
