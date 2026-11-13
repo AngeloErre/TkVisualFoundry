@@ -1,3 +1,10 @@
+# 1.22
+
+- Add minute-based project snapshots including pending event/startup/import editor text, without mutating the live model.
+- Add local checkpoint/history browser, bounded JSON comparison and open-as-copy recovery with name collision protection.
+- Keep 30 deduplicated versions per project identity, use atomic private writes and skip corrupt records. Preserve failed-write predecessors.
+- Add startup history discovery/status count and configurable automatic snapshots; keep resources, virtual environments and external editor buffers outside this scope.
+
 # 1.21
 
 - Add reviewed smart rename for forms/controls from Edit and inspector Actions.

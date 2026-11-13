@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 FLAGS={'dependency_before_insert':True,'dependency_before_run':True,'pip_auto_install':True,
-       'pip_wheels_only':False,'startup_checks':True,'guided_values':True}
+       'pip_wheels_only':False,'startup_checks':True,'guided_values':True,'local_history':True}
 COLORS={'background','foreground','surface','accent','editor_bg','editor_fg','canvas'}
 
 def normalized_settings(data,defaults,color_valid=None):

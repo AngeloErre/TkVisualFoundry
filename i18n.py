@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.21\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.21\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.22\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.22\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -633,3 +633,5 @@ EN_MESSAGES.update({'Correggi gli errori di sintassi prima della rinomina.': 'Fi
 EN_MESSAGES['Nome non normalizzato: verifica i riferimenti manualmente.']='Non-normalized name: review references manually.'
 
 EN_MESSAGES['Per rinominare usa Azioni → Rinomina intelligente…']='To rename, use Actions → Smart rename…'
+
+EN_MESSAGES.update({'Apri come copia recuperata': 'Open as recovered copy', 'Confronto troncato per dimensione.': 'Comparison truncated because of size.', 'Copie locali: ': 'Local snapshots: ', 'Copie ogni 60 secondi delle modifiche al progetto. Recupera apre una copia: il file originale non viene sovrascritto.': 'Snapshots of project changes every 60 seconds. Recovery opens a copy: the original file is not overwritten.', 'Crea copie locali automatiche del progetto ogni 60 secondi': 'Create automatic local project snapshots every 60 seconds', 'Cronologia e recupero locale': 'Local history and recovery', 'Cronologia locale': 'Local history', 'Data': 'Date', 'Errore cronologia locale': 'Local history error', 'Nessuna differenza.': 'No differences.', 'Recupero': 'Recovery', 'Salva punto locale': 'Save local checkpoint'})

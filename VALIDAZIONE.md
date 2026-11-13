@@ -1,3 +1,7 @@
+# Versione 1.22
+
+211 test superati per lingua, 11 grafici saltati. Nuove regressioni per copia del buffer eventi senza modifica del modello, sintassi incompleta, deduplicazione/limite versioni, errori di scrittura, copie corrotte, limiti dei confronti e nomi di recupero anche dopo il salvataggio del lavoro corrente. Non eseguita simulazione grafica completa di crash/ripristino.
+
 # Versione 1.21
 
 204 test superati per lingua, 11 grafici saltati. Nuove regressioni per riferimenti statici/metodi evento, nomi form e parent, posizioni Unicode, accessi riflessivi letterali, conservazione stringhe/commenti, collisioni/sintassi e self ridefinito. La rinomina non esegue il codice del progetto. Revisione e undo nell’interfaccia richiedono collaudo grafico.

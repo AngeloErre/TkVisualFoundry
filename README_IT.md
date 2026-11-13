@@ -1,10 +1,20 @@
-# VisualTk Studio 1.21
+# VisualTk Studio 1.22
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Cronologia locale e recupero (1.22)
+
+Apri **File → Cronologia e recupero locale** oppure il pulsante nella barra di stato. Il modello modificato e il testo corrente degli editor eventi/avvio/import vengono copiati ogni 60 secondi nello spazio locale dell’applicazione, fuori dal progetto/deploy. Salvataggi e punti locali manuali creano versioni; stati identici vengono deduplicati e si conservano le ultime 30 copie per percorso progetto o sessione senza nome. La finestra elenca fino a 300 copie recenti, anche di avvii precedenti.
+
+Seleziona una versione per confrontarla in formato JSON; **Apri come copia recuperata** la apre con un nuovo nome `-recovered`, senza scrivere sull’originale o su copie già esistenti. La copia rimane da salvare. Anche il codice con sintassi incompleta viene conservato. Non vengono copiati risorse esterne, credenziali esterne, ambienti virtuali o buffer degli editor di file separati: servono ancora le cartelle originali delle risorse. Se la cartella originale manca, va ripristinata prima del recupero.
+
+Le copie automatiche sono disattivabili in Configurazione; quelle esistenti restano disponibili. Rifiutare un normale salvataggio non cancella la cronologia. Le scritture sono atomiche e gli errori compaiono in stato/log conservando le copie precedenti. È un recupero locale periodico, non un backup completo della cartella progetto.
+
+211 test superati per lingua, 11 grafici saltati. Verificati codice non salvato, conservazione/deduplicazione, errori disco, copie corrotte, confronto limitato e collisioni dei nomi recuperati. Il flusso grafico di cronologia/recupero resta da collaudare.
 
 ## Rinomina intelligente con anteprima (1.21)
 

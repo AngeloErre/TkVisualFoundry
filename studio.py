@@ -23,6 +23,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import uuid
 import tokenize
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, colorchooser, simpledialog
@@ -32,6 +33,8 @@ from components import registry, descriptor, requirements, install_args, design_
 from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
+from local_history import recovered_path
+from history_ui import HistoryMixin
 from refactor_ui import RefactorMixin
 from preview_ui import PreviewMixin
 from environment_ui import EnvironmentMixin
@@ -55,7 +58,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -68,7 +71,7 @@ class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,Selection
         self.global_python=self.config_data['python'];self.environment_busy=False
         self.init_preview()
         self.saved_state=json.dumps(self.project,sort_keys=True); self.drag=None; self.breaks=set()
-        self.build(); self.apply_appearance(); self.menus(); self.refresh(); self.after(70,self.poll)
+        self.build(); self.apply_appearance(); self.menus(); self.refresh();self.init_local_history(); self.after(70,self.poll)
         if self.config_data.get('startup_checks',True):self.after(600,self.start_health)
         self.protocol('WM_DELETE_WINDOW',self.close)
         self.bind('<F1>',lambda e:self.help())
@@ -93,7 +96,7 @@ class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,Selection
         self.menu_bar=ttk.Frame(self,padding=(6,6));self.menu_bar.pack(fill='x')
         self.log_visible=False;self.log_toggle_text=tk.StringVar(value=tr('Mostra log'))
         self.build_classic_toolbar()
-        statusbar=ttk.Frame(self,relief='sunken',borderwidth=1);statusbar.pack(side='bottom',fill='x')
+        self.statusbar=statusbar=ttk.Frame(self,relief='sunken',borderwidth=1);statusbar.pack(side='bottom',fill='x')
         self.status=tk.StringVar(value=tr('Pronto'));ttk.Label(statusbar,textvariable=self.status,anchor='w',width=1,padding=(6,3),style='Muted.TLabel').pack(side='left',fill='x',expand=True)
         self.selection_status=tk.StringVar();ttk.Label(statusbar,textvariable=self.selection_status,padding=(6,3),style='Muted.TLabel').pack(side='right')
         self.vertical=vertical=ttk.Panedwindow(self,orient='vertical'); vertical.pack(fill='both',expand=True)
@@ -500,10 +503,13 @@ class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,Selection
         if json.dumps(self.project,sort_keys=True)==self.saved_state:return True
         answer=messagebox.askyesnocancel(tr('Modifiche non salvate'),tr('Salvare le modifiche prima di proseguire?'))
         if answer is None:return False
+        if not answer and hasattr(self,'history_jobs') and self.config_data.get('local_history',True):self.queue_local_snapshot('discarded')
         return self.save() if answer else True
     def new(self):
         if not self.dirty_guard():return
-        self.project=new_project(); self.path=None; self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(self.project,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
+        self.project=new_project(); self.path=None;
+        self.history_session=uuid.uuid4().hex;self.history_last_queued=None;self.recovery_unsaved=False
+        self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(self.project,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
     def open_project(self):
         if not self.dirty_guard():return
         path=filedialog.askopenfilename(filetypes=[('VisualTk project','*.vtk.json'),('JSON','*.json')])
@@ -514,6 +520,7 @@ class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,Selection
                 from project_environment import environment_python
                 environment_python(Path(path).parent)
         except Exception as exc:return messagebox.showerror(tr('Apertura'),str(exc))
+        self.recovery_unsaved=False
         self.project=p; self.path=Path(path); self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(p,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
     def save(self,as_new=False):
         self.commit_code()
@@ -521,12 +528,15 @@ class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,Selection
         if as_new or path is None:
             s=filedialog.asksaveasfilename(defaultextension='.vtk.json',filetypes=[('VisualTk project','*.vtk.json')]); path=Path(s) if s else None
         if path is None:return False
+        if not as_new and getattr(self,'recovery_unsaved',False) and path==self.path and path.exists():path=recovered_path(self.recovery_original)
         if self.path and path.resolve().parent!=self.path.resolve().parent and (self.project.get('files') or self.project.get('deployment',{}).get('icon') or self.project.get('environment',{}).get('managed')):
             messagebox.showinfo(tr('File di progetto'),tr('Per mantenere i percorsi relativi, copia prima la cartella del progetto nella nuova destinazione e aprila da lì.'));return False
         try:
             # Save even unfinished code, allowing recovery after syntax errors.
             atomic_write_text(path,json.dumps(self.project,indent=2,ensure_ascii=False))
-            self.path=path; self.saved_state=json.dumps(self.project,sort_keys=True); self.update_source(); self.refresh_project_files(); return True
+            self.path=path;self.recovery_unsaved=False; self.saved_state=json.dumps(self.project,sort_keys=True);
+            if hasattr(self,'history_jobs') and self.config_data.get('local_history',True):self.queue_local_snapshot('saved')
+            self.update_source(); self.refresh_project_files(); return True
         except OSError as exc:messagebox.showerror(tr('Salvataggio'),str(exc)); return False
     def check(self):
         self.show_log(True)
@@ -627,7 +637,7 @@ class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,Selection
         if self.proc and self.proc.poll() is None:
             try:self.proc.wait(timeout=2)
             except subprocess.TimeoutExpired:self.proc.kill(); self.proc.wait()
-        self.stop_preview();self.temp.cleanup(); self.destroy()
+        self.finish_local_history();self.stop_preview();self.temp.cleanup(); self.destroy()
 
 HELP=tr('VISUALTK STUDIO — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.')
 

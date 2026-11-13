@@ -1,10 +1,20 @@
-# VisualTk Studio 1.21
+# VisualTk Studio 1.22
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
 
 Startup layout fix: Project Explorer and Properties initialize after pane geometry is available, with a wider right dock and minimum visible areas. Valid manual pane sizes are preserved.
+
+## Local history and recovery (1.22)
+
+Open **File → Local history and recovery** or the status-bar snapshot button. Modified project models and pending event/startup/import editor text are copied every 60 seconds to private local application storage, outside project/deploy folders. Saves and explicit local checkpoints also create versions; identical states are deduplicated and the latest 30 snapshots per project path (or untitled session) are retained. The browser lists up to 300 recent snapshots across projects, including previous launches.
+
+Select a version for a bounded JSON difference view; **Open as recovered copy** opens it under a new `-recovered` name without writing over the original or an existing recovered file. The copy is unsaved until you save it. Pending syntax errors are preserved so work can be repaired. Resource files, credentials outside the project, virtual environments and separate file-editor buffers are not backed up: original resource folders are still required. Missing original folders block recovery until restored.
+
+Automatic snapshots can be disabled in Configuration. Existing local copies remain available; declining a normal project save does not erase history. Writes are atomic and failures are reported in the status/log without replacing previous snapshots. This is periodic local recovery, not a backup of the entire project directory.
+
+211 tests passed per language, 11 graphical tests skipped. Pending-code capture, retention/deduplication, failed writes, corrupt records, bounded comparison and recovery-name collisions tested. Interactive history/recovery acceptance remains pending.
 
 ## Reviewed smart rename (1.21)
 

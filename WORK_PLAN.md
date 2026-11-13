@@ -29,3 +29,11 @@ Next candidates: adaptive layouts, rename refactoring, local recovery/history an
 - [x] Bilingual docs and backend regressions; interactive GUI acceptance remains pending.
 
 Next: adaptive layouts, local recovery/history and visual debugging.
+
+## Phase 6 — local history and recovery (1.22)
+
+- [x] Periodic project/pending-editor snapshots outside deploy resources.
+- [x] Atomic bounded history, comparison and explicit recovery as a new copy.
+- [x] Configuration opt-out, startup discovery and regression coverage; graphical/crash acceptance pending.
+
+Next: adaptive layouts and visual debugging.

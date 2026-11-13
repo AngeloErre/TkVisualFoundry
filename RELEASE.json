@@ -1,8 +1,8 @@
 {
-  "version": "1.21",
+  "version": "1.22",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 204,
+  "tests_passed": 211,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -40,5 +40,6 @@
   "workflow_validation": "Selection geometry, hierarchy movement, static diagnostic locations/non-execution and real isolated venv creation/reuse passed in both languages. Graphical selection/navigation/onboarding pending.",
   "startup_layout_validation": "Unmapped-to-mapped pane geometry, collapsed panel recovery and valid manual size preservation tested; interactive graphical acceptance pending.",
   "preview_validation": "Visual-only snapshot/source compilation, callback removal, service/external placeholders, selected form/page and independent spawned-process ownership tested. Real graphical preview pending.",
-  "refactor_validation": "Source-preserving rename, parent/form/event references, Unicode positions, reflective literals, collisions/syntax and shadowed-self warnings tested. Interactive review/undo pending."
+  "refactor_validation": "Source-preserving rename, parent/form/event references, Unicode positions, reflective literals, collisions/syntax and shadowed-self warnings tested. Interactive review/undo pending.",
+  "history_validation": "Pending-editor capture, deduplication/retention, incomplete code, atomic failure preservation, corrupt records, comparison limits and recovery naming collisions tested. Interactive history/recovery pending."
 }
