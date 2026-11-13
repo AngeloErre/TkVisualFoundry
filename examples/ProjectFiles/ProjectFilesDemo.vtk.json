@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "files": [
+    "helpers.py",
+    "assets"
+  ],
+  "language": "en",
+  "name": "ProjectFilesDemo",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Project files and deployment",
+      "width": 640,
+      "height": 440,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Label1",
+          "kind": "Label",
+          "x": 40,
+          "y": 40,
+          "width": 450,
+          "height": 40,
+          "props": {
+            "text": "Click to read a bundled resource"
+          },
+          "events": {}
+        },
+        {
+          "name": "Button1",
+          "kind": "Button",
+          "x": 40,
+          "y": 110,
+          "width": 220,
+          "height": 40,
+          "props": {
+            "text": "Read project resource"
+          },
+          "events": {
+            "Click": "self.Label1.configure(text=helpers.greeting())"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "import helpers",
+  "startup": "self.Form1.deiconify()",
+  "deployment": {
+    "name": "ProjectFilesDemo",
+    "version": "1.0.0"
+  }
+}

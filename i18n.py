@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.10.1\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.10.1\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.11\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.11\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -585,3 +585,11 @@ EN_MESSAGES.update({'Errore: ': 'Error: ', '+ Nuovo record': '+ New record'})
 EN_MESSAGES.update({'Licenza':'License','Repository/documentazione':'Repository/documentation'})
 
 EN_MESSAGES['Configurazione…'] = 'Configuration…'
+
+EN_MESSAGES.update({'Form e componenti': 'Forms and components', 'File e cartelle': 'Files and folders', 'File e cartelle ▾': 'Files and folders ▾', 'Nuovo file…': 'New file…', 'Nuova cartella…': 'New folder…', 'Importa file…': 'Import file…', 'Rinomina…': 'Rename…', 'Sposta nel cestino': 'Move to trash', 'Includi / escludi dal deploy': 'Include / exclude from deploy', 'Salva il progetto per gestire file e cartelle.': 'Save the project to manage files and folders.', '✓ = incluso nel deploy. File sul disco; cestino in .visualtk-trash. Limite vista: 1500 elementi.': '✓ = included in deploy. Files on disk; trash in .visualtk-trash. View limit: 1500 entries.', 'Nome relativo alla cartella selezionata:': 'Name relative to the selected folder:', 'File di progetto': 'Project files', 'Usa Salva con nome per il file del progetto.': 'Use Save As for the project file.', 'Nuovo nome. I riferimenti nel codice non vengono modificati:': 'New name. Code references are not updated:', 'Puoi recuperarlo dalla cartella .visualtk-trash. I riferimenti nel codice non vengono modificati.': 'Recover it from .visualtk-trash. Code references are not updated.', 'Escludi prima la cartella contenitore.': 'Exclude the containing folder first.', 'Il progetto si modifica nel designer.': 'Edit the project in the designer.', 'Editor limitato a file UTF-8 fino a 2 MB.': 'The editor supports UTF-8 files up to 2 MB.', 'File modificato o spostato sul disco: riaprilo prima di salvare.': 'File changed or moved on disk: reopen it before saving.', 'Salva e chiudi gli editor dei file prima del deploy.': 'Save and close file editors before deploying.', 'Nome applicazione': 'Application name', 'Versione': 'Version', 'Destinazione': 'Destination', 'Genera un kit Mac + Windows. La compilazione va eseguita sul sistema di destinazione. Include soltanto i file contrassegnati ✓.': 'Generate a Mac + Windows kit. Build on the target OS. Only files marked ✓ are included.', 'Compila anche su questo computer (installa le dipendenze nel kit)': 'Also build on this computer (install dependencies in the kit)', 'Scegli una cartella di destinazione.': 'Choose an output folder.', 'Kit pronto. Leggi README_DEPLOY.md e usa gli script del sistema di destinazione.': 'Kit ready. Read README_DEPLOY.md and use the scripts for the target OS.', 'Genera deploy': 'Generate deployment'})
+
+EN_MESSAGES['Per mantenere i percorsi relativi, copia prima la cartella del progetto nella nuova destinazione e aprila da lì.']='To preserve relative paths, copy the project folder to the new destination first, then open it there.'
+
+EN_MESSAGES['File e deploy']='Files and deployment'
+
+EN_MESSAGES['Chiudi gli editor di questi file prima di rinominare o spostare.']='Close the editors for these files before renaming or moving them.'

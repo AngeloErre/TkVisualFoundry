@@ -1,3 +1,10 @@
+# 1.11
+
+- Add a project file/folder explorer with UTF-8 editing, imports, renaming, recoverable trash and explicit deployment inclusion.
+- Add a Deploy wizard and toolbar action exporting source, resources, requirements and Mac/Windows run/build/install scripts.
+- Native build driver produces macOS app/DMG, Windows portable ZIP and optional Inno Setup installer. Build on each target platform.
+- Resolve local project modules during IDE execution without shifting debugger lines.
+
 # 1.10.1
 
 - Keep completion suggestions inside the main window, preventing native popup focus changes from interrupting typing on macOS.

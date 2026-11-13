@@ -1,8 +1,12 @@
-# VisualTk Studio 1.10.1
+# VisualTk Studio 1.11
 
 A visual Python/Tkinter IDE for macOS, inspired by the Visual Basic 6 workflow. Design multiple forms, edit control properties, write event handlers and run your application from one workspace.
 
 [Guida italiana](README_IT.md) · [Changelog](CHANGELOG.md)
+
+## New in 1.11
+
+Project explorer for folders and files, UTF-8 file editors and explicit resource inclusion. The Deploy wizard exports a Mac/Windows build kit with source launchers, native build scripts, macOS app/DMG creation and optional Windows Inno Setup installer generation. Build on each target OS. [Full guide](docs/en/DEPLOYMENT.md).
 
 ## Features
 
@@ -49,3 +53,7 @@ Type `messagebox.` after `from tkinter import messagebox` to see available membe
 Run `VTS_LANGUAGE=it python3 -m unittest discover -s tests -q` from the repository directory. Graphical tests require a usable Tk display. Launch `python3 studio.py` with a supported Python/Tkinter installation. Use `Build_Mac.command` for macOS packaging.
 
 GUI behavior and the packaged macOS application require local graphical validation. Optional drivers and native libraries must be installed in the environment used to run the application.
+
+Try `examples/ProjectFiles/ProjectFilesDemo.vtk.json` for a local Python module and a resource included in deployment.
+
+Validation: 99 tests passed, 11 graphical tests skipped. A native macOS example app and ZIP were built with PyInstaller 6.22.3; resource inclusion and ad hoc signature verification passed. DMG creation was unavailable in this session, and ZIP fallback succeeded. Graphical launch, Windows builds and installation on clean targets remain pending.

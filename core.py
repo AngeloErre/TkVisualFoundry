@@ -10,13 +10,16 @@ KINDS = ('Button','Label','Entry','Text','Checkbutton','Radiobutton','Listbox','
 EVENTS = {'Click':'<Button-1>', 'DoubleClick':'<Double-Button-1>', 'Enter':'<Enter>', 'Leave':'<Leave>', 'KeyPress':'<KeyPress>', 'FocusIn':'<FocusIn>', 'FocusOut':'<FocusOut>', 'Change':'<<ComboboxSelected>>', 'ImageSelected':'<<ImageSelected>>', 'PlaybackStarted':'<<PlaybackStarted>>', 'SnapshotSaved':'<<SnapshotSaved>>', 'DeviceSelected':'<<DeviceSelected>>', 'DeviceError':'<<DeviceError>>', 'DataReceived':'<<DataReceived>>', 'FilesDropped':'<<FilesDropped>>', 'FileSelected':'<<FileSelected>>', 'DialogClosed':'<<DialogClosed>>', 'NavigationStarted':'<<NavigationStarted>>', 'StreamResolved':'<<StreamResolved>>', 'TreeSelect':'<<TreeviewSelect>>', 'TabChanged':'<<NotebookTabChanged>>', 'DateSelected':'<<CalendarSelected>>', 'DatabaseConnected':'<<DatabaseConnected>>', 'DataLoaded':'<<DataLoaded>>', 'RecordSelected':'<<RecordSelected>>', 'DataChanged':'<<DataChanged>>', 'DatabaseError':'<<DatabaseError>>'}
 
 def new_project(language=None):
-    return {'version':1,'language':language or get_language(),'name':tr('Applicazione'),'forms':[{'name':'Form1','title':'Form1','width':640,'height':440,'bg':'#f0f0f0','widgets':[],'events':{}}], 'imports':'', 'startup':'self.Form1.deiconify()'}
+    return {'version':1,'files':[],'language':language or get_language(),'name':tr('Applicazione'),'forms':[{'name':'Form1','title':'Form1','width':640,'height':440,'bg':'#f0f0f0','widgets':[],'events':{}}], 'imports':'', 'startup':'self.Form1.deiconify()'}
 
 def identifier(value):
     return isinstance(value,str) and value.isidentifier() and not keyword.iskeyword(value) and not value.startswith(('_','event_')) and value not in {'root','show','hide','startup','mainloop','destroy','report_callback_exception'}
 
 def validate(p, code=True):
     if p.get('version') != 1 or not p.get('forms'): raise ValueError(tr('Formato progetto non supportato'))
+    files=p.get('files',[])
+    if not isinstance(files,list) or not all(isinstance(value,str) for value in files):raise ValueError('Project files must be a list of relative paths.')
+    if 'deployment' in p and not isinstance(p['deployment'],dict):raise ValueError('Invalid deployment settings.')
     reg=registry(p); requirements(p)
     names=set()
     for f in p['forms']:

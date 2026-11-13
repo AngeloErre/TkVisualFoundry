@@ -35,11 +35,12 @@ from assist_ui import AssistMixin
 from configuration_ui import ConfigurationMixin
 from dependency_manager import dependency_plan
 from component_palette import ComponentPalette,LayoutMixin
+from project_ui import ProjectFilesMixin
 
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -76,6 +77,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         self.log_visible=False;self.log_toggle_text=tk.StringVar(value=tr('Mostra log'))
         ttk.Button(self.menu_bar,textvariable=self.log_toggle_text,command=self.toggle_log).pack(side='right',padx=2)
         ttk.Button(self.menu_bar,text='■',width=3,command=self.stop).pack(side='right',padx=2)
+        ttk.Button(self.menu_bar,text='Deploy…',command=self.deploy_project).pack(side='right',padx=3)
         ttk.Button(self.menu_bar,text='▶ F5',command=self.run,style='Accent.TButton',width=6).pack(side='right',padx=2)
         self.status=tk.StringVar(value=tr('Pronto')); ttk.Label(self,textvariable=self.status,anchor='w',padding=(16,8),style='Muted.TLabel').pack(side='bottom',fill='x')
         self.vertical=vertical=ttk.Panedwindow(self,orient='vertical'); vertical.pack(fill='both',expand=True)
@@ -104,7 +106,11 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         self.palette.bind('<Return>',lambda e:self.add_widget())
         self.palette.bind('<<ListboxSelect>>',self.palette_info)
         ttk.Label(project_area,text=tr('Esplora progetto'),style='Title.TLabel').pack(anchor='w',pady=(20,5))
-        self.tree=ttk.Treeview(project_area,show='tree',selectmode='browse'); self.tree.pack(fill='both',expand=True)
+        project_pages=ttk.Notebook(project_area);project_pages.pack(fill='both',expand=True)
+        form_page=ttk.Frame(project_pages);file_page=ttk.Frame(project_pages)
+        project_pages.add(form_page,text=tr('Form e componenti'));project_pages.add(file_page,text=tr('File e cartelle'))
+        self.tree=ttk.Treeview(form_page,show='tree',selectmode='browse'); self.tree.pack(fill='both',expand=True)
+        self.build_file_explorer(file_page)
         self.tree.bind('<<TreeviewSelect>>',self.tree_select)
         center=ttk.Frame(main); main.add(center,weight=4)
         self.tabs=ttk.Notebook(center); self.tabs.pack(fill='both',expand=True)
@@ -183,6 +189,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         for i,f in enumerate(self.project['forms']):
             self.tree.insert('','end',iid='f:'+str(i),text=f['name'],open=True)
             for w in f['widgets']:self.tree.insert('f:'+str(i),'end',iid='w:'+w['name'],text=w['name']+' : '+w['kind'])
+        self.refresh_project_files()
         self.draw(); self.properties(); self.update_source()
     def draw(self):
         c=self.canvas; c.delete('all'); f=self.form; ox=30; oy=45
@@ -369,6 +376,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         else:self.breaks.add(line)
         self.update_source(); return 'break'
     def dirty_guard(self):
+        if not self.close_project_editors():return False
         self.commit_code()
         if json.dumps(self.project,sort_keys=True)==self.saved_state:return True
         answer=messagebox.askyesnocancel(tr('Modifiche non salvate'),tr('Salvare le modifiche prima di proseguire?'))
@@ -390,10 +398,12 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         if as_new or path is None:
             s=filedialog.asksaveasfilename(defaultextension='.vtk.json',filetypes=[('VisualTk project','*.vtk.json')]); path=Path(s) if s else None
         if path is None:return False
+        if self.path and path.resolve().parent!=self.path.resolve().parent and self.project.get('files'):
+            messagebox.showinfo(tr('File di progetto'),tr('Per mantenere i percorsi relativi, copia prima la cartella del progetto nella nuova destinazione e aprila da lì.'));return False
         try:
             # Save even unfinished code, allowing recovery after syntax errors.
             temp=path.with_name(path.name+'.tmp'); temp.write_text(json.dumps(self.project,indent=2,ensure_ascii=False),encoding='utf-8'); temp.replace(path)
-            self.path=path; self.saved_state=json.dumps(self.project,sort_keys=True); self.update_source(); return True
+            self.path=path; self.saved_state=json.dumps(self.project,sort_keys=True); self.update_source(); self.refresh_project_files(); return True
         except OSError as exc:messagebox.showerror(tr('Salvataggio'),str(exc)); return False
     def check(self):
         self.show_log(True)
@@ -432,7 +442,9 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         except queue.Empty:pass
         self.after(70,self.poll)
     def runtime_file(self):
-        path=Path(self.temp.name)/'application.py'; path.write_text(generate(self.project),encoding='utf-8'); return path
+        path=Path(self.temp.name)/'application.py';source=generate(self.project)
+        if self.path:source=source.replace(source.splitlines()[0], 'import sys; sys.path.insert(0, '+repr(str(self.path.resolve().parent))+')',1)
+        path.write_text(source,encoding='utf-8');return path
     def run(self,dependencies_checked=False):
         if not dependencies_checked and self.config_data.get('dependency_before_run',True) and dependency_plan(self.project):
             return self.open_dependencies(on_ready=lambda:self.run(True))
@@ -459,16 +471,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
                 if proc.poll() is None:proc.kill()
             self.after(1500,kill)
     def package(self,dependencies_checked=False):
-        if not dependencies_checked and self.config_data.get('dependency_before_run',True) and dependency_plan(self.project):
-            return self.open_dependencies(on_ready=lambda:self.package(True))
-        if self.proc and self.proc.poll() is None:return messagebox.showwarning(tr('Processo attivo'),tr('Arresta prima il processo corrente.'))
-        if not self.check():return
-        out=filedialog.askdirectory(title=tr('Cartella di destinazione build'))
-        if not out:return
-        try:
-            source=Path(out)/'application.py'; source.write_text(generate(self.project),encoding='utf-8'); self.write_requirements(Path(out))
-            self.launch([self.config_data['python'],str(BASE/'build_project.py'),str(source)],cwd=out)
-        except OSError as exc:messagebox.showerror('Build',str(exc))
+        return self.deploy_project()
     def write_requirements(self,directory):
         (directory/'requirements-visualtk.txt').write_text('\n'.join(requirements(self.project))+'\n',encoding='utf-8')
     def install_project_dependencies(self):

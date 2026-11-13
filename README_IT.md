@@ -1,4 +1,4 @@
-# VisualTk Studio 1.10.1
+# VisualTk Studio 1.11
 
 Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
 
@@ -88,7 +88,7 @@ Inserisci **DatabaseView**, selezionalo e scegli **Azioni → Configura componen
 
 ## Verifica e limiti
 
-Versione 1.10.1: 85 test superati, 11 grafici saltati su macOS con Python 3.15.2 e Jedi 0.20.0. Verificati caricamento lingua, catalogo, formattazione, avvio dei moduli in inglese, conservazione dei dati ed esportazione autonoma. Il percorso grafico completo e la build macOS richiedono ancora collaudo manuale.
+Versione 1.11: 99 test superati, 11 grafici saltati su macOS con Python 3.15.2 e Jedi 0.20.0. Verificati caricamento lingua, catalogo, formattazione, avvio dei moduli in inglese, conservazione dei dati ed esportazione autonoma. Il percorso grafico completo e la build macOS richiedono ancora collaudo manuale.
 
 Il completamento dipende dalle informazioni di tipo disponibili. Il designer usa coordinate assolute e non supporta ancora l’annidamento visuale. Hardware e librerie native possono richiedere configurazioni specifiche. DatabaseView non è uno strumento di amministrazione del server.
 
@@ -101,3 +101,11 @@ Nell’ispettore **Azioni** raccoglie configurazione del controllo, colori e car
 ## Lingue
 
 In Progetto → Configurazione → Aspetto scegli Italiano o English, salva e riavvia. La lingua dei componenti generati è una scelta separata, salvata nel progetto. Testi e codice esistenti non vengono tradotti.
+
+## File di progetto e deploy
+
+La scheda Progetto gestisce form/componenti e file/cartelle. Il pulsante Deploy genera il kit con sorgenti, risorse, dipendenze, avvio e build per Mac e Windows. La compilazione avviene sul sistema di destinazione. [Guida completa](PROJECTS_DEPLOY.md).
+
+Prova `examples/ProjectFiles/ProjectFilesDemo.vtk.json`: include un modulo Python locale e una risorsa da distribuire.
+
+Build reale di esempio verificata: .app Mac, ZIP con risorse e firma ad hoc. La sessione non permette la creazione del DMG: verificato il ripiego automatico sullo ZIP. Avvio grafico, build Windows e installazioni finali restano da collaudare.

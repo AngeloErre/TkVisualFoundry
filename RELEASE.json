@@ -1,12 +1,15 @@
 {
-  "version": "1.10.1",
+  "version": "1.11",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 85,
+  "tests_passed": 99,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
   "semantic_validation": "stdlib, Tkinter, NumPy, target environment, external component and static non-execution passed",
   "gui_and_mac_packaging": "pending",
-  "project_interpreter": "selected Python, separate persistent worker"
+  "project_interpreter": "selected Python, separate persistent worker",
+  "project_files": "relative files, explicit deployment inclusion, recoverable trash, UTF-8 editors",
+  "deployment": "Mac/Windows source kit; native builds and signing require target validation",
+  "native_smoke": "macOS Python 3.15.2 / PyInstaller 6.22.3: application and resource ZIP built; ad hoc signature verified. DMG unavailable (device not configured); ZIP fallback passed. Windows and graphical launch pending."
 }
