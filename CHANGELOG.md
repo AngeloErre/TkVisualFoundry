@@ -1,3 +1,10 @@
+# 1.25
+
+- Show current pdb position and jump to a yellow line marker in immutable session source.
+- Observe fragmented prompts, canonicalize macOS temporary paths and isolate old process output.
+- Clear markers on resume/finish and preserve existing pdb console commands.
+- Add real subprocess and session regression tests; GUI acceptance pending.
+
 # 1.24
 
 - Add adaptive anchors inside Notebook pages with theme-dependent client-area calibration.

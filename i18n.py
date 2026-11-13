@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.24\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.24\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.25\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.25\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -639,3 +639,5 @@ EN_MESSAGES.update({'Apri come copia recuperata': 'Open as recovered copy', 'Con
 EN_MESSAGES.update({'Ancoraggi adattivi': 'Adaptive anchors', 'Seleziona almeno un componente.': 'Select at least one control.', 'Scegli i bordi da mantenere. Due bordi opposti allargano il controllo; nessun bordo lo mantiene centrato rispetto alla variazione del contenitore.': 'Choose edges to preserve. Opposite edges stretch the control; no edges center it relative to the container size change.', 'Sinistra': 'Left', 'Alto': 'Top', 'Destra': 'Right', 'Basso': 'Bottom', 'Larghezza minima': 'Minimum width', 'Altezza minima': 'Minimum height', 'Prima fase: controlli con geometria Tk/ttk su form e frame/canvas ordinari. CustomTkinter, pagine di schede e contenitori scorrevoli interni richiedono ancora layout da codice.': 'First stage: Tk/ttk geometry on forms and ordinary frames/canvases. CustomTkinter, tab-page contents and scrollable internals still need code-managed layout.', 'La selezione è cambiata: riapri gli ancoraggi.': 'Selection changed: reopen anchor settings.', 'Ripristina posizione fissa': 'Restore fixed position', 'Ancoraggi adattivi…': 'Adaptive anchors…'})
 
 EN_MESSAGES.update({'Controlli Tk/ttk su form, frame/canvas e pagine Notebook. CustomTkinter e contenitori scorrevoli interni richiedono ancora layout da codice.':'Tk/ttk controls on forms, frames/canvases and Notebook pages. CustomTkinter and scrollable internals still need code-managed layout.'})
+
+EN_MESSAGES.update({'Debug: in attesa del programma':'Debug: waiting for program','Debug terminato':'Debug finished','Debug fermo alla riga {v0}':'Debug paused at line {v0}','Debug fermo fuori dal sorgente generato':'Debug paused outside generated source','Debug: esecuzione in corso':'Debug: running','Debug non avviato':'Debug not started','Mostra riga':'Show line','Arresta il debug prima di cambiare i breakpoint.':'Stop debugging before changing breakpoints.'})

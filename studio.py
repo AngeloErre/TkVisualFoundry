@@ -34,6 +34,7 @@ from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
+from debug_ui import DebugViewMixin
 from adaptive_ui import AdaptiveMixin
 from history_ui import HistoryMixin
 from refactor_ui import RefactorMixin
@@ -59,7 +60,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -178,6 +179,7 @@ class Studio(AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMi
         style_editor(self.generated)
         self.generated.bind('<Double-Button-1>',self.toggle_break)
         self.generated.tag_configure('break',background='#f6a0a0',foreground='#111111')
+        self.generated.tag_configure('debug_current',background='#ffe08a',foreground='#111111')
         self.build_problems()
         main.add(self.right_panel,weight=0);right=inspector_area
         panel_caption(right,tr('Proprietà'))
@@ -214,6 +216,9 @@ class Studio(AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMi
         debug_menu=tk.Menu(br,tearoff=False)
         for label,cmd in [(tr('Continua'),lambda:self.debug_cmd('continue')),(tr('Passo'),lambda:self.debug_cmd('next')),(tr('Entra'),lambda:self.debug_cmd('step')),('Stack',lambda:self.debug_cmd('where')),(tr('Locali'),lambda:self.debug_cmd('pp locals()'))]:debug_menu.add_command(label=label,command=cmd)
         ttk.Menubutton(br,text='Debug ▾',menu=debug_menu).pack(side='left')
+        self.debug_location=tk.StringVar(value=tr('Debug non avviato'))
+        self.debug_jump=ttk.Button(br,text=tr('Mostra riga'),command=self.show_debug_position,state='disabled');self.debug_jump.pack(side='left',padx=4)
+        ttk.Label(bottom,textvariable=self.debug_location).grid(row=3,column=0,sticky='ew',padx=8)
         ttk.Button(br,text=tr('Chiudi log'),command=lambda:self.show_log(False)).pack(side='right')
         ttk.Button(br,text=tr('Pulisci'),command=self.clear_log).pack(side='right',padx=4)
         self.log=ScrolledText(bottom,height=5,bg='#151a23',fg='#dbe6ef',font=('Menlo',11));self.log.grid(row=1,column=0,sticky='nsew');style_editor(self.log)
@@ -489,11 +494,13 @@ class Studio(AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMi
         line=self.code.get('insert linestart','insert'); indent=re.match(r'\s*',line).group(); self.code.insert('insert','\n'+indent+('    ' if line.rstrip().endswith(':') else '')); return 'break'
     def update_source(self):
         try:
-            source=generate(self.project); self.generated.configure(state='normal'); self.generated.delete('1.0','end'); self.generated.insert('1.0',source)
+            source=getattr(self,'debug_source',None) or generate(self.project); self.generated.configure(state='normal'); self.generated.delete('1.0','end'); self.generated.insert('1.0',source)
             for line in self.breaks:self.generated.tag_add('break',f'{line}.0',f'{line}.end')
-            self.generated.configure(state='disabled'); self.status.set(tr('Pronto • ')+(tr('* modificato • ') if json.dumps(self.project,sort_keys=True)!=self.saved_state else '')+(str(self.path) if self.path else tr('Progetto senza nome')))
+            self.generated.configure(state='disabled');self.paint_debug_position(); self.status.set(tr('Pronto • ')+(tr('* modificato • ') if json.dumps(self.project,sort_keys=True)!=self.saved_state else '')+(str(self.path) if self.path else tr('Progetto senza nome')))
         except Exception as exc:self.status.set(tr('Codice da correggere: ')+str(exc))
     def toggle_break(self,e):
+        if getattr(self,'debug_source',None):
+            self.write_log(tr('Arresta il debug prima di cambiare i breakpoint.')+'\n');return 'break'
         line=int(self.generated.index('@%s,%s'%(e.x,e.y)).split('.')[0])
         if line in self.breaks:self.breaks.remove(line)
         else:self.breaks.add(line)
@@ -567,12 +574,13 @@ class Studio(AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMi
             while True:
                 data=os.read(proc.stdout.fileno(),4096)
                 if not data:break
-                self.messages.put(decoder.decode(data))
-            self.messages.put(decoder.decode(b'',final=True)); self.messages.put(tr('\n[Processo terminato: {v0}]\n', v0=f'{proc.wait()}'))
+                self.messages.put((proc,decoder.decode(data),False))
+            self.messages.put((proc,decoder.decode(b'',final=True),False)); self.messages.put((proc,tr('\n[Processo terminato: {v0}]\n', v0=f'{proc.wait()}'),True))
         threading.Thread(target=read,daemon=True).start()
     def poll(self):
         try:
-            while True:self.write_log(self.messages.get_nowait())
+            while True:
+                process,text,finished=self.messages.get_nowait();self.write_log(text);self.observe_debug(process,text,finished)
         except queue.Empty:pass
         self.after(70,self.poll)
     def runtime_file(self):
@@ -591,10 +599,16 @@ class Studio(AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMi
         if not self.check():return
         args=[self.config_data['python'],'-u','-m','pdb']
         for line in sorted(self.breaks):args+=['-c',f'break {line}']
-        args.append(str(self.runtime_file())); self.launch(args,cwd=str(self.path.parent if self.path else BASE)); self.write_log(tr('Debug pdb: continue, next, step, pp espressione, where, break N, quit.\nLa GUI si blocca intenzionalmente ai breakpoint.\n')); self.command.focus_set()
+        path=self.runtime_file();self.start_debug_view(path);args.append(str(path));self.launch(args,cwd=str(self.path.parent if self.path else BASE));self.debug_process=self.proc
+        if self.proc is None or self.proc.poll() is not None:
+            self.debug_source=None;self.debug_output=None;self.debug_process=None;self.debug_location.set(tr('Debug non avviato'))
+        else:self.update_source()
+        self.write_log(tr('Debug pdb: continue, next, step, pp espressione, where, break N, quit.\nLa GUI si blocca intenzionalmente ai breakpoint.\n')); self.command.focus_set()
     def debug_cmd(self,text):
         if self.proc and self.proc.poll() is None:
-            try:self.proc.stdin.write((text+'\n').encode()); self.proc.stdin.flush()
+            try:
+                self.proc.stdin.write((text+'\n').encode()); self.proc.stdin.flush()
+                if getattr(self,'debug_process',None) is self.proc:self.debug_resuming(text)
             except (OSError,ValueError):pass
     def console_command(self,event=None):
         command=self.command.get(); self.command.delete(0,'end'); self.write_log('> '+command+'\n'); self.debug_cmd(command)

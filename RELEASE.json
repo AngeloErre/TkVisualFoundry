@@ -1,8 +1,8 @@
 {
-  "version": "1.24",
+  "version": "1.25",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 218,
+  "tests_passed": 224,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -42,5 +42,6 @@
   "preview_validation": "Visual-only snapshot/source compilation, callback removal, service/external placeholders, selected form/page and independent spawned-process ownership tested. Real graphical preview pending.",
   "refactor_validation": "Source-preserving rename, parent/form/event references, Unicode positions, reflective literals, collisions/syntax and shadowed-self warnings tested. Interactive review/undo pending.",
   "history_validation": "Pending-editor capture, deduplication/retention, incomplete code, atomic failure preservation, corrupt records, comparison limits and recovery naming collisions tested. Interactive history/recovery pending.",
-  "adaptive_validation": "Tk/ttk forms, ordinary frames and Notebook pages. Theme client baseline, first map after resize, independent page generation, teardown and coalesced bindings tested. CustomTkinter and scrollable internals unsupported; graphical/theme acceptance pending."
+  "adaptive_validation": "Tk/ttk forms, ordinary frames and Notebook pages. Theme client baseline, first map after resize, independent page generation, teardown and coalesced bindings tested. CustomTkinter and scrollable internals unsupported; graphical/theme acceptance pending.",
+  "visual_debug_validation": "Real pdb subprocess over piped stdin/stdout, fragmented prompts, macOS path aliases, external frames, bounded buffering, old-process isolation, resume/finish markers and exact-session source guard tested. GUI acceptance pending; first-stage current position, no graphical watches."
 }

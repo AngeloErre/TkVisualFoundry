@@ -1,3 +1,7 @@
+# Versione 1.25
+
+224 test superati per lingua, 11 grafici saltati. Verificati processo pdb reale senza GUI, prompt frammentati, percorsi macOS equivalenti, frame esterni, buffer limitato, isolamento sessioni, reset marcatori e confronto esatto del sorgente. Interazione grafica di debug ancora da collaudare.
+
 # Versione 1.24
 
 218 test superati per lingua, 11 grafici saltati. Nuove regressioni: generazione indipendente per pagina Notebook, prima apertura dopo ridimensionamento, calibrazione area interna, cancellazione callback alla distruzione. Ridimensionamento grafico e temi reali ancora da collaudare. 14 esempi validati e compilati.

@@ -1,7 +1,5 @@
-# VisualTk Studio 1.24
+# VisualTk Studio 1.25
 
-Adaptive anchors now support controls inside Notebook pages. Client-area calibration accounts for theme borders and tab headers, including pages first opened after resizing. Each page has independent resize handlers. Nested ordinary frames retain their existing support.
+First-stage visual debug position: F9 starts pdb, the output panel reports current line/function and Show line opens a yellow marker in the immutable session source. Resume clears the marker; external frames and process termination update status. Project edits take effect on the next launch; stop before changing GUI breakpoints. Existing pdb commands remain available; graphical watches are not included.
 
-Use Edit → Adaptive anchors or inspector Actions. Try examples/Layout/NotebookAnchorsDemo.vtk.json. CustomTkinter controls and scrollable internals remain unsupported.
-
-218 tests passed per language, 11 graphical tests skipped. Actual graphical resizing and theme/platform acceptance remain pending.
+224 tests passed per language, 11 graphical tests skipped. Real piped pdb subprocess and parser/session regressions tested; interactive GUI acceptance pending.

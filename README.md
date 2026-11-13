@@ -1,4 +1,4 @@
-# VisualTk Studio 1.24
+# VisualTk Studio 1.25
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
@@ -27,6 +27,12 @@ Extended component palette and integrated reference for the LLM client component
 *Screenshots show the Italian interface on macOS. The IDE also supports English.*
 
 Startup layout fix: Project Explorer and Properties initialize after pane geometry is available, with a wider right dock and minimum visible areas. Valid manual pane sizes are preserved.
+
+## Visual debug position (1.25)
+
+Press **F9** to launch pdb. The Output/Debug panel shows the current generated-source line and function; **Show line** opens it with a yellow highlight. Continue/Next/Step clear the marker while the program runs. Library frames are reported as outside the generated source.
+
+During debug, the generated-source tab displays the immutable session source; project edits apply on the next launch. Stop debug before changing breakpoints by double-clicking. Existing pdb console, stack and locals commands remain available. This stage observes pdb output; it does not provide a graphical variable/watch editor. Runtime GUI pauses at breakpoints as expected.
 
 ## Adaptive edge anchors — first stage (1.23)
 

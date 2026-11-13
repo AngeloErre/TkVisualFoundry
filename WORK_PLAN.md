@@ -52,3 +52,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Independent anchors per page with measured client area and first-map calibration after resize.
 - [x] Regression tests, demo and bilingual documentation; graphical/theme acceptance pending.
 - [ ] CustomTkinter scaling, scrollable client areas and visual grid/pack remain future work.
+
+## Phase 9 — visual debug position (1.25)
+
+- [x] Current pdb line/function and explicit jump to generated-source highlight.
+- [x] Immutable session source, resume/finish cleanup and old process isolation.
+- [x] Real subprocess/parser tests and bilingual documentation; GUI acceptance pending.
+- [ ] Later: graphical stack/variables/watch editor and event-relative breakpoints.
