@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.19.1\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.19.1\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.20\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.20\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -625,3 +625,5 @@ EN_MESSAGES.update({' selezionati': ' selected', 'Allinea a sinistra': 'Align le
 EN_MESSAGES.update({'Problemi': 'Problems', 'Analizza progetto': 'Analyze project', 'Analisi statica: nessun codice del progetto viene eseguito.': 'Static analysis: project code is never executed.', 'Tipo': 'Type', 'Oggetto': 'Object', 'Evento': 'Event', 'Riga': 'Line', 'Descrizione': 'Description', 'Analisi in corso…': 'Analyzing…', 'Progetto o interprete cambiato: ripeti l’analisi.': 'Project or interpreter changed: analyze again.', 'Errore': 'Error', 'Avviso': 'Warning', 'Problemi rilevati: ': 'Problems found: ', 'Verifica import non disponibile: ': 'Import check unavailable: ', 'Riferimento self non riconosciuto: ': 'Unrecognized self reference: ', 'Modulo non rilevato nell’ambiente: ': 'Module not detected in environment: '})
 
 EN_MESSAGES.update({'Ambiente Python del progetto': 'Project Python environment', 'Ogni progetto può usare una propria .venv: i pacchetti restano separati dagli altri progetti.': 'Each project can use its own .venv, keeping packages separate from other projects.', 'Creazione ambiente in corso…': 'Creating environment…', 'Crea / usa .venv e prepara pacchetti': 'Create / use .venv and prepare packages', 'Usa interprete globale': 'Use global interpreter', 'Progetto cambiato: riapri la gestione ambiente.': 'Project changed: reopen environment management.'})
+
+EN_MESSAGES.update({'Anteprima': 'Preview', 'segnaposto': 'placeholder', 'Anteprima — F6': 'Preview — F6', 'Chiudi anteprima': 'Close preview', 'Anteprima reale: eventi e codice di avvio del progetto esclusi.\n': 'Live form preview: project events and startup code excluded.\n', 'Componenti mostrati come segnaposto: ': 'Components shown as placeholders: ', '\n[Anteprima terminata: {code}]\n': '\n[Preview ended: {code}]\n', 'Errore anteprima: ': 'Preview error: '})

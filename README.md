@@ -1,10 +1,18 @@
-# VisualTk Studio 1.19.1
+# VisualTk Studio 1.20
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
 
 Startup layout fix: Project Explorer and Properties initialize after pane geometry is available, with a wider right dock and minimum visible areas. Valid manual pane sizes are preserved.
+
+## Real form preview (1.20)
+
+Press **F6**, use **Run → Preview**, or the designer Preview button to open the current form in a separate process using the selected project Python. Repeat to refresh the snapshot; **Run → Close preview** closes only the preview, independently of the running/debugged application. Interpreter checks and process output run off the Tk thread.
+
+Preview renders standard Tk/ttk, CustomTkinter, calendar, selected Pmw and Sheet controls with project themes and active tab pages. Events, project imports/startup source and callback/Tcl focus options are removed from a deep copy; incomplete event code does not prevent visual preview. Device, database, network/service and user-defined external controls become labeled placeholders. Package preparation uses only the rendered controls/theme requirements. Themes and approved library initialization still run; this is not a sandbox for untrusted theme/library code. Changes in preview widgets do not update the designer or project.
+
+198 tests passed per language, 11 graphical tests skipped. Snapshot isolation, callback removal, tab/form selection and independent process ownership tested. Real graphical appearance and target-platform preview interaction remain pending.
 
 ## Three workflow upgrades (1.19)
 

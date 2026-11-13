@@ -1,3 +1,10 @@
+# 1.20
+
+- Add F6 real-form preview in an independent process with asynchronous interpreter validation and output.
+- Build visual-only snapshots without project event/import/startup source, callbacks or Tcl focus scripts; keep the selected form/theme/tab page.
+- Render approved UI libraries and substitute device/service/user-defined components with labeled placeholders.
+- Prepare only preview requirements; handle refresh, close and spawn/close ownership separately from run/debug.
+
 # 1.19.1
 
 - Initialize the workspace splitters after Map/Configure geometry is available instead of relying on a single early idle callback.

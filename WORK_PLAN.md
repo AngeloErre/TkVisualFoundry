@@ -12,3 +12,12 @@ Each step is implemented, checked and reported before the next step.
 - Steps 1–2: 186 tests passed, 11 graphical tests skipped.
 - Steps 1–3: 191 tests passed per language, 11 graphical tests skipped; a real isolated virtual environment was created/reused without network installation.
 - Layout, problem navigation and onboarding still need interactive graphical validation.
+
+## Phase 4 — real form preview (1.20)
+
+- [x] Isolated visual-only form snapshot and selected tab page.
+- [x] Independent process, F6/refresh/close controls, asynchronous validation/output.
+- [x] Service/external placeholders, callback removal and project preservation.
+- [x] Automated validation and bilingual documentation; graphical acceptance remains pending.
+
+Next candidates: adaptive layouts, rename refactoring, local recovery/history and visual debugging.

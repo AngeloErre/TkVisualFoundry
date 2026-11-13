@@ -1,3 +1,7 @@
+# Versione 1.20
+
+198 test superati per lingua, 11 grafici saltati. Nuove regressioni per copia senza eventi/import/avvio, rimozione callback/Tcl focus, segnaposto servizi/componenti esterni, form e pagina attivi, separazione dipendenze e arresto processo prima del polling UI. Nessuna verifica grafica completa dell’anteprima effettuata.
+
 # Versione 1.19.1
 
 193 test superati per lingua, 11 grafici saltati. Nuove regressioni per dimensioni iniziali non ancora assegnate, prima visualizzazione dei pannelli, recupero pannelli collassati e conservazione delle dimensioni valide. La verifica visiva interattiva resta necessaria.

@@ -1,10 +1,18 @@
-# VisualTk Studio 1.19.1
+# VisualTk Studio 1.20
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Anteprima reale dei form (1.20)
+
+Premi **F6**, usa **Esegui → Anteprima** oppure il pulsante del designer: il form corrente si apre in un processo separato nel Python del progetto. Ripeti per aggiornare la copia; **Esegui → Chiudi anteprima** chiude solo l’anteprima, indipendentemente dall’applicazione in esecuzione/debug. Controlli dell’interprete e lettura dell’output avvengono fuori dal thread Tk.
+
+Vengono mostrati i controlli Tk/ttk, CustomTkinter, calendario, Pmw selezionati e Sheet con temi e pagina attiva. Eventi, import/avvio del progetto e opzioni callback/focus Tcl sono eliminati da una copia: anche codice evento incompleto permette l’anteprima grafica. Dispositivi, database, rete/servizi e componenti esterni dell’utente vengono rappresentati da segnaposto. I pacchetti richiesti riguardano solo i controlli/temi mostrati. Temi e inizializzazione delle librerie approvate vengono comunque eseguiti: non è una sandbox per codice di temi/librerie non fidati. Le modifiche fatte nell’anteprima non aggiornano il progetto.
+
+198 test superati per lingua, 11 grafici saltati. Verificate isolamento della copia, rimozione callback, selezione form/schede e proprietà del processo indipendente. Aspetto grafico e interazione sulle piattaforme finali restano da collaudare.
 
 ## Tre miglioramenti del flusso di lavoro (1.19)
 

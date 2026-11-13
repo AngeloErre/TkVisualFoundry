@@ -32,6 +32,7 @@ from components import registry, descriptor, requirements, install_args, design_
 from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
+from preview_ui import PreviewMixin
 from environment_ui import EnvironmentMixin
 from selection_ui import SelectionMixin
 from problems_ui import ProblemsMixin
@@ -53,7 +54,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -64,11 +65,13 @@ class Studio(EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,Intelligence
         self.temp=tempfile.TemporaryDirectory(prefix='visualtk-'); self.config_data={'language':get_language(),'grid':10,'font_size':13,'python':str(Path.home()/'Applications/VisualTkStudio/.venv/bin/python') if getattr(sys,'frozen',False) else sys.executable}
         self.config_data=load_settings(SETTINGS,self.config_data,self.winfo_rgb)
         self.global_python=self.config_data['python'];self.environment_busy=False
+        self.init_preview()
         self.saved_state=json.dumps(self.project,sort_keys=True); self.drag=None; self.breaks=set()
         self.build(); self.apply_appearance(); self.menus(); self.refresh(); self.after(70,self.poll)
         if self.config_data.get('startup_checks',True):self.after(600,self.start_health)
         self.protocol('WM_DELETE_WINDOW',self.close)
         self.bind('<F1>',lambda e:self.help())
+        self.bind('<F6>',lambda e:self.preview_form())
         for sequence, action in [('<Command-s>',self.save),('<Control-s>',self.save),('<Command-o>',self.open_project),('<Control-o>',self.open_project),('<Command-z>',self.undo),('<Control-z>',self.undo),('<F5>',self.run),('<Shift-F5>',self.stop),('<F9>',self.debug)]:
             self.bind(sequence,lambda e,a=action:a())
 
@@ -139,6 +142,7 @@ class Studio(EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,Intelligence
         row=ttk.Frame(design,padding=5); row.pack(fill='x')
         self.formvar=tk.StringVar(); self.formbox=ttk.Combobox(row,textvariable=self.formvar,state='readonly',width=22); self.formbox.pack(side='left'); self.formbox.bind('<<ComboboxSelected>>',self.switch_form)
         ttk.Button(row,text='Form…',command=self.manage_forms).pack(side='left',padx=4)
+        ttk.Button(row,text=tr('Anteprima — F6'),command=self.preview_form).pack(side='left',padx=4)
         edit_menu=tk.Menu(row,tearoff=False)
         for label,cmd in [(tr('Codice evento'),self.edit_event),(tr('Duplica'),self.duplicate),(tr('Elimina'),self.delete),(tr('Allinea X'),lambda:self.align('x')),(tr('Allinea Y'),lambda:self.align('y'))]:edit_menu.add_command(label=label,command=cmd)
         for label,operation in [(tr('Allinea a sinistra'),'left'),(tr('Allinea in alto'),'top'),(tr('Allinea a destra'),'right'),(tr('Allinea in basso'),'bottom'),(tr('Stessa larghezza'),'width'),(tr('Stessa altezza'),'height'),(tr('Distribuisci orizzontalmente'),'horizontal'),(tr('Distribuisci verticalmente'),'vertical')]:edit_menu.add_command(label=label,command=lambda op=operation:self.layout_selection(op))
@@ -622,7 +626,7 @@ class Studio(EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,Intelligence
         if self.proc and self.proc.poll() is None:
             try:self.proc.wait(timeout=2)
             except subprocess.TimeoutExpired:self.proc.kill(); self.proc.wait()
-        self.temp.cleanup(); self.destroy()
+        self.stop_preview();self.temp.cleanup(); self.destroy()
 
 HELP=tr('VISUALTK STUDIO — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.')
 

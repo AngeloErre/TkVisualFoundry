@@ -1,8 +1,8 @@
 {
-  "version": "1.19.1",
+  "version": "1.20",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 193,
+  "tests_passed": 198,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -38,5 +38,6 @@
   "package_catalog_validation": "Live official PyPI Simple Index: 938819 names; partial-name search, caching, failed refresh preservation, cancellation, pagination and compatible metadata covered. GUI interaction pending.",
   "icon_validation": "Real PNG/ICO/ICNS generation and decoding, runtime source compilation, Mac/Windows build icon arguments and Setup directive verified; native OS icon display and graphical picker pending.",
   "workflow_validation": "Selection geometry, hierarchy movement, static diagnostic locations/non-execution and real isolated venv creation/reuse passed in both languages. Graphical selection/navigation/onboarding pending.",
-  "startup_layout_validation": "Unmapped-to-mapped pane geometry, collapsed panel recovery and valid manual size preservation tested; interactive graphical acceptance pending."
+  "startup_layout_validation": "Unmapped-to-mapped pane geometry, collapsed panel recovery and valid manual size preservation tested; interactive graphical acceptance pending.",
+  "preview_validation": "Visual-only snapshot/source compilation, callback removal, service/external placeholders, selected form/page and independent spawned-process ownership tested. Real graphical preview pending."
 }
