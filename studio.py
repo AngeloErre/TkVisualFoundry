@@ -34,6 +34,7 @@ from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
+from adaptive_ui import AdaptiveMixin
 from history_ui import HistoryMixin
 from refactor_ui import RefactorMixin
 from preview_ui import PreviewMixin
@@ -58,7 +59,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -188,7 +189,7 @@ class Studio(HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMi
         inspector_actions=ttk.Frame(right);inspector_actions.pack(side='top',fill='x',pady=4)
         self.apply_button=ttk.Button(inspector_actions,text=tr('Applica proprietà'),command=self.apply_props);self.apply_button.pack(side='left')
         actions=tk.Menu(inspector_actions,tearoff=False)
-        for label,command in [(tr('Rinomina intelligente…'),self.rename_selected),(tr('Configura componente…'),self.configure_component),(tr('Colore sfondo…'),lambda:self.pick_color('bg')),(tr('Colore testo…'),lambda:self.pick_color('fg')),(tr('Carattere…'),self.choose_font)]:actions.add_command(label=label,command=command)
+        for label,command in [(tr('Ancoraggi adattivi…'),self.configure_anchors),(tr('Rinomina intelligente…'),self.rename_selected),(tr('Configura componente…'),self.configure_component),(tr('Colore sfondo…'),lambda:self.pick_color('bg')),(tr('Colore testo…'),lambda:self.pick_color('fg')),(tr('Carattere…'),self.choose_font)]:actions.add_command(label=label,command=command)
         ttk.Menubutton(inspector_actions,text=tr('Azioni ▾'),menu=actions).pack(side='right')
         prop_area=self.build_documentation(right)
         property_tools=ttk.Frame(prop_area);property_tools.pack(fill='x',pady=2)

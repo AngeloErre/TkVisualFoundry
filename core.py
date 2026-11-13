@@ -6,6 +6,7 @@ import keyword
 from components import registry, requirements
 from pathlib import Path
 from hierarchy import ordered_widgets
+from adaptive_layout import validate_layout
 from library_catalog import theme_config
 from productivity_specs import validate_productivity
 
@@ -38,6 +39,7 @@ def validate(p, code=True):
                 if type(obj[dim]) is not int or not 1 <= obj[dim] <= 10000: raise ValueError(tr('Dimensioni tra 1 e 10000'))
             if obj is not f and any(type(obj.get(axis)) is not int for axis in ('x','y')):raise ValueError(tr('Le coordinate devono essere numeri interi.'))
             if obj is not f and obj['kind'] not in KINDS and obj['kind'] not in reg: raise ValueError(tr('Componente sconosciuto'))
+            if obj is not f:validate_layout(f,obj,reg)
             validate_productivity(obj.get('kind'),obj.get('props',{}))
             if obj.get('kind')=='DatabaseView':
                 props=obj.get('props',{})
@@ -62,6 +64,10 @@ def generate(p):
     reg=registry(p)
     used=sorted({w['kind'] for f in p['forms'] for w in f['widgets'] if w['kind'] in reg})
     prelude=[]
+    if any(w.get('layout') is not None for f in p['forms'] for w in f['widgets']):
+        runtime=Path(__file__).with_name('adaptive_layout.py').read_text(encoding='utf-8')
+        for public,private in [('EDGES','_VTS_EDGES'),('PARENTS','_VTS_PARENTS'),('validate_layout','_vts_validate_layout'),('anchored_geometry','_vts_anchored_geometry')]:runtime=runtime.replace(public,private)
+        prelude.append(runtime)
     embedded={'visualtk_runtime','database_runtime','integration_runtime','productivity_runtime'}
     if any(reg[k]['module'] in embedded for k in used):
         prelude.append(Path(__file__).with_name('i18n.py').read_text(encoding='utf-8')+'\nset_language('+repr(language)+')\n')
@@ -114,6 +120,14 @@ def generate(p):
             method=f'event_{fn}_{ev}'
             lines.append(f'        self.root.after_idle(self.{method})' if ev=='Load' else f'        {ref}.bind({EVENTS[ev]!r}, self.{method}, add="+")')
             handlers.append((method,body))
+    for form in p['forms']:
+        grouped={};by_name={w['name']:w for w in form['widgets']}
+        for widget in form['widgets']:
+            if widget.get('layout') is not None:grouped.setdefault(widget.get('parent') or form['name'],[]).append(widget)
+        for parent,widgets in grouped.items():
+            container=by_name.get(parent,form);baseline=(container['width'],container['height'])
+            entries=', '.join('(self.'+w['name']+', '+repr({key:w[key] for key in ('x','y','width','height')})+', '+repr(w['layout'])+')' for w in widgets)
+            lines.append('        _vts_install_anchors(self.'+parent+', ['+entries+'], '+repr(baseline)+')')
     lines += ['        self.startup()','','    def _error(self, kind, value, tb):','        traceback.print_exception(kind, value, tb)',f'        messagebox.showerror({tr("Errore applicazione",language=language)!r}, str(value))','','    def show(self, name):','        getattr(self, name).deiconify()','','    def hide(self, name):','        getattr(self, name).withdraw()','','    def startup(self):']
     lines += ['        '+l for l in (p.get('startup') or 'pass').splitlines()]
     for name,body in handlers:

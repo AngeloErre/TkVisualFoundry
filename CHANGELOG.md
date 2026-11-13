@@ -1,3 +1,10 @@
+# 1.23
+
+- Add optional multi-control edge-anchor settings with minimum stretched dimensions and fixed-placement reset.
+- Embed coalesced runtime placement helpers for forms and ordinary Tk/ttk frame/canvas parents; preserve existing event bindings.
+- Support nested ordinary frames and preview/deploy export while retaining fixed-layout compatibility.
+- Explicitly reject unsupported CustomTkinter/tab-page/scrollable internals and stale selection plans.
+
 # 1.22
 
 - Add minute-based project snapshots including pending event/startup/import editor text, without mutating the live model.

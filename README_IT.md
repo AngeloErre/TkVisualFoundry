@@ -1,10 +1,20 @@
-# VisualTk Studio 1.22
+# VisualTk Studio 1.23
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Ancoraggi adattivi — prima fase (1.23)
+
+Seleziona uno o più controlli e usa **Modifica → Ancoraggi adattivi…** oppure Azioni nell’ispettore. Sinistra/alto mantengono la posizione; destra/basso seguono il bordo; due lati opposti allargano il controllo; nessun lato lo centra rispetto alla variazione del contenitore. Puoi impostare dimensioni minime o ripristinare il posizionamento fisso. Il designer conserva le coordinate iniziali: verifica l’adattamento con **F6** o eseguendo e ridimensionando la finestra.
+
+Questa fase supporta geometria Tk/ttk su form e Frame/LabelFrame/TFrame/TLabelframe/Canvas ordinari, anche annidati. Controlli CustomTkinter e figli interni a pagine di schede/contenitori scorrevoli vengono esplicitamente esclusi: richiedono ancora layout da codice. Il contenitore a schede stesso può essere ancorato se usa geometria Tk. Non è un editor visuale grid/pack. Le dimensioni minime non possono superare quelle di progetto; se lo spazio è insufficiente, il minimo prevale sulla distanza dai bordi.
+
+Gli aggiornamenti vengono accorpati senza sostituire altri handler e il supporto è incorporato nei sorgenti esportati, deploy e anteprima. I progetti senza questi metadati mantengono il comportamento fisso. 216 test superati per lingua, 11 grafici saltati; ridimensionamento grafico reale ancora da collaudare.
+
+Prova `examples/Layout/AnchorsDemo.vtk.json`: espansione annidata e pulsante in basso a destra.
 
 ## Cronologia locale e recupero (1.22)
 

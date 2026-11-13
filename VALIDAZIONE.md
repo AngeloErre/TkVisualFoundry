@@ -1,3 +1,7 @@
+# Versione 1.23
+
+216 test superati per lingua, 11 grafici saltati. Verificate geometria ancorata a destra/basso, espansione/minimi, centratura, posizione fissa, helper incorporato, contenitori non supportati e accorpamento degli eventi senza sostituire binding esistenti. Non verificata interazione grafica di ridimensionamento. Supporto limitato alla prima fase Tk/ttk su form/frame ordinari.
+
 # Versione 1.22
 
 211 test superati per lingua, 11 grafici saltati. Nuove regressioni per copia del buffer eventi senza modifica del modello, sintassi incompleta, deduplicazione/limite versioni, errori di scrittura, copie corrotte, limiti dei confronti e nomi di recupero anche dopo il salvataggio del lavoro corrente. Non eseguita simulazione grafica completa di crash/ripristino.

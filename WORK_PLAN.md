@@ -37,3 +37,12 @@ Next: adaptive layouts, local recovery/history and visual debugging.
 - [x] Configuration opt-out, startup discovery and regression coverage; graphical/crash acceptance pending.
 
 Next: adaptive layouts and visual debugging.
+
+## Phase 7 — adaptive anchors, first stage (1.23)
+
+- [x] Optional edge anchoring/minimums and multi-control editor.
+- [x] Embedded runtime helpers, ordinary nested frames, additive/coalesced events and fixed-layout compatibility.
+- [x] Geometry/validation tests and bilingual scope documentation; graphical resize acceptance pending.
+- [ ] Later: CustomTkinter scaling, tab/scrollable client areas and visual grid/pack layouts.
+
+Next: visual debugging and expansion of adaptive layouts.

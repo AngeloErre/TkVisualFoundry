@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "AdaptiveLayout",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Adaptive anchors \u2014 resize this window",
+      "width": 640,
+      "height": 440,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Title",
+          "kind": "Label",
+          "x": 10,
+          "y": 10,
+          "width": 620,
+          "height": 25,
+          "props": {
+            "text": "Resize the window: frame and text grow; the button stays at the bottom right.",
+            "anchor": "w"
+          },
+          "events": {},
+          "layout": {
+            "anchors": [
+              "left",
+              "right",
+              "top"
+            ],
+            "min_width": 200,
+            "min_height": 20
+          }
+        },
+        {
+          "name": "ContentFrame",
+          "kind": "Frame",
+          "x": 10,
+          "y": 50,
+          "width": 620,
+          "height": 320,
+          "props": {
+            "bg": "#e9eef5"
+          },
+          "events": {},
+          "layout": {
+            "anchors": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "min_width": 300,
+            "min_height": 150
+          }
+        },
+        {
+          "name": "Editor",
+          "kind": "Text",
+          "parent": "ContentFrame",
+          "x": 10,
+          "y": 10,
+          "width": 600,
+          "height": 300,
+          "props": {
+            "wrap": "word"
+          },
+          "events": {},
+          "layout": {
+            "anchors": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "min_width": 200,
+            "min_height": 100
+          }
+        },
+        {
+          "name": "CloseButton",
+          "kind": "Button",
+          "x": 520,
+          "y": 390,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Close"
+          },
+          "events": {
+            "Click": "self.root.destroy()"
+          },
+          "layout": {
+            "anchors": [
+              "right",
+              "bottom"
+            ],
+            "min_width": 80,
+            "min_height": 20
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

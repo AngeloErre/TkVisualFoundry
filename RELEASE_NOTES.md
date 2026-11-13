@@ -1,7 +1,7 @@
-# VisualTk Studio 1.22
+# VisualTk Studio 1.23
 
-Local project history and recovery: periodic snapshots every 60 seconds, pending event/startup/import code capture, manual checkpoints and versions on save. Keep 30 versions per project path/untitled identity and list up to 300 recent copies from previous launches.
+Adaptive edge anchors for controls with Tk/ttk geometry on forms and ordinary frames/canvases. Configure from Edit or inspector Actions, including selected groups, minimum sizes and fixed-placement reset. Verify by resizing the running or preview form; the designer remains at its initial coordinates.
 
-Compare JSON snapshots and open as a new recovered copy without overwriting the original or existing recovered files. Resources, external file-editor buffers and virtual environments are not copied. Original resource folders are still needed. Disable automatic snapshots in Configuration; existing history is retained.
+This first stage excludes CustomTkinter controls and tab-page/scrollable internals. It does not introduce visual grid/pack editing. Runtime helpers are embedded and existing fixed projects remain unchanged.
 
-211 tests passed per language, 11 graphical tests skipped. Storage/preservation/recovery naming verified; interactive history/recovery and real crash acceptance remain pending.
+216 tests passed per language, 11 graphical tests skipped. Geometry/helper wiring tested; graphical resize behavior and platform/theme acceptance remain pending.
