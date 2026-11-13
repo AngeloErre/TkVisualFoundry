@@ -32,6 +32,7 @@ from components import registry, descriptor, requirements, install_args, design_
 from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
+from refactor_ui import RefactorMixin
 from preview_ui import PreviewMixin
 from environment_ui import EnvironmentMixin
 from selection_ui import SelectionMixin
@@ -54,7 +55,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -184,7 +185,7 @@ class Studio(PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin
         inspector_actions=ttk.Frame(right);inspector_actions.pack(side='top',fill='x',pady=4)
         self.apply_button=ttk.Button(inspector_actions,text=tr('Applica proprietà'),command=self.apply_props);self.apply_button.pack(side='left')
         actions=tk.Menu(inspector_actions,tearoff=False)
-        for label,command in [(tr('Configura componente…'),self.configure_component),(tr('Colore sfondo…'),lambda:self.pick_color('bg')),(tr('Colore testo…'),lambda:self.pick_color('fg')),(tr('Carattere…'),self.choose_font)]:actions.add_command(label=label,command=command)
+        for label,command in [(tr('Rinomina intelligente…'),self.rename_selected),(tr('Configura componente…'),self.configure_component),(tr('Colore sfondo…'),lambda:self.pick_color('bg')),(tr('Colore testo…'),lambda:self.pick_color('fg')),(tr('Carattere…'),self.choose_font)]:actions.add_command(label=label,command=command)
         ttk.Menubutton(inspector_actions,text=tr('Azioni ▾'),menu=actions).pack(side='right')
         prop_area=self.build_documentation(right)
         property_tools=ttk.Frame(prop_area);property_tools.pack(fill='x',pady=2)
@@ -353,7 +354,7 @@ class Studio(PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin
                     candidate['props'][k]=value
             if 'bg' in candidate:self.winfo_rgb(candidate['bg'])
             if candidate['name']!=obj['name']:
-                raise ValueError(tr('Il nome si assegna alla creazione; rinominare richiede aggiornare il codice utente.'))
+                raise ValueError(tr('Per rinominare usa Azioni → Rinomina intelligente…'))
             probe=copy.deepcopy(self.project)
             if self.selected is None:probe['forms'][self.form_index]=candidate
             else:probe['forms'][self.form_index]['widgets'][self.form['widgets'].index(obj)]=candidate

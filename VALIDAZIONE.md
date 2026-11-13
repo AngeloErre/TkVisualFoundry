@@ -1,3 +1,7 @@
+# Versione 1.21
+
+204 test superati per lingua, 11 grafici saltati. Nuove regressioni per riferimenti statici/metodi evento, nomi form e parent, posizioni Unicode, accessi riflessivi letterali, conservazione stringhe/commenti, collisioni/sintassi e self ridefinito. La rinomina non esegue il codice del progetto. Revisione e undo nell’interfaccia richiedono collaudo grafico.
+
 # Versione 1.20
 
 198 test superati per lingua, 11 grafici saltati. Nuove regressioni per copia senza eventi/import/avvio, rimozione callback/Tcl focus, segnaposto servizi/componenti esterni, form e pagina attivi, separazione dipendenze e arresto processo prima del polling UI. Nessuna verifica grafica completa dell’anteprima effettuata.

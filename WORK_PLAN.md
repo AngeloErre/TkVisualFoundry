@@ -21,3 +21,11 @@ Each step is implemented, checked and reported before the next step.
 - [x] Automated validation and bilingual documentation; graphical acceptance remains pending.
 
 Next candidates: adaptive layouts, rename refactoring, local recovery/history and visual debugging.
+
+## Phase 5 — reviewed smart rename (1.21)
+
+- [x] Source-preserving AST plans for static form/control references and parents.
+- [x] Review window, stale-plan checks, one undoable application and manual-review warnings.
+- [x] Bilingual docs and backend regressions; interactive GUI acceptance remains pending.
+
+Next: adaptive layouts, local recovery/history and visual debugging.

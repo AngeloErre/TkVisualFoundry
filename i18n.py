@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.20\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.20\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.21\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.21\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -627,3 +627,9 @@ EN_MESSAGES.update({'Problemi': 'Problems', 'Analizza progetto': 'Analyze projec
 EN_MESSAGES.update({'Ambiente Python del progetto': 'Project Python environment', 'Ogni progetto può usare una propria .venv: i pacchetti restano separati dagli altri progetti.': 'Each project can use its own .venv, keeping packages separate from other projects.', 'Creazione ambiente in corso…': 'Creating environment…', 'Crea / usa .venv e prepara pacchetti': 'Create / use .venv and prepare packages', 'Usa interprete globale': 'Use global interpreter', 'Progetto cambiato: riapri la gestione ambiente.': 'Project changed: reopen environment management.'})
 
 EN_MESSAGES.update({'Anteprima': 'Preview', 'segnaposto': 'placeholder', 'Anteprima — F6': 'Preview — F6', 'Chiudi anteprima': 'Close preview', 'Anteprima reale: eventi e codice di avvio del progetto esclusi.\n': 'Live form preview: project events and startup code excluded.\n', 'Componenti mostrati come segnaposto: ': 'Components shown as placeholders: ', '\n[Anteprima terminata: {code}]\n': '\n[Preview ended: {code}]\n', 'Errore anteprima: ': 'Preview error: '})
+
+EN_MESSAGES.update({'Correggi gli errori di sintassi prima della rinomina.': 'Fix syntax errors before renaming.', 'Riferimento ambiguo da controllare: ': 'Ambiguous reference to review: ', 'Accesso dinamico da controllare manualmente.': 'Dynamic access needs manual review.', 'Nome Python non valido o riservato.': 'Invalid or reserved Python name.', 'Oggetto non trovato.': 'Object not found.', 'Nome già usato nel progetto.': 'Name already used in the project.', 'Rinomina intelligente': 'Smart rename', 'Nuovo nome Python:': 'New Python name:', 'Anteprima della rinomina': 'Rename preview', 'Controlla le modifiche. Testi, commenti e file Python esterni non vengono riscritti.': 'Review the changes. Text, comments and external Python files are not rewritten.', 'Riferimenti costruiti dinamicamente o contenuti in stringhe generiche richiedono verifica manuale.': 'Dynamically built references and generic strings need manual review.', 'Il progetto è cambiato: ripeti la rinomina.': 'The project changed: repeat the rename.', 'Applica rinomina': 'Apply rename', 'Rinomina intelligente…': 'Smart rename…'})
+
+EN_MESSAGES['Nome non normalizzato: verifica i riferimenti manualmente.']='Non-normalized name: review references manually.'
+
+EN_MESSAGES['Per rinominare usa Azioni → Rinomina intelligente…']='To rename, use Actions → Smart rename…'

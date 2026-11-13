@@ -1,3 +1,10 @@
+# 1.21
+
+- Add reviewed smart rename for forms/controls from Edit and inspector Actions.
+- Update static self attributes, generated event-method references, literal form show/hide and reflective self-name access, plus parent relationships.
+- Preserve unrelated source formatting/text/comments and external files; warn on ambiguous/dynamic references.
+- Apply one undoable model change after syntax/name/collision and stale-review validation.
+
 # 1.20
 
 - Add F6 real-form preview in an independent process with asynchronous interpreter validation and output.

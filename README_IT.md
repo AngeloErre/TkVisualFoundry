@@ -1,10 +1,18 @@
-# VisualTk Studio 1.20
+# VisualTk Studio 1.21
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Rinomina intelligente con anteprima (1.21)
+
+Seleziona un form/controllo e usa **Modifica → Rinomina intelligente…** oppure Azioni nell’ispettore. Controlla le modifiche prima di applicare un’unica operazione annullabile. Vengono aggiornati `self.Nome`, i riferimenti ai metodi evento generati, i nomi form letterali in `show`/`hide`, gli accessi riflessivi letterali a self e i collegamenti parent. Testi visibili, commenti, stringhe generiche e file Python esterni restano invariati.
+
+Riferimenti ambigui in classi/funzioni con un altro self e accessi dinamici vengono segnalati per verifica manuale: non è una rifattorizzazione dell’intero programma. Sintassi incompleta, nomi non validi/riservati/duplicati e modifiche al progetto durante la revisione impediscono l’applicazione. Il codice viene analizzato senza eseguirlo e senza riformattare le parti non interessate.
+
+204 test superati per lingua, 11 grafici saltati. Verificate trasformazioni, conservazione testi, collisioni, Unicode e shadowing; revisione/undo nell’interfaccia ancora da collaudare.
 
 ## Anteprima reale dei form (1.20)
 

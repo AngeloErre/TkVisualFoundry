@@ -1,7 +1,5 @@
-# VisualTk Studio 1.20
+# VisualTk Studio 1.21
 
-Add real-form preview via F6, the designer button or Run menu. It runs independently in the selected Python and can be refreshed/closed without stopping the application under development.
+Reviewed smart rename for forms and controls. Use Edit → Smart rename… or inspector Actions. A source-aware plan updates recognized self/form/event/parent references in one undoable transaction. Text/comments/generic strings and external files are preserved; ambiguous/dynamic references require manual review. Invalid syntax, name collisions and stale project snapshots block application.
 
-A visual-only project copy removes event/import/startup source and callbacks; approved UI libraries render, while device/service/user-defined widgets use placeholders. Project data is unchanged. Themes and library initialization still run; preview is not a sandbox for untrusted themes/libraries.
-
-198 tests passed per language; 11 graphical tests skipped. Source isolation, form/tab selection and independent process cleanup verified. Real graphical rendering and target-platform interaction remain pending.
+204 tests passed per language; 11 graphical tests skipped. Backend refactoring and preservation verified. Graphical review/undo acceptance remains pending.
