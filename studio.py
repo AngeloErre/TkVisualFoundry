@@ -31,6 +31,7 @@ from components import registry, descriptor, requirements, install_args, design_
 from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
+from vb6_ui import VB6Mixin,panel_caption,resize_handle,resized_geometry,ToolTip
 from assist_ui import AssistMixin
 from intelligence_ui import IntelligenceMixin
 from configuration_ui import ConfigurationMixin
@@ -46,7 +47,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -82,17 +83,19 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         apply_theme(self)
         self.menu_bar=ttk.Frame(self,padding=(6,6));self.menu_bar.pack(fill='x')
         self.log_visible=False;self.log_toggle_text=tk.StringVar(value=tr('Mostra log'))
-        ttk.Button(self.menu_bar,textvariable=self.log_toggle_text,command=self.toggle_log).pack(side='right',padx=2)
-        ttk.Button(self.menu_bar,text='■',width=3,command=self.stop).pack(side='right',padx=2)
-        ttk.Button(self.menu_bar,text='Deploy…',command=self.deploy_project).pack(side='right',padx=3)
-        ttk.Button(self.menu_bar,text='▶ F5',command=self.run,style='Accent.TButton',width=6).pack(side='right',padx=2)
-        self.status=tk.StringVar(value=tr('Pronto')); ttk.Label(self,textvariable=self.status,anchor='w',padding=(16,8),style='Muted.TLabel').pack(side='bottom',fill='x')
+        self.build_classic_toolbar()
+        statusbar=ttk.Frame(self,relief='sunken',borderwidth=1);statusbar.pack(side='bottom',fill='x')
+        self.status=tk.StringVar(value=tr('Pronto'));ttk.Label(statusbar,textvariable=self.status,anchor='w',width=1,padding=(6,3),style='Muted.TLabel').pack(side='left',fill='x',expand=True)
+        self.selection_status=tk.StringVar();ttk.Label(statusbar,textvariable=self.selection_status,padding=(6,3),style='Muted.TLabel').pack(side='right')
         self.vertical=vertical=ttk.Panedwindow(self,orient='vertical'); vertical.pack(fill='both',expand=True)
         self.main_panes=main=ttk.Panedwindow(vertical,orient='horizontal'); vertical.add(main,weight=5)
-        left=ttk.Frame(main,width=190,padding=8); main.add(left,weight=0)
-        sidebar=ttk.Notebook(left);sidebar.pack(fill='both',expand=True)
-        palette_area=ttk.Frame(sidebar,padding=4);project_area=ttk.Frame(sidebar,padding=4)
-        sidebar.add(palette_area,text=tr('Componenti'));sidebar.add(project_area,text=tr('Progetto'))
+        left=ttk.Frame(main,width=190,padding=3,relief='sunken',borderwidth=1); main.add(left,weight=0)
+        panel_caption(left,tr('Casella degli strumenti'))
+        palette_area=ttk.Frame(left,padding=3);palette_area.pack(fill='both',expand=True)
+        self.right_panel=ttk.Frame(main,width=300,padding=3,relief='sunken',borderwidth=1)
+        self.right_panes=ttk.Panedwindow(self.right_panel,orient='vertical');self.right_panes.pack(fill='both',expand=True)
+        project_area=ttk.Frame(self.right_panes,height=220);self.right_panes.add(project_area,weight=1)
+        inspector_area=ttk.Frame(self.right_panes);self.right_panes.add(inspector_area,weight=3)
         # Reserve the actions before allocating expandable content.
         palette_actions=ttk.Frame(palette_area);palette_actions.pack(side='top',fill='x',pady=(3,5))
         self.insert_button=ttk.Button(palette_actions,text=tr('＋ Inserisci nel form'),command=self.add_widget,style='Accent.TButton');self.insert_button.pack(fill='x')
@@ -104,6 +107,7 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         self.palette_family=tk.StringVar(value=tr('Tutte le famiglie'))
         self.family_box=ttk.Combobox(palette_area,textvariable=self.palette_family,values=[tr('Tutte le famiglie')],state='readonly');self.family_box.pack(fill='x',pady=(2,5));self.family_box.bind('<<ComboboxSelected>>',lambda event:self.filter_palette())
         self.palette_query=tk.StringVar()
+        ttk.Label(palette_area,text=tr('Cerca componente'),style='Muted.TLabel').pack(anchor='w')
         search=ttk.Entry(palette_area,textvariable=self.palette_query);search.pack(side='top',fill='x',pady=(2,5))
         self.palette_query.trace_add('write',lambda *_:self.filter_palette())
         self.palette_details=tk.StringVar(value=tr('Seleziona un componente. Doppio clic o Invio per inserirlo.'))
@@ -114,16 +118,19 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         self.palette.bind('<Double-Button-1>',lambda e:self.add_widget())
         self.palette.bind('<Return>',lambda e:self.add_widget())
         self.palette.bind('<<ListboxSelect>>',self.palette_info)
-        ttk.Label(project_area,text=tr('Esplora progetto'),style='Title.TLabel').pack(anchor='w',pady=(20,5))
+        panel_caption(project_area,tr('Esplora progetto'))
+        project_actions=ttk.Frame(project_area);project_actions.pack(fill='x',pady=2)
+        ttk.Button(project_actions,text=tr('Designer'),command=lambda:self.tabs.select(0),style='Toolbar.TButton').pack(side='left')
+        ttk.Button(project_actions,text=tr('Codice'),command=self.edit_event,style='Toolbar.TButton').pack(side='left')
         project_pages=ttk.Notebook(project_area);project_pages.pack(fill='both',expand=True)
         form_page=ttk.Frame(project_pages);file_page=ttk.Frame(project_pages)
         project_pages.add(form_page,text=tr('Form e componenti'));project_pages.add(file_page,text=tr('File e cartelle'))
-        self.tree=ttk.Treeview(form_page,show='tree',selectmode='browse'); self.tree.pack(fill='both',expand=True)
+        self.tree=ttk.Treeview(form_page,show='tree',selectmode='browse');tree_scroll=ttk.Scrollbar(form_page,command=self.tree.yview);tree_scroll.pack(side='right',fill='y');self.tree.configure(yscrollcommand=tree_scroll.set);self.tree.pack(fill='both',expand=True)
         self.build_file_explorer(file_page)
         self.tree.bind('<<TreeviewSelect>>',self.tree_select)
         center=ttk.Frame(main); main.add(center,weight=4)
         self.tabs=ttk.Notebook(center); self.tabs.pack(fill='both',expand=True)
-        design=ttk.Frame(self.tabs); self.tabs.add(design,text='Designer')
+        design=ttk.Frame(self.tabs); self.tabs.add(design,text=tr('Designer'))
         row=ttk.Frame(design,padding=5); row.pack(fill='x')
         self.formvar=tk.StringVar(); self.formbox=ttk.Combobox(row,textvariable=self.formvar,state='readonly',width=22); self.formbox.pack(side='left'); self.formbox.bind('<<ComboboxSelected>>',self.switch_form)
         ttk.Button(row,text='Form…',command=self.manage_forms).pack(side='left',padx=4)
@@ -135,12 +142,16 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         ys=ttk.Scrollbar(design,orient='vertical',command=self.canvas.yview); ys.pack(side='right',fill='y')
         self.canvas.pack(fill='both',expand=True); self.canvas.configure(xscrollcommand=xs.set,yscrollcommand=ys.set)
         self.canvas.bind('<Button-1>',self.press); self.canvas.bind('<B1-Motion>',self.motion); self.canvas.bind('<ButtonRelease-1>',self.release); self.canvas.bind('<Double-Button-1>',lambda e:self.edit_event())
+        self.canvas.bind('<Motion>',self.designer_cursor)
         self.canvas.bind('<Delete>',lambda e:self.delete()); self.canvas.bind('<BackSpace>',lambda e:self.delete())
         for key,dx,dy in [('Left',-1,0),('Right',1,0),('Up',0,-1),('Down',0,1)]: self.canvas.bind('<'+key+'>',lambda e,x=dx,y=dy:self.nudge(x,y))
         codeframe=ttk.Frame(self.tabs); self.tabs.add(codeframe,text=tr('Codice eventi'))
         cr=ttk.Frame(codeframe,padding=5); cr.pack(fill='x')
         self.code_label=tk.StringVar(value=tr('Seleziona un componente e un evento'))
-        ttk.Label(cr,textvariable=self.code_label).pack(side='left')
+        self.code_object_var=tk.StringVar()
+        self.code_object=ttk.Combobox(cr,textvariable=self.code_object_var,state='readonly',width=22);self.code_object.pack(side='left',fill='x',expand=True)
+        self.code_object.bind('<<ComboboxSelected>>',lambda e:self.choose_designer_object(self.code_object_var.get(),code=True))
+        ttk.Label(codeframe,textvariable=self.code_label,style='Muted.TLabel',padding=(6,2)).pack(fill='x')
         self.evvar=tk.StringVar(value='Click'); self.evbox=ttk.Combobox(cr,textvariable=self.evvar,values=['Load']+list(EVENTS),state='readonly',width=14); self.evbox.pack(side='right'); self.evbox.bind('<<ComboboxSelected>>',lambda e:self.edit_event())
         ttk.Button(cr,text=tr('Applica codice'),command=self.commit_code).pack(side='right',padx=5)
         self.code=ScrolledText(codeframe,undo=True,bg='#202633',fg='#e2e8f0',insertbackground='white',font=('Menlo',self.config_data['font_size']),tabs=('32',)); self.code.pack(fill='both',expand=True)
@@ -151,8 +162,11 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         style_editor(self.generated)
         self.generated.bind('<Double-Button-1>',self.toggle_break)
         self.generated.tag_configure('break',background='#f6a0a0',foreground='#111111')
-        right=ttk.Frame(main,width=260,padding=8); main.add(right,weight=0)
-        ttk.Label(right,text=tr('Proprietà'),style='Title.TLabel').pack(anchor='w')
+        main.add(self.right_panel,weight=0);right=inspector_area
+        panel_caption(right,tr('Proprietà'))
+        self.inspector_object_var=tk.StringVar()
+        self.inspector_object=ttk.Combobox(right,textvariable=self.inspector_object_var,state='readonly');self.inspector_object.pack(fill='x',padx=3,pady=3)
+        self.inspector_object.bind('<<ComboboxSelected>>',lambda e:self.choose_designer_object(self.inspector_object_var.get()))
         self.inspector_title=tk.StringVar(value=tr('Finestra corrente'))
         ttk.Label(right,textvariable=self.inspector_title,style='Muted.TLabel',wraplength=250).pack(anchor='w',pady=4)
         inspector_actions=ttk.Frame(right);inspector_actions.pack(side='top',fill='x',pady=4)
@@ -161,6 +175,15 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         for label,command in [(tr('Configura componente…'),self.configure_component),(tr('Colore sfondo…'),lambda:self.pick_color('bg')),(tr('Colore testo…'),lambda:self.pick_color('fg')),(tr('Carattere…'),self.choose_font)]:actions.add_command(label=label,command=command)
         ttk.Menubutton(inspector_actions,text=tr('Azioni ▾'),menu=actions).pack(side='right')
         prop_area=self.build_documentation(right)
+        property_tools=ttk.Frame(prop_area);property_tools.pack(fill='x',pady=2)
+        self.property_order=tk.StringVar(value=tr('Per categoria'))
+        order=ttk.Combobox(property_tools,textvariable=self.property_order,values=[tr('Per categoria'),tr('Alfabetico')],state='readonly',width=14);order.pack(side='left')
+        order.bind('<<ComboboxSelected>>',lambda e:self.properties())
+        self.property_query=tk.StringVar();property_search=ttk.Entry(property_tools,textvariable=self.property_query,width=12);property_search.pack(side='left',fill='x',expand=True,padx=2)
+        ToolTip(property_search,tr('Filtra le proprietà per nome'))
+        self.property_query.trace_add('write',self.property_filter)
+        self.property_help=tk.StringVar(value=tr('Seleziona una proprietà per vedere il valore.'))
+        ttk.Label(prop_area,textvariable=self.property_help,wraplength=260,style='PropertyHelp.TLabel',padding=5).pack(side='bottom',fill='x')
         prop_canvas=tk.Canvas(prop_area,width=260,height=320,highlightthickness=0)
         prop_scroll=ttk.Scrollbar(prop_area,command=prop_canvas.yview);prop_scroll.pack(side='right',fill='y');prop_canvas.pack(side='left',fill='both',expand=True);prop_canvas.configure(yscrollcommand=prop_scroll.set)
         self.propbox=ttk.Frame(prop_canvas);prop_window=prop_canvas.create_window(0,0,window=self.propbox,anchor='nw')
@@ -199,15 +222,19 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         self.formbox['values']=[f['name'] for f in self.project['forms']]; self.formvar.set(self.form['name'])
         self.tree.delete(*self.tree.get_children())
         for i,f in enumerate(self.project['forms']):
-            self.tree.insert('','end',iid='f:'+str(i),text=f['name'],open=True)
+            self.tree.insert('','end',iid='f:'+str(i),text=f['name'],image=self.palette.image('Frame'),open=True)
             for w in ordered_widgets(f):
                 parent='w:'+w['parent'] if w.get('parent') and w['parent']!=f['name'] else 'f:'+str(i)
-                self.tree.insert(parent,'end',iid='w:'+w['name'],text=w['name']+' : '+w['kind']+(' ['+w['page']+']' if w.get('page') else ''),open=True)
+                self.tree.insert(parent,'end',iid='w:'+w['name'],text=w['name']+' : '+w['kind']+(' ['+w['page']+']' if w.get('page') else ''),image=self.palette.image(w['kind']),open=True)
         self.refresh_project_files()
         self.draw(); self.properties(); self.update_source()
     def draw(self):
         c=self.canvas; c.delete('all'); f=self.form; ox=30; oy=45
-        c.create_text(30,22,text=f['title']+'  —  '+f['name'],anchor='w',fill=self.config_data.get('appearance',{}).get('foreground','#455574'),font=('Helvetica',12,'bold'))
+        item=self.selected if self.selected is not None else f
+        self.selection_status.set(item['name']+'  •  '+str(item.get('x',0))+', '+str(item.get('y',0))+'  •  '+str(item['width'])+' × '+str(item['height']))
+        c.create_rectangle(ox-2,oy-29,ox+f['width']+2,oy-2,fill='#153d73',outline='#404040')
+        c.create_text(ox+8,oy-16,text=f['title']+'  ('+f['name']+')',anchor='w',fill='white',font=('Helvetica',11,'bold'))
+        c.create_text(ox+f['width']-15,oy-16,text='×',fill='white',font=('Helvetica',14))
         c.create_rectangle(ox+5,oy+6,ox+f['width']+5,oy+f['height']+6,fill='#cfd8e6',outline='')
         c.create_rectangle(ox,oy,ox+f['width'],oy+f['height'],fill=f['bg'],outline='#909baa',tags='form')
         grid=max(1,int(self.config_data['grid']))
@@ -236,8 +263,10 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
                 c.create_rectangle(x,y,x+width,y+26,fill='#dce8ff',outline='#8190a1')
                 c.create_text(x+8,y+13,text=' | '.join(('['+page+']' if page==active else page) for page in pages),anchor='w',fill='#243b63',width=max(1,width-16))
             if self.selected is w:
-                c.create_rectangle(x-2,y-2,x+width+2,y+height+2,outline='#1677ff',width=2)
-                c.create_rectangle(x+width-5,y+height-5,x+width+5,y+height+5,fill='#1677ff',outline='white',tags='handle')
+                c.create_rectangle(x-2,y-2,x+width+2,y+height+2,outline='#202020',width=1,dash=(2,2))
+                for hx,hy in ((x,y),(x+width/2,y),(x+width,y),(x,y+height/2),(x+width,y+height/2),(x,y+height),(x+width/2,y+height)):
+                    c.create_rectangle(hx-3,hy-3,hx+3,hy+3,fill='#202020',outline='white')
+                c.create_rectangle(x+width-5,y+height-5,x+width+5,y+height+5,fill='#202020',outline='white',tags='handle')
     def tree_select(self,event=None):
         ids=self.tree.selection()
         if not ids:return
@@ -256,15 +285,35 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         self.propvars={}; obj=self.selected if self.selected is not None else self.form
         self.inspector_title.set(obj['name']+' • '+obj.get('kind',tr('Finestra')))
         self.update_documentation(obj)
+        names=[item['name'] for form in self.project['forms'] for item in [form]+form['widgets']]
+        self.inspector_object.configure(values=names);self.inspector_object_var.set(obj['name'])
+        self.code_object.configure(values=names)
+        if self.code_target and not self.code_target[2]:self.code_object_var.set(self.code_target[0]['name'])
         values={k:obj[k] for k in ('name','x','y','width','height','title','bg') if k in obj}
         values=self.container_properties(obj,values)
         if self.selected is not None:values.update(obj['props'])
-        for i,(key,val) in enumerate(values.items()):
-            ttk.Label(self.propbox,text=key,width=10).grid(row=i,column=0,sticky='w',pady=2)
-            var=tk.StringVar(value=json.dumps(val,ensure_ascii=False) if isinstance(val,(list,dict)) else str(val)); self.propvars[key]=var
-            if self.container_property_entry(key,var,i,obj):continue
-            entry=ttk.Entry(self.propbox,textvariable=var,width=18); entry.grid(row=i,column=1,sticky='ew'); entry.bind('<Return>',lambda e:self.apply_props())
-        self.page_preview_selector(obj,len(values))
+        self.property_rows={};self.property_headers=[]
+        groups={tr('Identità'):('name','title','text'),tr('Disposizione'):('parent','page','x','y','width','height'),tr('Aspetto e comportamento'):()}
+        ordered=list(values)
+        categorized=self.property_order.get()==tr('Per categoria')
+        if not categorized:ordered=sorted(ordered,key=str.casefold)
+        else:ordered=[key for keys in groups.values() for key in keys if key in values]+[key for key in values if all(key not in keys for keys in groups.values())]
+        row=0;previous=None
+        for key in ordered:
+            val=values[key];category=next((title for title,keys in groups.items() if key in keys),tr('Aspetto e comportamento'))
+            if categorized and category!=previous:
+                header=ttk.Label(self.propbox,text=category,style='PropertyGroup.TLabel',padding=(4,3));header.grid(row=row,column=0,columnspan=2,sticky='ew');self.property_headers.append(header);row+=1;previous=category
+            label=ttk.Label(self.propbox,text=key,width=11,style='PropertyName.TLabel',padding=(4,2));label.grid(row=row,column=0,sticky='nsew')
+            var=tk.StringVar(value=json.dumps(val,ensure_ascii=False) if isinstance(val,(list,dict)) else str(val));self.propvars[key]=var
+            if self.container_property_entry(key,var,row,obj):entry=self.propbox.grid_slaves(row=row,column=1)[0]
+            else:
+                entry=ttk.Entry(self.propbox,textvariable=var,width=16);entry.grid(row=row,column=1,sticky='ew');entry.bind('<Return>',lambda e:self.apply_props())
+            if key=='name':entry.configure(state='readonly')
+            entry.bind('<FocusIn>',lambda e,k=key:self.describe_property(k),add='+')
+            self.property_rows[key]=(label,entry);row+=1
+        self.page_preview_selector(obj,row)
+        self.property_help.set(tr('Seleziona una proprietà per vedere il valore.'))
+        self.property_filter()
         self.propbox.columnconfigure(1,weight=1)
     def apply_props(self):
         obj=self.selected if self.selected is not None else self.form; candidate=copy.deepcopy(obj)
@@ -342,7 +391,8 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         if self.selected:
             w=self.selected
             wx,wy=widget_origin(self.form,w)
-            if abs(x-wx-w['width'])<9 and abs(y-wy-w['height'])<9:target=w; resize=True
+            resize=resize_handle(wx,wy,w['width'],w['height'],x,y)
+            if resize:target=w
         if target is None:
             for w in reversed(self.displayed_widgets()):
                 wx,wy=widget_origin(self.form,w)
@@ -354,7 +404,7 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         if not self.drag or not self.selected:return
         x,y,original,resize=self.drag; dx=self.canvas.canvasx(e.x)-30-x; dy=self.canvas.canvasy(e.y)-45-y; grid=max(1,int(self.config_data['grid']))
         def snap(n):return round(n/grid)*grid
-        if resize:self.selected['width']=max(10,snap(original['width']+dx)); self.selected['height']=max(10,snap(original['height']+dy))
+        if resize:self.selected.update(resized_geometry(original,resize,dx,dy,grid))
         else:self.selected['x']=max(0,snap(original['x']+dx)); self.selected['y']=max(0,snap(original['y']+dy))
         self.draw()
     def release(self,e):
@@ -381,10 +431,10 @@ class Studio(IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,Pro
         self.update_source()
     def edit_event(self):
         self.commit_code(); obj=self.selected if self.selected is not None else self.form; event=self.evvar.get()
-        self.code_target=(obj,event,False); self.code_label.set(obj['name']+' → '+event+'(self, event=None)')
+        self.code_target=(obj,event,False);self.code_object_var.set(obj['name']); self.code_label.set(obj['name']+' → '+event+'(self, event=None)')
         self.code.delete('1.0','end'); self.code.insert('1.0',obj.get('events',{}).get(event,'pass')); self.tabs.select(1); self.highlight(); self.code.focus_set(); self.update_assistant()
     def global_code(self,key):
-        self.commit_code(); self.code_target=(self.project,key,True); self.code_label.set(tr('Progetto → ')+key); self.code.delete('1.0','end'); self.code.insert('1.0',self.project.get(key,'')); self.tabs.select(1); self.highlight(); self.update_assistant()
+        self.commit_code();self.code_object_var.set(tr('Codice progetto')); self.code_target=(self.project,key,True); self.code_label.set(tr('Progetto → ')+key); self.code.delete('1.0','end'); self.code.insert('1.0',self.project.get(key,'')); self.tabs.select(1); self.highlight(); self.update_assistant()
     def highlight(self):
         for tag in ('kw','str','comment','num'):self.code.tag_remove(tag,'1.0','end')
         try:

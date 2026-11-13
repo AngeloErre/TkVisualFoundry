@@ -1,8 +1,14 @@
-# VisualTk Studio 1.14
+# VisualTk Studio 1.15
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. The IDE installer targets macOS; generated projects include build workflows for macOS and Windows.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## VB6-inspired workspace (1.15)
+
+Toolbox on the left, designer/code in the center and a vertically split Project Explorer/Properties dock on the right. Compact icon toolbar, in-window tooltips, object/event selectors, searchable categorized/alphabetical properties and live geometry status. The designer has a classic form title strip and eight active resize handles with grid snapping and cursor feedback. F7 opens code; Shift+F7 returns to the designer.
+
+New installations default to VB6 Classic: gray chrome, blue captions and a white editor with adapted syntax colors. Existing custom colors are preserved; choose **View → VB6 Classic** to apply the preset. Light/Dark/Sepia and custom appearance remain available. This recreates a VB6-style workflow inside Tk rather than a floating-window/MDI clone.
 
 ## Install or update
 

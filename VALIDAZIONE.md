@@ -1,3 +1,7 @@
+# Versione 1.15
+
+155 test superati; 11 grafici saltati. Verificate otto maniglie, conservazione dei bordi opposti, limiti minimi/coordinate e palette sintassi chiare/scure. La riorganizzazione grafica richiede verifica interattiva a diverse dimensioni; non è una replica MDI con pannelli flottanti.
+
 # Versione 1.14
 
 151 test superati; 11 test grafici saltati. Nuovi controlli: valori tipizzati, stringhe/commenti invariati, chiamate multilinea, descrittori esterni, riferimento locale per tutti i componenti, versioni stabili/Python compatibili, release ritirate e distinzione errori HTTP/rete. Nessun aggiornamento di pacchetti eseguito dal controllo di avvio. Verifica interattiva di digitazione/focus e avvio app ancora necessaria.

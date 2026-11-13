@@ -1,3 +1,11 @@
+# 1.15
+
+- Reorganize the IDE around a VB6-style toolbox, central designer/code workspace and right-hand Project Explorer/Properties split dock.
+- Add compact icon toolbar, focus-safe in-window tooltips, F7/Shift+F7 navigation, object selectors and geometry status.
+- Add searchable categorized/alphabetical property rows, read-only identifiers and compact grouped styling.
+- Add eight active resize handles with grid snapping, opposite-edge preservation and cursor feedback.
+- Add VB6 Classic appearance and contrast-aware editor syntax palettes while retaining saved custom colors.
+
 # 1.14
 
 - Add token-aware property value guidance, paired text quotes and enum/boolean suggestions across registered component defaults.

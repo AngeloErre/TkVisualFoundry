@@ -97,7 +97,7 @@ class ComponentPalette(ttk.Frame):
         for key,value in options.items():
             if key=='bg':values.update(background=value,fieldbackground=value)
             elif key=='fg':values['foreground']=value
-        style.configure(self.style_name,rowheight=30,**values)
+        style.configure(self.style_name,rowheight=24,**values)
         mappings={}
         if 'selectbackground' in options:mappings['background']=[('selected',options['selectbackground'])]
         if 'selectforeground' in options:mappings['foreground']=[('selected',options['selectforeground'])]
@@ -125,7 +125,8 @@ class LayoutMixin:
         self.show_log(False)
         width=self.main_panes.winfo_width()
         if width>800:
-            self.main_panes.sashpos(0,240);self.main_panes.sashpos(1,width-285)
+            self.main_panes.sashpos(0,205);self.main_panes.sashpos(1,width-315)
+        if hasattr(self,'right_panes') and self.right_panes.winfo_height()>300:self.right_panes.sashpos(0,max(140,int(self.right_panes.winfo_height()*.30)))
 
     def menus(self):
         import webbrowser
@@ -139,8 +140,8 @@ class LayoutMixin:
             (tr('Esegui'),[(tr('Avvia — F5'),self.run),('Debug — F9',self.debug),(tr('Ferma — Shift+F5'),self.stop),(tr('Verifica sintassi'),self.check),('Deploy…',self.deploy_project)]),
             ('PIP',[(tr('Controlli iniziali'),self.show_health),(tr('Prepara automaticamente il progetto…'),lambda:self.open_dependencies(auto_install=True)),(tr('Componente del designer…'),self.selected_dependencies),(tr('Componente della palette…'),self.palette_dependencies),(tr('Installa un pacchetto…'),self.install_package),(tr('Verifica requisiti senza installare…'),lambda:self.open_dependencies(auto_install=False)),(tr('Esplora PyPI…'),lambda:LibraryExplorer(self)),(tr('Impostazioni pacchetti…'),self.settings)]),
             (tr('Componenti'),[(tr('Librerie e temi…'),self.library_manager),(tr('Inserisci selezionato'),self.add_widget),(tr('Crea componente esterno…'),self.component_wizard),(tr('Importa descrittore…'),self.import_component),(tr('Componenti del progetto…'),self.component_manager),(tr('Configura selezionato…'),self.configure_component)]),
-            (tr('Vista'),[(tr('Mostra / nascondi log'),self.toggle_log),(tr('Ripristina pannelli'),self.reset_layout),(tr('Colori ambiente…'),self.appearance_settings),(tr('Tema applicazione…'),self.choose_theme)]),
-            ('Help',[(tr('Documenti, cloud e LLM'),lambda:self.help_topic(tr('Documenti, cloud e LLM'))),(tr('Librerie e temi'),lambda:self.help_topic(tr('Librerie e temi'))),(tr('File e deploy'),lambda:self.help_topic(tr('File e deploy'))),(tr('IntelliSense e completamento'),lambda:self.help_topic('IntelliSense')),(tr('Guida rapida — F1'),self.help),(tr('Pacchetti PIP'),lambda:self.help_topic(tr('Pacchetti PIP'))),('Database',lambda:self.help_topic('Database')),(tr('Manuale'),lambda:self.help_topic(tr('Manuale'))),(tr('Estensioni'),lambda:self.help_topic(tr('Estensioni'))),(tr('Esempi'),self.open_examples),(tr('Compatibilità'),lambda:self.help_topic(tr('Compatibilità'))),(tr('Diagnostica'),self.diagnostics),(tr('Documentazione Tkinter'),lambda:webbrowser.open('https://docs.python.org/3/library/tkinter.html')),(tr('Informazioni'),lambda:messagebox.showinfo('VisualTk Studio',tr('VisualTk Studio 1.14\nDesigner visuale Python / Tkinter')))]),
+            (tr('Vista'),[(tr('Classico VB6'),self.use_classic_appearance),(tr('Mostra / nascondi log'),self.toggle_log),(tr('Ripristina pannelli'),self.reset_layout),(tr('Colori ambiente…'),self.appearance_settings),(tr('Tema applicazione…'),self.choose_theme)]),
+            ('Help',[(tr('Documenti, cloud e LLM'),lambda:self.help_topic(tr('Documenti, cloud e LLM'))),(tr('Librerie e temi'),lambda:self.help_topic(tr('Librerie e temi'))),(tr('File e deploy'),lambda:self.help_topic(tr('File e deploy'))),(tr('IntelliSense e completamento'),lambda:self.help_topic('IntelliSense')),(tr('Guida rapida — F1'),self.help),(tr('Pacchetti PIP'),lambda:self.help_topic(tr('Pacchetti PIP'))),('Database',lambda:self.help_topic('Database')),(tr('Manuale'),lambda:self.help_topic(tr('Manuale'))),(tr('Estensioni'),lambda:self.help_topic(tr('Estensioni'))),(tr('Esempi'),self.open_examples),(tr('Compatibilità'),lambda:self.help_topic(tr('Compatibilità'))),(tr('Diagnostica'),self.diagnostics),(tr('Documentazione Tkinter'),lambda:webbrowser.open('https://docs.python.org/3/library/tkinter.html')),(tr('Informazioni'),lambda:messagebox.showinfo('VisualTk Studio',tr('VisualTk Studio 1.15\nDesigner visuale Python / Tkinter')))]),
         ]
         for title,items in definitions:
             menu=tk.Menu(bar,tearoff=False);bar.add_cascade(label=title,menu=menu)

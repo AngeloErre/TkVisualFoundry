@@ -8,9 +8,11 @@ from pathlib import Path
 from components import BUILTINS, descriptor, registry
 from core import KINDS, identifier
 from library_explorer import LibraryExplorer
-from ux_theme import apply_theme, style_editor
+from ux_theme import apply_theme, style_editor,editor_palette
+from vb6_ui import CLASSIC
 
 PRESETS = {
+    tr('Classico VB6'): CLASSIC,
     tr('Chiaro'): {'background':'#f4f6fa','foreground':'#25324a','surface':'#ffffff','accent':'#2563eb','editor_bg':'#182234','editor_fg':'#dbe6f5','canvas':'#e8edf5'},
     tr('Scuro'): {'background':'#202938','foreground':'#e2e8f0','surface':'#2c384c','accent':'#467df0','editor_bg':'#111827','editor_fg':'#e2e8f0','canvas':'#151e2d'},
     tr('Seppia'): {'background':'#eee7da','foreground':'#453c31','surface':'#fff9ee','accent':'#916333','editor_bg':'#302a24','editor_fg':'#f1e4cf','canvas':'#ddd3c2'},
@@ -88,12 +90,15 @@ class WorkspaceMixin:
 
     def apply_appearance(self):
         apply_theme(self)
-        colors={**PRESETS[tr('Chiaro')],**self.config_data.get('appearance',{})};style=ttk.Style(self)
+        colors={**PRESETS[tr('Classico VB6')],**self.config_data.get('appearance',{})};style=ttk.Style(self)
         for klass in ('.','TFrame','TLabel','TNotebook','TNotebook.Tab','TPanedwindow'):
             style.configure(klass,background=colors['background'],foreground=colors['foreground'])
         for klass in ('Brand.TLabel','Title.TLabel','Muted.TLabel'):style.configure(klass,foreground=colors['foreground'],background=colors['background'])
         for klass in ('TEntry','TCombobox','Treeview'):style.configure(klass,fieldbackground=colors['surface'],background=colors['surface'],foreground=colors['foreground'])
-        style.configure('TButton',background=colors['surface'],foreground=colors['foreground'])
+        style.configure('TButton',background=colors['background'],foreground=colors['foreground'])
+        style.configure('Caption.TFrame',background=colors['accent']);style.configure('Caption.TLabel',background=colors['accent'],foreground='white')
+        style.configure('PropertyGroup.TLabel',background=colors['background'],foreground=colors['foreground'])
+        style.configure('PropertyName.TLabel',background=colors['surface'],foreground=colors['foreground'])
         style.configure('TNotebook.Tab',background=colors['background'])
         style.map('TNotebook.Tab',background=[('selected',colors['surface'])],foreground=[('selected',colors['foreground'])])
         style.configure('Accent.TButton',background=colors['accent'])
@@ -104,12 +109,14 @@ class WorkspaceMixin:
         self.palette.configure(bg=colors['surface'],fg=colors['foreground'],selectbackground=colors['accent'],selectforeground='white')
         self.assist_list.configure(bg=colors['surface'],fg=colors['foreground'],selectbackground=colors['accent'],selectforeground='white')
         for widget in (self.code,self.generated,self.log):
-            style_editor(widget);widget.configure(bg=colors['editor_bg'],fg=colors['editor_fg'])
+            style_editor(widget);widget.configure(bg=colors['editor_bg'],fg=colors['editor_fg'],insertbackground=colors['editor_fg'],selectbackground=colors['accent'])
+        for tag,color in editor_palette(colors['editor_bg']).items():self.code.tag_configure(tag,foreground=color)
+        if hasattr(self,'docs_text'):self.docs_text.configure(bg=colors['surface'],fg=colors['foreground'])
 
     def appearance_settings(self):
         win=tk.Toplevel(self);win.title(tr('Aspetto ambiente di sviluppo'));win.transient(self)
-        values={k:tk.StringVar(value=v) for k,v in {**PRESETS[tr('Chiaro')],**self.config_data.get('appearance',{})}.items()}
-        preset=tk.StringVar(value=tr('Chiaro'));combo=ttk.Combobox(win,values=list(PRESETS),textvariable=preset,state='readonly');combo.grid(row=0,column=1,pady=10)
+        values={k:tk.StringVar(value=v) for k,v in {**PRESETS[tr('Classico VB6')],**self.config_data.get('appearance',{})}.items()}
+        preset=tk.StringVar(value=tr('Classico VB6'));combo=ttk.Combobox(win,values=list(PRESETS),textvariable=preset,state='readonly');combo.grid(row=0,column=1,pady=10)
         combo.bind('<<ComboboxSelected>>',lambda e:[values[k].set(v) for k,v in PRESETS[preset.get()].items()])
         labels=[tr('Sfondo pannelli'),tr('Testo pannelli'),tr('Superficie controlli'),tr('Colore accento'),tr('Sfondo editor'),tr('Testo editor'),tr('Sfondo designer')]
         def choose(key):

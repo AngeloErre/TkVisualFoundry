@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.14\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.14\nVisual Python / Tkinter designer",
+  "VisualTk Studio 1.15\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.15\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -609,3 +609,7 @@ EN_MESSAGES.update({' • anteprima del testo della prima pagina': ' • first-p
 EN_MESSAGES['Documenti, cloud e LLM']='Documents, cloud and LLMs'
 
 EN_MESSAGES.update({'Documentazione': 'Documentation', 'Sito ufficiale': 'Official website', 'API installata (pydoc)': 'Installed API (pydoc)', 'Controlli librerie e documentazione…': 'Library and documentation checks…', 'Caricamento API…': 'Loading API…', 'Controllo in background… Puoi continuare a lavorare.': 'Checking in the background… You can continue working.', 'Controllo non completato: ': 'Check incomplete: ', 'Controllo versioni stabili (compatibilità Python e vincoli dichiarati).': 'Stable version check (Python compatibility and declared constraints).', 'PIP verificherà anche dipendenze e disponibilità di wheel prima di installare.': 'PIP will also check dependencies and wheel availability before installation.', 'Documentazione:': 'Documentation:', 'Controlli iniziali': 'Startup checks', 'Ricontrolla': 'Check again', 'Aggiorna con wizard PIP…': 'Update with PIP wizard…', 'Nessun controllo eseguito.': 'No checks performed.', 'Completa automaticamente le virgolette dei valori testuali': 'Automatically complete quotation marks for text values', 'Controlla librerie, PIP e documentazione all’avvio': 'Check libraries, PIP and documentation at startup', 'Proprietà modificabili da codice': 'Properties editable in code', 'Metodi ed esempi': 'Methods and examples', 'Configurazione nel designer': 'Designer configuration', 'Pacchetti richiesti': 'Required packages', 'Libreria standard': 'Standard library', 'Controllo in corso…': 'Checking…', 'Risultati controlli iniziali…': 'Startup check results…'})
+
+EN_MESSAGES.update({'Alfabetico': 'Alphabetical', 'Aspetto e comportamento': 'Appearance and behavior', 'Casella degli strumenti': 'Toolbox', 'Classico VB6': 'VB6 Classic', 'Codice': 'Code', 'Codice progetto': 'Project code', 'Designer': 'Designer', 'Disposizione': 'Layout', 'Identità': 'Identity', 'Per categoria': 'Categorized', 'Seleziona una proprietà per vedere il valore.': 'Select a property to see its value.'})
+
+EN_MESSAGES.update({'Cerca componente':'Find component','Filtra le proprietà per nome':'Filter properties by name'})
