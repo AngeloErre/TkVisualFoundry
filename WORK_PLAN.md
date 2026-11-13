@@ -93,3 +93,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Rename visible product branding, docs, generator headers, repository links and build names.
 - [x] Preserve project/storage identities and recognize owned legacy launcher manifests.
 - [x] Migration and bilingual regression checks; native/graphical acceptance pending.
+
+## Phase 15 — command palette (1.31)
+
+- [x] Discover existing menu actions from Ctrl/Cmd+Shift+P and Edit menu.
+- [x] Bilingual search, keyboard selection and session-recent ranking.
+- [x] Model regressions and bilingual documentation.
+- [ ] Interactive focus, keyboard and modal acceptance (desktop access unavailable).

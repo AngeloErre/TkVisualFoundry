@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.31
+
+254 test superati per lingua, 11 grafici saltati. Ricerca bilingue e senza accenti, ordinamento stabile, priorità ai recenti di sessione e assenza di esecuzione durante la ricerca verificati. Collaudo grafico di focus, tastiera e dialoghi ancora da completare: accesso desktop al Terminale non disponibile.
+
 # TkVisualFoundry 1.30
 
 251 test superati per lingua, 11 grafici saltati. Rinomina di UI/documentazione, header generati e pacchetti; compatibilità di storage e ownership mantenuta. Nuove regressioni sui launcher Mac precedenti e rifiuto di registrazione dalla cartella già installata. 15 esempi compilati. Collaudo grafico, migrazione Windows e installazione nativa ancora da completare.

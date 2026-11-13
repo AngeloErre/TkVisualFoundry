@@ -34,6 +34,7 @@ from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
+from command_palette import CommandPaletteMixin
 from watch_ui import WatchMixin
 from breakpoint_ui import BreakpointMixin
 from event_breakpoints import resolve_breakpoints
@@ -64,7 +65,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -82,6 +83,7 @@ class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMi
         self.protocol('WM_DELETE_WINDOW',self.close)
         self.bind('<F1>',lambda e:self.help())
         self.bind('<F6>',lambda e:self.preview_form())
+        for shortcut in ('<Control-Shift-P>','<Command-Shift-P>'):self.bind(shortcut,self.open_command_palette)
         for sequence, action in [('<Command-s>',self.save),('<Control-s>',self.save),('<Command-o>',self.open_project),('<Control-o>',self.open_project),('<Command-z>',self.undo),('<Control-z>',self.undo),('<F5>',self.run),('<Shift-F5>',self.stop),('<F9>',self.debug)]:
             self.bind(sequence,lambda e,a=action:a())
 

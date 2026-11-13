@@ -1,8 +1,8 @@
 {
-  "version": "1.30",
+  "version": "1.31",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 251,
+  "tests_passed": 254,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -52,5 +52,6 @@
   "product_name": "TkVisualFoundry",
   "previous_name": "VisualTk Studio",
   "repository": "https://github.com/AngeloErre/TkVisualFoundry",
-  "rebrand_validation": "UI/help/docs/generator headers/install labels and Mac build artifacts renamed; legacy storage, settings/history and ownership identifiers preserved. Legacy Mac launcher ownership and recording-from-installed-folder rejection tested. Windows shortcut/Apps migration and GUI/native acceptance pending."
+  "rebrand_validation": "UI/help/docs/generator headers/install labels and Mac build artifacts renamed; legacy storage, settings/history and ownership identifiers preserved. Legacy Mac launcher ownership and recording-from-installed-folder rejection tested. Windows shortcut/Apps migration and GUI/native acceptance pending.",
+  "command_palette_validation": "Bilingual/accent-insensitive search, stable ranking, session recent ordering and non-executing discovery tested. Graphical focus, keyboard and modal acceptance pending; desktop Terminal access unavailable."
 }

@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.30
+# TkVisualFoundry 1.31
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Command palette (1.31)
+
+Press **Ctrl+Shift+P** (Windows/Linux) or **Cmd+Shift+P** (macOS), or choose **Edit → Find a command…**. Search existing menu actions in Italian or English, select with ↑/↓ and press Enter. Esc closes the palette and restores the previous focus. An empty search lists recently used commands first (for the current session). The palette invokes the existing menu handlers, preserving their context checks. Search text is never executed as code.
 
 ## TkVisualFoundry — the new name (1.30)
 

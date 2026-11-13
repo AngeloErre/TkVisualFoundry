@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "TkVisualFoundry 1.30\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.30\nVisual Python / Tkinter designer",
+  "TkVisualFoundry 1.31\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.31\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -658,3 +658,5 @@ EN_MESSAGES.update({'Watch / Osserva':'Watch','Aggiungi Watch':'Add watch','Rimu
 EN_MESSAGES.update({'Usa un percorso di variabile con al massimo 256 caratteri.':'Use a variable path of at most 256 characters.','Percorso Watch non valido.':'Invalid watch path.','Le Watch accettano nomi, attributi, indici interi non negativi e chiavi stringa; chiamate e calcoli non sono supportati.':'Watches accept names, attributes and literal non-negative indices/string keys; calls and arithmetic are not supported.','Percorso Watch troppo profondo.':'Watch path is too deep.','Usa al massimo 100 percorsi Watch distinti.':'Use up to 100 unique watch paths.'})
 
 EN_MESSAGES.update({'Seleziona frame':'Select frame','Seleziona un frame durante una pausa del debug corrente.':'Select a frame while the current debug session is paused.'})
+
+EN_MESSAGES.update({'Palette dei comandi':'Command palette','Cerca una funzione, poi premi Invio. Puoi usare termini italiani o inglesi.':'Find a function, then press Enter. You can search in Italian or English.','↑↓ seleziona · Invio esegue · Esc chiude. Senza ricerca, i comandi recenti sono in cima.':'↑↓ select · Enter runs · Esc closes. With no query, recent commands appear first.','Comandi trovati: {v0}':'Commands found: {v0}','Nessun comando trovato.':'No commands found.','Cerca un comando…':'Find a command…'})

@@ -1,3 +1,10 @@
+# 1.31 — Command palette
+
+- Search menu actions in Italian or English with Ctrl/Cmd+Shift+P.
+- Keyboard selection, session recent commands and previous-focus restoration.
+- Preserve existing context guards; do not execute search text.
+- Add model regressions; graphical acceptance remains pending.
+
 # 1.30 — TkVisualFoundry
 
 - Rename the product to TkVisualFoundry — Visual Python Studio and update repository links.
