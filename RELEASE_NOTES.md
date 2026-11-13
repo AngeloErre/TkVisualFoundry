@@ -1,19 +1,11 @@
-# VisualTk Studio 1.8
+# VisualTk Studio 1.9
 
-## Interfaccia
+Il completamento è ora collegato automaticamente ai moduli e agli oggetti Python. Digitare `messagebox.` elenca i membri pubblici; aprire una chiamata mostra la firma e l’argomento corrente. Il motore comprende import, alias, variabili, chiamate concatenate e tipi dei componenti, utilizzando Jedi nell’interprete configurato per il progetto.
 
-La palette ora mostra icone e supporta l’inserimento con Invio. I comandi di inserimento e applicazione delle proprietà sono fissati sopra le rispettive aree di lavoro, mentre i comandi secondari si trovano nei menu. La barra in alto offre File, Modifica, Progetto, Esegui, PIP, Componenti, Vista e Help. Il log è richiudibile e non può espandersi fino a coprire i controlli del designer.
+L’analisi avviene in un processo persistente separato dalla UI. Gli eventi del progetto non vengono eseguiti per ottenere suggerimenti. Esc, cambi di contesto e nuova digitazione invalidano le risposte precedenti. I simboli selezionati mostrano documentazione e firma; il completamento sostituisce soltanto la porzione di nome digitata.
 
-## Pacchetti automatici
+L’installer include Jedi; se si sceglie un altro Python, il pulsante Motore nell’editor guida alla sua predisposizione. Dopo un’installazione PIP il motore si ricarica per vedere le nuove librerie. Per librerie esterne serve il relativo import. Codice dinamico o estensioni native prive di informazioni di tipo possono dare risultati parziali.
 
-Quando inserisci o avvii un componente con dipendenze, la preparazione controlla l’interprete configurato, installa ciò che manca e prosegue dopo la verifica. Se tutto è già pronto, continua senza richiedere altri clic. Una installazione fallita non provoca tentativi infiniti: log ed errori restano consultabili.
+Per aggiornare rieseguire Install_Mac.command. Il requisito dell’app rimane Python >=3.15 stabile. Nuova guida Help → IntelliSense.
 
-Il menu PIP permette di preparare il progetto, il componente selezionato o un pacchetto per nome. La finestra riserva spazio ai pulsanti anche quando il log o i messaggi sono lunghi. PIP preferisce wheel disponibili ma può usare pacchetti sorgenti; l’opzione avanzata solo-wheel è disattivata di default.
-
-## Aggiornamento
-
-Riesegui Install_Mac.command dal pacchetto 1.8. Le librerie già presenti vengono mantenute. Le nuove preferenze attivano la preparazione automatica e mantengono facoltativo il blocco dei pacchetti sorgenti.
-
-## Verifica
-
-58 test superati, 10 grafici saltati. Testata una reale installazione PIP offline in un ambiente temporaneo, oltre alle decisioni automatiche e al controllo degli errori. Verificata in sola lettura la disponibilità della webcam nel Python configurato (OpenCV/NumPy/Pillow importabili); non verificato l’accesso alla fotocamera. GUI, download live e packaging richiedono ancora collaudo.
+Validazione: 77 test superati, 11 grafici saltati su Linux Python 3.12.14/Jedi 0.20.0; Mac, GUI e packaging non verificati in questa sessione.

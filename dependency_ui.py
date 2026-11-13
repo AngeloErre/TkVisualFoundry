@@ -111,6 +111,7 @@ class DependencyWizard(tk.Toplevel):
                 action=preparation_action(data,self.automatic.get(),self.install_attempted,bool(self.on_ready))
                 self.ready=action in ('ready','continue');self.controls()
                 if self.ready:
+                    if self.install_attempted and hasattr(self.studio,'restart_intellisense'):self.studio.restart_intellisense()
                     self.status.set('3/3 • Componente pronto. Requisiti verificati.');self.pages.select(0)
                     if action=='continue':self.auto_timer=self.after(200,self.finish)
                 elif action=='install':self.auto_timer=self.after(100,self.install)

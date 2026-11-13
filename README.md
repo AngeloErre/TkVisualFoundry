@@ -1,16 +1,17 @@
-# VisualTk Studio 1.8
+# VisualTk Studio 1.9
 
 Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
 
-## Novità 1.8
+## Novità 1.9 — IntelliSense semantico
 
-- **Palette con icone** Tk native per i componenti, ricerca e inserimento con doppio clic o Invio.
-- **Barra compatta di menu a tendina**: File, Modifica, Progetto, Esegui, PIP, Componenti, Vista e Help, visibili dentro la finestra anche su Mac.
-- **Inserisci nel form** e **Applica proprietà** fissati sopra le rispettive aree scorrevoli.
-- **Log richiudibile**, nascosto all’apertura, con altezza limitata per preservare lo spazio del designer.
-- **PIP automatico**: controlla, installa se necessario, verifica e continua l’inserimento o l’avvio senza premere ogni volta Continua.
-- Preferenza per pacchetti precompilati senza escludere quelli sorgenti. La modalità “solo wheel” rimane un’opzione avanzata.
-- Finestra PIP a schede, pulsanti sempre riservati nel layout, log dettagliato e interruzione.
+- Suggerimenti automatici dopo il punto per moduli Python/Tkinter, oggetti, variabili e librerie importate.
+- `messagebox.` elenca funzioni e costanti pubbliche; `messagebox.showinfo(` mostra firma e argomento attivo.
+- Riconoscimento degli import del progetto e dell’editor, inclusi alias come `import numpy as np`.
+- Metodi ereditati dei controlli e analisi delle classi dei componenti esterni.
+- Analisi Jedi in un processo separato, eseguito nel Python configurato per il progetto.
+- Descrizione del simbolo selezionato, firme, completamento degli argomenti nominati e filtraggio durante la digitazione.
+- Risposte obsolete scartate dopo modifiche, cambio contesto o Esc; cache temporanea dedicata.
+- Pulsante **Motore…** per predisporre Jedi con il wizard PIP quando manca nell’interprete scelto.
 
 ## Funzionalità
 
@@ -59,7 +60,7 @@ self.Button1.configure(text="Operazione completata")
 self.show("Form2")
 ```
 
-Scrivi `self.`, `self.Button1.` o `self.Button1.configure(` per esplorare nomi, metodi e proprietà. Ctrl+Spazio richiama i suggerimenti; Invio/Tab accetta, Esc chiude. Il pannello “cosa puoi fare” inserisce esempi al cursore. Jedi è opzionale per i suggerimenti Python generali; il completamento contestuale Tkinter funziona anche senza Jedi.
+Scrivi `self.`, `self.Button1.` o `self.Button1.configure(` per esplorare nomi, metodi e proprietà. Ctrl+Spazio richiama i suggerimenti; Invio/Tab accetta, Esc chiude. Il pannello “cosa puoi fare” inserisce esempi al cursore. Jedi, incluso nell’installazione dell’IDE, abilita l’analisi delle librerie nell’interprete scelto. Senza Jedi rimane un fallback per Python, Tkinter standard e controlli del progetto. [Guida IntelliSense](INTELLISENSE.md).
 
 ## Webcam e pacchetti
 
@@ -75,6 +76,7 @@ Inserisci **DatabaseView**, selezionalo e scegli **Azioni → Configura componen
 
 ## Documentazione
 
+- [IntelliSense Python e librerie](INTELLISENSE.md)
 - [Pacchetti e configurazione guidata](PACCHETTI.md)
 - [Database locali/remoti](DATABASE.md)
 - [Componenti ed estensioni](ESTENSIONI.md)
@@ -86,7 +88,9 @@ Inserisci **DatabaseView**, selezionalo e scegli **Azioni → Configura componen
 
 ## Verifica e limiti
 
-Versione in sviluppo: **58 test superati, 10 grafici saltati**, con Python 3.15.2. Verificati SQLite reale, transazioni, chiavi, generazione, dipendenze e flusso di installazione simulato. Eseguita anche un’installazione PIP reale da un wheel di prova locale in un ambiente temporaneo isolato, con verifica finale dell’import. Non sono stati eseguiti collaudi GUI, download PIP da Internet, connessioni a server remoti o build `.app` in questa sessione.
+Versione in sviluppo: **77 test superati, 11 grafici saltati**, nel runtime Linux Python 3.12.14 con Jedi 0.20.0. Il requisito dell’app macOS resta Python 3.15 stabile o successivo; la policy è verificata da test dedicati. Verificati semanticamente moduli, firme, alias, variabili, NumPy, componenti esterni e librerie disponibili soltanto nell’ambiente scelto. I test confermano che l’analisi non esegue il codice Python di esempio. Il percorso grafico sul Mac e la build `.app` richiedono ancora collaudo; il precedente ambiente Mac non è disponibile in questa sessione.
+
+I membri creati dinamicamente e alcune estensioni native possono avere suggerimenti parziali, in base ai sorgenti e alle informazioni di tipo disponibili. Per completare una libreria esterna deve essere importata nel codice o negli import del progetto, oltre che installata nel Python configurato.
 
 Il designer usa coordinate assolute. I contenitori non consentono ancora l’annidamento visuale dei controlli. Installare una libreria non crea automaticamente il relativo widget: occorre una classe Tkinter compatibile o un adattatore. Le funzioni hardware dipendono da driver, librerie native e autorizzazioni. DatabaseView copre tabelle dello schema predefinito e tipi comuni, senza amministrazione del server o migrazioni.
 

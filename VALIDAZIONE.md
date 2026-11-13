@@ -1,3 +1,21 @@
+# Verifica corrente — 1.9
+
+88 test con Python 3.12.14 e Jedi 0.20.0 nel nuovo ambiente Linux: **77 superati, 11 grafici saltati**. La policy di avvio dell’app mantiene Python >=3.15 stabile; i relativi test simulano versioni compatibili/non compatibili.
+
+- `messagebox.` completo di metodi/costanti pubbliche, filtro `sh`, firma di showinfo, argomento attivo e argomenti nominati.
+- Alias/import del progetto e dell’editor, Path concatenati, variabili stringa/lista, metodi ereditati di Button, NumPy installato.
+- Componente esterno definito in un modulo di test con un’operazione al livello globale: Jedi ne riconosce i membri senza eseguire tale operazione.
+- Libreria fixture collocata soltanto nel site-packages di un ambiente virtuale temporaneo: il worker usa il Python di quell’ambiente e la riconosce.
+- Trasporto JSON persistente, riuso del processo, timeout senza blocco del chiamante, assenza di Jedi con messaggio gestibile, chiusura dei worker e risposte obsolete scartate.
+- Inserimento del solo membro: messagebox.sh diventa messagebox.showinfo, senza duplicare il ricevitore.
+- Test GUI aggiunto per popup e accettazione; saltato insieme agli altri per assenza di una sessione grafica.
+
+Non eseguiti: percorso UI sul Mac, build app/DMG, connessioni a server database o test hardware. Il codice precedente non è stato modificato nell’installazione Mac, attualmente non collegata. Rimangono validi i test non grafici delle funzioni preesistenti.
+
+Le verifiche seguenti sono storiche e descrivono le singole versioni.
+
+---
+
 # Verifica corrente — 1.8
 
 68 test eseguiti con Python 3.15.2: **58 superati e 10 grafici saltati**.

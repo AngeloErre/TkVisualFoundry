@@ -1,14 +1,19 @@
 """Non-modal completions and a contextual examples panel."""
-import builtins
-import keyword
+import copy
+import queue
+from pathlib import Path
 import re
 import tkinter as tk
 from tkinter import ttk
-from code_assist import completions,examples,signature
+from code_assist import examples
+from semantic_engine import local_analysis,in_literal
+from analysis_client import AnalysisClient
 
 class AssistMixin:
     def build_assistant(self,parent):
         self.assist_popup=None;self.assist_timer=None;self.assist_items=[]
+        self.analysis_client=AnalysisClient();self.analysis_requests={};self.assist_generation=0;self.detail_timer=None;self.detail_requested=None;self.local_items=[];self.semantic_state='';self.assist_results_timer=self.after(60,self.poll_analysis)
+        self.bind('<Destroy>',self.assist_destroy,add='+')
         self.code.pack_forget()
         panel=ttk.Frame(parent,padding=(10,6));panel.pack(side='bottom',fill='x')
         self.assist_title=tk.StringVar(value='Assistente codice • seleziona un componente e apri un evento')
@@ -18,7 +23,8 @@ class AssistMixin:
         self.assist_list.bind('<<ListboxSelect>>',self.assist_describe)
         self.assist_list.bind('<Double-Button-1>',lambda e:self.insert_example())
         ttk.Button(row,text='Inserisci esempio',command=self.insert_example).pack(side='left',padx=10)
-        ttk.Button(row,text='Completa  Ctrl+Spazio',command=self.complete).pack(side='left')
+        ttk.Button(row,text='Ctrl+Spazio',command=self.complete).pack(side='left',padx=2)
+        ttk.Button(row,text='Motore…',command=self.setup_intellisense).pack(side='left',padx=2)
         self.assist_detail=tk.StringVar(value='Scrivi self. per vedere i controlli; dopo il nome scrivi . per i metodi.')
         ttk.Label(panel,textvariable=self.assist_detail,wraplength=660).pack(anchor='w')
         self.signature_var=tk.StringVar();ttk.Label(panel,textvariable=self.signature_var,wraplength=660).pack(anchor='w')
@@ -27,6 +33,7 @@ class AssistMixin:
         self.code.bind('<Up>',self.assist_up)
         self.code.bind('<Escape>',lambda e:self.dismiss_completion())
         self.code.bind('<Button-1>',lambda e:self.dismiss_completion(),add='+')
+        self.code.bind('<FocusOut>',lambda e:self.after(80,self.hide_if_unfocused),add='+')
         self.tabs.bind('<<NotebookTabChanged>>',lambda e:self.dismiss_completion(),add='+')
         self.code.pack(fill='both',expand=True)
 
@@ -62,17 +69,23 @@ class AssistMixin:
 
     def assist_key(self,event):
         self.highlight()
-        if self.assist_timer:self.after_cancel(self.assist_timer);self.assist_timer=None
-        before=self.code.get('1.0','insert');self.signature_var.set(signature(before,self.project))
-        if event.keysym in ('Up','Down','Return','Tab','Escape','Left','Right','Control_L','Control_R','Shift_L','Shift_R'):return
-        self.dismiss_completion()
-        if event.char=='.' or (signature(before,self.project) and event.char in ('(',',',' ')) or re.search(r'(?:self\.\w*|self\.\w+\.\w*|\w{2,})$',before):
-            self.assist_timer=self.after(300,lambda:self.complete(automatic=True))
+        if event.keysym in ('Up','Down','Return','Tab','Escape','Control_L','Control_R','Shift_L','Shift_R'):return
+        self.dismiss_completion();before=self.code.get('1.0','insert')
+        if in_literal(before):
+            self.assist_timer=self.after(160,lambda:self.complete(automatic=True,show_popup=False));return
+        popup=event.keysym not in ('Left','Right') and (event.char=='.' or bool(re.search(r'(?:\.\w*|\w{2,})$',before)))
+        local=local_analysis(before,self.project,self.code.get('1.0','end-1c'));self.signature_var.set(local['calltip'][:350])
+        if local['items'] and before.rstrip().endswith(('(',',','=')):popup=True
+        self.assist_timer=self.after(40 if event.char=='.' else 160,lambda:self.complete(automatic=True,show_popup=popup))
 
     def dismiss_completion(self):
-        if getattr(self,'assist_popup',None):
-            self.assist_popup.destroy();self.assist_popup=None
-        if getattr(self,'assist_timer',None):self.after_cancel(self.assist_timer);self.assist_timer=None
+        self.assist_generation=getattr(self,'assist_generation',0)+1
+        if hasattr(self,'analysis_requests'):self.analysis_requests.clear()
+        if getattr(self,'assist_popup',None):self.assist_popup.destroy();self.assist_popup=None
+        for name in ('assist_timer','detail_timer'):
+            timer=getattr(self,name,None)
+            if timer:self.after_cancel(timer);setattr(self,name,None)
+        self.detail_requested=None
 
     def assist_down(self,event=None):return self.move_completion(1)
     def assist_up(self,event=None):return self.move_completion(-1)
@@ -83,43 +96,123 @@ class AssistMixin:
 
     def completion_describe(self,event=None):
         selected=self.completion_box.curselection()
-        if selected:self.assist_detail.set(self.completion_items[selected[0]][1])
+        if not selected:return
+        item=self.completion_items[selected[0]]
+        detail=' • '.join(value for value in (item.get('signature',''),item.get('doc','').split('\n\n')[0]) if value)
+        self.assist_detail.set(detail[:420] or item['name'])
+        if self.detail_timer:self.after_cancel(self.detail_timer)
+        name=item['name'];key=(self.assist_snapshot(),name)
+        if self.detail_requested!=key:self.detail_timer=self.after(180,lambda:self.request_detail(name,key))
+
+    def request_detail(self,name,key):
+        self.detail_timer=None
+        if not self.assist_popup or self.assist_snapshot()!=key[0]:return
+        identifier=self.queue_analysis('detail',detail_name=name)
+        self.detail_requested=key if identifier is not None else None
 
     def accept_completion(self,event=None):
         if not self.assist_popup:return None
         selected=self.completion_box.curselection()
         if selected:
-            text=self.completion_items[selected[0]][0];self.code.edit_separator()
-            self.code.delete('assist_start','assist_end');self.code.insert('assist_start',text);self.code.mark_set('insert','assist_start+'+str(len(text))+'c');self.code.edit_separator()
-        self.dismiss_completion();self.highlight();self.code.focus_set();return 'break'
-
-    def complete(self,event=None,automatic=False):
-        self.dismiss_completion()
-        if self.code.focus_get()!=self.code and automatic:return
-        if automatic and self.code.tag_ranges('sel'):return
-        before=self.code.get('1.0','insert');prefix,items=completions(before,self.project)
-        if not items and not automatic:
-            match=re.search(r'[\w.]+$',before);prefix=match.group() if match else ''
-            items=[(s,'Python') for s in keyword.kwlist+dir(builtins)+['messagebox','filedialog','tk','ttk'] if s.startswith(prefix)]
-            try:
-                import jedi
-                body=self.code.get('1.0','end-1c');script='class Application:\n    def handler(self, event=None):\n'+'\n'.join('        '+line for line in body.splitlines())
-                row,col=map(int,self.code.index('insert').split('.'))
-                items.extend((prefix+c.complete,c.description) for c in jedi.Script(script).complete(row+2,col+8))
-            except Exception:pass
-        if not items:return 'break'
-        self.completion_items=list(dict(items).items())[:80]
-        self.code.mark_set('assist_start',f'insert-{len(prefix)}c');self.code.mark_gravity('assist_start','left');self.code.mark_set('assist_end','insert')
-        popup=tk.Toplevel(self);self.assist_popup=popup;popup.overrideredirect(True);popup.transient(self)
-        bounds=self.code.bbox('insert') or (0,0,0,20)
-        x=min(self.code.winfo_rootx()+bounds[0],max(0,self.winfo_screenwidth()-440));y=self.code.winfo_rooty()+bounds[1]+bounds[3]
-        if y+210>self.winfo_screenheight():y=max(0,y-230)
-        popup.geometry(f'440x200+{x}+{y}')
-        colors=self.config_data.get('appearance',{})
-        self.completion_box=tk.Listbox(popup,exportselection=False,font=('Menlo',12),takefocus=False,bg=colors.get('surface','#ffffff'),fg=colors.get('foreground','#25324a'),selectbackground=colors.get('accent','#2563eb'),selectforeground='white')
-        self.completion_box.pack(fill='both',expand=True)
-        for text,doc in self.completion_items:self.completion_box.insert('end',text)
-        self.completion_box.selection_set(0);self.completion_describe()
-        self.completion_box.bind('<<ListboxSelect>>',self.completion_describe)
-        self.completion_box.bind('<ButtonRelease-1>',self.accept_completion)
+            item=self.completion_items[selected[0]];text=item['insert'];length=item['prefix_len'];self.code.edit_separator()
+            self.code.delete(f'insert-{length}c','insert');self.code.insert('insert',text);self.code.edit_separator()
+        self.dismiss_completion();self.highlight();self.code.focus_set()
+        self.assist_timer=self.after(80,lambda:self.complete(automatic=True,show_popup=False))
         return 'break'
+
+    def assist_snapshot(self):
+        target=self.code_target;context=(target[0].get('name','project'),target[1],target[2]) if target else None
+        return self.code.get('1.0','end-1c'),self.code.index('insert'),context,self.assist_generation,self.config_data['python']
+
+    def queue_analysis(self,action='complete',show_popup=False,detail_name=None):
+        snapshot=self.assist_snapshot();body,cursor,context,_,python=snapshot
+        mode='imports' if context and context[2] and context[1]=='imports' else 'event'
+        request={'body':body,'cursor':cursor,'project':copy.deepcopy(self.project),'mode':mode,'action':action,'cwd':str(self.path.parent if self.path else Path(__file__).resolve().parent)}
+        if detail_name:request['detail_name']=detail_name
+        identifier=self.analysis_client.submit(python,request)
+        if identifier is not None:self.analysis_requests[identifier]=(snapshot,show_popup,detail_name)
+        if len(self.analysis_requests)>30:
+            for identifier in sorted(self.analysis_requests)[:-15]:self.analysis_requests.pop(identifier,None)
+        return identifier
+
+    def complete(self,event=None,automatic=False,show_popup=True):
+        self.dismiss_completion()
+        if automatic and (self.code.focus_get()!=self.code or self.code.tag_ranges('sel')):return 'break'
+        if not automatic:self.code.focus_set()
+        before=self.code.get('1.0','insert')
+        if in_literal(before):
+            self.local_items=[];self.queue_analysis('signature',False);return 'break'
+        local=local_analysis(before,self.project,self.code.get('1.0','end-1c'));self.local_items=local['items'];self.signature_var.set(local['calltip'][:350])
+        if show_popup and self.local_items:self.show_completions(self.local_items)
+        self.queue_analysis('complete' if show_popup else 'signature',show_popup)
+        return 'break'
+
+    def show_completions(self,items):
+        unique={}
+        for item in items:unique.setdefault(item['insert'],item)
+        items=sorted(unique.values(),key=lambda item:(item['name'].startswith('_'),item['name'].casefold()))
+        if not items:return
+        selected_name=None
+        if self.assist_popup:
+            selection=self.completion_box.curselection()
+            if selection:selected_name=self.completion_items[selection[0]]['name']
+            self.completion_box.delete(0,'end')
+        else:
+            popup=tk.Toplevel(self);self.assist_popup=popup;popup.overrideredirect(True);popup.transient(self)
+            bounds=self.code.bbox('insert') or (0,0,0,20);width=min(540,self.winfo_screenwidth());height=240
+            x=max(0,min(self.code.winfo_rootx()+bounds[0],self.winfo_screenwidth()-width));y=self.code.winfo_rooty()+bounds[1]+bounds[3]
+            if y+height>self.winfo_screenheight():y=max(0,y-height-bounds[3])
+            popup.geometry(f'{width}x{height}+{x}+{y}');colors=self.config_data.get('appearance',{})
+            scroll=ttk.Scrollbar(popup);scroll.pack(side='right',fill='y')
+            self.completion_box=tk.Listbox(popup,exportselection=False,font=('Menlo',12),takefocus=False,bg=colors.get('surface','#ffffff'),fg=colors.get('foreground','#25324a'),selectbackground=colors.get('accent','#2563eb'),selectforeground='white',yscrollcommand=scroll.set)
+            self.completion_box.pack(fill='both',expand=True);scroll.configure(command=self.completion_box.yview)
+            self.completion_box.bind('<<ListboxSelect>>',self.completion_describe);self.completion_box.bind('<ButtonRelease-1>',self.accept_completion)
+        self.completion_items=items
+        for item in items:self.completion_box.insert('end',item['name']+'   ['+item.get('kind','member')+']')
+        index=next((i for i,item in enumerate(items) if item['name']==selected_name),0)
+        self.completion_box.selection_set(index);self.completion_box.see(index);self.completion_describe()
+
+    def poll_analysis(self):
+        try:
+            while True:
+                result=self.analysis_client.results.get_nowait();context=self.analysis_requests.pop(result.get('id'),None)
+                if context is None or context[0]!=self.assist_snapshot():continue
+                snapshot,show_popup,detail_name=context
+                if result.get('error'):
+                    self.semantic_state=result['error']
+                    if result.get('missing_jedi'):self.assist_detail.set('Attiva Jedi dal pulsante Motore… per analizzare le librerie esterne. I suggerimenti standard restano disponibili.')
+                    elif not self.local_items:self.assist_detail.set('Analisi semantica: '+result['error'][:250])
+                    continue
+                self.semantic_state=result.get('engine','Jedi')
+                if detail_name:
+                    selected=self.completion_box.curselection() if self.assist_popup else ()
+                    if selected and self.completion_items[selected[0]]['name']==detail_name and result.get('detail'):
+                        detail=result['detail'];self.completion_items[selected[0]].update(signature=detail['signature'],doc=detail['doc']);self.completion_describe()
+                    continue
+                before=self.code.get('1.0','insert')
+                if (result.get('calltip') or result.get('action')=='signature') and not re.search(r'self\.\w+\.(?:configure|config)\(',before):self.signature_var.set(result.get('calltip','')[:350])
+                if show_popup and self.code.focus_get()==self.code:
+                    items=result.get('items',[])
+                    if re.search(r'self\.\w+\.(?:configure|config)\([^()]*$',before):items=[item for item in items if item['name'].endswith('=')]
+                    self.show_completions(self.local_items+items)
+        except queue.Empty:pass
+        self.assist_results_timer=self.after(60,self.poll_analysis)
+
+    def hide_if_unfocused(self):
+        try:focus=self.focus_get()
+        except tk.TclError:return
+        if focus is self.code:return
+        if self.assist_popup and focus and focus.winfo_toplevel() is self.assist_popup:return
+        self.dismiss_completion()
+
+    def restart_intellisense(self):
+        self.dismiss_completion();self.analysis_client.close();self.analysis_client=AnalysisClient();self.semantic_state=''
+        self.assist_detail.set('Motore ricaricato: digita un punto oppure premi Ctrl+Spazio.')
+    def setup_intellisense(self):self.open_dependencies(specs=['jedi>=0.19,<0.21'],auto_install=True,on_ready=self.restart_intellisense)
+    def assist_destroy(self,event):
+        if event.widget is self:
+            self.analysis_client.close()
+            try:
+                self.dismiss_completion()
+                if getattr(self,'assist_results_timer',None):self.after_cancel(self.assist_results_timer)
+            except tk.TclError:pass

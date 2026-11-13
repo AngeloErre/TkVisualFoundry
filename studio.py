@@ -174,6 +174,7 @@ class Studio(LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMi
         if selected in self.palette.names:self.palette.selection_set(self.palette.names.index(selected))
 
     def refresh(self):
+        self.dismiss_completion()
         self.kinds=list(KINDS)+list(registry(self.project))
         self.filter_palette()
         self.formbox['values']=[f['name'] for f in self.project['forms']]; self.formvar.set(self.form['name'])

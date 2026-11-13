@@ -1,3 +1,9 @@
+# 1.9 — IntelliSense Python e librerie
+
+Motore semantico Jedi collegato automaticamente al punto, analisi nel Python dei progetti, import/alias/variabili, metodi dei componenti e firme con argomento attivo. Worker persistente con timeout e scarto delle risposte obsolete; documentazione selezionata su richiesta. Fallback stdlib, comando Motore per preparare Jedi e riavvio dell’analisi dopo installazioni PIP.
+
+77 test superati, 11 grafici saltati nel runtime Linux Python 3.12.14 / Jedi 0.20.0. GUI e build macOS da verificare.
+
 # 1.8 — UI compatta e preparazione PIP automatica
 
 - Icone native per la palette, ricerca e inserimento da tastiera.
