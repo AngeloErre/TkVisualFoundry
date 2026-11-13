@@ -1,7 +1,7 @@
-# VisualTk Studio 1.27
+# VisualTk Studio 1.28
 
-Set persisted event-local breakpoints with the Breakpoint button or Shift+F9 inside the code editor; project startup/import code is supported too. F9 maps markers to exact executable generated-source lines, while unresolved/comment points are reported and skipped. Existing inspector and debugger positions remain available.
+Add a persistent Watch tab with read-only scope/type/value, expandable captured containers and changed-value accents. Support names, Application fields, non-negative indices/string keys and explicit globals/locals/last scope prefixes. Resolve only existing inspector samples without executing calls, arithmetic or properties.
 
-Text insertion/replacement/deletion remaps points; smart rename preserves metadata and deleted objects naturally remove their own points. Review markers after large rewrites because text diff is approximate. Stop debug before changing markers. Generated-source manual breakpoints remain transient; F5/export/deploy never activate project markers.
+Add/remove watches with project undo, preserve direct self component paths through smart rename, clear data for unmonitored launches and isolate samples when another project opens. Limit paths, child rendering and hidden-tab work. Values outside bounded snapshots remain unavailable. Update the variable inspector example and bilingual READMEs; see docs/WATCHES.md for scope precedence and limits.
 
-235 tests passed per language, 11 graphical tests skipped. A real pdb process stopped on a generated event method without creating Tk. Graphical marker/shortcut acceptance remains pending.
+242 tests passed per language, 11 graphical tests skipped. A real isolated runner test observes a watched global changing; graphical acceptance remains pending.

@@ -1,3 +1,11 @@
+# 1.28
+
+- Add persistent, read-only Watch paths backed by live/debug inspector snapshots.
+- Support explicit scopes, captured container expansion, changed values, add/remove and rename preservation.
+- Reject executable expressions and mark absent/truncated values unavailable; bound path/rendering work.
+- Reset project ownership on open and clear samples for unmonitored launches.
+- Add real changing-watch and persistence/scope/ownership regressions; graphical acceptance pending.
+
 # 1.27
 
 - Add persistent event/startup/import breakpoints with editor markers and Shift+F9.

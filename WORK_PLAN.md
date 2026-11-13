@@ -73,3 +73,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Executable generated-source mapping, edit remapping and rename/save/load preservation.
 - [x] Real pdb event-stop regression and bilingual docs; graphical acceptance pending.
 - [ ] Next: explicit watches, graphical stack frame selection and broader UI acceptance.
+
+## Phase 12 — persistent snapshot watches (1.28)
+
+- [x] Saved read-only watch paths, explicit scopes and captured container expansion.
+- [x] Non-executing resolution, bounded visible-tab rendering, changed values and rename preservation.
+- [x] Cross-project ownership and unmonitored-launch reset; real changing-watch and model regressions.
+- [ ] Graphical acceptance and stack-frame selection; arbitrary expression watches remain outside this first stage.

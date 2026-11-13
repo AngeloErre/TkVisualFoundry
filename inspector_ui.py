@@ -23,7 +23,8 @@ class InspectorMixin:
         ttk.Label(page,text=tr('Campioni ogni 0,5 s. Locali attive o ultima funzione osservata; valori e contenitori limitati. Nessuna espressione o proprietà viene eseguita.'),wraplength=900,padding=6).pack(fill='x')
         self.inspector_previous={}
     def inspector_args(self,path,debug=False):
-        self.inspector_process=None
+        self.inspector_process=None;self.inspector_data=None;self.watch_session=getattr(self,'history_session',None);self.watch_previous={}
+        self.render_watches();self.inspector_tree.delete(*self.inspector_tree.get_children())
         if not self.inspector_enabled.get():
             self.inspector_file=None;self.inspector_status.set(tr('Monitoraggio disattivato per questo avvio.'));return None
         folder=Path(self.temp.name)/('inspect-'+uuid.uuid4().hex);folder.mkdir(mode=0o700)
@@ -32,6 +33,7 @@ class InspectorMixin:
         if self.path:
             tracked=[str(p.resolve()) for p in included_files(self.project,self.path.parent).values() if p.suffix=='.py']
         config=folder/'config.json';config.write_text(json.dumps({'output':str(output),'tracked':tracked}),encoding='utf-8')
+        self.watch_session=getattr(self,'history_session',None)
         self.inspector_file=output;self.inspector_sequence=None;self.inspector_data=None;self.inspector_previous={};self.inspector_tree.delete(*self.inspector_tree.get_children());self.inspector_status.set(tr('In attesa del primo campione…'))
         return [self.config_data['python'],'-u',str(folder/'inspector_runner.py'),'--config',str(config)]+(['--debug'] if debug else [])+[part for line in (sorted(getattr(self,'session_breaks',self.breaks)) if debug else []) for part in ('--break',str(line))]+[str(path)]
     def inspector_launched(self,process):
@@ -57,6 +59,7 @@ class InspectorMixin:
             self.inspector_sequence=stamp;self.inspector_data=data;self.render_inspector()
         except (OSError,ValueError,TypeError):pass
     def render_inspector(self):
+        self.render_watches()
         data=self.inspector_data
         if not data:return
         tree=self.inspector_tree;opened=set()

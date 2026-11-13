@@ -60,5 +60,10 @@
     }
   ],
   "imports": "example_title = 'Variable Inspector demo'",
-  "startup": "self.counter = 0\nself.samples = []\nself.Form1.deiconify()"
+  "startup": "self.counter = 0\nself.samples = []\nself.Form1.deiconify()",
+  "watches": [
+    "self.counter",
+    "self.samples",
+    "self.samples[0]"
+  ]
 }

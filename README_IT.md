@@ -1,4 +1,4 @@
-# VisualTk Studio 1.27
+# VisualTk Studio 1.28
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. L’installer dell’IDE è per macOS; i progetti generati comprendono procedure di build per Mac e Windows.
 
@@ -27,6 +27,12 @@ Catalogo dei componenti estesi e documentazione integrata del componente client 
 *Le immagini mostrano l’interfaccia italiana su macOS. L’IDE supporta anche l’inglese.*
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
+
+## Pannello Watch persistente (1.28)
+
+Apri **Watch / Osserva** (anche da **Debug → Watch** nel pannello Output/Debug), aggiungi percorsi come `self.counter`, `self.samples[0]` o `config['port']`, quindi avvia con F5/F9. Le Watch vengono salvate nel progetto e mostrano ambito, tipo e valore; i contenitori campionati sono espandibili e i cambiamenti evidenziati. I prefissi `globals.nome`, `locals.nome` e `last.nome` selezionano gli ambiti disponibili. La rinomina guidata aggiorna i riferimenti `self.NomeComponente`.
+
+Questa prima fase legge i campioni dell’ispettore senza eseguire chiamate, calcoli o proprietà dell’utente. I valori assenti dal campione limitato sono indicati come non disponibili. Il monitoraggio deve essere attivo; aprire un altro progetto impedisce di riutilizzare i valori del precedente. [Guida e limiti delle Watch](docs/WATCHES.md).
 
 ## Breakpoint nel codice degli eventi (1.27)
 

@@ -8,6 +8,7 @@ from pathlib import Path
 from hierarchy import ordered_widgets
 from adaptive_layout import validate_layout
 from event_breakpoints import validate_breakpoints
+from watch_values import validate_watches
 from library_catalog import theme_config
 from productivity_specs import validate_productivity
 
@@ -22,7 +23,7 @@ def identifier(value):
 
 def validate(p, code=True):
     if p.get('version') != 1 or not p.get('forms'): raise ValueError(tr('Formato progetto non supportato'))
-    validate_breakpoints(p,project=True)
+    validate_breakpoints(p,project=True);validate_watches(p)
     files=p.get('files',[])
     if not isinstance(files,list) or not all(isinstance(value,str) for value in files):raise ValueError('Project files must be a list of relative paths.')
     if 'deployment' in p and not isinstance(p['deployment'],dict):raise ValueError('Invalid deployment settings.')

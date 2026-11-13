@@ -34,6 +34,7 @@ from library_explorer import LibraryExplorer
 from ux_theme import apply_theme, style_editor
 from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
+from watch_ui import WatchMixin
 from breakpoint_ui import BreakpointMixin
 from event_breakpoints import resolve_breakpoints
 from inspector_ui import InspectorMixin
@@ -63,7 +64,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -187,7 +188,7 @@ class Studio(BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,History
         self.generated.bind('<Double-Button-1>',self.toggle_break)
         self.generated.tag_configure('break',background='#f6a0a0',foreground='#111111')
         self.generated.tag_configure('debug_current',background='#ffe08a',foreground='#111111')
-        self.build_problems();self.build_inspector()
+        self.build_problems();self.build_inspector();self.build_watches()
         main.add(self.right_panel,weight=0);right=inspector_area
         panel_caption(right,tr('Proprietà'))
         self.inspector_object_var=tk.StringVar()
@@ -222,6 +223,7 @@ class Studio(BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,History
         ttk.Label(br,text='OUTPUT / DEBUG',style='Title.TLabel').pack(side='left',padx=5)
         debug_menu=tk.Menu(br,tearoff=False)
         for label,cmd in [(tr('Continua'),lambda:self.debug_cmd('continue')),(tr('Passo'),lambda:self.debug_cmd('next')),(tr('Entra'),lambda:self.debug_cmd('step')),('Stack',lambda:self.debug_cmd('where')),(tr('Locali'),lambda:self.debug_cmd('pp locals()'))]:debug_menu.add_command(label=label,command=cmd)
+        debug_menu.add_separator();debug_menu.add_command(label=tr('Watch'),command=lambda:self.tabs.select(self.watch_page))
         ttk.Menubutton(br,text='Debug ▾',menu=debug_menu).pack(side='left')
         self.debug_location=tk.StringVar(value=tr('Debug non avviato'))
         self.debug_jump=ttk.Button(br,text=tr('Mostra riga'),command=self.show_debug_position,state='disabled');self.debug_jump.pack(side='left',padx=4)
@@ -246,6 +248,7 @@ class Studio(BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,History
         if selected in self.palette.names:self.palette.selection_set(self.palette.names.index(selected))
 
     def refresh(self):
+        self.render_watches()
         self.activate_project_environment()
         if self.selected is None:self.selection_names=set()
         if self.code_target is None:self.reset_code_context()
@@ -539,6 +542,7 @@ class Studio(BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,History
                 environment_python(Path(path).parent)
         except Exception as exc:return messagebox.showerror(tr('Apertura'),str(exc))
         self.recovery_unsaved=False
+        self.history_session=uuid.uuid4().hex;self.history_last_queued=None
         self.project=p; self.path=Path(path); self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(p,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
     def save(self,as_new=False):
         self.commit_code()

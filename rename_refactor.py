@@ -1,4 +1,5 @@
 """Reviewed, source-preserving object rename. Never executes submitted project code."""
+from watch_values import rename_watch
 from event_breakpoints import remap_lines
 import ast
 import copy
@@ -92,5 +93,6 @@ def rename_project(project,old,new):
         for old_obj,new_obj in zip([old_form]+old_form['widgets'],[new_form]+new_form['widgets']):
             for event,lines in list(new_obj.get('breakpoints',{}).items()):
                 new_obj['breakpoints'][event]=remap_lines(old_obj.get('events',{}).get(event,''),new_obj.get('events',{}).get(event,''),lines)
+    if 'watches' in snapshot:snapshot['watches']=list(dict.fromkeys(rename_watch(path,mapping) for path in snapshot['watches']))
     validate(snapshot)
     return {'project':snapshot,'changes':changes,'warnings':warnings}

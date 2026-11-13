@@ -1,3 +1,7 @@
+# Versione 1.28
+
+242 test superati per lingua, 11 grafici saltati. Verificati percorsi con ambito e indici/chiavi letterali, rifiuto di chiamate/espressioni eseguibili, dati mancanti/troncati, rinomina e salvataggio, cambio di proprietà della sessione aprendo un altro progetto. Un processo reale produce campioni con valore globale osservato che cambia. Collaudo grafico ancora da completare.
+
 # Versione 1.27
 
 235 test superati per lingua, 11 grafici saltati. Verificati offset dei runtime incorporati, posizioni evento/startup/import, righe non eseguibili, inserimento/sostituzione/eliminazione, rinomina e salvataggio/caricamento. Un processo pdb reale si è fermato nel metodo evento generato senza creare Tk. Marcatori e scorciatoia grafica ancora da collaudare.
