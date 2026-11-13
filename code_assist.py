@@ -43,6 +43,15 @@ for name in ('TButton','CTkButton'):SPECIFIC[name]=SPECIFIC['Button']
 for name in ('TScale','CTkSlider'):SPECIFIC[name]=SPECIFIC['Scale']
 for name in ('CTkComboBox','CTkOptionMenu','CTkSegmentedButton'):SPECIFIC[name]={'get':('',tr('Legge la selezione.')),'set':('"First"',tr('Imposta la selezione.'))}
 
+SPECIFIC.update({
+ 'MIDIPlayer':{'refresh_ports':('','List available MIDI outputs.'),'play':('"song.mid"','Play through the selected synthesizer output.'),'pause':('','Toggle pause/resume.'),'stop':('','Stop playback and reset output.')},
+ 'ExcelWorkbook':{'load':('"data.xlsx"','Load asynchronously; wait for ExcelLoaded.'),'create':('headers=["Name", "Value"], rows=[["A", 1]]','Create asynchronously; wait for ExcelLoaded.'),'get_data':('','Read the visible rows (includes the first row).'),'set_cell':('2, 2, 42','Set a cell using 1-based row/column indexes.'),'add_sheet':('"Results"','Add a sheet.'),'save_as':('"updated.xlsx"','Save asynchronously; wait for ExcelSaved.')},
+ 'PDFDocument':{'load':('"document.pdf"','Load asynchronously; wait for PDFLoaded.'),'extract_text':('','Extract all text asynchronously; wait for PDFTextReady.'),'merge':('["first.pdf", "second.pdf"], "merged.pdf"','Merge PDFs asynchronously.'),'extract_pages':('[0, 2], "selected.pdf"','Extract zero-based page indexes.'),'save_text':('"document.txt"','Extract and save all text asynchronously.')},
+ 'PrintDocument':{'preview':('"document.pdf"','Open the document in its associated application.'),'print_file':('"document.pdf"','Ask for confirmation, then submit a print job.')},
+ 'CloudStorage':{'connect':('','Initialize authentication; wait for CloudConnected.'),'list_files':('','List the configured folder; wait for CloudListed.'),'upload':('"report.xlsx"','Upload to the configured service/folder.'),'download':('"FILE_ID_OR_KEY", "download.pdf"','Download a selected remote file.')},
+ 'LLMClient':{'list_models':('','List models available to the configured API account.'),'send':('"Explain this result in simple language"','Send text asynchronously; read response in LLMResponse.')},
+})
+
 
 def objects(project):
     return {obj['name']:obj for form in project['forms'] for obj in [form]+form['widgets']}
@@ -50,7 +59,7 @@ def objects(project):
 
 def properties(obj, project):
     if 'kind' not in obj:return {'bg':obj.get('bg','white')}
-    if obj.get('kind') in ('DatabaseView','Sheet','MapView','CTkTabview'):return {}
+    if obj.get('kind') in ('DatabaseView','Sheet','MapView','CTkTabview','MIDIPlayer','ExcelWorkbook','PDFDocument','PrintDocument','CloudStorage','LLMClient'):return {}
     props=dict(registry(project).get(obj['kind'],{}).get('defaults',{}));props.update(obj.get('props',{}))
     kind=obj['kind']
     if kind=='Notebook':props.pop('pages',None)
@@ -84,6 +93,8 @@ def examples(obj, project):
     if obj.get('kind')=='DatabaseView':
         result.append((tr('Leggi riga selezionata'),f'record = {ref}.selected_record', tr('Dizionario della riga selezionata o None.')))
         result.append((tr('Leggi dati caricati'),f'records = {ref}.rows', tr('Usa nell’evento DataLoaded: lista di dizionari.')))
+    for attribute in {'LLMClient':['response','usage','error'],'CloudStorage':['files','last_transfer','error'],'PDFDocument':['text','page_count','last_path','error'],'ExcelWorkbook':['rows','path','error'],'PrintDocument':['print_job','error'],'MIDIPlayer':['source','error']}.get(obj.get('kind'),[]):
+        result.append((attribute,f'value = {ref}.{attribute}','Read after the corresponding completion event.'))
     for form in project['forms']:
         result.append((tr('Mostra ')+form['name'],f'self.show({form["name"]!r})',tr('Apre una finestra del progetto.')))
     result.append((tr('Messaggio informativo'),'messagebox.showinfo("Informazione", "Operazione completata")',tr('Mostra un messaggio.')))

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "ServicesDemo",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Cloud and LLM APIs \u2014 credentials required",
+      "width": 1050,
+      "height": 760,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Cloud1",
+          "kind": "CloudStorage",
+          "x": 20,
+          "y": 20,
+          "width": 950,
+          "height": 280,
+          "props": {
+            "provider": "drive",
+            "folder": "root",
+            "bucket": "",
+            "auth_mode": "desktop",
+            "scope": "app",
+            "client_env": "GOOGLE_OAUTH_CLIENT_FILE",
+            "token_env": "GOOGLE_TOKEN_FILE",
+            "endpoint_env": "S3_ENDPOINT_URL",
+            "url_env": "WEBDAV_URL",
+            "user_env": "WEBDAV_USER",
+            "password_env": "WEBDAV_PASSWORD"
+          },
+          "events": {
+            "CloudConnected": "self.Cloud1.list_files()",
+            "ServiceError": "print(self.Cloud1.error)"
+          }
+        },
+        {
+          "name": "LLM1",
+          "kind": "LLMClient",
+          "x": 20,
+          "y": 330,
+          "width": 950,
+          "height": 360,
+          "props": {
+            "provider": "openai",
+            "model": "",
+            "api_key_env": "",
+            "max_tokens": 1024
+          },
+          "events": {
+            "LLMResponse": "print(self.LLM1.response)",
+            "ServiceError": "print(self.LLM1.error)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

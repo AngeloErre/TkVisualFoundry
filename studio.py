@@ -37,6 +37,7 @@ from dependency_manager import dependency_plan
 from component_palette import ComponentPalette,LayoutMixin
 from project_ui import ProjectFilesMixin
 from library_ui import LibraryMixin
+from productivity_ui import ProductivityMixin
 from library_catalog import component_family
 from container_ui import ContainerMixin
 from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
@@ -44,7 +45,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()

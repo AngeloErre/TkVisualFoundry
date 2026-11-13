@@ -1,4 +1,4 @@
-# VisualTk Studio 1.12
+# VisualTk Studio 1.13
 
 Ambiente visuale per creare applicazioni Python/Tkinter, ispirato al flusso di lavoro di Visual Basic 6 e pensato principalmente per macOS. Disegna i form, modifica le proprietà, scrivi il codice degli eventi e avvia il progetto dall’IDE.
 
@@ -115,3 +115,9 @@ Build reale di esempio verificata: .app Mac, ZIP con risorse e firma ad hoc. La 
 Gestore di librerie e temi, filtro palette per famiglia, nuovi controlli ttk e CustomTkinter, tabella tksheet, MapView e megawidget Pmw selezionati. Contenitori annidati con parent/page e temi ttkbootstrap, ttkthemes, Sun Valley, Azure e Forest. [Guida completa](LIBRARIES_THEMES.md).
 
 118 test superati e 11 grafici saltati. Import di sette librerie opzionali verificati nell’interprete scelto. Build Mac reale di un esempio con librerie moderne: app/ZIP, risorse e firma ad hoc verificati. Il DMG non è disponibile in questa sessione; verificato il ripiego ZIP. Avvio grafico e build Windows restano da collaudare. PySimpleGUI, FreeSimpleGUI e guizero sono catalogati come motori separati, non generati da questa versione; Tix non è supportato.
+
+## Novità 1.13
+
+Sei componenti predefiniti per MIDI, Excel, PDF, stampa, cloud (Drive, S3/MinIO, WebDAV) e API LLM (OpenAI, Claude, Gemini). Configurazione guidata, dipendenze per servizio, credenziali di sessione o variabili esterne ed eventi asincroni. [Guida completa](PRODUCTIVITY.md).
+
+141 test superati e 11 grafici saltati. Verificati documenti temporanei e import SDK. Stampa, MIDI e API remote usano simulazioni nei test; nessuna chiamata a pagamento o stampa reale. Build Mac dell’esempio Office verificata; avvio grafico, Windows e servizi reali ancora da collaudare.

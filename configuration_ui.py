@@ -39,6 +39,8 @@ class ConfigurationMixin:
         return self.open_dependencies(obj['kind'],obj.get('props',{}),auto_install=True) if obj else self.palette_dependencies()
 
     def configure_component(self):
+        from productivity_specs import PRODUCTIVITY_COMPONENTS
+        if self.selected and self.selected['kind'] in PRODUCTIVITY_COMPONENTS:return self.productivity_setup()
         if self.selected and self.selected['kind']=='DatabaseView':return self.database_setup()
         return self.selected_dependencies()
 

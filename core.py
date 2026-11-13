@@ -7,9 +7,10 @@ from components import registry, requirements
 from pathlib import Path
 from hierarchy import ordered_widgets
 from library_catalog import theme_config
+from productivity_specs import validate_productivity
 
 KINDS = ('Button','Label','Entry','Text','Checkbutton','Radiobutton','Listbox','Combobox','Scale','Spinbox','Frame','Canvas','Progressbar')
-EVENTS = {'Click':'<Button-1>', 'DoubleClick':'<Double-Button-1>', 'Enter':'<Enter>', 'Leave':'<Leave>', 'KeyPress':'<KeyPress>', 'FocusIn':'<FocusIn>', 'FocusOut':'<FocusOut>', 'Change':'<<ComboboxSelected>>', 'ImageSelected':'<<ImageSelected>>', 'PlaybackStarted':'<<PlaybackStarted>>', 'SnapshotSaved':'<<SnapshotSaved>>', 'DeviceSelected':'<<DeviceSelected>>', 'DeviceError':'<<DeviceError>>', 'DataReceived':'<<DataReceived>>', 'FilesDropped':'<<FilesDropped>>', 'FileSelected':'<<FileSelected>>', 'DialogClosed':'<<DialogClosed>>', 'NavigationStarted':'<<NavigationStarted>>', 'StreamResolved':'<<StreamResolved>>', 'TreeSelect':'<<TreeviewSelect>>', 'TabChanged':'<<NotebookTabChanged>>', 'DateSelected':'<<CalendarSelected>>', 'DatabaseConnected':'<<DatabaseConnected>>', 'DataLoaded':'<<DataLoaded>>', 'RecordSelected':'<<RecordSelected>>', 'DataChanged':'<<DataChanged>>', 'SheetChanged':'<<SheetChanged>>','SheetSelected':'<<SheetSelected>>','MapClicked':'<<MapClicked>>','MarkerSelected':'<<MarkerSelected>>', 'DatabaseError':'<<DatabaseError>>'}
+EVENTS = {'Click':'<Button-1>', 'DoubleClick':'<Double-Button-1>', 'Enter':'<Enter>', 'Leave':'<Leave>', 'KeyPress':'<KeyPress>', 'FocusIn':'<FocusIn>', 'FocusOut':'<FocusOut>', 'Change':'<<ComboboxSelected>>', 'ImageSelected':'<<ImageSelected>>', 'PlaybackStarted':'<<PlaybackStarted>>', 'SnapshotSaved':'<<SnapshotSaved>>', 'DeviceSelected':'<<DeviceSelected>>', 'DeviceError':'<<DeviceError>>', 'DataReceived':'<<DataReceived>>', 'FilesDropped':'<<FilesDropped>>', 'FileSelected':'<<FileSelected>>', 'DialogClosed':'<<DialogClosed>>', 'NavigationStarted':'<<NavigationStarted>>', 'StreamResolved':'<<StreamResolved>>', 'TreeSelect':'<<TreeviewSelect>>', 'TabChanged':'<<NotebookTabChanged>>', 'DateSelected':'<<CalendarSelected>>', 'DatabaseConnected':'<<DatabaseConnected>>', 'DataLoaded':'<<DataLoaded>>', 'RecordSelected':'<<RecordSelected>>', 'DataChanged':'<<DataChanged>>', 'SheetChanged':'<<SheetChanged>>','SheetSelected':'<<SheetSelected>>','MapClicked':'<<MapClicked>>','MarkerSelected':'<<MarkerSelected>>', 'ServiceError':'<<ServiceError>>','MidiStarted':'<<MidiStarted>>','MidiFinished':'<<MidiFinished>>','ExcelLoaded':'<<ExcelLoaded>>','ExcelChanged':'<<ExcelChanged>>','ExcelSaved':'<<ExcelSaved>>','PDFLoaded':'<<PDFLoaded>>','PDFTextReady':'<<PDFTextReady>>','PDFSaved':'<<PDFSaved>>','PrintSubmitted':'<<PrintSubmitted>>','CloudConnected':'<<CloudConnected>>','CloudListed':'<<CloudListed>>','CloudTransferred':'<<CloudTransferred>>','LLMModelsReady':'<<LLMModelsReady>>','LLMResponse':'<<LLMResponse>>', 'DatabaseError':'<<DatabaseError>>'}
 
 def new_project(language=None):
     return {'version':1,'files':[],'language':language or get_language(),'name':tr('Applicazione'),'forms':[{'name':'Form1','title':'Form1','width':640,'height':440,'bg':'#f0f0f0','widgets':[],'events':{}}], 'imports':'', 'startup':'self.Form1.deiconify()'}
@@ -35,6 +36,7 @@ def validate(p, code=True):
             for dim in ('width','height'):
                 if not 1 <= int(obj[dim]) <= 10000: raise ValueError(tr('Dimensioni tra 1 e 10000'))
             if obj is not f and obj['kind'] not in KINDS and obj['kind'] not in reg: raise ValueError(tr('Componente sconosciuto'))
+            validate_productivity(obj.get('kind'),obj.get('props',{}))
             if obj.get('kind')=='DatabaseView':
                 props=obj.get('props',{})
                 if props.get('backend','sqlite') not in ('sqlite','postgresql','mysql'):raise ValueError(tr('Backend database non supportato'))
@@ -58,11 +60,14 @@ def generate(p):
     reg=registry(p)
     used=sorted({w['kind'] for f in p['forms'] for w in f['widgets'] if w['kind'] in reg})
     prelude=[]
-    embedded={'visualtk_runtime','database_runtime','integration_runtime'}
+    embedded={'visualtk_runtime','database_runtime','integration_runtime','productivity_runtime'}
     if any(reg[k]['module'] in embedded for k in used):
         prelude.append(Path(__file__).with_name('i18n.py').read_text(encoding='utf-8')+'\nset_language('+repr(language)+')\n')
     for module in sorted({reg[k]['module'] for k in used}&embedded):
         runtime=Path(__file__).with_name(module+'.py').read_text(encoding='utf-8').replace('from i18n import tr\n','')
+        if module=='productivity_runtime':
+            prelude.append(Path(__file__).with_name('service_backends.py').read_text(encoding='utf-8'))
+            runtime='\n'.join(line for line in runtime.splitlines() if not line.startswith('from service_backends import '))
         prelude.append(runtime)
     for kind in used:
         d=reg[kind]

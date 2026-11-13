@@ -35,6 +35,8 @@ class LibraryMixin:
             row=selected()
             if not row:return
             controls=[kind for kind,data in registry(self.project).items() if data.get('family')==row[0] or data['module']==row[3]] if row[3] else []
+            if row[0] in ('Google Drive','S3 / MinIO','WebDAV'):controls=['CloudStorage']
+            if row[0] in ('OpenAI','Claude','Gemini'):controls=['LLMClient']
             detail.set(row[5]+'\nPIP: '+(', '.join(row[2]) or '—')+'\n'+tr('Controlli: ')+', '.join(controls)+'\n'+tr('Deploy della libreria: non verificato automaticamente.'))
             state='disabled' if busy or row[4] in ('unsupported','separate') else 'normal'
             install.configure(state=state if row[2] else 'disabled');probe.configure(state=state);runtime.configure(state=state)

@@ -1,3 +1,11 @@
+# 1.13
+
+- Add built-in MIDIPlayer, ExcelWorkbook, PDFDocument, PrintDocument, CloudStorage and LLMClient controls with guided setup and asynchronous events.
+- Support MIDI output to synthesizers, XLSX/XLSM sheets/cells, PDF text/merge/extraction, and operating-system print submission with confirmation.
+- Add Google Drive OAuth/ADC, S3/MinIO and WebDAV file operations; add official OpenAI, Claude and Gemini text APIs with model listing.
+- Keep runtime credentials in memory or external storage; validate environment variable names and reject secret-valued project properties.
+- Collect provider-specific dependencies, SDK resources and certificates for deployment. Add bilingual documentation and three examples.
+
 # 1.12
 
 - Add a 19-family library/theme catalog with interpreter-scoped import checks and isolated representative GUI probes.

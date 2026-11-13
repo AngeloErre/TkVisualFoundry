@@ -8,6 +8,8 @@ from dependency_manager import probe_interpreter
 
 SAMPLES={'tkinter':'import tkinter as tk\nw = tk.Button(root,text="Test")','tkinter.ttk':'from tkinter import ttk\nw = ttk.Button(root,text="Test")','CustomTkinter':'import customtkinter as ctk\nw = ctk.CTkButton(root,text="Test")','Pmw':'import Pmw\nPmw.initialise(root)\nw = Pmw.EntryField(root)','tkcalendar':'from tkcalendar import DateEntry\nw = DateEntry(root)','tksheet':'from integration_runtime import SheetView\nw = SheetView(root,data=[["Test",1]],headers=["Name","Value"])','tkintermapview':'from integration_runtime import MapView\nw = MapView(root)','tkinterweb':'from visualtk_runtime import WebView\nw = WebView(root)','tkVideoPlayer':'from visualtk_runtime import LegacyVideoPlayer\nw = LegacyVideoPlayer(root)','TkinterDnD2':'from tkinterdnd2 import TkinterDnD\nTkinterDnD._require(root)\nw = tk.Label(root,text="tkDnD loaded")'}
 
+SAMPLES.update({name:'from productivity_runtime import '+kind+'\nw = '+kind+'(root'+(',provider="anthropic"' if name=='Claude' else ',provider="gemini"' if name=='Gemini' else ',provider="s3"' if name=='S3 / MinIO' else ',provider="webdav"' if name=='WebDAV' else '')+')' for name,kind in {'MIDI':'MIDIPlayer','Excel':'ExcelWorkbook','PDF':'PDFDocument','Stampa':'PrintDocument','Google Drive':'CloudStorage','S3 / MinIO':'CloudStorage','WebDAV':'CloudStorage','OpenAI':'LLMClient','Claude':'LLMClient','Gemini':'LLMClient'}.items()})
+
 def check_library(python,name,runtime=False,config=None,cwd=None):
     row=next(item for item in LIBRARIES if item[0]==name)
     if row[4] in ('unsupported','separate'):return {'state':row[4],'detail':row[5]}
@@ -16,7 +18,7 @@ def check_library(python,name,runtime=False,config=None,cwd=None):
         if any(item['state']!='ready' for item in checks):return {'state':'missing','detail':json.dumps(checks,ensure_ascii=False)}
     if not runtime:
         if row[4]=='assets':return {'state':'assets','detail':'Configure and import the theme folder, then run its isolated test.'}
-        result=subprocess.run([python,'-c','import importlib; importlib.import_module('+repr(row[3])+')'],capture_output=True,text=True,timeout=20)
+        result=subprocess.run([python,'-c','import sys,importlib;sys.path.insert(0,'+repr(str(Path(__file__).resolve().parent))+'); importlib.import_module('+repr(row[3])+')'],capture_output=True,text=True,timeout=20)
         return {'state':'installed' if result.returncode==0 else 'error','detail':(result.stderr or 'Import OK')[-4000:],'checked_at':time.time(),'python':python,'theme':config if row[1]=='theme' else None}
     setup=SAMPLES.get(name)
     if row[1]=='theme':

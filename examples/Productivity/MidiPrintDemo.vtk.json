@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "MidiPrintDemo",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "MIDI output and print services",
+      "width": 900,
+      "height": 500,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Midi1",
+          "kind": "MIDIPlayer",
+          "x": 20,
+          "y": 20,
+          "width": 820,
+          "height": 180,
+          "props": {
+            "source": "",
+            "port": ""
+          },
+          "events": {}
+        },
+        {
+          "name": "Print1",
+          "kind": "PrintDocument",
+          "x": 20,
+          "y": 230,
+          "width": 820,
+          "height": 200,
+          "props": {
+            "source": "",
+            "printer": "",
+            "copies": 1
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

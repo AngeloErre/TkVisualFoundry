@@ -52,6 +52,9 @@ BUILTINS['MapView']={'module':'integration_runtime','class':'MapView','family':'
 for suffix,defaults in {'ComboBox':{'scrolledlist_items':['First','Second']},'EntryField':{'value':''},'Counter':{'entryfield_value':0},'ScrolledText':{}}.items():
     BUILTINS['Pmw'+suffix]={'module':'Pmw','class':suffix,'family':'Pmw','defaults':defaults,'requirements':['Pmw>=2.1,<3'],'description':'Pmw '+suffix}
 
+from productivity_specs import PRODUCTIVITY_COMPONENTS,productivity_requirements
+BUILTINS.update(PRODUCTIVITY_COMPONENTS)
+
 CATALOG = [
  ('Pillow',tr('Immagini / gallerie')),('pygame-ce',tr('Audio MP3 — Python 3.15')),('opencv-python','Webcam / computer vision'),('pyusb',tr('USB generico')),('pyserial',tr('Seriale / Arduino')),
  ('customtkinter',tr('Widget moderni')),('ttkbootstrap',tr('Temi e componenti ttk')),('tkcalendar',tr('Calendario')),('SQLAlchemy',tr('Database remoti')),('psycopg','PostgreSQL'),('PyMySQL','MySQL'),('tksheet',tr('Tabelle')),('matplotlib',tr('Grafici')),('numpy',tr('Calcolo numerico')),('tkinterdnd2',tr('Drag & drop Finder')),('tkfilebrowser',tr('Dialoghi file avanzati')),('tkinterweb',tr('HTML/CSS web')),('tkhtmlview',tr('HTML leggero')),('pywebview',tr('Web nativo')),('python-vlc',tr('Video / streaming')),('yt-dlp','YouTube'),('pytubefix',tr('YouTube alternativo')),('pytube','YouTube legacy'),('tkVideoPlayer',tr('Video legacy / verificare Python')),('cefpython3',tr('Chromium legacy — non supportato su Python 3.13'))]
@@ -78,6 +81,7 @@ def requirements(project):
     for f in project['forms']:
         for w in f['widgets']:
             if w['kind'] in reg:result.update(reg[w['kind']].get('requirements',[]))
+            result.update(productivity_requirements(w['kind'],w.get('props',{})))
     from library_catalog import theme_requirements
     result.update(theme_requirements(project))
     if project.get('appearance_mode'):result.add('customtkinter>=5.2,<7')
@@ -101,6 +105,8 @@ def install_args(python, specs):
     return [python,'-m','pip','install','--index-url','https://pypi.org/simple',*specs]
 
 def design_size(kind,external=False):
+    if kind in ('ExcelWorkbook','PDFDocument','CloudStorage','LLMClient'):return 680,380
+    if kind in ('MIDIPlayer','PrintDocument'):return 620,180
     if kind in ('Sheet','MapView'):return 600,380
     if kind in ('Notebook','CTkTabview'):return 500,320
     if kind in ('Frame','LabelFrame','TFrame','TLabelframe','CTkFrame','CTkScrollableFrame','TPanedwindow'):return 400,240

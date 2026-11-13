@@ -48,9 +48,9 @@ print('La presenza del modulo non certifica compatibilità o funzionamento hardw
         else:webbrowser.open(directory.as_uri())
     def help_topic(self,topic=tr('Guida rapida')):
         HELP=getattr(sys.modules[self.__class__.__module__],'HELP',tr('Consulta il Manuale'))
-        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — VisualTk Studio 1.12');win.geometry('900x650')
+        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — VisualTk Studio 1.13');win.geometry('900x650')
         row=ttk.Frame(win,padding=5);row.pack(fill='x');selection=tk.StringVar(value=topic);query=tk.StringVar()
-        box=ttk.Combobox(row,textvariable=selection,values=[tr('Librerie e temi'),tr('File e deploy'),tr('Guida rapida'),tr('Manuale'),tr('Estensioni'),tr('Esempi'),tr('Compatibilità'),'Database',tr('Pacchetti PIP'),'IntelliSense'],state='readonly');box.pack(side='left');entry=ttk.Entry(row,textvariable=query);entry.pack(side='left',fill='x',expand=True,padx=6)
+        box=ttk.Combobox(row,textvariable=selection,values=[tr('Documenti, cloud e LLM'),tr('Librerie e temi'),tr('File e deploy'),tr('Guida rapida'),tr('Manuale'),tr('Estensioni'),tr('Esempi'),tr('Compatibilità'),'Database',tr('Pacchetti PIP'),'IntelliSense'],state='readonly');box.pack(side='left');entry=ttk.Entry(row,textvariable=query);entry.pack(side='left',fill='x',expand=True,padx=6)
         text=ScrolledText(win,wrap='word',font=('Helvetica',12));text.pack(fill='both',expand=True)
         files={tr('Manuale'):'README.md',tr('Estensioni'):'ESTENSIONI.md',tr('Esempi'):'ESEMPI.md',tr('Compatibilità'):'COMPATIBILITA.md','Database':'DATABASE.md',tr('Pacchetti PIP'):'PACCHETTI.md','IntelliSense':'INTELLISENSE.md'}
         if get_language()=='en':
@@ -58,6 +58,7 @@ print('La presenza del modulo non certifica compatibilità o funzionamento hardw
         else:files[tr('Manuale')]='README_IT.md'
         files[tr('File e deploy')]='docs/en/DEPLOYMENT.md' if get_language()=='en' else 'PROJECTS_DEPLOY.md'
         files[tr('Librerie e temi')]='docs/en/LIBRARIES.md' if get_language()=='en' else 'LIBRARIES_THEMES.md'
+        files[tr('Documenti, cloud e LLM')]='docs/en/PRODUCTIVITY.md' if get_language()=='en' else 'PRODUCTIVITY.md'
         def show(event=None):
             path=base/files.get(selection.get(),'README.md');content=HELP if selection.get()==tr('Guida rapida') else (path.read_text(encoding='utf-8') if path.exists() else tr('Documento non disponibile.'))
             text.configure(state='normal');text.delete('1.0','end');text.insert('1.0',content);text.configure(state='disabled')

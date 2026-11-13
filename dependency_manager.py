@@ -6,8 +6,9 @@ import subprocess
 import os
 import threading
 from components import registry, requirements, install_args
+from productivity_specs import productivity_requirements
 
-PACKAGE_MODULES = {'sv-ttk':'sv_ttk','pmw':'Pmw','customtkinter':'customtkinter','ttkbootstrap':'ttkbootstrap','ttkthemes':'ttkthemes','tksheet':'tksheet','tkcalendar':'tkcalendar','tkintermapview':'tkintermapview','tkinterweb':'tkinterweb','jedi':'jedi','pillow':'PIL','opencv-python':'cv2','numpy':'numpy','pygame-ce':'pygame','pyusb':'usb','pyserial':'serial','sqlalchemy':'sqlalchemy','psycopg':'psycopg','pymysql':'pymysql','python-vlc':'vlc','yt-dlp':'yt_dlp','pywebview':'webview','tkvideoplayer':'tkVideoPlayer','pyinstaller':'PyInstaller'}
+PACKAGE_MODULES = {'mido':'mido','python-rtmidi':'rtmidi','openpyxl':'openpyxl','pypdf':'pypdf','openai':'openai','anthropic':'anthropic','google-genai':'google.genai','google-api-python-client':'googleapiclient.discovery','google-auth-oauthlib':'google_auth_oauthlib','google-auth-httplib2':'google_auth_httplib2','boto3':'boto3','requests':'requests','sv-ttk':'sv_ttk','pmw':'Pmw','customtkinter':'customtkinter','ttkbootstrap':'ttkbootstrap','ttkthemes':'ttkthemes','tksheet':'tksheet','tkcalendar':'tkcalendar','tkintermapview':'tkintermapview','tkinterweb':'tkinterweb','jedi':'jedi','pillow':'PIL','opencv-python':'cv2','numpy':'numpy','pygame-ce':'pygame','pyusb':'usb','pyserial':'serial','sqlalchemy':'sqlalchemy','psycopg':'psycopg','pymysql':'pymysql','python-vlc':'vlc','yt-dlp':'yt_dlp','pywebview':'webview','tkvideoplayer':'tkVideoPlayer','pyinstaller':'PyInstaller'}
 NOTES = {
  'WebcamView':tr('OpenCV acquisisce il video e richiede NumPy; Pillow converte e visualizza i fotogrammi. Dopo l’installazione macOS deve autorizzare la Fotocamera per Python o l’app avviata.'),
  'USBExplorer':tr('PyUSB richiede anche la libreria nativa libusb (su Mac: brew install libusb). Il wizard PIP non installa driver di sistema.'),
@@ -19,6 +20,7 @@ NOTES = {
 
 def component_requirements(project, kind, props=None):
     specs=list(registry(project).get(kind,{}).get('requirements',[]));props=props or {}
+    specs+=productivity_requirements(kind,props)
     if kind=='WebcamView':specs.append('numpy')
     if kind=='DatabaseView':
         backend=props.get('backend','sqlite')

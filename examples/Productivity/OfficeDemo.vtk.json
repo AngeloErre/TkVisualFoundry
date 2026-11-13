@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "OfficeDemo",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Excel, PDF and printing",
+      "width": 1000,
+      "height": 700,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Excel1",
+          "kind": "ExcelWorkbook",
+          "x": 20,
+          "y": 20,
+          "width": 920,
+          "height": 300,
+          "props": {
+            "source": "",
+            "sheet": "",
+            "preview_rows": 500
+          },
+          "events": {}
+        },
+        {
+          "name": "PDF1",
+          "kind": "PDFDocument",
+          "x": 20,
+          "y": 340,
+          "width": 920,
+          "height": 300,
+          "props": {
+            "source": ""
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "",
+  "startup": "self.Form1.deiconify()"
+}

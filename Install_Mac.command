@@ -41,9 +41,9 @@ fi
 INSTALL_DIR="$HOME/Applications/VisualTkStudio"
 mkdir -p "$INSTALL_DIR"
 # Copy only distribution files, never a previous environment.
-cp hierarchy.py library_catalog.py library_checks.py library_ui.py container_ui.py integration_runtime.py theme_runtime.py project_ui.py project_files.py deployment.py deploy_build.py studio.py i18n.py component_palette.py ux_theme.py workspace_ui.py code_assist.py assist_ui.py semantic_engine.py analysis_client.py intellisense_worker.py dependency_manager.py dependency_ui.py configuration_ui.py database_runtime.py support_ui.py runtime_requirements.py core.py components.py library_explorer.py visualtk_runtime.py build_project.py requirements.txt requirements-multimedia.txt requirements-integrations.txt Build_Mac.command Install_Optional_Legacy.command "$INSTALL_DIR/"
+cp productivity_ui.py productivity_specs.py productivity_runtime.py service_backends.py hierarchy.py library_catalog.py library_checks.py library_ui.py container_ui.py integration_runtime.py theme_runtime.py project_ui.py project_files.py deployment.py deploy_build.py studio.py i18n.py component_palette.py ux_theme.py workspace_ui.py code_assist.py assist_ui.py semantic_engine.py analysis_client.py intellisense_worker.py dependency_manager.py dependency_ui.py configuration_ui.py database_runtime.py support_ui.py runtime_requirements.py core.py components.py library_explorer.py visualtk_runtime.py build_project.py requirements.txt requirements-multimedia.txt requirements-integrations.txt Build_Mac.command Install_Optional_Legacy.command "$INSTALL_DIR/"
 cp -R examples docs "$INSTALL_DIR/"
-cp LIBRARIES_THEMES.md PROJECTS_DEPLOY.md README.md README_IT.md ESTENSIONI.md ESEMPI.md COMPATIBILITA.md VALIDAZIONE.md CHANGELOG.md RELEASE.json DATABASE.md PACCHETTI.md INTELLISENSE.md RELEASE_NOTES.md "$INSTALL_DIR/"
+cp PRODUCTIVITY.md LIBRARIES_THEMES.md PROJECTS_DEPLOY.md README.md README_IT.md ESTENSIONI.md ESEMPI.md COMPATIBILITA.md VALIDAZIONE.md CHANGELOG.md RELEASE.json DATABASE.md PACCHETTI.md INTELLISENSE.md RELEASE_NOTES.md "$INSTALL_DIR/"
 if [ -x "$INSTALL_DIR/.venv/bin/python" ]; then
   if ! "$INSTALL_DIR/.venv/bin/python" -c 'import sys,importlib.metadata; assert sys.version_info[:2] >= (3, 15) and sys.version_info.releaselevel == "final"; assert not any(d.metadata.get("Name","").lower()=="pygame" for d in importlib.metadata.distributions())' >/dev/null 2>&1; then
     ENV_BACKUP="$INSTALL_DIR/.venv.backup-$(date +%Y%m%d-%H%M%S)-$$"
@@ -73,7 +73,7 @@ cat > "$APP_DIR/Contents/Info.plist" <<'PLIST'
 <key>CFBundleDisplayName</key><string>VisualTk Studio</string>
 <key>CFBundleExecutable</key><string>VisualTkStudio</string>
 <key>CFBundleIdentifier</key><string>it.visualtk.studio</string>
-<key>CFBundleVersion</key><string>1.12</string>
+<key>CFBundleVersion</key><string>1.13</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>NSHighResolutionCapable</key><true/>
 </dict></plist>

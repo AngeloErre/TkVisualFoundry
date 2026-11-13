@@ -23,6 +23,19 @@ LIBRARIES=[
  ('FreeSimpleGUI','framework',[],'','separate',tr('Motore di layout/eventi separato; non disponibile come widget nella palette')),
  ('guizero','framework',[],'','separate',tr('Modello App/contenitori separato; non disponibile come widget nella palette')),
 ]
+LIBRARIES.extend([
+ ('MIDI','widgets',['mido>=1.3,<2','python-rtmidi>=1.5,<2'],'mido','adapter','MIDIPlayer: requires a synthesizer output; no audio engine included'),
+ ('Excel','widgets',['openpyxl>=3.1,<4'],'openpyxl','adapter','ExcelWorkbook: XLSX/XLSM cells and sheets, no formula calculation'),
+ ('PDF','widgets',['pypdf[crypto]>=6,<8'],'pypdf','adapter','PDFDocument: text, merge and page extraction; no OCR'),
+ ('Stampa','widgets',[],'productivity_runtime','adapter','PrintDocument: associated application and operating-system print queue'),
+ ('Google Drive','widgets',['google-api-python-client>=2,<3','google-auth-oauthlib>=1,<2','google-auth-httplib2>=0.2,<1'],'googleapiclient.discovery','adapter','CloudStorage: Desktop OAuth or ADC, external tokens'),
+ ('S3 / MinIO','widgets',['boto3>=1.35,<2'],'boto3','adapter','CloudStorage: bucket and account credentials required'),
+ ('WebDAV','widgets',['requests>=2.32,<3'],'requests','adapter','CloudStorage: Nextcloud/ownCloud and compatible HTTPS servers'),
+ ('OpenAI','widgets',['openai>=2,<4'],'openai','adapter','LLMClient: official Responses API; key and model required'),
+ ('Claude','widgets',['anthropic>=0.70,<2'],'anthropic','adapter','LLMClient: official Messages API; key and model required'),
+ ('Gemini','widgets',['google-genai>=1,<3'],'google.genai','adapter','LLMClient: official Google Gen AI SDK; key and model required'),
+])
+
 THEME_REQUIREMENTS={row[0]:row[2] for row in LIBRARIES if row[1]=='theme'}
 
 def theme_config(project):
@@ -48,6 +61,10 @@ def packaging_flags(project):
     names={split(r'[<>=!~\[]',value,maxsplit=1)[0].lower() for value in requirements(project)}
     modules={'customtkinter':'customtkinter','ttkbootstrap':'ttkbootstrap','ttkthemes':'ttkthemes','sv-ttk':'sv_ttk','pmw':'Pmw','tkcalendar':'tkcalendar','tksheet':'tksheet','tkinterweb':'tkinterweb','tkintermapview':'tkintermapview','tkinterdnd2':'tkinterdnd2','tkvideoplayer':'tkVideoPlayer'}
     flags=[]
+    for name,module in {'mido':'mido','python-rtmidi':'rtmidi','openpyxl':'openpyxl','pypdf':'pypdf','openai':'openai','anthropic':'anthropic','google-genai':'google.genai','google-api-python-client':'googleapiclient','google-auth-oauthlib':'google_auth_oauthlib','google-auth-httplib2':'google_auth_httplib2','boto3':'boto3','requests':'requests'}.items():
+        if name in names:flags+=['--collect-all='+module]
+    if 'boto3' in names:flags+=['--collect-all=botocore']
+    if names & {'openai','anthropic','google-genai','google-api-python-client','requests','boto3'}:flags+=['--collect-data=certifi']
     for name,module in modules.items():
         if name in names:flags+=['--collect-all='+module]
     if 'customtkinter' in names:flags+=['--hidden-import=PIL._tkinter_finder']

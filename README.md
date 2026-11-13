@@ -1,8 +1,14 @@
-# VisualTk Studio 1.12
+# VisualTk Studio 1.13
 
 A visual Python/Tkinter IDE for macOS, inspired by the Visual Basic 6 workflow. Design multiple forms, edit control properties, write event handlers and run your application from one workspace.
 
 [Guida italiana](README_IT.md) · [Changelog](CHANGELOG.md)
+
+## New in 1.13
+
+Six built-in components: MIDIPlayer, ExcelWorkbook, PDFDocument, PrintDocument, CloudStorage and LLMClient. Optional dependencies follow the selected service. CloudStorage supports Google Drive, S3/MinIO and WebDAV; LLMClient supports official OpenAI, Claude and Gemini APIs. Runtime session credentials or external environment variables keep secrets out of project files. Slow operations complete asynchronously through events.
+
+[Documents, cloud and LLM guide](docs/en/PRODUCTIVITY.md). Examples are in `examples/Productivity/`. MIDI needs a synthesizer output; API/cloud accounts, consent and printer/device setup remain external requirements. The library catalog now has 29 entries.
 
 ## New in 1.12
 
@@ -65,3 +71,5 @@ Try `examples/ProjectFiles/ProjectFilesDemo.vtk.json` for a local Python module 
 Validation: 118 tests passed, 11 graphical tests skipped. A native macOS example app and ZIP were built with PyInstaller 6.22.3; resource inclusion and ad hoc signature verification passed. DMG creation was unavailable in this session, and ZIP fallback succeeded. Graphical launch, Windows builds and installation on clean targets remain pending.
 
 Version 1.12 validation: 118 tests passed, 11 graphical tests skipped. Seven optional libraries imported successfully in the selected Python 3.15.2 environment. A native macOS example build with CustomTkinter, tksheet and sv-ttk produced an app/ZIP with library resources and a valid ad hoc signature. DMG creation unavailable in this session; fallback succeeded. Graphical execution and Windows builds remain pending.
+
+1.13 validation: 141 tests passed; 11 graphical tests skipped. Real temporary Excel/PDF operations and installed SDK imports passed. Print, MIDI and remote API contracts were tested with mocks, without live account access, paid requests or physical printing. A native Mac Office example app/ZIP build and ad hoc signature were verified; graphical launch, Windows and live services remain pending.

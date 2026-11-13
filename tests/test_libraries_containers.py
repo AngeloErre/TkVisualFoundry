@@ -64,7 +64,7 @@ class HierarchyTests(unittest.TestCase):
 
 class LibraryIntegrationTests(unittest.TestCase):
     def test_catalog_contains_every_requested_family(self):
-        self.assertEqual(len(LIBRARIES),19);names={row[0] for row in LIBRARIES}
+        self.assertGreaterEqual(len(LIBRARIES),19);names={row[0] for row in LIBRARIES}
         self.assertTrue({'CustomTkinter','ttkbootstrap','ttkthemes','sv-ttk','Azure','Forest','Pmw','Tix','PySimpleGUI','FreeSimpleGUI','guizero'}.issubset(names))
         for name in ('PySimpleGUI','FreeSimpleGUI','guizero'):self.assertEqual(check_library(sys.executable,name)['state'],'separate')
         self.assertEqual(check_library(sys.executable,'Tix')['state'],'unsupported')
