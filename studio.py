@@ -211,7 +211,7 @@ class Studio(EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,Intelligence
         self.command=ttk.Entry(bottom);self.command.grid(row=2,column=0,sticky='ew');self.command.bind('<Return>',self.console_command)
         for sequence in ('<Configure>','<B1-Motion>','<ButtonRelease-1>'):vertical.bind(sequence,lambda e:self.after_idle(self.clamp_log),add='+')
         for sequence in ('<Command-j>','<Control-j>'):self.bind(sequence,lambda e:self.toggle_log())
-        self.after_idle(self.reset_layout)
+        self.install_layout_guards()
     def filter_palette(self):
         query=self.palette_query.get().strip().casefold()
         selected=self.palette.get(self.palette.curselection()[0]) if self.palette.curselection() else None

@@ -1,3 +1,8 @@
+# 1.19.1
+
+- Initialize the workspace splitters after Map/Configure geometry is available instead of relying on a single early idle callback.
+- Give the right dock a wider initial area and clamp Project Explorer/Properties to usable dimensions after resizing. Preserve valid user splitter positions.
+
 # 1.19
 
 - Add canvas Shift-click/select-all, group movement, hierarchy-aware duplicate/delete and sibling alignment/equal-size/distribution commands.

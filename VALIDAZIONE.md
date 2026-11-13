@@ -1,3 +1,7 @@
+# Versione 1.19.1
+
+193 test superati per lingua, 11 grafici saltati. Nuove regressioni per dimensioni iniziali non ancora assegnate, prima visualizzazione dei pannelli, recupero pannelli collassati e conservazione delle dimensioni valide. La verifica visiva interattiva resta necessaria.
+
 # Versione 1.19
 
 191 test superati in italiano e inglese, 11 grafici saltati per esecuzione. Verificati spostamento dei gruppi/gerarchie, distribuzione/allineamento, posizioni degli errori, analisi senza esecuzione e gestione moduli. Ambiente .venv reale creato e riutilizzato senza installazioni di rete; verificati preservazione cartelle esistenti, pulizia dopo errore, isolamento delle preferenze globali e assenza di fallback silenzioso.

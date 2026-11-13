@@ -121,12 +121,38 @@ class LayoutMixin:
         if height<2:return
         minimum=min(height,max(320,int(height*.65)))
         if self.vertical.sashpos(0)<minimum:self.vertical.sashpos(0,minimum)
+    def install_layout_guards(self):
+        self.layout_initialized=False;self.right_layout_initialized=False;self.layout_guard_timer=None
+        for pane in (self.main_panes,self.right_panes):
+            for sequence in ('<Configure>','<Map>','<ButtonRelease-1>'):
+                pane.bind(sequence,self.schedule_layout_guard,add='+')
+        self.schedule_layout_guard()
+
+    def schedule_layout_guard(self,event=None):
+        if self.layout_guard_timer is None:self.layout_guard_timer=self.after_idle(self.ensure_layout_visible)
+
+    def ensure_layout_visible(self):
+        self.layout_guard_timer=None
+        width=self.main_panes.winfo_width()
+        if width>=800:
+            if not self.layout_initialized:
+                self.main_panes.sashpos(0,205);self.main_panes.sashpos(1,width-340);self.layout_initialized=True
+            else:
+                left=max(170,min(self.main_panes.sashpos(0),width-620))
+                right=max(left+320,min(self.main_panes.sashpos(1),width-300))
+                if self.main_panes.sashpos(0)!=left:self.main_panes.sashpos(0,left)
+                if self.main_panes.sashpos(1)!=right:self.main_panes.sashpos(1,right)
+        height=self.right_panes.winfo_height()
+        if height>=250:
+            low=min(150,max(80,height-180));high=max(low,height-170)
+            position=max(low,min(260,round(height*.36))) if not self.right_layout_initialized else self.right_panes.sashpos(0)
+            position=max(low,min(high,position));self.right_layout_initialized=True
+            if self.right_panes.sashpos(0)!=position:self.right_panes.sashpos(0,position)
+
     def reset_layout(self):
         self.show_log(False)
-        width=self.main_panes.winfo_width()
-        if width>800:
-            self.main_panes.sashpos(0,205);self.main_panes.sashpos(1,width-315)
-        if hasattr(self,'right_panes') and self.right_panes.winfo_height()>300:self.right_panes.sashpos(0,max(140,int(self.right_panes.winfo_height()*.30)))
+        self.layout_initialized=False;self.right_layout_initialized=False
+        self.schedule_layout_guard()
 
     def menus(self):
         import webbrowser
@@ -141,7 +167,7 @@ class LayoutMixin:
             ('PIP',[(tr('Controlli iniziali'),self.show_health),(tr('Prepara automaticamente il progetto…'),lambda:self.open_dependencies(auto_install=True)),(tr('Componente del designer…'),self.selected_dependencies),(tr('Componente della palette…'),self.palette_dependencies),(tr('Installa un pacchetto…'),self.install_package),(tr('Verifica requisiti senza installare…'),lambda:self.open_dependencies(auto_install=False)),(tr('Catalogo pacchetti…'),lambda:LibraryExplorer(self)),(tr('Impostazioni pacchetti…'),self.settings)]),
             (tr('Componenti'),[(tr('Librerie e temi…'),self.library_manager),(tr('Inserisci selezionato'),self.add_widget),(tr('Crea componente esterno…'),self.component_wizard),(tr('Importa descrittore…'),self.import_component),(tr('Componenti del progetto…'),self.component_manager),(tr('Configura selezionato…'),self.configure_component)]),
             (tr('Vista'),[(tr('Classico VB6'),self.use_classic_appearance),(tr('Mostra / nascondi log'),self.toggle_log),(tr('Ripristina pannelli'),self.reset_layout),(tr('Colori ambiente…'),self.appearance_settings),(tr('Tema applicazione…'),self.choose_theme)]),
-            ('Help',[(tr('Documenti, cloud e LLM'),lambda:self.help_topic(tr('Documenti, cloud e LLM'))),(tr('Librerie e temi'),lambda:self.help_topic(tr('Librerie e temi'))),(tr('File e deploy'),lambda:self.help_topic(tr('File e deploy'))),(tr('IntelliSense e completamento'),lambda:self.help_topic('IntelliSense')),(tr('Guida rapida — F1'),self.help),(tr('Pacchetti PIP'),lambda:self.help_topic(tr('Pacchetti PIP'))),('Database',lambda:self.help_topic('Database')),(tr('Manuale'),lambda:self.help_topic(tr('Manuale'))),(tr('Estensioni'),lambda:self.help_topic(tr('Estensioni'))),(tr('Esempi'),self.open_examples),(tr('Compatibilità'),lambda:self.help_topic(tr('Compatibilità'))),(tr('Diagnostica'),self.diagnostics),(tr('Documentazione Tkinter'),lambda:webbrowser.open('https://docs.python.org/3/library/tkinter.html')),(tr('Informazioni'),lambda:messagebox.showinfo('VisualTk Studio',tr('VisualTk Studio 1.19\nDesigner visuale Python / Tkinter')))]),
+            ('Help',[(tr('Documenti, cloud e LLM'),lambda:self.help_topic(tr('Documenti, cloud e LLM'))),(tr('Librerie e temi'),lambda:self.help_topic(tr('Librerie e temi'))),(tr('File e deploy'),lambda:self.help_topic(tr('File e deploy'))),(tr('IntelliSense e completamento'),lambda:self.help_topic('IntelliSense')),(tr('Guida rapida — F1'),self.help),(tr('Pacchetti PIP'),lambda:self.help_topic(tr('Pacchetti PIP'))),('Database',lambda:self.help_topic('Database')),(tr('Manuale'),lambda:self.help_topic(tr('Manuale'))),(tr('Estensioni'),lambda:self.help_topic(tr('Estensioni'))),(tr('Esempi'),self.open_examples),(tr('Compatibilità'),lambda:self.help_topic(tr('Compatibilità'))),(tr('Diagnostica'),self.diagnostics),(tr('Documentazione Tkinter'),lambda:webbrowser.open('https://docs.python.org/3/library/tkinter.html')),(tr('Informazioni'),lambda:messagebox.showinfo('VisualTk Studio',tr('VisualTk Studio 1.19.1\nDesigner visuale Python / Tkinter')))]),
         ]
         for title,items in definitions:
             menu=tk.Menu(bar,tearoff=False);bar.add_cascade(label=title,menu=menu)

@@ -1,7 +1,5 @@
-# VisualTk Studio 1.19
+# VisualTk Studio 1.19.1
 
-Three completed work-plan steps: multiple control selection/group layout, navigable static Problems diagnostics and private project Python environments. Use Shift-click or canvas Ctrl/Cmd+A, Run → Problems, and Project → Project Python environment.
+Fix Project Explorer being collapsed at startup. Splitter initialization waits for valid pane geometry, the initial right dock is wider and minimum Project Explorer/Properties dimensions are preserved during resizing. Valid user sizes are retained.
 
-Property editing/resizing remains primary-control based; layout requires sibling controls. Import/reference warnings can have dynamic-code false positives. Virtual environments are not portable and are excluded from deployment; recreate them after moving projects. No event source is executed for static diagnostics.
-
-191 tests passed per language, 11 graphical tests skipped. Real environment creation/reuse, static analysis and geometry checks passed. Interactive GUI and destination-platform acceptance remain pending.
+193 tests passed per language, 11 graphical tests skipped. Geometry lifecycle and collapsed/valid splitter cases covered; interactive GUI validation remains pending.
