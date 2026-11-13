@@ -107,3 +107,9 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Dataset selection, sample filter, refresh and session baseline comparison.
 - [x] Reader PIP wizard, format matrix, DBX/Access prerequisites and regression tests.
 - [ ] Native optional-reader and interactive GUI acceptance.
+
+## Phase 17 — general stress and debug (1.33)
+
+- [x] Reproduce and fix Unicode namespace, malformed load, typed comparison and reader lifecycle defects.
+- [x] Nine regressions, bilingual full suite and reproducible offline stress fixtures.
+- [x] Report evidence and remaining native/graphical acceptance limits.

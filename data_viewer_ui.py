@@ -10,10 +10,18 @@ from data_reader import REQUIREMENTS,difference
 from i18n import tr
 
 
+def stop_reader(process):
+    # Reader workers are read-only and own no application transaction.
+    if process is not None:
+        try:
+            if process.poll() is None:process.kill()
+        except OSError:pass  # The worker may have exited between poll and kill.
+
+
 class DataViewer(tk.Toplevel):
     def __init__(self,studio):
         super().__init__(studio);self.studio=studio;self.title(tr('Visualizzatore dati'));self.geometry('1050x650');self.minsize(700,430)
-        self.path='';self.current=None;self.baseline=None;self.process=None;self.sequence=0;self.closed=False;self.busy=False;self.events=queue.Queue();self.after_id=None
+        self.path='';self.current=None;self.baseline=None;self.process=None;self.process_lock=threading.Lock();self.sequence=0;self.closed=False;self.busy=False;self.events=queue.Queue();self.after_id=None
         self.path_text=tk.StringVar();self.dataset=tk.StringVar();self.query=tk.StringVar();self.auto=tk.BooleanVar();self.show_baseline=tk.BooleanVar();self.status=tk.StringVar(value=tr('Apri un file dati per controllarne il contenuto.'))
         top=ttk.Frame(self,padding=8);top.pack(fill='x')
         ttk.Button(top,text=tr('Apri file dati…'),command=self.open_file).pack(side='left')
@@ -36,7 +44,8 @@ class DataViewer(tk.Toplevel):
         path=filedialog.askopenfilename(parent=self,title=tr('Apri file dati…'),filetypes=[(tr('File dati'),'*.sqlite *.sqlite3 *.db *.sql *.mdb *.accdb *.dbx *.dbf *.xls *.xlsx *.xlsm *.json *.jsonl *.ndjson *.csv *.tsv *.txt *.parquet'),(tr('Tutti i file'),'*')])
         if not path:return
         self.sequence+=1
-        if self.process and self.process.poll() is None:self.process.terminate()
+        with self.process_lock:process=self.process;self.process=None
+        stop_reader(process)
         self.path=path;self.path_text.set(path);self.dataset.set('');self.selector.configure(values=());self.current=None;self.baseline=None;self.show_baseline.set(False);self.render();self.busy=False;self.refresh()
     def refresh(self):
         if self.closed or self.busy or not self.path:return
@@ -47,14 +56,22 @@ class DataViewer(tk.Toplevel):
             process=None
             try:
                 process=subprocess.Popen([python,'-u',str(Path(__file__).with_name('data_reader.py'))],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,encoding='utf-8',errors='replace')
-                if self.closed or token!=self.sequence:process.terminate()
-                else:self.process=process
+                with self.process_lock:
+                    if self.closed or token!=self.sequence:stop_reader(process)
+                    else:self.process=process
                 output,errors=process.communicate(json.dumps(request),timeout=20)
                 if process.returncode:raise RuntimeError(errors[-1000:] or 'Reader process failed')
                 result=json.loads(output)
             except Exception as error:
-                if process and process.poll() is None:process.kill();process.communicate()
+                stop_reader(process)
+                if process is not None:process.communicate()
                 result={'ok':False,'error':str(error)[:1500]}
+            finally:
+                with self.process_lock:
+                    if self.process is process:self.process=None
+                if process is not None:
+                    for pipe in (process.stdin,process.stdout,process.stderr):
+                        if pipe is not None:pipe.close()
             self.events.put((token,result))
         threading.Thread(target=work,daemon=True).start()
     def poll(self):
@@ -93,10 +110,12 @@ class DataViewer(tk.Toplevel):
         if self.auto.get():self.refresh()
         self.auto_id=self.after(2000,self.tick)
     def close(self):
-        self.closed=True;self.sequence+=1
+        with self.process_lock:
+            if self.closed:return
+            self.closed=True;self.sequence+=1;process=self.process;self.process=None
         for timer in (self.after_id,self.auto_id):
             if timer:self.after_cancel(timer)
-        if self.process and self.process.poll() is None:self.process.terminate()
+        stop_reader(process)
         self.destroy()
 
 

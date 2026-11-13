@@ -1,3 +1,10 @@
+# 1.33 — General stress and debugging
+
+- Reject Unicode names changed by Python NFKC normalization and malformed project code/form shapes.
+- Preserve scalar types in preview comparison keys.
+- Synchronize reader ownership; handle exited workers, cancel/reap workers and close pipes.
+- Add nine regressions and reproducible temporary-only stress runner.
+
 # 1.32.1 — Generated Python syntax colors
 
 - Share syntax tokenization and light/dark palette between event editor and generated Python.

@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.33
+
+275 test superati per lingua, 11 grafici saltati. Nove nuove regressioni su nomi Unicode, strutture/codice non validi, confronto tipi e chiusura processi. Stress offline: 300 progetti casuali, 60 letture SQLite con 100 commit, 100 scritture atomiche, 40 lettori cancellati e raccolti, 500 snapshot variabili e sorgente da 3000 widget compilato/tokenizzato. Dettagli in docs/DEBUG_REPORT_1.33.md. GUI, build/installazioni native e lettori opzionali reali restano da validare.
+
 # TkVisualFoundry 1.32.1
 
 266 test superati per lingua, 11 grafici saltati. Colorazione condivisa del Python generato e palette adattiva; priorità breakpoint/debug/selezione mantenuta. Accettazione grafica ancora da completare.

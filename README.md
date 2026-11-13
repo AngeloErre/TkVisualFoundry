@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.32.1
+# TkVisualFoundry 1.33
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Stress test and debugging (1.33)
+
+General stress/debug release: reject Python-normalized identifier aliases and malformed project/event structures before loading, preserve value types in data comparisons, and make data-reader shutdown race-safe. See the [debug report and reproducible offline checks](docs/DEBUG_REPORT_1.33.md).
 
 ## Generated Python syntax colors (1.32.1)
 

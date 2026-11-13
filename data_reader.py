@@ -2,6 +2,7 @@
 import csv
 import datetime
 import itertools
+import hashlib
 import json
 import sqlite3
 import sys
@@ -22,14 +23,16 @@ def cell(value):
 
 
 def table_result(names,selected,columns,rows):
-    result={'datasets':list(names)[:500],'selected':selected,'columns':[str(c)[:128] for c in list(columns)[:MAX_COLUMNS]],'rows':[],'limited':False}
+    result={'datasets':list(names)[:500],'selected':selected,'columns':[str(c)[:128] for c in list(columns)[:MAX_COLUMNS]],'rows':[],'row_keys':[],'limited':False}
     budget=0
     for row in itertools.islice(rows,MAX_ROWS+1):
         if len(result['rows'])==MAX_ROWS:result['limited']=True;break
-        values=[cell(v) for v in list(row)[:MAX_COLUMNS]];values+=['']*(len(result['columns'])-len(values));values=values[:len(result['columns'])]
+        raw=list(row)[:len(result['columns'])];values=[cell(v) for v in raw];values+=['']*(len(result['columns'])-len(values))
+        typed=[(type(value).__name__,hashlib.sha256(value).hexdigest() if isinstance(value,bytes) else text) for value,text in zip(raw,values)]
+        key=hashlib.sha256(json.dumps(typed,ensure_ascii=False).encode('utf-8')).hexdigest()
         budget+=len(json.dumps(values,ensure_ascii=False).encode('utf-8'))
         if budget>3*1024*1024:result['limited']=True;break
-        result['rows'].append(values)
+        result['rows'].append(values);result['row_keys'].append(key)
     return result
 
 
@@ -134,7 +137,9 @@ def preview(filename,dataset=''):
 
 def difference(before,after):
     if before['path']!=after['path'] or before['selected']!=after['selected']:return None
-    old=Counter(tuple(r) for r in before['rows']);new=Counter(tuple(r) for r in after['rows'])
+    def keys(data):
+        return data['row_keys'] if 'row_keys' in data else [tuple(r) for r in data['rows']]
+    old=Counter(keys(before));new=Counter(keys(after))
     return {'added':sum((new-old).values()),'removed':sum((old-new).values()),'columns_changed':before['columns']!=after['columns']}
 
 

@@ -1,8 +1,8 @@
 {
-  "version": "1.32.1",
+  "version": "1.33",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 266,
+  "tests_passed": 275,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -56,5 +56,59 @@
   "command_palette_validation": "Bilingual/accent-insensitive search, stable ranking, session recent ordering and non-executing discovery tested. Graphical focus, keyboard and modal acceptance pending; desktop Terminal access unavailable.",
   "menu_validation": "Removed custom duplicate menu row; single Tk native menu retains all menu definitions, command palette and shortcuts. Full suite checked; graphical macOS/Windows/Linux acceptance pending.",
   "data_viewer_validation": "Read-only SQLite/WAL, quoted names, missing files, SQL non-execution, CSV/JSON/NDJSON, limits, multiset comparisons, real XLSX formulas/no-save and worker subprocess passed. Access uses mocked ODBC contract; native Access, legacy XLS/DBF/Parquet and GUI acceptance pending. Preview only: 500 rows, 80 columns, 512 chars per cell.",
-  "generated_syntax_validation": "Shared token highlighter and theme palette cover generated Python; debugger/breakpoint/selection priorities retained. Unchanged source avoids repeated tokenization. Interactive graphical acceptance pending."
+  "generated_syntax_validation": "Shared token highlighter and theme palette cover generated Python; debugger/breakpoint/selection priorities retained. Unchanged source avoids repeated tokenization. Interactive graphical acceptance pending.",
+  "stress_validation": {
+    "random_projects": {
+      "count": 300,
+      "checks": "deterministic generation, compile and tokenization",
+      "seconds": 1.779
+    },
+    "concurrent_readers": {
+      "reads": 60,
+      "max_workers": 4,
+      "writer_commits": 100,
+      "rows_in_database": 2000,
+      "seconds": 0.692
+    },
+    "atomic_writes": {
+      "count": 100,
+      "seconds": 0.018
+    },
+    "reader_cancellation": {
+      "count": 40,
+      "seconds": 0.094,
+      "all_reaped": true
+    },
+    "inspector_snapshots": {
+      "count": 500,
+      "seconds": 0.049,
+      "bounded": true
+    },
+    "large_source": [
+      {
+        "widgets": 100,
+        "bytes": 27633,
+        "tokens": 7957,
+        "seconds": 0.008
+      },
+      {
+        "widgets": 1000,
+        "bytes": 268833,
+        "tokens": 76357,
+        "seconds": 0.074
+      },
+      {
+        "widgets": 3000,
+        "bytes": 816833,
+        "tokens": 228357,
+        "seconds": 0.226
+      }
+    ]
+  },
+  "stress_fixes": [
+    "Reject NFKC-unstable identifiers that Python rewrites into internal names",
+    "Reject non-text code and malformed form/event/property structures before UI replacement",
+    "Compare typed bounded row keys, distinguishing null/text and numeric/text values",
+    "Synchronize worker ownership, tolerate exit races and reap cancelled read-only readers"
+  ]
 }

@@ -3,6 +3,7 @@ from i18n import tr,get_language
 import ast
 import json
 import keyword
+import unicodedata
 from components import registry, requirements
 from pathlib import Path
 from hierarchy import ordered_widgets
@@ -19,10 +20,16 @@ def new_project(language=None):
     return {'version':1,'files':[],'language':language or get_language(),'name':tr('Applicazione'),'forms':[{'name':'Form1','title':'Form1','width':640,'height':440,'bg':'#f0f0f0','widgets':[],'events':{}}], 'imports':'', 'startup':'self.Form1.deiconify()'}
 
 def identifier(value):
-    return isinstance(value,str) and value.isidentifier() and not keyword.iskeyword(value) and not value.startswith(('_','event_')) and value not in {'root','show','hide','startup','mainloop','destroy','report_callback_exception'}
+    return isinstance(value,str) and value==unicodedata.normalize('NFKC',value) and value.isidentifier() and not keyword.iskeyword(value) and not value.startswith(('_','event_')) and value not in {'root','show','hide','startup','mainloop','destroy','report_callback_exception'}
 
 def validate(p, code=True):
-    if p.get('version') != 1 or not p.get('forms'): raise ValueError(tr('Formato progetto non supportato'))
+    if not isinstance(p,dict) or p.get('version') != 1 or not isinstance(p.get('forms'),list) or not p['forms']: raise ValueError(tr('Formato progetto non supportato'))
+    if not all(isinstance(p.get(key,''),str) for key in ('imports','startup')):raise ValueError(tr('Il codice del progetto e degli eventi deve essere testo.'))
+    for form in p['forms']:
+        if not isinstance(form,dict) or not isinstance(form.get('widgets'),list) or not all(isinstance(form.get(key),str) for key in ('title','bg')):raise ValueError(tr('Struttura del form non valida.'))
+        for obj in [form]+form['widgets']:
+            if not isinstance(obj,dict) or not isinstance(obj.get('props',{}),dict) or not isinstance(obj.get('events',{}),dict):raise ValueError(tr('Struttura del form non valida.'))
+            if not all(isinstance(key,str) and isinstance(body,str) for key,body in obj.get('events',{}).items()):raise ValueError(tr('Il codice del progetto e degli eventi deve essere testo.'))
     validate_breakpoints(p,project=True);validate_watches(p)
     files=p.get('files',[])
     if not isinstance(files,list) or not all(isinstance(value,str) for value in files):raise ValueError('Project files must be a list of relative paths.')
