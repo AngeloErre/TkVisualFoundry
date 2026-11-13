@@ -226,7 +226,7 @@ class MessageButton(tk.Frame):
         self.event_generate('<<DialogClosed>>',when='tail')
 
 class HtmlView(tk.Frame):
-    def __init__(self,master,html='<h2>VisualTk Studio</h2><p>Contenuto HTML</p>',**kw):
+    def __init__(self,master,html='<h2>TkVisualFoundry</h2><p>Contenuto HTML</p>',**kw):
         super().__init__(master,**kw);self.html=html
         try:
             from tkhtmlview import HTMLScrolledText

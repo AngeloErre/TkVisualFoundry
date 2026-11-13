@@ -80,4 +80,4 @@ def component_family(kind,project,reg=None):
     if kind=='WebView':return 'tkinterweb'
     if kind=='LegacyVideoPlayer':return 'tkVideoPlayer'
     if kind in ('Notebook','Treeview'):return 'tkinter.ttk'
-    return 'VisualTk' if data['module'] in ('visualtk_runtime','database_runtime') else data['module']
+    return 'TkVisualFoundry' if data['module'] in ('visualtk_runtime','database_runtime') else data['module']

@@ -16,7 +16,7 @@ class SupportMixin:
         ttk.Combobox(win,textvariable=family,values=sorted(set(tkfont.families(self))),width=40).pack(padx=12,pady=10)
         ttk.Spinbox(win,from_=6,to=96,textvariable=size).pack(padx=12,pady=5)
         ttk.Checkbutton(win,text=tr('Grassetto'),variable=bold).pack(anchor='w',padx=12);ttk.Checkbutton(win,text=tr('Corsivo'),variable=italic).pack(anchor='w',padx=12)
-        preview_font=tkfont.Font(self,family=family.get(),size=size.get());sample=ttk.Label(win,text='VisualTk Studio — Anteprima 123',font=preview_font);sample.pack(padx=15,pady=15)
+        preview_font=tkfont.Font(self,family=family.get(),size=size.get());sample=ttk.Label(win,text='TkVisualFoundry — Anteprima 123',font=preview_font);sample.pack(padx=15,pady=15)
         def preview(*args):
             try:preview_font.configure(family=family.get(),size=size.get(),weight='bold' if bold.get() else 'normal',slant='italic' if italic.get() else 'roman')
             except (tk.TclError,ValueError):pass
@@ -48,7 +48,7 @@ print('La presenza del modulo non certifica compatibilità o funzionamento hardw
         else:webbrowser.open(directory.as_uri())
     def help_topic(self,topic=tr('Guida rapida')):
         HELP=getattr(sys.modules[self.__class__.__module__],'HELP',tr('Consulta il Manuale'))
-        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — VisualTk Studio 1.29');win.geometry('900x650')
+        base=Path(__file__).resolve().parent;win=tk.Toplevel(self);win.title('Help — TkVisualFoundry 1.30');win.geometry('900x650')
         row=ttk.Frame(win,padding=5);row.pack(fill='x');selection=tk.StringVar(value=topic);query=tk.StringVar()
         box=ttk.Combobox(row,textvariable=selection,values=[tr('Documenti, cloud e LLM'),tr('Librerie e temi'),tr('File e deploy'),tr('Guida rapida'),tr('Manuale'),tr('Estensioni'),tr('Esempi'),tr('Compatibilità'),'Database',tr('Pacchetti PIP'),'IntelliSense'],state='readonly');box.pack(side='left');entry=ttk.Entry(row,textvariable=query);entry.pack(side='left',fill='x',expand=True,padx=6)
         text=ScrolledText(win,wrap='word',font=('Helvetica',12));text.pack(fill='both',expand=True)

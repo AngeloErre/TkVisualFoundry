@@ -87,3 +87,9 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Owned IDE uninstallers and Windows per-user install; generated Mac/Windows uninstall support.
 - [x] Real pdb and temporary uninstall preservation regressions; bilingual documentation.
 - [ ] Graphical acceptance: desktop control unavailable. Native Windows registry/shortcut/Recycle Bin and target OS installer acceptance pending.
+
+## Phase 14 — TkVisualFoundry identity (1.30)
+
+- [x] Rename visible product branding, docs, generator headers, repository links and build names.
+- [x] Preserve project/storage identities and recognize owned legacy launcher manifests.
+- [x] Migration and bilingual regression checks; native/graphical acceptance pending.

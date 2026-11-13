@@ -1,4 +1,4 @@
-# File di progetto e deploy — VisualTk Studio 1.11
+# File di progetto e deploy — TkVisualFoundry 1.11
 
 ## Esplora progetto
 

@@ -31,13 +31,13 @@ RECOMMENDED=recommended_packages()
 
 def package_info(name,python_version=None):
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*',name):raise ValueError(tr('Inserisci il nome esatto del pacchetto PyPI'))
-    request=Request('https://pypi.org/pypi/'+quote(name,safe='')+'/json',headers={'User-Agent':'VisualTkStudio/1.17'})
+    request=Request('https://pypi.org/pypi/'+quote(name,safe='')+'/json',headers={'User-Agent':'TkVisualFoundry/1.30'})
     with urlopen(request,timeout=15,context=https_context()) as response:data=json.load(response)
     info=dict(data['info'])
     if python_version:
         chosen=stable_versions(data,SpecifierSet(),python_version)
         if chosen and chosen!=info.get('version'):
-            request=Request('https://pypi.org/pypi/'+quote(name,safe='')+'/'+quote(chosen,safe='')+'/json',headers={'User-Agent':'VisualTkStudio/1.17'})
+            request=Request('https://pypi.org/pypi/'+quote(name,safe='')+'/'+quote(chosen,safe='')+'/json',headers={'User-Agent':'TkVisualFoundry/1.30'})
             with urlopen(request,timeout=15,context=https_context()) as response:info=dict(json.load(response)['info'])
         info['version']=chosen
     return info

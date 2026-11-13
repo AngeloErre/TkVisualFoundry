@@ -1,4 +1,4 @@
-# Librerie, temi e contenitori — VisualTk Studio 1.12
+# Librerie, temi e contenitori — TkVisualFoundry 1.12
 
 Apri **Componenti → Librerie e temi…**. La finestra presenta tutte le 19 famiglie discusse, il tipo di integrazione, i requisiti e l’ultima verifica nell’interprete selezionato. La palette dispone di un filtro per famiglia, oltre alla ricerca per nome.
 

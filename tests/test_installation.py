@@ -33,3 +33,22 @@ class InstallationTests(unittest.TestCase):
             (source/'studio.py').write_text('owned');(root/'studio.py').write_text('owned');(root/'.venv').mkdir();(root/'personal.vtk.json').write_text('personal');(root/'empty-personal-folder').mkdir();(home/'settings.json').write_text('settings');record_install(root,source)
             with patch('installation.Path.home',return_value=home),patch('installation.install_root',return_value=root),patch('builtins.input',return_value='y'):uninstall_mac(root)
             self.assertTrue((root/'empty-personal-folder').is_dir());self.assertFalse((root/'studio.py').exists());self.assertFalse((root/'.venv').exists());self.assertTrue((root/'personal.vtk.json').exists());self.assertTrue((home/'settings.json').exists())
+    def test_rebrand_preserves_owned_legacy_launcher_and_modified_files(self):
+        from unittest.mock import patch
+        from installation import APP_NAME,LEGACY_APP_NAME
+        with tempfile.TemporaryDirectory() as d:
+            home=Path(d);source=home/'download';root=home/'Applications/VisualTkStudio';source.mkdir();root.mkdir(parents=True);(source/'studio.py').write_text('code');(root/'studio.py').write_text('code')
+            old=home/'Applications'/LEGACY_APP_NAME;new=home/'Applications'/APP_NAME
+            for app in (old,new):
+                (app/'Contents/MacOS').mkdir(parents=True);(app/'Contents/Info.plist').write_text('owned plist');(app/'Contents/MacOS/VisualTkStudio').write_text('owned launcher')
+            record_install(root,source,old)
+            # Version 1.29 had no app_name field: it must remain a recognized old launcher.
+            marker=root/'.visualtk-install.json';data=json.loads(marker.read_text());data.pop('app_name');marker.write_text(json.dumps(data))
+            record_install(root,source,new);data=json.loads(marker.read_text());self.assertEqual(data['app_name'],APP_NAME);self.assertTrue(data['legacy_app_files'])
+            (old/'Contents/Info.plist').write_text('user change')
+            with patch('installation.Path.home',return_value=home):plan=uninstall_plan(root,expected=root,app=new)
+            self.assertIn(old/'Contents/Info.plist',plan['preserve']);self.assertIn(old/'Contents/MacOS/VisualTkStudio',plan['files']);self.assertIn(new/'Contents/Info.plist',plan['files'])
+    def test_recording_from_installed_folder_is_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            with self.assertRaises(ValueError):record_install(root,root)

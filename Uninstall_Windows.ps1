@@ -23,7 +23,7 @@ foreach ($file in $data.files.PSObject.Properties) {
   }
 }
 Write-Host 'Projects, modified/untracked files, settings, history and system Python are preserved.'
-if ((Read-Host 'Uninstall VisualTk Studio? [y/N]') -notmatch '^(y|yes|s|si)$') { exit 0 }
+if ((Read-Host 'Uninstall TkVisualFoundry? [y/N]') -notmatch '^(y|yes|s|si)$') { exit 0 }
 $environment = SafePath '.venv'
 if ($data.environment -and (Test-Path -LiteralPath $environment)) {
   $owner = SafePath '.venv/.visualtk-owner'
@@ -31,8 +31,15 @@ if ($data.environment -and (Test-Path -LiteralPath $environment)) {
   Add-Type -AssemblyName Microsoft.VisualBasic
   [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteDirectory($environment, [Microsoft.VisualBasic.FileIO.UIOption]::OnlyErrorDialogs, [Microsoft.VisualBasic.FileIO.RecycleOption]::SendToRecycleBin)
 }
-$shortcut = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\VisualTk Studio.lnk'
-if ((Test-Path -LiteralPath $shortcut) -and (Get-FileHash -LiteralPath $shortcut -Algorithm SHA256).Hash.ToLower() -eq $data.shortcut_sha256) { Remove-Item -LiteralPath $shortcut }
+$shortcutName = $data.shortcut_name
+if (!$shortcutName) { $shortcutName = 'VisualTk Studio.lnk' }
+if ($shortcutName -notin @('TkVisualFoundry.lnk','VisualTk Studio.lnk')) { throw 'Unexpected shortcut name' }
+$shortcuts = @(@{Name=$shortcutName; Hash=$data.shortcut_sha256})
+if ($data.legacy_shortcut_sha256) { $shortcuts += @{Name='VisualTk Studio.lnk'; Hash=$data.legacy_shortcut_sha256} }
+foreach ($entry in $shortcuts) {
+  $shortcut = Join-Path $env:APPDATA ('Microsoft\Windows\Start Menu\Programs\'+$entry.Name)
+  if ((Test-Path -LiteralPath $shortcut) -and (Get-FileHash -LiteralPath $shortcut -Algorithm SHA256).Hash.ToLower() -eq $entry.Hash) { Remove-Item -LiteralPath $shortcut }
+}
 $key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\VisualTkStudio'
 if ((Test-Path -LiteralPath $key) -and (Get-ItemProperty -LiteralPath $key).VTSToken -eq $data.token) { Remove-Item -LiteralPath $key }
 foreach ($path in $remove) { Remove-Item -LiteralPath $path -Force }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""VisualTk Studio: visual Tkinter designer, event IDE and process debugger."""
+"""TkVisualFoundry: visual Tkinter designer, event IDE and process debugger."""
 from i18n import tr,get_language
 from runtime_requirements import ensure_current, validate_interpreter
 from settings_store import load_settings
@@ -68,7 +68,7 @@ class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMi
     def __init__(self):
         ensure_current()
         super().__init__()
-        self.title('VisualTk Studio • Python Visual Development')
+        self.title('TkVisualFoundry • Python Visual Development')
         self.geometry('1400x900'); self.minsize(1050,650)
         self.project=new_project(); self.path=None; self.selected=None; self.selection_names=set();self.form_index=0
         self.history=[]; self.future=[]; self.proc=None; self.messages=queue.Queue(); self.code_target=None
@@ -533,7 +533,7 @@ class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMi
         self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(self.project,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
     def open_project(self):
         if not self.dirty_guard():return
-        path=filedialog.askopenfilename(filetypes=[('VisualTk project','*.vtk.json'),('JSON','*.json')])
+        path=filedialog.askopenfilename(filetypes=[('TkVisualFoundry project','*.vtk.json'),('JSON','*.json')])
         if not path:return
         try:
             p=load(path)
@@ -548,7 +548,7 @@ class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMi
         self.commit_code()
         path=self.path
         if as_new or path is None:
-            s=filedialog.asksaveasfilename(defaultextension='.vtk.json',filetypes=[('VisualTk project','*.vtk.json')]); path=Path(s) if s else None
+            s=filedialog.asksaveasfilename(defaultextension='.vtk.json',filetypes=[('TkVisualFoundry project','*.vtk.json')]); path=Path(s) if s else None
         if path is None:return False
         if not as_new and getattr(self,'recovery_unsaved',False) and path==self.path and path.exists():path=recovered_path(self.recovery_original)
         if self.path and path.resolve().parent!=self.path.resolve().parent and (self.project.get('files') or self.project.get('deployment',{}).get('icon') or self.project.get('environment',{}).get('managed')):
@@ -647,7 +647,7 @@ class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMi
     def install_project_dependencies(self):
         self.commit_code();return self.open_dependencies()
     def import_component(self):
-        path=filedialog.askopenfilename(title=tr('Descrittore componente visuale'),filetypes=[('VisualTk component','*.vtk-component.json'),('JSON','*.json')])
+        path=filedialog.askopenfilename(title=tr('Descrittore componente visuale'),filetypes=[('TkVisualFoundry component','*.vtk-component.json'),('JSON','*.json')])
         if not path:return
         try:
             data=json.loads(Path(path).read_text(encoding='utf-8'));name=data['name'];desc=descriptor(data)
@@ -676,7 +676,7 @@ class Studio(WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMi
             except subprocess.TimeoutExpired:self.proc.kill(); self.proc.wait()
         self.finish_local_history();self.stop_preview();self.temp.cleanup(); self.destroy()
 
-HELP=tr('VISUALTK STUDIO — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.')
+HELP=tr('TKVISUALFOUNDRY — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.')
 
 if __name__=='__main__':
     Studio().mainloop()

@@ -1,7 +1,7 @@
-# VisualTk Studio 1.29
+# TkVisualFoundry 1.30
 
-Select a paused F9 stack frame by double-click, Enter or Select frame. Locals, module globals, Watch resolution and pdb generated-source position follow the selected frame. Full stack remains visible; pause tokens reject stale requests.
+VisualTk Studio is now TkVisualFoundry — Visual Python Studio. Update application titles/About/help, bilingual READMEs/guides, generated headers, component documentation links, installer names and Mac standalone build artifacts. Repository: https://github.com/AngeloErre/TkVisualFoundry. Original screenshots are retained and labeled as pre-rename releases.
 
-Add ownership-based IDE uninstallers for macOS/Windows and a Windows IDE installer with private environment, Start shortcut and Windows Apps registration. Preserve modified/untracked files, projects, settings, history and system Python. Generated Mac kits gain a recognized-app Trash uninstaller; Windows Setup explicitly enables native uninstall. See docs/INSTALL_UNINSTALL.md.
+Preserve project formats, settings/cache/history/private environment locations, internal module names and stable installation ownership IDs. New Mac/Windows launchers use TkVisualFoundry; uninstallers recognize old ownership manifests and matching legacy launchers/shortcuts while preserving modified files. Native/graphical install and Windows migration acceptance remain pending.
 
-249 tests passed per language, 11 graphical tests skipped. Real pdb context switching and temporary-fixture removal tested. Desktop control was unavailable for graphical acceptance. Native Windows install/uninstall/registry and platform UI acceptance remain pending. No real user installation was removed.
+251 tests passed per language, 11 graphical tests skipped. All 15 examples validated/compiled. Additional migration regressions cover legacy owned Mac launchers and rejection of recording from the installed directory.

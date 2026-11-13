@@ -42,7 +42,7 @@ def project_names(path=None,refresh=False,cancelled=None,progress=None):
         if names and all(NAME.fullmatch(n) for n in names):
             return {'names':names,'cached':True,'age':max(0,time.time()-path.stat().st_mtime)}
     parser=ProjectNames();decoder=codecs.getincrementaldecoder('utf-8')();started=time.monotonic();size=0
-    request=Request('https://pypi.org/simple/',headers={'Accept':'application/vnd.pypi.simple.v1+html','Accept-Encoding':'gzip','User-Agent':'VisualTkStudio/1.17'})
+    request=Request('https://pypi.org/simple/',headers={'Accept':'application/vnd.pypi.simple.v1+html','Accept-Encoding':'gzip','User-Agent':'TkVisualFoundry/1.30'})
     with urlopen(request,timeout=12,context=https_context()) as response:
         stream=gzip.GzipFile(fileobj=response) if response.headers.get('Content-Encoding')=='gzip' else response
         while True:

@@ -1,3 +1,10 @@
+# 1.30 — TkVisualFoundry
+
+- Rename the product to TkVisualFoundry — Visual Python Studio and update repository links.
+- Update UI, bilingual help/docs, generated headers, installer labels and Mac build names.
+- Preserve existing storage/project formats and stable ownership IDs; support owned legacy launchers/shortcuts during uninstall.
+- Add migration regressions; native Windows/GUI acceptance remains pending.
+
 # 1.29
 
 - Select paused pdb frames with locals/global/Watch context and stale-stop protection.

@@ -1,4 +1,4 @@
-# MIDI, Excel, PDF, stampa, cloud e LLM — VisualTk Studio 1.13
+# MIDI, Excel, PDF, stampa, cloud e LLM — TkVisualFoundry 1.13
 
 I sei nuovi componenti sono nella palette predefinita. Le librerie vengono preparate dal wizard PIP quando necessario. Seleziona il controllo e usa **Azioni → Configura componente…**: scegli servizio, file, modello e nomi delle variabili ambiente, poi **Salva e prepara dipendenze…**. I file locali richiesti vanno inclusi nel progetto per il deploy; i percorsi assoluti non vengono convertiti automaticamente.
 

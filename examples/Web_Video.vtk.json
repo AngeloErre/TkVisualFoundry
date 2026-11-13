@@ -17,7 +17,7 @@
           "width": 510,
           "height": 220,
           "props": {
-            "html": "<h2>VisualTk Studio</h2><p>HTML semplice</p>"
+            "html": "<h2>TkVisualFoundry</h2><p>HTML semplice</p>"
           },
           "events": {}
         },

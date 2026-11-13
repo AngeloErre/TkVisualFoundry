@@ -10,6 +10,10 @@ import sys
 import uuid
 
 MARKER='.visualtk-install.json'
+APP_NAME='TkVisualFoundry.app'
+LEGACY_APP_NAME='VisualTk Studio.app'
+SHORTCUT_NAME='TkVisualFoundry.lnk'
+LEGACY_SHORTCUT_NAME='VisualTk Studio.lnk'
 
 def install_root():
     return Path(os.environ.get('LOCALAPPDATA',str(Path.home()/'AppData/Local')))/'Programs/VisualTkStudio' if sys.platform=='win32' else Path.home()/'Applications/VisualTkStudio'
@@ -38,6 +42,11 @@ def distribution_files(source):
 def record_install(root,source,app=None):
     if root.resolve()==source.resolve():raise ValueError('Run installation from the extracted download')
     if is_link(root):raise ValueError('Refusing linked installation root')
+    previous={}
+    marker=confined(root,MARKER)
+    if marker.is_file():
+        previous=json.loads(marker.read_text())
+        if previous.get('product')!='VisualTkStudio':raise ValueError('Unrecognized prior installation')
     token=uuid.uuid4().hex;files={}
     for p in distribution_files(source):
         relative=p.relative_to(source).as_posix();target=confined(root,relative)
@@ -47,6 +56,10 @@ def record_install(root,source,app=None):
     if env.is_dir():confined(env,'.visualtk-owner').write_text(token)
     data={'format':1,'product':'VisualTkStudio','token':token,'files':files,'environment':env.is_dir()}
     if app:
+        if app.name not in (APP_NAME,LEGACY_APP_NAME):raise ValueError('Unexpected launcher name')
+        data['app_name']=app.name
+        legacy=previous.get('app_files',{}) if previous.get('app_name',LEGACY_APP_NAME)==LEGACY_APP_NAME else previous.get('legacy_app_files',{})
+        if app.name==APP_NAME and legacy:data['legacy_app_files']=legacy
         owned={}
         for rel in ('Contents/Info.plist','Contents/MacOS/VisualTkStudio'):
             path=confined(app,rel)
@@ -64,27 +77,35 @@ def uninstall_plan(root,expected=None,app=None):
     for rel,sha in data['files'].items():
         path=confined(root,rel)
         if path.is_file():(remove if digest(path)==sha else preserve).append(path)
-    if app and data.get('app_files'):
-        for rel,sha in data['app_files'].items():
-            path=confined(app,rel)
-            if path.is_file():(remove if digest(path)==sha else preserve).append(path)
+    app_roots=[]
+    if app:
+        app_roots=[app]
+        bundles=[(app,data.get('app_files',{}))]
+        if data.get('legacy_app_files'):
+            legacy=Path.home()/'Applications'/LEGACY_APP_NAME;app_roots.append(legacy);bundles.append((legacy,data['legacy_app_files']))
+        for bundle,files in bundles:
+            for rel,sha in files.items():
+                path=confined(bundle,rel)
+                if path.is_file():(remove if digest(path)==sha else preserve).append(path)
     env=confined(root,'.venv');environment=None
     if data.get('environment') and env.exists():
         owner=confined(env,'.visualtk-owner')
         if owner.is_file() and owner.read_text()==data['token']:environment=env
         else:preserve.append(env)
-    return {'files':remove,'preserve':preserve,'environment':environment,'marker':marker}
+    return {'files':remove,'preserve':preserve,'environment':environment,'marker':marker,'app_roots':app_roots}
 
 def uninstall_mac(root,dry_run=False):
-    app=Path.home()/'Applications/VisualTk Studio.app';plan=uninstall_plan(root,app=app)
+    name=json.loads(confined(root,MARKER).read_text()).get('app_name',LEGACY_APP_NAME)
+    if name not in (APP_NAME,LEGACY_APP_NAME):raise ValueError('Unexpected launcher name')
+    app=Path.home()/'Applications'/name;plan=uninstall_plan(root,app=app)
     print('Files / File:',len(plan['files']),'— modified files kept / modificati conservati:',len(plan['preserve']))
     print('Projects, settings, history and system Python are kept. / Progetti, impostazioni, cronologia e Python di sistema restano.')
     print('Installation / Installazione:',root)
     if dry_run:
         for path in plan['files']:print('REMOVE:',path)
         print('Managed environment:',plan['environment']);return plan
-    print('Close VisualTk Studio before continuing. / Chiudi VisualTk Studio prima di continuare.')
-    if input('Uninstall VisualTk Studio? / Disinstallare? [y/N]: ').strip().lower() not in ('y','yes','s','si'):return plan
+    print('Close TkVisualFoundry before continuing. / Chiudi TkVisualFoundry prima di continuare.')
+    if input('Uninstall TkVisualFoundry? / Disinstallare? [y/N]: ').strip().lower() not in ('y','yes','s','si'):return plan
     if plan['environment']:shutil.rmtree(plan['environment'])
     for path in plan['files']:
         try:path.unlink()
@@ -92,7 +113,7 @@ def uninstall_mac(root,dry_run=False):
     directories=set()
     for path in plan['files']:
         for directory in path.parents:
-            if directory==root or directory==app:
+            if directory==root or directory in plan['app_roots']:
                 directories.add(directory);break
             directories.add(directory)
     for directory in sorted(directories,key=lambda p:len(p.parts),reverse=True):
@@ -119,19 +140,23 @@ def install_windows(source):
     subprocess.run([str(python),'-m','pip','install','--upgrade','pip'],check=True);subprocess.run([str(python),'-m','pip','install','-r',str(root/'requirements.txt')],check=True)
     subprocess.run([str(python),'-c','import tkinter,jedi,PyInstaller'],check=True)
     # Use environment-local Python by default when Studio is launched through this shortcut.
-    shortcut=Path(os.environ['APPDATA'])/'Microsoft/Windows/Start Menu/Programs/VisualTk Studio.lnk';shortcut.parent.mkdir(parents=True,exist_ok=True)
+    shortcut=Path(os.environ['APPDATA'])/'Microsoft/Windows/Start Menu/Programs'/SHORTCUT_NAME;shortcut.parent.mkdir(parents=True,exist_ok=True)
     def ps(value):return "'"+str(value).replace("'","''")+"'"
     command='$s=(New-Object -ComObject WScript.Shell).CreateShortcut('+ps(shortcut)+');$s.TargetPath='+ps(env/'Scripts/pythonw.exe')+';$s.Arguments='+ps('"'+str(root/'studio.py')+'"')+';$s.WorkingDirectory='+ps(root)+';$s.Save()'
     subprocess.run(['powershell.exe','-NoProfile','-Command',command],check=True)
-    data=record_install(root,source);data['shortcut_sha256']=digest(shortcut);(root/MARKER).write_text(json.dumps(data,indent=2))
+    old_marker=confined(root,MARKER);previous=json.loads(old_marker.read_text()) if old_marker.is_file() else {}
+    data=record_install(root,source);data['shortcut_name']=SHORTCUT_NAME;data['shortcut_sha256']=digest(shortcut)
+    if previous.get('shortcut_name',LEGACY_SHORTCUT_NAME)==LEGACY_SHORTCUT_NAME and previous.get('shortcut_sha256'):data['legacy_shortcut_sha256']=previous['shortcut_sha256']
+    elif previous.get('legacy_shortcut_sha256'):data['legacy_shortcut_sha256']=previous['legacy_shortcut_sha256']
+    (root/MARKER).write_text(json.dumps(data,indent=2))
     version=json.loads((root/'RELEASE.json').read_text())['version']
     with winreg.CreateKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Uninstall\VisualTkStudio') as key:
-        for name,value in {'DisplayName':'VisualTk Studio','DisplayVersion':version,'Publisher':'VisualTk Studio','InstallLocation':str(root),'VTSToken':data['token'],'UninstallString':'"'+os.environ.get('COMSPEC','cmd.exe')+'" /c ""'+str(root/'Uninstall_Windows.cmd')+'""'}.items():winreg.SetValueEx(key,name,0,winreg.REG_SZ,value)
+        for name,value in {'DisplayName':'TkVisualFoundry','DisplayVersion':version,'Publisher':'TkVisualFoundry','InstallLocation':str(root),'VTSToken':data['token'],'UninstallString':'"'+os.environ.get('COMSPEC','cmd.exe')+'" /c ""'+str(root/'Uninstall_Windows.cmd')+'""'}.items():winreg.SetValueEx(key,name,0,winreg.REG_SZ,value)
     print('Installed:',root,'— Uninstall from Windows Settings / Disinstalla da Impostazioni Windows.')
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('action',choices=['record-mac','install-windows','uninstall-mac']);p.add_argument('--source',default=str(Path(__file__).resolve().parent));p.add_argument('--dry-run',action='store_true');args=p.parse_args();root=install_root()
-    if args.action=='record-mac':record_install(root,Path(args.source),Path.home()/'Applications/VisualTk Studio.app')
+    if args.action=='record-mac':record_install(root,Path(args.source),Path.home()/'Applications'/APP_NAME)
     elif args.action=='install-windows':install_windows(Path(args.source))
     elif sys.platform=='darwin':uninstall_mac(root,args.dry_run)
     else:raise RuntimeError('Use Uninstall_Windows.cmd on Windows')

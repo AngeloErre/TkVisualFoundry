@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.30
+
+251 test superati per lingua, 11 grafici saltati. Rinomina di UI/documentazione, header generati e pacchetti; compatibilità di storage e ownership mantenuta. Nuove regressioni sui launcher Mac precedenti e rifiuto di registrazione dalla cartella già installata. 15 esempi compilati. Collaudo grafico, migrazione Windows e installazione nativa ancora da completare.
+
 # Versione 1.29
 
 249 test superati per lingua, 11 grafici saltati. Cambio frame pdb reale con locali/Watch e rifiuto di richieste obsolete; pianificazione e disinstallazione effettiva in cartelle temporanee con conservazione di progetti, file modificati e cartelle personali vuote. Verificata sintassi shell dei kit e configurazione uninstall di Inno Setup. Controllo desktop non disponibile: collaudo grafico e installazione/disinstallazione Windows nativa ancora da eseguire. Nessuna installazione reale dell’utente rimossa.

@@ -1,8 +1,14 @@
-# VisualTk Studio 1.29
+# TkVisualFoundry 1.30
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## TkVisualFoundry — il nuovo nome (1.30)
+
+**TkVisualFoundry — Visual Python Studio** è il nuovo nome di VisualTk Studio. Il repository è ora [AngeloErre/TkVisualFoundry](https://github.com/AngeloErre/TkVisualFoundry). Titoli, Informazioni/guida, intestazioni del codice generato, etichette degli installer e pacchetti usano il nuovo marchio.
+
+Progetti, impostazioni, cache, cronologia di recupero e ambienti esistenti restano compatibili. Le cartelle interne e gli identificativi di installazione conservano i nomi precedenti per consentire l’aggiornamento. Su Mac il launcher è `TkVisualFoundry.app`; Windows mostra TkVisualFoundry nel menu Start e nelle App installate. Il disinstallatore riconosce anche i precedenti launcher/collegamenti gestiti. [Compatibilità di aggiornamento e rimozione](docs/INSTALL_UNINSTALL.md#rename-compatibility).
 
 ## Schermate
 
@@ -10,7 +16,7 @@
 
 Ambiente ispirato a VB6 con casella degli strumenti, designer dei form, Esplora progetto e ispettore delle proprietà.
 
-![Designer visuale e ambiente di progetto di VisualTk Studio](docs/screenshots/designer-workspace.png)
+![Designer visuale e ambiente di progetto di TkVisualFoundry](docs/screenshots/designer-workspace.png)
 
 ### Applicazione in esecuzione
 
@@ -24,7 +30,7 @@ Catalogo dei componenti estesi e documentazione integrata del componente client 
 
 ![Catalogo componenti e documentazione integrata del client LLM](docs/screenshots/components-documentation.png)
 
-*Le immagini mostrano l’interfaccia italiana su macOS. L’IDE supporta anche l’inglese.*
+*Le immagini mostrano versioni precedenti su macOS, prima della rinomina TkVisualFoundry. L’IDE supporta italiano e inglese.*
 
 Correzione del layout iniziale: Esplora progetto e Proprietà vengono dimensionati quando la geometria è disponibile, con pannello destro più largo e aree minime visibili. Le dimensioni manuali valide vengono conservate.
 
@@ -134,7 +140,7 @@ Le nuove installazioni usano Classico VB6: pannelli grigi, intestazioni blu ed e
 
 1. Scarica ed estrai il repository o lo ZIP in una cartella scrivibile.
 2. Esegui `Install_Mac.command` con doppio clic oppure `bash Install_Mac.command` dal Terminale.
-3. L’installer individua **Python 3.15 stabile o successivo con Tkinter**, prepara un ambiente virtuale privato e crea `VisualTk Studio.app` in `~/Applications`.
+3. L’installer individua **Python 3.15 stabile o successivo con Tkinter**, prepara un ambiente virtuale privato e crea `TkVisualFoundry.app` in `~/Applications`.
 4. Avvia l’app e scegli il Python dei progetti in **Progetto → Configurazione…**.
 5. Segui il wizard PIP quando inserisci componenti che richiedono pacchetti opzionali.
 

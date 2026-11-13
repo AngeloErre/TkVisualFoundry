@@ -138,7 +138,7 @@ EN_MESSAGES = {
   "Configura il tuo ambiente di lavoro": "Configure your workspace",
   "Configura selezionato…": "Configure selected component…",
   "Configurazione database": "Database configuration",
-  "Configurazione • VisualTk Studio": "Settings • VisualTk Studio",
+  "Configurazione • TkVisualFoundry": "Settings • TkVisualFoundry",
   "Conflitti di dipendenze dopo l’installazione.\n": "Dependency conflicts after installation.\n",
   "Connessione database": "Database connection",
   "Connessione e tabella dati": "Connection and data table",
@@ -547,7 +547,7 @@ EN_MESSAGES = {
   "Lingua interfaccia": "Interface language",
   "Lingua dei componenti generati": "Generated component language",
   "Lingua aggiornata": "Language updated",
-  "La lingua è stata salvata. Riavvia VisualTk Studio per applicarla a tutte le finestre.": "The language has been saved. Restart VisualTk Studio to apply it to all windows.",
+  "La lingua è stata salvata. Riavvia TkVisualFoundry per applicarla a tutte le finestre.": "The language has been saved. Restart TkVisualFoundry to apply it to all windows.",
   "Italiano": "Italiano",
   "English": "English",
   "Scelta lingua non valida.": "Invalid language selection.",
@@ -568,12 +568,12 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "VisualTk Studio 1.29\nDesigner visuale Python / Tkinter": "VisualTk Studio 1.29\nVisual Python / Tkinter designer",
+  "TkVisualFoundry 1.30\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.30\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
   "Seleziona la lingua dell’interfaccia. Il cambio viene applicato al riavvio.": "Choose the interface language. Changes apply after restarting.",
-  "VISUALTK STUDIO — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.": "VISUALTK STUDIO — Quick start\n\n1. Insert a control from the palette by double-clicking or pressing Enter.\n2. Edit its properties and click Apply properties.\n3. Double-click the control to open its event code.\n4. Type messagebox., tk. or self. for suggestions.\n5. Save the project and press F5.\n\nPIP automatically prepares the required packages.\nProject → Settings lets you select the language, Python and preferences.\nView manages the log and colors. Help provides detailed guides.\n\nInterface language changes after restarting. Project code and text are preserved."
+  "TKVISUALFOUNDRY — Guida rapida\n\n1. Inserisci un controllo dalla palette, con doppio clic o Invio.\n2. Modifica le proprietà e premi Applica proprietà.\n3. Doppio clic sul controllo per aprire il codice evento.\n4. Digita messagebox., tk. o self. per i suggerimenti.\n5. Salva il progetto e premi F5.\n\nPIP prepara automaticamente i pacchetti necessari.\nProgetto → Configurazione consente di scegliere lingua, Python e preferenze.\nVista gestisce log e colori. Help contiene le guide dettagliate.\n\nLa lingua dell’interfaccia cambia dopo il riavvio. Il codice e i testi dei progetti restano invariati.": "TKVISUALFOUNDRY — Quick start\n\n1. Insert a control from the palette by double-clicking or pressing Enter.\n2. Edit its properties and click Apply properties.\n3. Double-click the control to open its event code.\n4. Type messagebox., tk. or self. for suggestions.\n5. Save the project and press F5.\n\nPIP automatically prepares the required packages.\nProject → Settings lets you select the language, Python and preferences.\nView manages the log and colors. Help provides detailed guides.\n\nInterface language changes after restarting. Project code and text are preserved."
 }
 
 EN_MESSAGES["Database"] = "Database"

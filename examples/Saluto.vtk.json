@@ -4,7 +4,7 @@
   "forms": [
     {
       "name": "Form1",
-      "title": "Saluto — Demo VisualTk",
+      "title": "Saluto — Demo TkVisualFoundry",
       "width": 640,
       "height": 440,
       "bg": "#f0f0f0",

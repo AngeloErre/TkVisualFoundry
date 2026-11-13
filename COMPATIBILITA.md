@@ -1,4 +1,4 @@
-# Compatibilità e dipendenze — VisualTk Studio 1.3
+# Compatibilità e dipendenze — TkVisualFoundry 1.3
 
 Python minimo richiesto: 3.15 stabile, con Tcl/Tk. Il software è destinato principalmente a macOS. I componenti opzionali richiedono collaudo sul sistema effettivo; la presenza nel catalogo non certifica compatibilità di ogni versione di un pacchetto.
 

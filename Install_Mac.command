@@ -10,7 +10,7 @@ if [ -t 0 ] && [ -z "${VTS_LANGUAGE:-}" ]; then
   read -r -p 'Lingua / Language [it/en, default it]: ' INSTALL_LANGUAGE
 fi
 say() { if [ "$INSTALL_LANGUAGE" = en ]; then echo "$2"; else echo "$1"; fi; }
-say 'VisualTk Studio — installazione per macOS' 'VisualTk Studio — macOS installation' 
+say 'TkVisualFoundry — installazione per macOS' 'TkVisualFoundry — macOS installation'
 # Prefer a modern Python with working Tk. No administrator privileges required.
 PYTHON_BIN=''
 for candidate in /Library/Frameworks/Python.framework/Versions/3.15/bin/python3 /opt/homebrew/bin/python3.15 /usr/local/bin/python3.15 python3.15 python3; do
@@ -61,7 +61,7 @@ fi
 say 'I componenti esterni si preparano dall’app: Pacchetti PIP → scegli componente → Installa.' 'Prepare external components in the app: PIP → select component → Install.'
 say 'Webcam: il wizard installerà OpenCV, NumPy e Pillow. SQLite non richiede pacchetti.' 'Webcam: the wizard installs OpenCV, NumPy and Pillow. SQLite needs no packages.'
 "$INSTALL_DIR/.venv/bin/python" -c 'import tkinter, jedi, PyInstaller; r=tkinter.Tk(); r.withdraw(); r.update(); r.destroy()'
-APP_DIR="$HOME/Applications/VisualTk Studio.app"
+APP_DIR="$HOME/Applications/TkVisualFoundry.app"
 mkdir -p "$APP_DIR/Contents/MacOS"
 cat > "$APP_DIR/Contents/MacOS/VisualTkStudio" <<'LAUNCH'
 #!/bin/bash
@@ -73,11 +73,11 @@ cat > "$APP_DIR/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-<key>CFBundleName</key><string>VisualTk Studio</string>
-<key>CFBundleDisplayName</key><string>VisualTk Studio</string>
+<key>CFBundleName</key><string>TkVisualFoundry</string>
+<key>CFBundleDisplayName</key><string>TkVisualFoundry</string>
 <key>CFBundleExecutable</key><string>VisualTkStudio</string>
 <key>CFBundleIdentifier</key><string>it.visualtk.studio</string>
-<key>CFBundleVersion</key><string>1.29</string>
+<key>CFBundleVersion</key><string>1.30</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>NSHighResolutionCapable</key><true/>
 </dict></plist>

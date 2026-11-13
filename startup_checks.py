@@ -53,7 +53,7 @@ def package_check(name,version,requirements,python):
 def check_link(url):
     for method in ('HEAD','GET'):
         try:
-            request=urllib.request.Request(url,method=method,headers={'User-Agent':'VisualTkStudio/1.16 documentation check'})
+            request=urllib.request.Request(url,method=method,headers={'User-Agent':'TkVisualFoundry/1.30 documentation check'})
             with urllib.request.urlopen(request,timeout=8,context=https_context()) as response:
                 return {'url':url,'status':'ok','resolved':response.url}
         except urllib.error.HTTPError as exc:

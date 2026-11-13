@@ -14,10 +14,10 @@ URLS={
  'tkintermapview':'https://github.com/TomSchimansky/TkinterMapView',
  'tkinterweb':'https://tkinterweb.readthedocs.io/en/latest/',
  'Pmw':'https://pmw.sourceforge.net/',
- 'visualtk_runtime':'https://github.com/AngeloErre/VisualTkStudio',
- 'integration_runtime':'https://github.com/AngeloErre/VisualTkStudio',
+ 'visualtk_runtime':'https://github.com/AngeloErre/TkVisualFoundry',
+ 'integration_runtime':'https://github.com/AngeloErre/TkVisualFoundry',
  'database_runtime':'https://docs.python.org/3/library/sqlite3.html',
- 'productivity_runtime':'https://github.com/AngeloErre/VisualTkStudio',
+ 'productivity_runtime':'https://github.com/AngeloErre/TkVisualFoundry',
 }
 
 KIND_URLS={

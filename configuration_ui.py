@@ -77,7 +77,7 @@ class ConfigurationMixin:
         ttk.Button(row,text=tr('Salva configurazione'),command=save).pack(side='right',padx=4);ttk.Button(row,text=tr('Salva e prepara dipendenze…'),command=lambda:save(True)).pack(side='right',padx=4)
 
     def settings(self):
-        win=tk.Toplevel(self);win.title(tr('Configurazione • VisualTk Studio'));win.geometry('760x590');win.minsize(680,510);win.transient(self);win.columnconfigure(0,weight=1);win.rowconfigure(1,weight=1)
+        win=tk.Toplevel(self);win.title(tr('Configurazione • TkVisualFoundry'));win.geometry('760x590');win.minsize(680,510);win.transient(self);win.columnconfigure(0,weight=1);win.rowconfigure(1,weight=1)
         ttk.Label(win,text=tr('Configura il tuo ambiente di lavoro'),style='Brand.TLabel',padding=15).grid(row=0,column=0,sticky='w')
         tabs=ttk.Notebook(win);tabs.grid(row=1,column=0,sticky='nsew',padx=12,pady=8)
         general=ttk.Frame(tabs,padding=15);packages=ttk.Frame(tabs,padding=15);appearance=ttk.Frame(tabs,padding=15)
@@ -118,7 +118,7 @@ class ConfigurationMixin:
                 if updated['python']!=self.config_data['python']:
                     self.commit_code();self.checkpoint();self.project.pop('environment',None);self.global_python=updated['python']
                 self.save_ide_settings(updated);self.config_data=updated;self.code.configure(font=('Menlo',updated['font_size']));self.draw()
-                if language_changed:messagebox.showinfo(tr('Lingua aggiornata',language=updated['language']),tr('La lingua è stata salvata. Riavvia VisualTk Studio per applicarla a tutte le finestre.',language=updated['language']),parent=win)
+                if language_changed:messagebox.showinfo(tr('Lingua aggiornata',language=updated['language']),tr('La lingua è stata salvata. Riavvia TkVisualFoundry per applicarla a tutte le finestre.',language=updated['language']),parent=win)
                 win.destroy()
             except Exception as exc:status.set(str(exc))
         row=ttk.Frame(win,padding=12);row.grid(row=3,column=0,sticky='ew');ttk.Button(row,text=tr('Salva configurazione'),command=save,style='Accent.TButton').pack(side='right');ttk.Button(row,text=tr('Annulla',context='cancel'),command=win.destroy).pack(side='right',padx=8)
