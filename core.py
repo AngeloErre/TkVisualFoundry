@@ -22,6 +22,12 @@ def new_project(language=None):
 def identifier(value):
     return isinstance(value,str) and value==unicodedata.normalize('NFKC',value) and value.isidentifier() and not keyword.iskeyword(value) and not value.startswith(('_','event_')) and value not in {'root','show','hide','startup','mainloop','destroy','report_callback_exception'}
 
+def executable_body(body):
+    """Keep user lines intact; make blank/comment-only function bodies executable."""
+    if any(line.strip() and not line.lstrip().startswith('#') for line in body.splitlines()):return body
+    return body+'\npass' if body else 'pass'
+
+
 def validate(p, code=True):
     if not isinstance(p,dict) or p.get('version') != 1 or not isinstance(p.get('forms'),list) or not p['forms']: raise ValueError(tr('Formato progetto non supportato'))
     if not all(isinstance(p.get(key,''),str) for key in ('imports','startup')):raise ValueError(tr('Il codice del progetto e degli eventi deve essere testo.'))
@@ -58,13 +64,13 @@ def validate(p, code=True):
                 if not 0<=int(props.get('port',0))<=65535 or not 1<=int(props.get('limit',200))<=5000:raise ValueError(tr('Porta o limite database non validi'))
             for ev, body in obj.get('events',{}).items():
                 if ev not in EVENTS and ev != 'Load': raise ValueError(tr('Evento sconosciuto'))
-                if code: ast.parse('def handler(self, event=None):\n'+ '\n'.join('    '+l for l in (body or 'pass').splitlines()))
+                if code: ast.parse('def handler(self, event=None):\n'+ '\n'.join('    '+l for l in executable_body(body).splitlines()))
     if code: ast.parse(p.get('imports',''))
-    if code: ast.parse('def startup(self):\n'+'\n'.join('    '+l for l in (p.get('startup') or 'pass').splitlines()))
+    if code: ast.parse('def startup(self):\n'+'\n'.join('    '+l for l in executable_body(p.get('startup','')).splitlines()))
     return p
 
 def load(path):
-    return validate(json.loads(Path(path).read_text(encoding='utf-8')), code=False)
+    return validate(json.loads(Path(path).read_text(encoding='utf-8-sig')), code=False)
 
 def generate(p):
     validate(p)
@@ -142,8 +148,8 @@ def generate(p):
             host=', baseline_host=self.'+parent if page else ''
             lines.append('        _vts_install_anchors('+target+', ['+entries+'], '+repr(baseline)+host+')')
     lines += ['        self.startup()','','    def _error(self, kind, value, tb):','        traceback.print_exception(kind, value, tb)',f'        messagebox.showerror({tr("Errore applicazione",language=language)!r}, str(value))','','    def show(self, name):','        getattr(self, name).deiconify()','','    def hide(self, name):','        getattr(self, name).withdraw()','','    def startup(self):']
-    lines += ['        '+l for l in (p.get('startup') or 'pass').splitlines()]
+    lines += ['        '+l for l in executable_body(p.get('startup','')).splitlines()]
     for name,body in handlers:
-        lines += ['',f'    def {name}(self, event=None):']+['        '+l for l in (body or 'pass').splitlines()]
+        lines += ['',f'    def {name}(self, event=None):']+['        '+l for l in executable_body(body).splitlines()]
     lines += ['','if __name__ == "__main__":','    import sys', '    if sys.version_info[:2] < (3, 15) or sys.version_info.releaselevel != "final":', '        raise SystemExit("È richiesto Python 3.15 o successivo stabile")', '    import multiprocessing', '    multiprocessing.freeze_support()', '    app = Application()','    app.root.mainloop()','']
     source='\n'.join(lines); compile(source,'application.py','exec'); return source

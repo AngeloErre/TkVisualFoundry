@@ -3,6 +3,7 @@ import ast
 import json
 import subprocess
 from i18n import tr
+from core import executable_body
 
 def sources(project):
     yield '$project','imports',project.get('imports',''),False
@@ -26,7 +27,7 @@ def project_problems(project,available_modules=None):
     known={'root','show','hide','startup','_error','_theme_style','_app_icon'}|{o['name'] for f in project['forms'] for o in [f]+f['widgets']}
     trees=[];issues=[]
     for obj,event,body,wrapped in sources(project):
-        text='def handler(self, event=None):\n'+''.join('    '+line+'\n' for line in (body or 'pass').splitlines()) if wrapped else body
+        text='def handler(self, event=None):\n'+''.join('    '+line+'\n' for line in executable_body(body).splitlines()) if wrapped else body
         try:tree=ast.parse(text);trees.append((obj,event,tree,wrapped))
         except SyntaxError as exc:issues.append({'severity':'error','object':obj,'event':event,'line':max(1,(exc.lineno or 1)-(1 if wrapped else 0)),'column':max(0,(exc.offset or 1)-1-(4 if wrapped else 0)),'message':exc.msg})
     for _,_,tree,_ in trees:

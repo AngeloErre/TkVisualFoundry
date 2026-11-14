@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "TkVisualFoundry 1.33\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.33\nVisual Python / Tkinter designer",
+  "TkVisualFoundry 1.33.1\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.33.1\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",

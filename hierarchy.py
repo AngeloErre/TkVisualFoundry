@@ -4,27 +4,30 @@ TABS={'Notebook','CTkTabview'}
 
 def ordered_widgets(form):
     widgets=form['widgets'];by_name={w['name']:w for w in widgets};result=[];visiting=set();done=set()
-    def visit(widget):
-        name=widget['name']
-        if name in visiting:raise ValueError('Container cycle: '+name)
-        if name in done:return
-        visiting.add(name);parent=widget.get('parent')
-        if parent and parent!=form['name']:
-            if parent not in by_name:raise ValueError('Unknown parent: '+str(parent))
-            container=by_name[parent]
-            if container['kind'] not in CONTAINERS:raise ValueError('Parent is not a container: '+parent)
-            visit(container)
-            page=widget.get('page','')
-            if container['kind'] in TABS:
-                pages=container.get('props',{}).get('pages',[])
-                if page not in pages:raise ValueError('Select a valid container page: '+name)
-            elif page:raise ValueError('Only tab containers accept a page.')
-        elif widget.get('page'):raise ValueError('A form does not have pages.')
-        if widget['kind'] in TABS:
-            pages=widget.get('props',{}).get('pages',['Page 1','Page 2'])
-            if not isinstance(pages,list) or not pages or not all(isinstance(p,str) and p for p in pages) or len(pages)!=len(set(pages)):raise ValueError('Tab pages must be non-empty unique names.')
-        visiting.remove(name);done.add(name);result.append(widget)
-    for w in widgets:visit(w)
+    for first in widgets:
+        stack=[(first,False)]
+        while stack:
+            widget,expanded=stack.pop();name=widget['name']
+            if expanded:
+                visiting.remove(name);done.add(name);result.append(widget);continue
+            if name in visiting:raise ValueError('Container cycle: '+name)
+            if name in done:continue
+            visiting.add(name);parent=widget.get('parent');container=None
+            if parent and parent!=form['name']:
+                if parent not in by_name:raise ValueError('Unknown parent: '+str(parent))
+                container=by_name[parent]
+                if container['kind'] not in CONTAINERS:raise ValueError('Parent is not a container: '+parent)
+                page=widget.get('page','')
+                if container['kind'] in TABS:
+                    pages=container.get('props',{}).get('pages',[])
+                    if page not in pages:raise ValueError('Select a valid container page: '+name)
+                elif page:raise ValueError('Only tab containers accept a page.')
+            elif widget.get('page'):raise ValueError('A form does not have pages.')
+            if widget['kind'] in TABS:
+                pages=widget.get('props',{}).get('pages',['Page 1','Page 2'])
+                if not isinstance(pages,list) or not pages or not all(isinstance(p,str) and p for p in pages) or len(pages)!=len(set(pages)):raise ValueError('Tab pages must be non-empty unique names.')
+            stack.append((widget,True))
+            if container is not None:stack.append((container,False))
     return result
 
 def descendants(form,name):

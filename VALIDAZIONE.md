@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.33.1
+
+281 test superati per lingua, 11 grafici saltati. Sei regressioni su codice vuoto/commentato, errori reali mantenuti, righe breakpoint, BOM senza riscrittura, 1500 contenitori annidati e cicli/ordine fratelli. Validazione grafica ancora da completare. Dettagli in docs/DEBUG_REPORT_1.33.1.md.
+
 # TkVisualFoundry 1.33
 
 275 test superati per lingua, 11 grafici saltati. Nove nuove regressioni su nomi Unicode, strutture/codice non validi, confronto tipi e chiusura processi. Stress offline: 300 progetti casuali, 60 letture SQLite con 100 commit, 100 scritture atomiche, 40 lettori cancellati e raccolti, 500 snapshot variabili e sorgente da 3000 widget compilato/tokenizzato. Dettagli in docs/DEBUG_REPORT_1.33.md. GUI, build/installazioni native e lettori opzionali reali restano da validare.

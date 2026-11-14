@@ -1,7 +1,5 @@
-# TkVisualFoundry 1.33
+# TkVisualFoundry 1.33.1
 
-General stress/debug release. Fix four reproduced issues: Unicode identifier aliases could shadow internal attributes, malformed non-text events could enter the editor, data comparison confused NULL/text and numeric/text values, and reader shutdown could race process exit/start. Preserve canonical Unicode names, incomplete text code recovery and bounded previews.
+Follow-up debug: handle comment-only/whitespace-only event and startup bodies by appending pass in generated code only; use the same normalization in diagnostics. Preserve original text and executable line locations. Accept UTF-8 BOM project files. Order containers iteratively so deep valid hierarchies do not hit Python recursion limits, while cycles and invalid parent/page references remain rejected.
 
-275 tests passed per language, 11 graphical tests skipped. Offline stress: 300 random projects; 60 concurrent SQLite readers/100 writer commits; 100 atomic writes; 40 cancelled/reaped readers; 500 bounded inspector snapshots; generation/compile/tokenization up to 3000 widgets. See docs/DEBUG_REPORT_1.33.md and tools/stress_check.py.
-
-Interactive GUI, target-platform installation/builds and native optional reader/device/cloud validation remain pending. No user installation, project or real data was changed by the stress fixtures.
+281 tests passed per language; 11 graphical tests skipped. Six new regressions include 1500 nested containers, a 1500-node cycle, deterministic sibling order, BOM no-rewrite and breakpoint line preservation. GUI acceptance remains pending. See docs/DEBUG_REPORT_1.33.1.md.

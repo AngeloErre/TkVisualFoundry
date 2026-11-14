@@ -113,3 +113,9 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Reproduce and fix Unicode namespace, malformed load, typed comparison and reader lifecycle defects.
 - [x] Nine regressions, bilingual full suite and reproducible offline stress fixtures.
 - [x] Report evidence and remaining native/graphical acceptance limits.
+
+## Follow-up 1.33.1 — recovery edge cases
+
+- [x] Comment-only function bodies and matching static diagnostics; preserve stored source and line offsets.
+- [x] BOM project load and iterative deep hierarchy/cycle validation.
+- [x] Six regressions, full bilingual suite and follow-up report.

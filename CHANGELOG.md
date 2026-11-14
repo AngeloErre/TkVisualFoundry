@@ -1,3 +1,10 @@
+# 1.33.1 — Recovery and hierarchy fixes
+
+- Compile comment/whitespace-only bodies without rewriting project text; share behavior with diagnostics.
+- Open UTF-8 BOM project files.
+- Replace recursive container traversal with stable iterative ordering and cycle checks.
+- Add six regressions, including 1500-level containers and source-line preservation.
+
 # 1.33 — General stress and debugging
 
 - Reject Unicode names changed by Python NFKC normalization and malformed project code/form shapes.
