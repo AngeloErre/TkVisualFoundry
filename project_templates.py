@@ -17,6 +17,10 @@ TEMPLATES=(
     ('notepad','TabbedNotepad','Blocco note a schede','Utilità','Note multiple con apertura e salvataggio UTF-8, schede dinamiche e protezione delle modifiche non salvate.'),
     ('habits','HabitTracker','Tracker di abitudini','Organizzazione','Abitudini giornaliere, serie consecutive e cronologia. Apertura e salvataggio manuale JSON.'),
     ('pixels','PixelArt','Editor Pixel Art','Creatività','Griglia 16×16, colori e gomma bianca. Esporta immagini PPM o SVG senza librerie esterne.'),
+    ('calculator','ScientificCalculator','Calcolatrice scientifica','Utilità','Espressioni aritmetiche, funzioni scientifiche in radianti e cronologia. Valutazione AST senza eval.'),
+    ('timetable','WeeklyTimetable','Orario settimanale','Organizzazione','Lezioni, giorni, orari, aula e docente. Verifica sovrapposizioni e salva un archivio JSON.'),
+    ('recipes','RecipeManager','Ricettario','Organizzazione','Ricette, ingredienti, preparazione, categorie e tempi. Ricerca e gestione di un archivio JSON.'),
+    ('books','BookCatalog','Catalogo libri','Organizzazione','Titoli, autori, stato di lettura, prestiti e valutazioni. Ricerca e gestione di un archivio JSON.'),
 )
 
 

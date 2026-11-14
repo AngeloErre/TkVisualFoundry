@@ -1,0 +1,435 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Scientific Calculator",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Scientific Calculator",
+      "width": 880,
+      "height": 650,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "ExpressionEntry",
+          "kind": "Entry",
+          "x": 20,
+          "y": 20,
+          "width": 670,
+          "height": 38,
+          "props": {
+            "font": "Helvetica 16"
+          },
+          "events": {}
+        },
+        {
+          "name": "EqualsButton",
+          "kind": "Button",
+          "x": 710,
+          "y": 20,
+          "width": 150,
+          "height": 36,
+          "props": {
+            "text": "Calculate"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_calculate(self)"
+          }
+        },
+        {
+          "name": "ResultLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 75,
+          "width": 840,
+          "height": 55,
+          "props": {
+            "text": "Enter an expression. Trigonometry uses radians.",
+            "font": "Helvetica 18",
+            "wraplength": 820
+          },
+          "events": {}
+        },
+        {
+          "name": "HistoryList",
+          "kind": "Listbox",
+          "x": 440,
+          "y": 155,
+          "width": 420,
+          "height": 390,
+          "props": {
+            "exportselection": false
+          },
+          "events": {}
+        },
+        {
+          "name": "HelpLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 570,
+          "width": 840,
+          "height": 55,
+          "props": {
+            "text": "Functions: sin cos tan asin acos atan sqrt log log10 exp abs factorial. Constants: pi e tau. No code execution.",
+            "wraplength": 820
+          },
+          "events": {}
+        },
+        {
+          "name": "Key0",
+          "kind": "Button",
+          "x": 20,
+          "y": 155,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "7"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '7')"
+          }
+        },
+        {
+          "name": "Key1",
+          "kind": "Button",
+          "x": 120,
+          "y": 155,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "8"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '8')"
+          }
+        },
+        {
+          "name": "Key2",
+          "kind": "Button",
+          "x": 220,
+          "y": 155,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "9"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '9')"
+          }
+        },
+        {
+          "name": "Key3",
+          "kind": "Button",
+          "x": 320,
+          "y": 155,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "/"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '/')"
+          }
+        },
+        {
+          "name": "Key4",
+          "kind": "Button",
+          "x": 20,
+          "y": 215,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "4"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '4')"
+          }
+        },
+        {
+          "name": "Key5",
+          "kind": "Button",
+          "x": 120,
+          "y": 215,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '5')"
+          }
+        },
+        {
+          "name": "Key6",
+          "kind": "Button",
+          "x": 220,
+          "y": 215,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "6"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '6')"
+          }
+        },
+        {
+          "name": "Key7",
+          "kind": "Button",
+          "x": 320,
+          "y": 215,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "*"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '*')"
+          }
+        },
+        {
+          "name": "Key8",
+          "kind": "Button",
+          "x": 20,
+          "y": 275,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "1"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '1')"
+          }
+        },
+        {
+          "name": "Key9",
+          "kind": "Button",
+          "x": 120,
+          "y": 275,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "2"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '2')"
+          }
+        },
+        {
+          "name": "Key10",
+          "kind": "Button",
+          "x": 220,
+          "y": 275,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "3"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '3')"
+          }
+        },
+        {
+          "name": "Key11",
+          "kind": "Button",
+          "x": 320,
+          "y": 275,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "-"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '-')"
+          }
+        },
+        {
+          "name": "Key12",
+          "kind": "Button",
+          "x": 20,
+          "y": 335,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "0"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '0')"
+          }
+        },
+        {
+          "name": "Key13",
+          "kind": "Button",
+          "x": 120,
+          "y": 335,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "."
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '.')"
+          }
+        },
+        {
+          "name": "Key14",
+          "kind": "Button",
+          "x": 220,
+          "y": 335,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "("
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '(')"
+          }
+        },
+        {
+          "name": "Key15",
+          "kind": "Button",
+          "x": 320,
+          "y": 335,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": ")"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, ')')"
+          }
+        },
+        {
+          "name": "Key16",
+          "kind": "Button",
+          "x": 20,
+          "y": 395,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "pi"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, 'pi')"
+          }
+        },
+        {
+          "name": "Key17",
+          "kind": "Button",
+          "x": 120,
+          "y": 395,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "e"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, 'e')"
+          }
+        },
+        {
+          "name": "Key18",
+          "kind": "Button",
+          "x": 220,
+          "y": 395,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "**"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '**')"
+          }
+        },
+        {
+          "name": "Key19",
+          "kind": "Button",
+          "x": 320,
+          "y": 395,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "+"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, '+')"
+          }
+        },
+        {
+          "name": "Key20",
+          "kind": "Button",
+          "x": 20,
+          "y": 455,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "sqrt("
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, 'sqrt(')"
+          }
+        },
+        {
+          "name": "Key21",
+          "kind": "Button",
+          "x": 120,
+          "y": 455,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "sin("
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, 'sin(')"
+          }
+        },
+        {
+          "name": "Key22",
+          "kind": "Button",
+          "x": 220,
+          "y": 455,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "cos("
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, 'cos(')"
+          }
+        },
+        {
+          "name": "Key23",
+          "kind": "Button",
+          "x": 320,
+          "y": 455,
+          "width": 90,
+          "height": 36,
+          "props": {
+            "text": "log("
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncalc_insert(self, 'log(')"
+          }
+        },
+        {
+          "name": "ClearExpression",
+          "kind": "Button",
+          "x": 20,
+          "y": 520,
+          "width": 390,
+          "height": 36,
+          "props": {
+            "text": "Clear"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nself.ExpressionEntry.delete(0, \"end\")"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Parse arithmetic with an allowlisted AST; never call eval or exec.\nimport ast\nimport math\nimport operator\n\n\ndef calc_factorial(value):\n    if int(value) != value or not 0 <= value <= 50:\n        raise ValueError(\"factorial accepts whole numbers from 0 to 50\")\n    return math.factorial(int(value))\n\n\ndef calc_expression(expression):\n    # Bound input size, tree size, exponent size and every intermediate result.\n    if not isinstance(expression, str) or not 1 <= len(expression.strip()) <= 256:\n        raise ValueError(\"Use an expression of 1-256 characters\")\n    tree = ast.parse(expression.strip(), mode=\"eval\")\n    if sum(1 for node in ast.walk(tree)) > 100:\n        raise ValueError(\"Expression is too complex\")\n    binary = {ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul, ast.Div: operator.truediv, ast.FloorDiv: operator.floordiv, ast.Mod: operator.mod, ast.Pow: operator.pow}\n    functions = {\"sin\": math.sin, \"cos\": math.cos, \"tan\": math.tan, \"asin\": math.asin, \"acos\": math.acos, \"atan\": math.atan, \"sqrt\": math.sqrt, \"log\": math.log, \"log10\": math.log10, \"exp\": math.exp, \"abs\": abs, \"factorial\": calc_factorial}\n    constants = {\"pi\": math.pi, \"e\": math.e, \"tau\": math.tau}\n    def visit(node):\n        if isinstance(node, ast.Constant) and type(node.value) in (int, float):\n            value = node.value\n            if abs(value) > 1e12:\n                raise ValueError(\"Numeric literals must be at most 1e12\")\n        elif isinstance(node, ast.Name) and node.id in constants:\n            value = constants[node.id]\n        elif isinstance(node, ast.UnaryOp) and type(node.op) in (ast.UAdd, ast.USub):\n            value = visit(node.operand) * (-1 if isinstance(node.op, ast.USub) else 1)\n        elif isinstance(node, ast.BinOp) and type(node.op) in binary:\n            left, right = visit(node.left), visit(node.right)\n            if isinstance(node.op, ast.Pow) and abs(right) > 12:\n                raise ValueError(\"Exponents must be between -12 and 12\")\n            value = binary[type(node.op)](left, right)\n        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in functions and not node.keywords and 1 <= len(node.args) <= 2:\n            value = functions[node.func.id](*[visit(arg) for arg in node.args])\n        else:\n            raise ValueError(\"Only arithmetic, listed math functions and pi/e/tau are allowed\")\n        if type(value) not in (int, float) or not math.isfinite(value) or abs(value) > 1e100:\n            raise ValueError(\"Result is non-real, non-finite or outside the supported range\")\n        return value\n    return visit(tree.body)\n\n\ndef calc_insert(app, token):\n    app.ExpressionEntry.insert(\"insert\", token)\n    app.ExpressionEntry.focus_set()\n\n\ndef calc_calculate(app):\n    expression = app.ExpressionEntry.get()\n    try:\n        value = calc_expression(expression)\n    except (ValueError, TypeError, SyntaxError, ZeroDivisionError, OverflowError) as error:\n        app.ResultLabel.configure(text=\"Error: \" + str(error))\n        return\n    result = format(value, \".12g\")\n    app.ResultLabel.configure(text=result)\n    app.calc_history.insert(0, (expression, result))\n    del app.calc_history[100:]\n    app.HistoryList.delete(0, \"end\")\n    for text, answer in app.calc_history:\n        app.HistoryList.insert(\"end\", text + \" = \" + answer)\n\n\ndef calc_reuse(app):\n    selected = app.HistoryList.curselection()\n    if selected:\n        app.ExpressionEntry.delete(0, \"end\")\n        app.ExpressionEntry.insert(0, app.calc_history[selected[0]][0])\n",
+  "startup": "# Trigonometric inputs are radians; ** is exponentiation.\nself.calc_history = []\nself.ExpressionEntry.insert(0, \"sqrt(81) + sin(pi / 2)\")\nself.ExpressionEntry.bind(\"<Return>\", lambda event: calc_calculate(self))\nself.HistoryList.bind(\"<<ListboxSelect>>\", lambda event: calc_reuse(self))\nself.Form1.deiconify()"
+}

@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.37
+# TkVisualFoundry 1.38
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Fourth starter batch (1.38)
+
+Add **Scientific Calculator**, **Weekly Timetable**, **Recipe Manager** and **Book Catalog**. There are now **16 English-commented standard-library starters plus Blank project**. The calculator uses a bounded allowlisted AST, not eval. The three searchable archives provide add/update/delete and atomic JSON saves; timetable validation rejects overlapping lessons. Mac graphical/native acceptance remains deferred until reconnection. See the [template guide](docs/STARTER_TEMPLATES.md).
 
 ## Third starter batch (1.37)
 

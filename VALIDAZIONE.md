@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.38
+
+Linux remoto, Python 3.15.2: 346 test superati per lingua, 11 grafici saltati. Tredici nuovi test su AST e limiti calcolatrice, cronologia, schemi/CRUD/ricerca archivi, ricette, sovrapposizioni orario, JSON atomico e annullamenti/errori/limiti. Tutti i 31 esempi validati e compilati. Nessun collaudo nativo Mac: resta in attesa del messaggio “ambiente collegato”.
+
 # TkVisualFoundry 1.37
 
 Linux remoto, Python 3.15.2: 333 test superati per lingua, 11 grafici saltati. Diciassette nuovi test su timer/sveglia, date e serie abitudini, salvataggi atomici, schede/annullamento note, bordi/colori/esportazione PPM/SVG. Tutti i 27 esempi validati e compilati. Mac scollegato: nessuna verifica nativa eseguita. Ripresa prevista al messaggio “ambiente collegato”, con checklist in docs/MAC_RECONNECT_CHECKLIST.md.

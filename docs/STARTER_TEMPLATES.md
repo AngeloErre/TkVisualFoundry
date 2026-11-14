@@ -1,10 +1,10 @@
-# Starter templates / Modelli iniziali — 1.37
+# Starter templates / Modelli iniziali — 1.38
 
 ## English
 
 Choose **File → New project** or the toolbar **New** button. Select **Blank project** or a starter in the new chooser, read its description and dependencies, then press **Create project**. Cancel closes the chooser without replacing the current project. If the current project has unsaved edits, the normal save/discard/cancel guard runs before replacement. Each starter is a fresh copy with no project path and is marked unsaved: choose Save as to store your own project. Built-in JSON files are never overwritten by creating or editing a copy.
 
-The twelve starters below are the first three batches from the proposed 32-project collection. Their application labels and code comments are in English; the chooser is Italian/English. Every visible control is in the project model and can be edited in the designer. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
+The sixteen starters below are the first four batches from the proposed 32-project collection. Their application labels and code comments are in English; the chooser is Italian/English. Every visible control is in the project model and can be edited in the designer. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
 
 | Starter | Included behavior | Where to customize |
 | --- | --- | --- |
@@ -20,8 +20,12 @@ The twelve starters below are the first three batches from the proposed 32-proje
 | Tabbed Notepad | Up to 20 UTF-8 notes, new/open/save/close, dirty markers and close guards | Designer first page; dynamic `tabs_add` pages |
 | Habit Tracker | Add/remove habits, daily toggle, current streak and total, validated JSON open/save | `habit_streak`, history schema and buttons |
 | Pixel Art | 16×16 RGB cells, brush/white eraser, palette/custom color, PPM and SVG export | Canvas click/motion, `pixel_ppm`, `pixel_svg` |
+| Scientific Calculator | Arithmetic/functions in radians, allowlisted AST, bounded 100-item history | `calc_expression`, button tokens and history events |
+| Weekly Timetable | Recurring week, days/times/room/teacher, overlap validation, JSON | Field schema, timetable validators and archive helpers |
+| Recipe Manager | Ingredients/steps/categories/preparation time, search/CRUD, JSON | Field schema, recipe validator and archive helpers |
+| Book Catalog | Authors/status/borrower/rating, search/CRUD, JSON | Field schema, choices and archive helpers |
 
-All twelve use Python/Tkinter's standard library and require no additional PIP packages. Run with F5 using the selected compatible Python. They can be exported/deployed using the existing project workflow; native builds still require their target platform/toolchain. The original files are in `examples/StarterTemplates/`, included in both source installers and the Mac standalone build's example resources.
+All sixteen use Python/Tkinter's standard library and require no additional PIP packages. Run with F5 using the selected compatible Python. They can be exported/deployed using the existing project workflow; native builds still require their target platform/toolchain. The original files are in `examples/StarterTemplates/`, included in both source installers and the Mac standalone build's example resources.
 
 ### Second-batch details
 
@@ -33,21 +37,21 @@ Mini-Paint draws vector objects on Canvas; the eraser paints white rather than d
 
 The dice starter provides immediate rolls, not animated dice or a complete RPG rules engine. The text converter creates Markdown **bullet lists**, not a full Markdown parser. Counts update after keyboard edits and on focus changes. The sticky-note starter is one note window, uses explicit file saves and asks before closing without saving; it does not autosave or maintain a desktop-wide multi-note database. The quiz uses a short editable demonstration bank, not a complete assessment system.
 
-Thirty-eight automated regressions cover compilation/no extra requirements, independent copies, comment presence and no execution on load; quiz scoring/restart, dice validation/totals, Unicode conversions, real temporary note open/save/cancel and new-project state handling. All 27 example project files validate/compile. Interactive graphical acceptance remains pending.
+Fifty-one automated regressions cover compilation/no extra requirements, independent copies, comment presence and no execution on load; quiz scoring/restart, dice validation/totals, Unicode conversions, real temporary note open/save/cancel and new-project state handling. All 31 example project files validate/compile. Interactive graphical acceptance remains pending.
 
 ### Next batches
 
-The other requested projects are not yet shown in the chooser. The remaining twenty requested starters include archives, calendars, scientific tools, multimedia apps and arcade games. Arcade games, neural-network driving, databases/media archives and cloud/LLM study agents require separate logic, assets or dependency setup and will be added as complete, documented projects rather than empty placeholders.
+The other requested projects are not yet shown in the chooser. The remaining sixteen requested starters include archives, calendars, scientific tools, multimedia apps and arcade games. Arcade games, neural-network driving, databases/media archives and cloud/LLM study agents require separate logic, assets or dependency setup and will be added as complete, documented projects rather than empty placeholders.
 
 ## Italiano
 
-Da **File → Nuovo progetto** o dal pulsante **Nuovo** scegli un progetto vuoto oppure uno dei dodici modelli. Il selettore mostra descrizione e dipendenze. **Crea progetto** apre una copia indipendente ancora da salvare; Annulla lascia il progetto corrente. La normale richiesta di salvare/scartare/annullare protegge le modifiche già presenti. Modificando la copia non si cambia il modello integrato.
+Da **File → Nuovo progetto** o dal pulsante **Nuovo** scegli un progetto vuoto oppure uno dei sedici modelli. Il selettore mostra descrizione e dipendenze. **Crea progetto** apre una copia indipendente ancora da salvare; Annulla lascia il progetto corrente. La normale richiesta di salvare/scartare/annullare protegge le modifiche già presenti. Modificando la copia non si cambia il modello integrato.
 
 Primo gruppo: **Quiz**, **Simulatore di dadi**, **Convertitore di testi** e **Post-it digitali**. Con il secondo gruppo sono i primi otto della raccolta proposta di 32 progetti. I commenti del codice e i testi delle applicazioni dimostrative sono in inglese; il selettore segue la lingua dell’IDE. Tutti i controlli si modificano nel designer e la logica si trova negli eventi, nel codice di avvio e negli import/funzioni globali.
 
 Non occorrono pacchetti PIP aggiuntivi. Avvia con F5 e salva la tua copia prima di usare il normale flusso di deploy. Per il quiz modifica la lista delle domande nel codice di avvio. I dadi permettono D6/D20/D100, quantità e bonus; non includono animazioni. Il convertitore offre maiuscolo/minuscolo, camelCase e liste Markdown, con conteggi. Il post-it è una nota singola con colori e salvataggio manuale di file: non salva automaticamente e chiede conferma prima di chiudere senza salvare.
 
-Trentotto test automatici dedicati ai modelli e compilazione/validazione di tutti i 27 esempi. Resta il collaudo grafico. Gli altri 20 modelli non sono ancora nel selettore: saranno sviluppati nei gruppi successivi, senza voci vuote o funzionalità simulate.
+Cinquantuno test automatici dedicati ai modelli e compilazione/validazione di tutti i 31 esempi. Resta il collaudo grafico. Gli altri 16 modelli non sono ancora nel selettore: saranno sviluppati nei gruppi successivi, senza voci vuote o funzionalità simulate.
 
 ### Secondo gruppo (1.36)
 
@@ -67,3 +71,19 @@ Seventeen third-batch regressions cover timing, malformed inputs, midnight rollo
 ### Terzo gruppo — Mac scollegato
 
 Aggiunti **Sveglia e timer**, **Blocco note a schede**, **Tracker di abitudini** ed **Editor Pixel Art**: ora 12 modelli più il progetto vuoto. Codice commentato in inglese e nessun PIP aggiuntivo. Il timer richiede l’app aperta e non riattiva il computer; la campanella va verificata sul Mac. Il blocco note protegge le modifiche, gestisce fino a 20 schede e salva esplicitamente in UTF-8. Il tracker salva manualmente una cronologia JSON. Pixel Art esporta PPM/SVG, non PNG, e non salva automaticamente. I test automatici sono eseguiti da remoto; collaudo nativo e debugging saranno ripresi al messaggio **ambiente collegato**.
+
+## Fourth batch (1.38)
+
+All four starters run without extra PIP packages. The calculator supports +, -, *, /, //, %, **; sin/cos/tan/inverse functions, sqrt, log/log10, exp, abs, factorial and pi/e/tau. Trigonometry uses radians. Expressions are limited to 256 characters/100 AST nodes, numeric literals to 1e12, exponents to -12…12, factorial to whole values 0…50 and finite real intermediate results to 1e100. Attributes, imports, strings, containers, arbitrary names and keyword arguments are rejected. Floating-point arithmetic is used; this is not symbolic algebra or arbitrary precision.
+
+The three archives keep up to 500 records in memory. Use **New → edit fields → Add**, or select a record, edit and press **Update**. Then **Save JSON** writes the collection. Unapplied field drafts are not part of the saved collection. Search covers all fields and keeps stable record IDs; a hidden selection cannot be updated accidentally. Delete, collection replacement and app closure require confirmation. There is no autosave or merge of external edits.
+
+JSON files carry version and archive-kind markers, so opening a recipe file in the book catalog is rejected. Reads and writes are capped at 2 MiB; field lengths and unique IDs are validated. Saves use temporary files and atomic replacement to preserve previous files on write failure. These templates use local JSON archives, **not SQLite or a remote database**.
+
+Timetables represent a recurring week in a sorted list, not a visual calendar grid. Times must be HH:MM on the same day; adjacent lessons are valid, overlaps on the same day are rejected. Recipes allow preparation times from 0 to 1440 whole minutes and require ingredients/steps. Books track one optional borrower string, reading status and a 0–5 numeric rating (0 means unrated); no ISBN lookup, cover-image service or automatic lending reminders are included.
+
+Thirteen fourth-batch regressions cover the calculator allowlist/limits/history, archive data/CRUD/filter selection, invalid records, timetable overlaps/ordering, recipe constraints, real temporary JSON round trips, atomic failure preservation, file-kind and size rejection and cancellation. Native Mac graphical acceptance remains pending.
+
+### Quarto gruppo (1.38)
+
+Aggiunti **Calcolatrice scientifica**, **Orario settimanale**, **Ricettario** e **Catalogo libri**: sedici modelli più il progetto vuoto. Commenti in inglese, nessun PIP aggiuntivo. La calcolatrice valuta solo espressioni matematiche limitate e usa radianti. I tre archivi permettono ricerca, aggiunta, modifica ed eliminazione: premi **Add/Update prima di Save JSON**, perché i campi non applicati non vengono salvati. Dati in JSON locale, non SQLite; massimo 500 record e file da 2 MiB. L’orario è una lista settimanale ordinata e rifiuta sovrapposizioni; il ricettario include ingredienti/passaggi/tempi; il catalogo gestisce stato di lettura, prestito e voto. Sono inclusi salvataggi atomici e conferme, non autosave o servizi esterni. Le verifiche native attendono il messaggio **ambiente collegato**.

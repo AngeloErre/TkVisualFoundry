@@ -1,3 +1,10 @@
+# 1.38 — Fourth starter batch
+
+- Add Scientific Calculator, Weekly Timetable, Recipe Manager and Book Catalog.
+- Bounded allowlisted AST math and searchable JSON archives with atomic saves.
+- Validate timetable overlaps, recipe times, archive IDs/types/size; preserve data on failed writes.
+- Sixteen starters; add thirteen regression tests and update native reconnection checklist.
+
 # 1.37 — Third starter batch, remote development
 
 - Add Alarm and Timers, Tabbed Notepad, Habit Tracker and Pixel Art Editor.

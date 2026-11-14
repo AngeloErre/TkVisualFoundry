@@ -1,5 +1,5 @@
-# TkVisualFoundry 1.37
+# TkVisualFoundry 1.38
 
-Add Alarm and Timers, Tabbed Notepad, Habit Tracker and Pixel Art Editor. There are now twelve English-commented standard-library starters plus Blank project. Timers use monotonic time and owned Tk callbacks; notes provide dirty-state save/discard/cancel protection and atomic UTF-8 saves; habits support validated JSON history/streaks; Pixel Art paints a 16×16 grid and exports PPM/SVG. No extra PIP required by the new templates.
+Add Scientific Calculator, Weekly Timetable, Recipe Manager and Book Catalog. Sixteen English-commented standard-library starters plus Blank project. The calculator evaluates a bounded allowlisted AST (no eval/exec), supports radians and keeps 100 history items. Three archives provide search, add/update/delete and atomic versioned JSON save/open. Timetable entries require valid same-day times and no overlaps.
 
-333 tests passed per language; 11 graphical tests skipped. All 27 example projects validate/compile. Seventeen new template regressions run on remote Linux with Python 3.15.2. The Mac is disconnected: graphical/native checks and debugging resume only when the user reports ambiente collegato. See docs/MAC_RECONNECT_CHECKLIST.md.
+346 tests passed per language, 11 graphical tests skipped; all 31 examples validate/compile. Thirteen new regressions cover calculator restrictions, archive CRUD/validation/persistence and failure/cancellation paths. Development remains remote Linux: native Mac acceptance is deferred until ambiente collegato. See docs/STARTER_TEMPLATES.md.

@@ -150,3 +150,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Persist Mac reconnection checklist and separate remote/native validation evidence.
 - [ ] User signal: ambiente collegato. Then perform native graphical tests/debugging and report results.
 - [ ] Remaining 20 requested starters.
+
+## Phase 22 — starter templates, fourth batch (1.38)
+
+- [x] Scientific Calculator, Weekly Timetable, Recipe Manager and Book Catalog.
+- [x] English comments, no extra PIP, bounded arithmetic and JSON archives.
+- [x] Thirteen regressions, remote suite, example compilation and bilingual docs.
+- [ ] Native Mac acceptance on explicit ambiente collegato; remaining 16 requested starters.
