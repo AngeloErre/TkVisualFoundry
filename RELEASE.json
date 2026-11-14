@@ -1,8 +1,8 @@
 {
-  "version": "1.41",
+  "version": "1.42",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 394,
+  "tests_passed": 418,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 Linux remote (Mac disconnected)",
   "jedi_validation_version": "0.20.1",
@@ -113,8 +113,8 @@
   ],
   "recovery_edge_validation": "Comment/whitespace-only function bodies compile without changing saved text or real executable line offsets; real syntax errors remain diagnosed. UTF-8 BOM projects load without rewriting. 1500 nested containers order/compile and cycles are rejected without recursive traversal. Interactive GUI acceptance pending.",
   "global_search_validation": "Project/event/startup/import scopes; unsaved active and file editor buffers; deleted backing file buffers; literal/case/whole-word positions; confinement/exclusions; bounds/cancellation; non-execution; actual navigation handlers and stale content/project checks covered. Tcl character-unit index conversion checked. Interactive graphical acceptance pending.",
-  "starter_templates": 32,
-  "template_validation": "32 English-commented starters plus blank: all catalog copies validate and compile as standalone generated projects; 29 require no extra PIP, three declare optional dependencies. IT/EN chooser metadata; loading is non-executing. Native GUI, audio, live API and dependency-bearing target builds await ambiente collegato.",
+  "starter_templates": 36,
+  "template_validation": "36 English-commented starters plus blank; all catalog projects validate/compile as standalone Python. 32 need no extra PIP; four declare optional packages. IT/EN metadata, loading is non-executing. Native GUI/device/service/deployment acceptance awaits ambiente collegato.",
   "template_batch2_validation": "Odd One Out scoring/finish, Memory pairs/mismatch locking/stale reset callbacks/completion, 100 solvable Sliding 15 shuffles/legal moves/win, Canvas brush/shape/eraser contracts and clear/EPS cancellation tested. All 23 example projects validate/compile without extra starter requirements. Interactive GUI and native EPS output acceptance pending.",
   "template_batch3_validation": "Seventeen tests cover stopwatch/countdown/alarm behavior, habits dates/streaks/validation/atomic JSON files, notepad dynamic tab logic/unsaved guards/atomic UTF-8 saves and Pixel Art bounds/palette/PPM/SVG exports. Native Mac GUI, alerts and export display pending user reconnection.",
   "mac_acceptance": "Deferred until user reports ambiente collegato; see docs/MAC_RECONNECT_CHECKLIST.md. No Mac connection, installation or native validation was performed in this release.",
@@ -122,7 +122,7 @@
   "template_batch5_validation": "Fourteen tests cover Decimal expenses/currency isolation/input validation, inventory totals/thresholds/adjustment/unique codes, media loans/year, JSON atomic persistence, actual contact SQLite round trips/parameters/schema guards/rollback/cancellation and mocked PNG preview bounds/lifetime. Remote Linux only; native photo display and Mac acceptance pending.",
   "template_batch6_validation": "Fifteen tests cover safe mine placement/flags/flood fill/win/loss, connected mazes/path movement, calendar leap years/month navigation/date validation/JSON, slideshow format/size bounds/mock image lifetime/timer generation/cancellation and folder changes. Remote Linux only; native Mac mouse/keyboard/photo acceptance pending.",
   "template_batch7_validation": "Nineteen offline regressions: all game timer lifecycles, invader shots/bounds/win/loss, connected chase map/pursuit/collision, platform landing/jumps/goal/fall, seven-piece rotations/line clearing/hard drop/spawn loss, actual 3-6-1 supervised neural error reduction, tutor prompt guards, sound assignments, dependency declarations and actual QR/Code128 PNG encode/decode round trips. No live API, physical audio or native Mac GUI validation.",
-  "example_projects_validated": 47,
+  "example_projects_validated": 51,
   "template_optional_dependencies": {
     "study": [
       "openai>=2,<4"
@@ -135,6 +135,10 @@
     ],
     "soundboard": [
       "pygame-ce>=2.5.8"
+    ],
+    "data": [
+      "openpyxl>=3.1,<4"
     ]
-  }
+  },
+  "template_batch8_validation": "Twenty-four remote offline regressions cover Kanban CRUD/schema/dates/drag/drop/atomic JSON and timer cancellation/deadlines; real CSV/SQLite/XLSX reads, read-only source guards, finite summaries/filter/sorting/pagination/export; educational task phases/adaptive spans/response timing/CSV and both complete original escape-room paths, persistence and malformed save rejection. Native Mac drag/scroll/focus/PIP/build acceptance pending."
 }

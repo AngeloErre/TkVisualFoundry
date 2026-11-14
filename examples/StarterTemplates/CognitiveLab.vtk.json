@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Memory and Attention Lab",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Memory and Attention Lab",
+      "width": 1000,
+      "height": 770,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Help",
+          "kind": "Label",
+          "x": 20,
+          "y": 10,
+          "width": 950,
+          "height": 40,
+          "props": {
+            "text": "Educational memory/visual-search activities \u2014 not a diagnostic test. Anonymous results stay in this session unless exported.",
+            "wraplength": 940
+          },
+          "events": {}
+        },
+        {
+          "name": "Mode",
+          "kind": "Combobox",
+          "x": 20,
+          "y": 65,
+          "width": 170,
+          "height": 30,
+          "props": {
+            "values": [
+              "Memory",
+              "Attention"
+            ],
+            "state": "readonly"
+          },
+          "events": {}
+        },
+        {
+          "name": "Start",
+          "kind": "Button",
+          "x": 210,
+          "y": 65,
+          "width": 150,
+          "height": 30,
+          "props": {
+            "text": "Start trial"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nlab_start(self)\n"
+          }
+        },
+        {
+          "name": "Stop",
+          "kind": "Button",
+          "x": 380,
+          "y": 65,
+          "width": 120,
+          "height": 30,
+          "props": {
+            "text": "Stop trial"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nlab_cancel(self)\nself.Feedback.configure(text='Trial stopped; no result recorded.')\n"
+          }
+        },
+        {
+          "name": "Export",
+          "kind": "Button",
+          "x": 780,
+          "y": 65,
+          "width": 170,
+          "height": 30,
+          "props": {
+            "text": "Export results CSV"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nlab_export(self)\n"
+          }
+        },
+        {
+          "name": "Board",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 110,
+          "width": 940,
+          "height": 330,
+          "props": {
+            "bg": "white",
+            "highlightthickness": 0
+          },
+          "events": {}
+        },
+        {
+          "name": "Answer",
+          "kind": "Entry",
+          "x": 20,
+          "y": 460,
+          "width": 500,
+          "height": 35,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "Submit",
+          "kind": "Button",
+          "x": 540,
+          "y": 460,
+          "width": 150,
+          "height": 35,
+          "props": {
+            "text": "Submit sequence"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nlab_submit(self)\n"
+          }
+        },
+        {
+          "name": "Feedback",
+          "kind": "Label",
+          "x": 20,
+          "y": 505,
+          "width": 950,
+          "height": 40,
+          "props": {
+            "text": "Choose a task and press Start trial.",
+            "wraplength": 940,
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Trend",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 555,
+          "width": 940,
+          "height": 165,
+          "props": {
+            "bg": "white",
+            "highlightthickness": 0
+          },
+          "events": {}
+        },
+        {
+          "name": "Summary",
+          "kind": "Label",
+          "x": 20,
+          "y": 725,
+          "width": 950,
+          "height": 35,
+          "props": {
+            "text": "",
+            "wraplength": 940,
+            "anchor": "w"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Educational tasks record anonymous session results, without diagnostic interpretation.\nimport csv\nimport random\nimport time\nfrom datetime import datetime\n\ndef lab_cancel(app):\n    app.generation += 1; app.phase = 'idle'\n    if app.timer is not None:\n        app.root.after_cancel(app.timer); app.timer = None\n\ndef lab_memory_hide(app,generation):\n    if generation != app.generation or app.phase != 'showing':\n        return\n    app.timer = None; app.Board.delete('all'); app.phase = 'answer'; app.started = time.monotonic()\n    app.Board.create_text(460,150,text='Type the sequence, then Submit.',font=('TkDefaultFont',20))\n    app.Feedback.configure(text='The sequence is hidden. Type your answer now; response timing has started.')\n    app.Answer.focus_set()\n\ndef lab_start(app):\n    lab_cancel(app); app.trial_mode = app.Mode.get(); app.Answer.delete(0,'end'); app.Board.delete('all')\n    app.trial_level = app.levels[app.trial_mode]\n    if app.trial_mode == 'Memory':\n        app.expected = ''.join(str(random.randrange(10)) for _ in range(app.trial_level)); app.phase = 'showing'\n        app.Board.create_text(460,150,text=' '.join(app.expected),font=('TkDefaultFont',34,'bold'))\n        app.Feedback.configure(text=f'Remember {app.trial_level} digits. The answer box activates when they disappear.')\n        generation = app.generation; app.timer = app.root.after(1200+app.trial_level*250,lambda:lab_memory_hide(app,generation))\n    else:\n        app.phase = 'search'; app.target = random.randrange(36); app.started = time.monotonic()\n        for i in range(36):\n            x = 220+(i%6)*75; y = 20+(i//6)*50\n            app.Board.create_rectangle(x,y,x+65,y+42,fill='#edf3fb',outline='#b2bfd0')\n            app.Board.create_text(x+32,y+21,text='O' if i==app.target else 'Q',font=('TkDefaultFont',20))\n        app.Feedback.configure(text='Find and click the single O among the Q characters.')\n\ndef lab_finish(app, correct):\n    if app.phase not in ('answer','search'):\n        return\n    elapsed = max(0,time.monotonic()-app.started)\n    record = {'timestamp':datetime.now().isoformat(timespec='seconds'),'mode':app.trial_mode,'level':app.trial_level,'correct':bool(correct),'response_ms':round(elapsed*1000,1)}\n    app.results.append(record); app.results = app.results[-200:]; app.phase = 'finished'\n    if app.trial_mode == 'Memory':\n        app.levels['Memory'] = max(2,min(9,app.trial_level+(1 if correct else -1)))\n    app.Feedback.configure(text=('Correct' if correct else 'Try again')+f' | Response {record[\"response_ms\"]:.0f} ms | Press Start trial for another round.')\n    lab_plot(app)\n\ndef lab_submit(app):\n    if app.phase == 'answer':\n        lab_finish(app,''.join(app.Answer.get().split())==app.expected)\n\ndef lab_click(app,event):\n    if app.phase != 'search':\n        return\n    col = int((event.x-220)//75); row = int((event.y-20)//50)\n    if 0 <= col < 6 and 0 <= row < 6 and (event.x-220)%75 <= 65 and (event.y-20)%50 <= 42:\n        lab_finish(app,row*6+col==app.target)\n\ndef lab_plot(app):\n    c = app.Trend; c.delete('all'); data = app.results[-20:]\n    scale = max([r['response_ms'] for r in data]+[1])\n    for i,record in enumerate(data):\n        x = 20+i*44; height = record['response_ms']/scale*110\n        c.create_rectangle(x,135-height,x+30,135,fill='#3c9970' if record['correct'] else '#c35c62',outline='')\n        c.create_text(x+15,150,text=str(len(app.results)-len(data)+i+1))\n    correct = sum(r['correct'] for r in app.results)\n    app.Summary.configure(text=f'Session trials: {len(app.results)} | Correct: {correct} | Green=correct, red=incorrect. Bar height=response time; modes are not directly comparable.')\n\ndef lab_export(app):\n    path = filedialog.asksaveasfilename(parent=app.Form1,defaultextension='.csv',filetypes=[('CSV','*.csv')])\n    if not path:\n        return\n    try:\n        with open(path,'w',newline='',encoding='utf-8') as stream:\n            writer = csv.DictWriter(stream,fieldnames=['timestamp','mode','level','correct','response_ms']); writer.writeheader(); writer.writerows(app.results)\n    except OSError as exc:\n        messagebox.showerror('Lab',str(exc),parent=app.Form1)\n\ndef lab_close(app):\n    if app.results and not messagebox.askyesno('Lab','Close? Session results will be lost unless exported.',parent=app.Form1):\n        return\n    lab_cancel(app); app.root.destroy()\n",
+  "startup": "# No trial begins automatically; there are no names, accounts or background uploads.\nself.timer = None\nself.generation = 0\nself.phase = 'idle'\nself.levels = {'Memory':3,'Attention':6}\nself.results = []\nself.Mode.set('Memory')\nself.Board.bind('<Button-1>',lambda event:lab_click(self,event))\nself.Answer.bind('<Return>',lambda event:lab_submit(self))\nself.Form1.protocol('WM_DELETE_WINDOW',lambda:lab_close(self))\nlab_plot(self)\nself.Form1.deiconify()\n",
+  "requirements": []
+}

@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "TkVisualFoundry 1.41\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.41\nVisual Python / Tkinter designer",
+  "TkVisualFoundry 1.42\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.42\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -693,3 +693,14 @@ EN_MESSAGES.update({
 'Tutor di studio con client OpenAI asincrono. Richiede PIP, modello e chiave API personale.':'Study tutor with an asynchronous OpenAI client. Requires PIP, a model and a personal API key.',
 'Generazione PNG e lettura QR/barcode locali. Richiede qrcode, python-barcode, zxing-cpp e Pillow.':'Local PNG generation and QR/barcode reading. Requires qrcode, python-barcode, zxing-cpp and Pillow.',
 'Otto pad con file audio locali, volume e stop. Richiede pygame; nessun audio incluso.':'Eight pads for local audio files, volume and stop. Requires pygame-ce; no bundled sounds.'})
+
+# Four additional starter templates.
+EN_MESSAGES.update({
+'Kanban e Pomodoro':'Kanban and Pomodoro',
+'Esploratore dati interattivo':'Interactive Data Explorer',
+'Laboratorio memoria e attenzione':'Memory and Attention Lab',
+'Escape room investigativa':'Investigation Escape Room',
+'Schede trascinabili, scadenze, salvataggio JSON e timer di concentrazione.':'Draggable cards, due dates, JSON saves and a focus timer.',
+'CSV/TSV, XLSX e SQLite in sola lettura; filtri, statistiche, grafico ed export. XLSX richiede openpyxl.':'Read-only CSV/TSV, XLSX and SQLite; filters, statistics, chart and export. XLSX requires openpyxl.',
+'Sequenze adattive, ricerca visiva, tempi di risposta e CSV. Attività educativa, non diagnostica.':'Adaptive sequences, visual search, response times and CSV. Educational activity, not diagnostic.',
+'Tre stanze originali, inventario, due enigmi e finali alternativi con salvataggio JSON.':'Three original rooms, inventory, two puzzles and alternative endings with JSON saves.'})

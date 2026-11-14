@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.42
+
+Linux remoto, Python 3.15.2: 418 test superati per lingua, 11 grafici saltati; 51 esempi validati e compilati. Ventiquattro nuove regressioni: schede/scadenze/trascinamento/JSON atomico Kanban e timer monotono; CSV/SQLite/XLSX reali in sola lettura, filtri/statistiche/pagine/export con protezione sorgenti; sequenze/ricerca visiva/tempi/CSV e due percorsi completi escape room con salvataggi validati. Catalogo di 36 modelli più vuoto. Nessun collaudo nativo Mac di grafica, trascinamento, focus, PIP o build; attesa “ambiente collegato”.
+
 # TkVisualFoundry 1.41
 
 Linux remoto, Python 3.15.2: 394 test superati per lingua, 11 grafici saltati. Diciannove nuove regressioni su timer, collisioni, labirinto connesso, gravità/salti, sette rotazioni di pezzi con ciclo completo, righe/caduta, addestramento neurale, invio tutor e audio simulati, dipendenze e QR/Code128 PNG generati e riletti realmente. Verifica deterministica extra: rete addestrata, 2500 passi e 10000 unità senza uscire di strada. Tutti i 47 esempi validati e compilati; catalogo di 32 modelli più vuoto. Nessuna chiamata API reale, uscita audio o verifica Mac nativa. Attesa “ambiente collegato”.

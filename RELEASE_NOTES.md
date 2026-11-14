@@ -1,9 +1,14 @@
-# TkVisualFoundry 1.41
+# TkVisualFoundry 1.42
 
-Complete the 32-starter collection with Micro Invaders, Dot Maze Chase, Mini Platformer, Falling Blocks, Neural Driving Lab, Study Agent, QR and Barcode Studio, and Soundboard. Each has editable designer controls and English-commented helper/startup/event code. Games use original geometric graphics and cancellable timers. Neural Driving trains a real small supervised tanh network. Study Agent reuses the async OpenAI client; Code Studio creates and decodes local QR/Code128 images; Soundboard assigns eight local-file pads to the existing audio player.
+Four additional editable starter applications bring the chooser to **36 starters plus Blank project**:
 
-The chooser shows project dependencies: 29 starters need no additional PIP; the other three use OpenAI, QR/barcode imaging or pygame-ce. Models and API keys remain user-configured; no requests or audio start automatically. Sound paths are session-only; no media is bundled. See [starter guide](docs/STARTER_TEMPLATES.md).
+- **Kanban and Pomodoro:** three drag-and-drop stages, task CRUD, ISO due dates, overdue marks, bounded/scrollable board, atomic versioned JSON saves, unsaved guards and monotonic focus timer with pause/resume/reset.
+- **Interactive Data Explorer:** read-only UTF-8 CSV/TSV, active XLSX sheet and SQLite tables, filtering/sorting/pagination/scrollbars, finite numeric min/max/mean, zero-baseline chart and separate filtered CSV export. Source overwrite aliases are rejected and formula-like text escaped on export. Limits prevent unrestricted row/text/workbook loading. `openpyxl>=3.1,<4` is declared for XLSX.
+- **Memory and Attention Lab:** adaptive 2–9 digit sequences, fixed 6×6 visual search, response times, latest 200 anonymous session results, chart and CSV export. Educational demo, without diagnostic norms or clinical interpretation.
+- **The Clockwork Observatory:** original three-room investigation, clues/keys/inventory, two puzzles, solo/rescue endings and validated atomic JSON progress. Story content is editable JSON data in global code.
 
-Remote Python 3.15.2/Linux: 394 tests passed per language, 11 graphical tests skipped; all 47 examples validate and compile. Nineteen new offline regressions include real QR/Code128 PNG round trips with qrcode 8.2, python-barcode 0.16.1, zxing-cpp 3.1.1 and Pillow 12.3.0. Service/audio actions are mocked. The trained neural simulation also completed 2500 steps / 10000 distance units without leaving the road in a deterministic remote check.
+Each has English-commented global/startup/event code; chooser metadata is Italian/English. Thirty-two starters require no extra PIP; four declare optional packages. Creating a template loads a fresh unsaved project copy without executing its code.
 
-Mac GUI, keyboard/audio behavior, live API use, native package installation and generated-app builds remain pending until the user reports **ambiente collegato**. No Mac access or native validation is claimed. Checklist: [MAC_RECONNECT_CHECKLIST.md](docs/MAC_RECONNECT_CHECKLIST.md).
+Remote Python 3.15.2/Linux: **418 tests passed per language, 11 graphical tests skipped; 51 example projects validate and compile**. Twenty-four new regressions include real CSV/SQLite/XLSX round trips, timer phases/deadlines, persistence failure cleanup, drag/drop logic and both complete adventure paths. No native Mac GUI, mouse/keyboard, PIP or target-build validation was performed. These checks await **ambiente collegato**.
+
+See [starter guide](docs/STARTER_TEMPLATES.md) and [Mac reconnection checklist](docs/MAC_RECONNECT_CHECKLIST.md).

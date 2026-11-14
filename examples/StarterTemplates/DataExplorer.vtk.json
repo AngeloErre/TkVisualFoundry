@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Interactive Data Explorer",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Interactive Data Explorer",
+      "width": 1000,
+      "height": 820,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Help",
+          "kind": "Label",
+          "x": 20,
+          "y": 10,
+          "width": 950,
+          "height": 35,
+          "props": {
+            "text": "Read-only CSV/TSV, active XLSX sheet and SQLite tables. First 5000 rows / 60 columns; export filtered data separately."
+          },
+          "events": {}
+        },
+        {
+          "name": "Open",
+          "kind": "Button",
+          "x": 20,
+          "y": 55,
+          "width": 140,
+          "height": 30,
+          "props": {
+            "text": "Open data"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ndata_open(self)\n"
+          }
+        },
+        {
+          "name": "Table",
+          "kind": "Combobox",
+          "x": 180,
+          "y": 55,
+          "width": 250,
+          "height": 30,
+          "props": {
+            "state": "readonly"
+          },
+          "events": {
+            "Change": "# Handle this designer control.\ndata_open(self, True)\n"
+          }
+        },
+        {
+          "name": "Filter",
+          "kind": "Entry",
+          "x": 450,
+          "y": 55,
+          "width": 310,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "Apply",
+          "kind": "Button",
+          "x": 780,
+          "y": 55,
+          "width": 170,
+          "height": 30,
+          "props": {
+            "text": "Apply filter"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nself.page = 0\ndata_refresh(self)\n"
+          }
+        },
+        {
+          "name": "Column",
+          "kind": "Combobox",
+          "x": 20,
+          "y": 105,
+          "width": 250,
+          "height": 30,
+          "props": {
+            "state": "readonly"
+          },
+          "events": {
+            "Change": "# Handle this designer control.\ndata_refresh(self)\n"
+          }
+        },
+        {
+          "name": "Asc",
+          "kind": "Button",
+          "x": 290,
+          "y": 105,
+          "width": 120,
+          "height": 30,
+          "props": {
+            "text": "Sort ascending"
+          },
+          "events": {
+            "Click": "# Sort the selected column ascending.\ndata_refresh(self, False)\n"
+          }
+        },
+        {
+          "name": "Desc",
+          "kind": "Button",
+          "x": 420,
+          "y": 105,
+          "width": 120,
+          "height": 30,
+          "props": {
+            "text": "Sort descending"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ndata_refresh(self, True)\n"
+          }
+        },
+        {
+          "name": "Prev",
+          "kind": "Button",
+          "x": 550,
+          "y": 105,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "text": "Previous"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ndata_page(self, -1)\n"
+          }
+        },
+        {
+          "name": "Next",
+          "kind": "Button",
+          "x": 660,
+          "y": 105,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "text": "Next"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ndata_page(self, 1)\n"
+          }
+        },
+        {
+          "name": "Export",
+          "kind": "Button",
+          "x": 780,
+          "y": 105,
+          "width": 170,
+          "height": 30,
+          "props": {
+            "text": "Export filtered CSV"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ndata_export(self)\n"
+          }
+        },
+        {
+          "name": "Grid",
+          "kind": "Treeview",
+          "x": 20,
+          "y": 160,
+          "width": 935,
+          "height": 340,
+          "props": {
+            "columns": [
+              "c0",
+              "c1",
+              "c2"
+            ],
+            "show": "headings"
+          },
+          "events": {}
+        },
+        {
+          "name": "Summary",
+          "kind": "Label",
+          "x": 20,
+          "y": 525,
+          "width": 950,
+          "height": 45,
+          "props": {
+            "text": "",
+            "wraplength": 940,
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Chart",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 580,
+          "width": 950,
+          "height": 210,
+          "props": {
+            "bg": "white",
+            "highlightthickness": 0
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# All source files are read-only. Export writes a separate user-selected CSV file.\nimport csv\nfrom contextlib import closing\nimport math\nimport sqlite3\nimport statistics\nimport zipfile\nfrom pathlib import Path\nMAX_ROWS = 5000\nMAX_COLUMNS = 60\n\ndef data_text(value):\n    if value is None:\n        return ''\n    if isinstance(value,bytes):\n        return f'<binary {len(value)} bytes>'\n    return str(value)[:2000]\n\ndef data_headers(values):\n    result = []\n    for i,value in enumerate(values):\n        label = data_text(value).strip() or f'Column {i+1}'\n        name = label; suffix = 2\n        while name in result:\n            name = f'{label} ({suffix})'; suffix += 1\n        result.append(name)\n    return result\n\ndef data_sqlite(path, table=None):\n    # URI read-only mode and query_only prohibit modifications to the inspected database.\n    with closing(sqlite3.connect(Path(path).resolve().as_uri()+'?mode=ro',uri=True,timeout=2)) as db:\n        db.execute('PRAGMA query_only=ON')\n        db.setlimit(sqlite3.SQLITE_LIMIT_LENGTH,1_000_000)\n        db.set_progress_handler(lambda:1,2_000_000)\n        tables = [r[0] for r in db.execute(\"SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name LIMIT 101\")]\n        if len(tables)>100:\n            raise ValueError('At most 100 tables are supported.')\n        if not tables:\n            raise ValueError('No data tables found.')\n        table = table or tables[0]\n        if table not in tables:\n            raise ValueError('Select a listed table.')\n        quoted = '\"'+table.replace('\"','\"\"')+'\"'\n        cursor = db.execute('SELECT * FROM '+quoted+' LIMIT 5001')\n        if len(cursor.description)>MAX_COLUMNS:\n            raise ValueError('At most 60 columns are supported.')\n        headers = data_headers([column[0] for column in cursor.description]); rows = []; total = 0; truncated = False\n        # Stream rows so a large database cannot allocate an unbounded fetch buffer.\n        for row in cursor:\n            converted = [data_text(v) for v in row]\n            size = sum(len(v) for v in converted)\n            if len(rows) >= MAX_ROWS or total+size > 5_000_000:\n                truncated = True; break\n            rows.append(converted); total += size\n    return headers,rows,truncated,tables\n\ndef data_load(path, table=None):\n    path = Path(path); suffix = path.suffix.lower()\n    if suffix in ('.db','.sqlite','.sqlite3'):\n        return data_sqlite(path,table)\n    if path.stat().st_size > 10*1024*1024:\n        raise ValueError('CSV/XLSX files must be at most 10 MB.')\n    if suffix in ('.csv','.tsv'):\n        with path.open(encoding='utf-8-sig',newline='') as stream:\n            sample = stream.read(8192); stream.seek(0)\n            try:\n                dialect = csv.Sniffer().sniff(sample,delimiters=',;\\t')\n            except csv.Error:\n                dialect = csv.excel_tab if suffix=='.tsv' else csv.excel\n            reader = csv.reader(stream,dialect); first = next(reader,None)\n            if not first or len(first)>MAX_COLUMNS:\n                raise ValueError('Expected a header and 1-60 columns.')\n            headers = data_headers(first); rows = []\n            for i,row in enumerate(reader):\n                if i >= MAX_ROWS:\n                    return headers,rows,True,[]\n                if len(row)>MAX_COLUMNS:\n                    raise ValueError('A row exceeds 60 columns.')\n                rows.append([data_text(v) for v in (row+['']*len(headers))[:len(headers)]])\n        return headers,rows,False,[]\n    if suffix == '.xlsx':\n        # Bound the expanded workbook before the optional parser reads it.\n        with zipfile.ZipFile(path) as archive:\n            if len(archive.infolist())>2000 or sum(i.file_size for i in archive.infolist())>50*1024*1024:\n                raise ValueError('Expanded workbook is too large.')\n        import openpyxl\n        book = openpyxl.load_workbook(path,read_only=True,data_only=True,keep_links=False)\n        try:\n            sheet = book.active\n            if sheet.max_column and sheet.max_column>MAX_COLUMNS:\n                raise ValueError('At most 60 columns are supported.')\n            iterator = sheet.iter_rows(min_row=1,max_row=MAX_ROWS+2,max_col=min(sheet.max_column or MAX_COLUMNS,MAX_COLUMNS),values_only=True)\n            first = next(iterator,None)\n            if not first:\n                raise ValueError('Workbook has no header.')\n            headers = data_headers(first); raw = []\n            for row in iterator:\n                raw.append([data_text(v) for v in row])\n                if len(raw)>MAX_ROWS:\n                    break\n            return headers,raw[:MAX_ROWS],len(raw)>MAX_ROWS,[]\n        finally:\n            book.close()\n    raise ValueError('Use CSV, TSV, XLSX or SQLite (.db/.sqlite/.sqlite3).')\n\ndef data_numeric(value):\n    try:\n        number = float(value)\n        return number if math.isfinite(number) else None\n    except (ValueError,TypeError,OverflowError):\n        return None\n\ndef data_filter(rows, query, column=None, descending=False):\n    query = query.casefold()\n    result = [row for row in rows if not query or any(query in value.casefold() for value in row)]\n    if column is not None:\n        def key(row):\n            value = row[column]; numeric = data_numeric(value)\n            return (0,numeric) if numeric is not None else (1,value.casefold())\n        result = sorted(result,key=key,reverse=descending)\n    return result\n\ndef data_summary(rows,column):\n    values = [n for row in rows if (n:=data_numeric(row[column])) is not None]\n    return {'rows':len(rows),'numeric':len(values),'min':min(values) if values else None,'max':max(values) if values else None,'mean':statistics.mean(values) if values else None}\n\ndef data_refresh(app, reverse=None):\n    if not app.headers:\n        return\n    if reverse is not None:\n        app.descending = reverse\n    selected = app.Column.get(); column = app.headers.index(selected) if selected in app.headers else 0\n    app.visible = data_filter(app.rows,app.Filter.get(),column,app.descending)\n    app.Grid.delete(*app.Grid.get_children())\n    # Paginate the table while summaries/export use all filtered loaded rows.\n    pages = max(1,(len(app.visible)+99)//100); app.page = min(max(0,app.page),pages-1)\n    for row in app.visible[app.page*100:(app.page+1)*100]:\n        app.Grid.insert('','end',values=row)\n    stats = data_summary(app.visible,column)\n    app.Summary.configure(text=f\"Loaded {len(app.rows)} | Filtered {stats['rows']} | Page {app.page+1}/{pages} | Numeric {stats['numeric']} | Min {stats['min']} | Max {stats['max']} | Mean {stats['mean']}\"+(' | SOURCE TRUNCATED (ROW/TEXT LIMIT)'  if app.truncated else ''))\n    c = app.Chart; c.delete('all'); values = [(i,n) for i,row in enumerate(app.visible[:12]) if (n:=data_numeric(row[column])) is not None]\n    scale = max([abs(n) for i,n in values]+[1]); c.create_line(10,90,940,90,fill='#74849b')\n    for i,n in values:\n        x = 20+i*76; y = 90-n/scale*65\n        c.create_rectangle(x,min(90,y),x+45,max(90,y)+1,fill='#3975c6',outline='')\n        c.create_text(x+22,170,text=str(i+1)); c.create_text(x+22,y-8 if n>=0 else y+8,text=f'{n:.3g}')\n    c.create_text(480,195,text=f'{selected}: first 12 filtered rows; zero baseline')\n\ndef data_open(app, table_change=False):\n    path = app.source if table_change else filedialog.askopenfilename(parent=app.Form1,filetypes=[('Data','*.csv *.tsv *.xlsx *.db *.sqlite *.sqlite3')])\n    if not path:\n        return\n    try:\n        headers,rows,truncated,tables = data_load(path,app.Table.get() if table_change else None)\n        app.headers = headers; app.rows = rows; app.truncated = truncated; app.source = path; app.page = 0\n        app.Table.configure(values=tables,state='readonly' if tables else 'disabled')\n        if tables and not table_change:\n            app.Table.set(tables[0])\n        if not tables:\n            app.Table.set('')\n        app.Column.configure(values=headers); app.Column.set(headers[0]); app.Grid.configure(columns=[f'c{i}' for i in range(len(headers))],show='headings')\n        for i,label in enumerate(headers):\n            app.Grid.heading(f'c{i}',text=label); app.Grid.column(f'c{i}',width=140,minwidth=80,stretch=False)\n        data_refresh(app)\n    except Exception as exc:\n        messagebox.showerror('Data Explorer',str(exc),parent=app.Form1)\n\ndef data_page(app, delta):\n    app.page += delta; data_refresh(app)\n\ndef data_export(app):\n    path = filedialog.asksaveasfilename(parent=app.Form1,defaultextension='.csv',filetypes=[('CSV','*.csv')])\n    if not path:\n        return\n    try:\n        if app.source and (Path(path).resolve()==Path(app.source).resolve() or Path(path).exists() and Path(path).samefile(app.source)):\n            raise ValueError('Choose a separate export file; source data is read-only.')\n        with open(path,'w',encoding='utf-8',newline='') as stream:\n            writer = csv.writer(stream); writer.writerow(app.headers)\n            # Escape formula prefixes for safe spreadsheet opening; source data is unchanged.\n            writer.writerows([[\"'\"+v if v.lstrip().startswith(('=','+','-','@')) and data_numeric(v) is None else v for v in row] for row in app.visible])\n    except (OSError,ValueError) as exc:\n        messagebox.showerror('Data Explorer',str(exc),parent=app.Form1)\n",
+  "startup": "# Open no source automatically; the built-in sample makes filter/chart behavior visible.\nself.source = None\nself.headers = ['Item','Quantity','Price']\nself.rows = [['Books','12','8.5'],['Pens','35','1.2'],['Folders','18','3.0']]\nself.visible = []\nself.truncated = False\nself.page = 0\nself.descending = False\nself.Column.configure(values=self.headers)\nself.Column.set('Quantity')\nself.Table.configure(state='disabled')\nself.Grid.configure(columns=['c0','c1','c2'],show='headings')\nfor i,label in enumerate(self.headers):\n    self.Grid.heading('c'+str(i),text=label)\n    self.Grid.column('c'+str(i),width=140,minwidth=80,stretch=False)\n# Scrollbars are attached to the editable designer Treeview.\nself.data_vscroll = ttk.Scrollbar(self.Form1,orient='vertical',command=self.Grid.yview)\nself.data_vscroll.place(x=956,y=160,width=18,height=340)\nself.data_hscroll = ttk.Scrollbar(self.Form1,orient='horizontal',command=self.Grid.xview)\nself.data_hscroll.place(x=20,y=500,width=935,height=18)\nself.Grid.configure(yscrollcommand=self.data_vscroll.set,xscrollcommand=self.data_hscroll.set)\ndata_refresh(self)\nself.Form1.deiconify()\n",
+  "requirements": [
+    "openpyxl>=3.1,<4"
+  ]
+}

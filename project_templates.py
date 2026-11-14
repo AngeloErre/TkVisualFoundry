@@ -37,6 +37,10 @@ TEMPLATES=(
     ('study', 'StudyAgent', 'Study Agent', 'Utilità', 'Tutor di studio con client OpenAI asincrono. Richiede PIP, modello e chiave API personale.'),
     ('codes', 'CodeStudio', 'QR and Barcode Studio', 'Utilità', 'Generazione PNG e lettura QR/barcode locali. Richiede qrcode, python-barcode, zxing-cpp e Pillow.'),
     ('soundboard', 'Soundboard', 'Soundboard', 'Creatività', 'Otto pad con file audio locali, volume e stop. Richiede pygame; nessun audio incluso.'),
+    ('kanban', 'KanbanPomodoro', 'Kanban e Pomodoro', 'Utilità', 'Schede trascinabili, scadenze, salvataggio JSON e timer di concentrazione.'),
+    ('data', 'DataExplorer', 'Esploratore dati interattivo', 'Archivi', 'CSV/TSV, XLSX e SQLite in sola lettura; filtri, statistiche, grafico ed export. XLSX richiede openpyxl.'),
+    ('cognitive', 'CognitiveLab', 'Laboratorio memoria e attenzione', 'Giochi', 'Sequenze adattive, ricerca visiva, tempi di risposta e CSV. Attività educativa, non diagnostica.'),
+    ('escape', 'ClockworkEscape', 'Escape room investigativa', 'Giochi', 'Tre stanze originali, inventario, due enigmi e finali alternativi con salvataggio JSON.'),
 )
 
 

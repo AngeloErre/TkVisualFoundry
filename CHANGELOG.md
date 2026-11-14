@@ -1,3 +1,9 @@
+# 1.42 — Four additional starter applications
+
+- Add Kanban/Pomodoro, read-only Data Explorer, educational Memory/Attention Lab and Clockwork Observatory escape room.
+- English-commented code and IT/EN descriptions; optional openpyxl declared; 36 starters plus blank.
+- Twenty-four offline regressions; 418 passed and 11 GUI skipped per language; 51 example projects validate/compile. Mac native acceptance deferred.
+
 # 1.41 — complete starter collection
 
 - Add the final eight English-commented starters: four Canvas arcade games, an actual supervised neural driving demo, an async study tutor, local QR/Code128 generator/reader and an eight-pad soundboard.

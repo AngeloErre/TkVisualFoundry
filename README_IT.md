@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.41
+# TkVisualFoundry 1.42
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Quattro nuovi modelli (1.42)
+
+Il selettore offre ora **36 modelli più Progetto vuoto**. Aggiunti Kanban e Pomodoro (schede trascinabili, scadenze, JSON e timer), Esploratore dati interattivo (CSV/TSV, foglio attivo XLSX e SQLite in sola lettura, filtri, ordinamento, statistiche, grafico ed export CSV), Laboratorio memoria e attenzione (sequenze adattive, ricerca visiva, tempi di risposta e risultati CSV), escape room Clockwork Observatory (tre stanze originali, inventario, due enigmi, due finali e salvataggi JSON). Codice commentato in inglese. Per XLSX è dichiarato openpyxl; gli altri tre modelli non richiedono PIP aggiuntivi. Le attività cognitive sono dimostrative ed educative, non diagnostiche. [Guida ai modelli](docs/STARTER_TEMPLATES.md). Collaudo nativo Mac ancora in attesa.
 
 ## Ultimi otto modelli iniziali (1.41)
 

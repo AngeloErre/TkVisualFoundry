@@ -1,0 +1,284 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Kanban and Pomodoro",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Kanban and Pomodoro",
+      "width": 1000,
+      "height": 770,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Instructions",
+          "kind": "Label",
+          "x": 20,
+          "y": 10,
+          "width": 950,
+          "height": 35,
+          "props": {
+            "text": "Click a card to edit; drag it to another stage. Scroll the board with the mouse wheel or Up/Down buttons."
+          },
+          "events": {}
+        },
+        {
+          "name": "Title",
+          "kind": "Entry",
+          "x": 20,
+          "y": 55,
+          "width": 430,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "Due",
+          "kind": "Entry",
+          "x": 465,
+          "y": 55,
+          "width": 150,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "Stage",
+          "kind": "Combobox",
+          "x": 630,
+          "y": 55,
+          "width": 170,
+          "height": 30,
+          "props": {
+            "values": [
+              "To do",
+              "In progress",
+              "Done"
+            ],
+            "state": "readonly"
+          },
+          "events": {}
+        },
+        {
+          "name": "Fields",
+          "kind": "Label",
+          "x": 20,
+          "y": 90,
+          "width": 780,
+          "height": 25,
+          "props": {
+            "text": "Task title                                     Due date: YYYY-MM-DD (optional)             Stage",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Add",
+          "kind": "Button",
+          "x": 20,
+          "y": 120,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Add"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nkanban_edit(self)\n"
+          }
+        },
+        {
+          "name": "Update",
+          "kind": "Button",
+          "x": 140,
+          "y": 120,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Update"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nkanban_edit(self, True)\n"
+          }
+        },
+        {
+          "name": "Delete",
+          "kind": "Button",
+          "x": 260,
+          "y": 120,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Delete"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nkanban_delete(self)\n"
+          }
+        },
+        {
+          "name": "Open",
+          "kind": "Button",
+          "x": 390,
+          "y": 120,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Open JSON"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nkanban_file(self, True)\n"
+          }
+        },
+        {
+          "name": "Save",
+          "kind": "Button",
+          "x": 510,
+          "y": 120,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Save JSON"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nkanban_file(self)\n"
+          }
+        },
+        {
+          "name": "ScrollUp",
+          "kind": "Button",
+          "x": 650,
+          "y": 120,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Board up"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nself.Board.yview_scroll(-4, 'units')\n"
+          }
+        },
+        {
+          "name": "ScrollDown",
+          "kind": "Button",
+          "x": 770,
+          "y": 120,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Board down"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nself.Board.yview_scroll(4, 'units')\n"
+          }
+        },
+        {
+          "name": "Board",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 165,
+          "width": 930,
+          "height": 390,
+          "props": {
+            "bg": "white",
+            "highlightthickness": 0
+          },
+          "events": {}
+        },
+        {
+          "name": "Summary",
+          "kind": "Label",
+          "x": 20,
+          "y": 560,
+          "width": 950,
+          "height": 30,
+          "props": {
+            "text": "",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "MinutesHelp",
+          "kind": "Label",
+          "x": 20,
+          "y": 605,
+          "width": 110,
+          "height": 30,
+          "props": {
+            "text": "Focus minutes:"
+          },
+          "events": {}
+        },
+        {
+          "name": "Minutes",
+          "kind": "Entry",
+          "x": 140,
+          "y": 605,
+          "width": 70,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FocusStart",
+          "kind": "Button",
+          "x": 230,
+          "y": 605,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "text": "Start focus"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nfocus_start(self)\n"
+          }
+        },
+        {
+          "name": "FocusPause",
+          "kind": "Button",
+          "x": 340,
+          "y": 605,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "text": "Pause"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nfocus_pause(self)\n"
+          }
+        },
+        {
+          "name": "FocusReset",
+          "kind": "Button",
+          "x": 450,
+          "y": 605,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "text": "Reset"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nfocus_reset(self)\n"
+          }
+        },
+        {
+          "name": "TimerLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 650,
+          "width": 930,
+          "height": 45,
+          "props": {
+            "text": "Focus ready; choose minutes then Start.",
+            "anchor": "w"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Write only explicit user-selected files; replacement is atomic in the same directory.\nimport json\nimport os\nimport tempfile\nfrom pathlib import Path\n\ndef write_json(path, value):\n    target = Path(path)\n    handle, temporary = tempfile.mkstemp(prefix='.'+target.name+'.',suffix='.tmp',dir=target.parent)\n    try:\n        with os.fdopen(handle,'w',encoding='utf-8') as stream:\n            json.dump(value,stream,ensure_ascii=False,indent=2)\n            stream.write('\\n')\n        os.replace(temporary,target)\n    finally:\n        if os.path.exists(temporary):\n            os.unlink(temporary)\n\ndef read_json(path):\n    if Path(path).stat().st_size > 2*1024*1024:\n        raise ValueError('Project data must be at most 2 MB.')\n    return json.loads(Path(path).read_text(encoding='utf-8-sig'))\n\n# Cards belong to one of three stages. Dates are ISO YYYY-MM-DD or empty.\nfrom datetime import date\nimport time\nimport uuid\nSTAGES = ('To do','In progress','Done')\n\ndef kanban_validate(value):\n    if not isinstance(value,dict) or value.get('type') != 'tkvf-kanban' or value.get('version') != 1:\n        raise ValueError('This is not a Kanban v1 file.')\n    cards = value.get('cards')\n    if not isinstance(cards,list) or len(cards) > 120:\n        raise ValueError('At most 120 cards are supported.')\n    ids = set()\n    for card in cards:\n        if not isinstance(card,dict) or set(card) != {'id','title','due','stage'}:\n            raise ValueError('Invalid card fields.')\n        if not all(isinstance(v,str) for v in card.values()):\n            raise ValueError('Card fields must be text.')\n        if not card['id'] or len(card['id']) > 50 or card['id'] in ids or not card['title'].strip() or len(card['title']) > 160 or card['stage'] not in STAGES:\n            raise ValueError('Invalid card or duplicate ID.')\n        ids.add(card['id'])\n        if card['due']:\n            if date.fromisoformat(card['due']).isoformat() != card['due']:\n                raise ValueError('Use YYYY-MM-DD for dates.')\n    return [dict(card) for card in cards]\n\ndef kanban_draw(app):\n    c = app.Board; c.delete('all'); app.card_rects = []\n    counts = [0,0,0]\n    for i,stage in enumerate(STAGES):\n        c.create_rectangle(i*310,0,(i+1)*310-10,14000,fill=('#eef3fb','#fff5d8','#e4f4eb')[i],outline='')\n        c.create_text(i*310+12,18,text=stage,anchor='w',font=('TkDefaultFont',13,'bold'))\n    today = date.today().isoformat()\n    for card in app.cards:\n        column = STAGES.index(card['stage']); y = 45+counts[column]*75; counts[column] += 1; x = column*310+10\n        app.card_rects.append((x,y,x+280,y+65,card['id']))\n        c.create_rectangle(x,y,x+280,y+65,fill='white',outline='#3476bf' if card['id']==app.selected else '#b6c3d1',width=2)\n        c.create_text(x+8,y+8,text=card['title'],anchor='nw',width=260)\n        overdue = card['due'] and card['due'] < today and card['stage'] != 'Done'\n        c.create_text(x+8,y+52,text=('Overdue: ' if overdue else 'Due: ')+card['due'] if card['due'] else 'No due date',anchor='w',fill='#b02d2d' if overdue else '#52627a')\n    c.configure(scrollregion=(0,0,930,max(390,50+max(counts)*75)))\n    app.Summary.configure(text=f'{len(app.cards)} tasks | Done: {counts[2]} | Focus sessions: {app.focus_sessions} | '+('Unsaved changes' if app.dirty else 'Saved / new'))\n\ndef kanban_select(app,event):\n    x,y = app.Board.canvasx(event.x),app.Board.canvasy(event.y); app.dragging = None\n    for left,top,right,bottom,identifier in app.card_rects:\n        if left <= x <= right and top <= y <= bottom:\n            app.selected = identifier; app.dragging = identifier\n            card = next(c for c in app.cards if c['id']==identifier)\n            app.Title.delete(0,'end'); app.Title.insert(0,card['title']); app.Due.delete(0,'end'); app.Due.insert(0,card['due']); app.Stage.set(card['stage'])\n            break\n    kanban_draw(app)\n\ndef kanban_drag(app,event):\n    if app.dragging:\n        app.Board.configure(cursor='fleur')\n\ndef kanban_release(app,event):\n    app.Board.configure(cursor='')\n    identifier = app.dragging; app.dragging = None\n    if identifier and 0 <= event.x < 930 and 0 <= event.y < 390:\n        card = next(c for c in app.cards if c['id']==identifier)\n        stage = STAGES[min(2,int(app.Board.canvasx(event.x)//310))]\n        if card['stage'] != stage:\n            card['stage'] = stage; app.Stage.set(stage); app.dirty = True\n        kanban_draw(app)\n\ndef kanban_edit(app, update=False):\n    try:\n        if update and not app.selected:\n            raise ValueError('Select a card first.')\n        card = {'id':app.selected if update else uuid.uuid4().hex,'title':app.Title.get().strip(),'due':app.Due.get().strip(),'stage':app.Stage.get()}\n        cards = [card if old['id']==card['id'] else dict(old) for old in app.cards] if update else app.cards+[card]\n        cards = kanban_validate({'type':'tkvf-kanban','version':1,'cards':cards})\n        app.cards = cards; app.selected = card['id']; app.dirty = True; kanban_draw(app)\n    except (ValueError,TypeError) as exc:\n        messagebox.showerror('Kanban',str(exc),parent=app.Form1)\n\ndef kanban_delete(app):\n    if app.selected and messagebox.askyesno('Kanban','Delete the selected task?',parent=app.Form1):\n        app.cards = [c for c in app.cards if c['id']!=app.selected]; app.selected = None; app.dirty = True; kanban_draw(app)\n\ndef kanban_file(app, opening=False):\n    if opening and app.dirty and not messagebox.askyesno('Kanban','Discard unsaved board changes?',parent=app.Form1):\n        return\n    path = (filedialog.askopenfilename if opening else filedialog.asksaveasfilename)(parent=app.Form1,defaultextension='.json',filetypes=[('Kanban JSON','*.json')])\n    if not path:\n        return\n    try:\n        if opening:\n            cards = kanban_validate(read_json(path)); app.cards = cards; app.selected = None; app.dragging = None\n        else:\n            write_json(path,{'type':'tkvf-kanban','version':1,'cards':app.cards})\n        app.dirty = False; kanban_draw(app)\n    except (OSError,ValueError,TypeError) as exc:\n        messagebox.showerror('Kanban',str(exc),parent=app.Form1)\n\ndef focus_pause(app):\n    if app.focus_running:\n        app.focus_remaining = max(0,app.focus_deadline-time.monotonic())\n    app.focus_running = False; app.focus_generation += 1\n    if app.focus_timer is not None:\n        app.root.after_cancel(app.focus_timer); app.focus_timer = None\n\ndef focus_tick(app,generation):\n    if not app.focus_running or generation != app.focus_generation:\n        return\n    app.focus_timer = None; app.focus_remaining = max(0,app.focus_deadline-time.monotonic())\n    seconds = int(app.focus_remaining+0.999)\n    app.TimerLabel.configure(text=f'Focus {seconds//60:02}:{seconds%60:02}')\n    if app.focus_remaining <= 0:\n        app.focus_running = False; app.focus_sessions += 1; app.TimerLabel.configure(text='Focus complete \u2014 take a short break.'); kanban_draw(app)\n    else:\n        app.focus_timer = app.root.after(200,lambda:focus_tick(app,generation))\n\ndef focus_start(app):\n    if app.focus_running:\n        return\n    if app.focus_remaining <= 0:\n        try:\n            minutes = int(app.Minutes.get())\n            if not 1 <= minutes <= 180:\n                raise ValueError('Choose 1-180 minutes.')\n            app.focus_remaining = minutes*60\n        except ValueError as exc:\n            messagebox.showerror('Pomodoro',str(exc),parent=app.Form1); return\n    app.focus_deadline = time.monotonic()+app.focus_remaining; app.focus_running = True; app.focus_generation += 1; focus_tick(app,app.focus_generation)\n\ndef focus_reset(app):\n    focus_pause(app); app.focus_remaining = 0; app.TimerLabel.configure(text='Focus ready; choose minutes then Start.')\n\ndef kanban_close(app):\n    if app.dirty and not messagebox.askyesno('Kanban','Close and discard unsaved board changes?',parent=app.Form1):\n        return\n    focus_pause(app); app.root.destroy()\n",
+  "startup": "# Initialize an unsaved example board; file writes and the timer require explicit actions.\nself.cards = [{'id':'sample','title':'Explore this editable Kanban template','due':'','stage':'To do'}]\nself.selected = None\nself.dragging = None\nself.dirty = True\nself.focus_timer = None\nself.focus_generation = 0\nself.focus_running = False\nself.focus_remaining = 0\nself.focus_sessions = 0\nself.Stage.set('To do')\nself.Minutes.insert(0,'25')\nself.Board.bind('<Button-1>',lambda event:kanban_select(self,event))\nself.Board.bind('<B1-Motion>',lambda event:kanban_drag(self,event))\nself.Board.bind('<ButtonRelease-1>',lambda event:kanban_release(self,event))\nself.Board.bind('<MouseWheel>',lambda event:self.Board.yview_scroll(-1 if event.delta > 0 else 1,'units'))\nself.Board.bind('<Button-4>',lambda event:self.Board.yview_scroll(-1,'units'))\nself.Board.bind('<Button-5>',lambda event:self.Board.yview_scroll(1,'units'))\nself.Form1.protocol('WM_DELETE_WINDOW',lambda:kanban_close(self))\nkanban_draw(self)\nself.Form1.deiconify()\n",
+  "requirements": []
+}

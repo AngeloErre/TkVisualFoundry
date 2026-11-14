@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "The Clockwork Observatory",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "The Clockwork Observatory",
+      "width": 1000,
+      "height": 770,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "New",
+          "kind": "Button",
+          "x": 20,
+          "y": 15,
+          "width": 150,
+          "height": 30,
+          "props": {
+            "text": "New adventure"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nescape_new(self)\n"
+          }
+        },
+        {
+          "name": "Load",
+          "kind": "Button",
+          "x": 190,
+          "y": 15,
+          "width": 150,
+          "height": 30,
+          "props": {
+            "text": "Load progress"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nescape_file(self, True)\n"
+          }
+        },
+        {
+          "name": "Save",
+          "kind": "Button",
+          "x": 360,
+          "y": 15,
+          "width": 150,
+          "height": 30,
+          "props": {
+            "text": "Save progress"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nescape_file(self)\n"
+          }
+        },
+        {
+          "name": "Progress",
+          "kind": "Label",
+          "x": 530,
+          "y": 15,
+          "width": 430,
+          "height": 35,
+          "props": {
+            "text": "",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Scene",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 60,
+          "width": 940,
+          "height": 180,
+          "props": {
+            "bg": "#f1f4f8",
+            "highlightthickness": 0
+          },
+          "events": {}
+        },
+        {
+          "name": "Story",
+          "kind": "Text",
+          "x": 20,
+          "y": 250,
+          "width": 940,
+          "height": 160,
+          "props": {
+            "wrap": "word"
+          },
+          "events": {}
+        },
+        {
+          "name": "Actions",
+          "kind": "Listbox",
+          "x": 20,
+          "y": 425,
+          "width": 600,
+          "height": 180,
+          "props": {
+            "exportselection": false
+          },
+          "events": {}
+        },
+        {
+          "name": "Answer",
+          "kind": "Entry",
+          "x": 650,
+          "y": 425,
+          "width": 310,
+          "height": 35,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "AnswerHelp",
+          "kind": "Label",
+          "x": 650,
+          "y": 470,
+          "width": 310,
+          "height": 45,
+          "props": {
+            "text": "Select an action; for a puzzle, enter its answer here.",
+            "wraplength": 300
+          },
+          "events": {}
+        },
+        {
+          "name": "Act",
+          "kind": "Button",
+          "x": 650,
+          "y": 530,
+          "width": 310,
+          "height": 45,
+          "props": {
+            "text": "Perform selected action"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nescape_act(self)\n"
+          }
+        },
+        {
+          "name": "Inventory",
+          "kind": "Label",
+          "x": 20,
+          "y": 625,
+          "width": 940,
+          "height": 75,
+          "props": {
+            "text": "",
+            "wraplength": 930,
+            "anchor": "nw"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Write only explicit user-selected files; replacement is atomic in the same directory.\nimport json\nimport os\nimport tempfile\nfrom pathlib import Path\n\ndef write_json(path, value):\n    target = Path(path)\n    handle, temporary = tempfile.mkstemp(prefix='.'+target.name+'.',suffix='.tmp',dir=target.parent)\n    try:\n        with os.fdopen(handle,'w',encoding='utf-8') as stream:\n            json.dump(value,stream,ensure_ascii=False,indent=2)\n            stream.write('\\n')\n        os.replace(temporary,target)\n    finally:\n        if os.path.exists(temporary):\n            os.unlink(temporary)\n\ndef read_json(path):\n    if Path(path).stat().st_size > 2*1024*1024:\n        raise ValueError('Project data must be at most 2 MB.')\n    return json.loads(Path(path).read_text(encoding='utf-8-sig'))\n\nSTORY_JSON = '{\"foyer\": {\"title\": \"The Clockmaker\\\\u2019s Foyer\", \"description\": \"A storm has sealed the old observatory. A numbered box rests beneath a stopped clock. A compass hangs by the door. The workshop is locked.\", \"color\": \"#b9cbe2\", \"items\": {\"note\": \"The note reads: three gears, one moon, four stars.\", \"compass\": \"A compass may guide someone home through the storm.\"}, \"exits\": {\"workshop\": {\"key\": \"brass_key\"}}, \"puzzle\": {\"id\": \"box\", \"question\": \"Enter the three-digit box combination.\", \"answer\": \"314\", \"reward\": \"brass_key\"}}, \"workshop\": {\"title\": \"The Sunlit Workshop\", \"description\": \"A dim control panel powers the garden gate. A scratched inscription asks a riddle.\", \"color\": \"#e5cba5\", \"items\": {\"inscription\": \"I rise in the east and warm the day. Enter my name in English.\"}, \"exits\": {\"foyer\": {\"key\": \"\"}, \"garden\": {\"key\": \"garden_key\"}}, \"puzzle\": {\"id\": \"panel\", \"question\": \"What powers the panel?\", \"answer\": \"sun\", \"reward\": \"garden_key\"}}, \"garden\": {\"title\": \"The Storm Garden\", \"description\": \"The outer gate is open. A lost companion waits by a dark path. You can leave immediately or use the compass to help them.\", \"color\": \"#b1d6bd\", \"items\": {}, \"exits\": {\"workshop\": {\"key\": \"\"}}}}'\n# The original story is data: edit descriptions, items, exits and puzzle answers here.\nSTORY = json.loads(STORY_JSON)\nINVENTORY = {'note','compass','inscription','brass_key','garden_key'}\n\ndef escape_new(app):\n    if getattr(app,'dirty',False) and not messagebox.askyesno('Escape Room','Discard unsaved progress?',parent=app.Form1):\n        return\n    app.state = {'type':'tkvf-escape','version':1,'room':'foyer','inventory':[],'solved':[],'ending':'','moves':0}\n    app.dirty = True; app.notice = 'Explore, collect clues and solve the two puzzles.'; escape_draw(app)\n\ndef escape_validate(value):\n    if not isinstance(value,dict) or set(value) != {'type','version','room','inventory','solved','ending','moves'} or value['type']!='tkvf-escape' or value['version']!=1 or value['room'] not in STORY:\n        raise ValueError('Invalid Escape Room v1 save.')\n    for key,allowed in (('inventory',INVENTORY),('solved',{'box','panel'})):\n        items = value[key]\n        if not isinstance(items,list) or not all(isinstance(x,str) and x in allowed for x in items) or len(set(items))!=len(items):\n            raise ValueError('Invalid inventory or puzzle state.')\n    if value['ending'] not in ('','solo','rescued') or type(value['moves']) is not int or not 0<=value['moves']<=100000:\n        raise ValueError('Invalid ending or move count.')\n    items=set(value['inventory']);solved=set(value['solved'])\n    if ('brass_key' in items)!=('box' in solved) or ('garden_key' in items)!=('panel' in solved):\n        raise ValueError('Puzzle rewards and solved state disagree.')\n    if value['room'] in ('workshop','garden') and 'brass_key' not in items or value['room']=='garden' and 'garden_key' not in items:\n        raise ValueError('Missing room key.')\n    if value['ending'] and value['room']!='garden' or value['ending']=='rescued' and 'compass' not in items:\n        raise ValueError('Invalid ending location or missing compass.')\n    return json.loads(json.dumps(value))\n\ndef escape_actions(state):\n    if state['ending']:\n        return []\n    room = STORY[state['room']]; result = []\n    for item in room['items']:\n        if item not in state['inventory']:\n            result.append(('take',item,'Inspect / take '+item))\n    for destination in room['exits']:\n        result.append(('go',destination,'Go to '+STORY[destination]['title']))\n    if 'puzzle' in room and room['puzzle']['id'] not in state['solved']:\n        result.append(('solve','',room['puzzle']['question']))\n    if state['room']=='garden':\n        result.extend([('end','solo','Leave alone'),('end','rescued','Guide the companion with the compass')])\n    return result\n\ndef escape_apply(state, action, argument, answer=''):\n    state = escape_validate(state)\n    if state['ending'] or (action,argument) not in [(a,b) for a,b,label in escape_actions(state)]:\n        raise ValueError('That action is not available.')\n    room = STORY[state['room']]; notice = ''\n    if action=='take':\n        state['inventory'].append(argument); notice=room['items'][argument]\n    elif action=='go':\n        key = room['exits'][argument]['key']\n        if key and key not in state['inventory']:\n            return state,'The door is locked. Find the key first.'\n        state['room']=argument; notice='You enter '+STORY[argument]['title']+'.'\n    elif action=='solve':\n        puzzle=room['puzzle']\n        if answer.strip().casefold()!=puzzle['answer'].casefold():\n            return state,'The mechanism stays locked. Inspect the clues and try again.'\n        state['solved'].append(puzzle['id']);state['inventory'].append(puzzle['reward']);notice='Solved! You receive '+puzzle['reward']+'.'\n    elif action=='end':\n        if argument=='rescued' and 'compass' not in state['inventory']:\n            return state,'You need a compass to guide the companion.'\n        state['ending']=argument;notice='You and your companion reach safety.' if argument=='rescued' else 'You escape alone, leaving the mystery behind.'\n    state['moves']+=1\n    return state,notice\n\ndef escape_draw(app):\n    room=STORY[app.state['room']];app.Scene.delete('all');app.Scene.create_rectangle(20,20,920,160,fill=room['color'],outline='')\n    app.Scene.create_text(470,60,text=room['title'],font=('TkDefaultFont',22,'bold'))\n    app.Scene.create_text(470,115,text='Two puzzles \u2022 Three rooms \u2022 Two endings',font=('TkDefaultFont',13))\n    app.Story.delete('1.0','end');app.Story.insert('1.0',room['description']+'\\n\\n'+app.notice)\n    app.options=escape_actions(app.state);app.Actions.delete(0,'end')\n    for action,argument,label in app.options:\n        app.Actions.insert('end',label)\n    app.Inventory.configure(text='Inventory: '+(', '.join(app.state['inventory']) or '(empty)'))\n    app.Progress.configure(text=f\"Moves: {app.state['moves']} | Puzzles: {len(app.state['solved'])}/2 | Ending: {app.state['ending'] or 'playing'} | \"+('Unsaved' if app.dirty else 'Saved'))\n\ndef escape_act(app):\n    selection=app.Actions.curselection()\n    if not selection:\n        return\n    action,argument,label=app.options[selection[0]]\n    state,notice=escape_apply(app.state,action,argument,app.Answer.get())\n    app.dirty = app.dirty or state!=app.state;app.state=state;app.notice=notice;app.Answer.delete(0,'end');escape_draw(app)\n\ndef escape_file(app, opening=False):\n    if opening and app.dirty and not messagebox.askyesno('Escape Room','Discard unsaved progress?',parent=app.Form1):\n        return\n    path=(filedialog.askopenfilename if opening else filedialog.asksaveasfilename)(parent=app.Form1,defaultextension='.json',filetypes=[('Escape save','*.json')])\n    if not path:\n        return\n    try:\n        if opening:\n            state=escape_validate(read_json(path));app.state=state;app.notice='Progress restored.'\n        else:\n            write_json(path,escape_validate(app.state));app.notice='Progress saved.'\n        app.dirty=False;escape_draw(app)\n    except (OSError,ValueError,TypeError) as exc:\n        messagebox.showerror('Escape Room',str(exc),parent=app.Form1)\n\ndef escape_close(app):\n    if app.dirty and not messagebox.askyesno('Escape Room','Close and discard unsaved progress?',parent=app.Form1):\n        return\n    app.root.destroy()\n",
+  "startup": "# Create a fresh story state; saved progress is loaded only on request.\nself.dirty = False\nescape_new(self)\nself.Form1.protocol('WM_DELETE_WINDOW',lambda:escape_close(self))\nself.Form1.deiconify()\n",
+  "requirements": []
+}

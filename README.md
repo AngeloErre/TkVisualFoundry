@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.41
+# TkVisualFoundry 1.42
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Four additional starters (1.42)
+
+The chooser now offers **36 starters plus Blank project**. Add Kanban and Pomodoro (drag cards, due dates, JSON, focus timer), Interactive Data Explorer (read-only CSV/TSV, active XLSX sheet and SQLite, filters/sorting, numeric summaries, bar chart and CSV export), Memory and Attention Lab (adaptive digit spans, visual search, response times, session chart/CSV), and the Clockwork Observatory escape room (three original rooms, inventory, two puzzles, two endings, JSON saves). Code comments are English. Data Explorer declares openpyxl for XLSX; the other three need no extra PIP. The cognitive tasks are educational demonstrations, not diagnostic tests. [Template guide](docs/STARTER_TEMPLATES.md). Native Mac acceptance remains pending.
 
 ## Final eight starter templates (1.41)
 

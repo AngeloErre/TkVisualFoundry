@@ -1,10 +1,10 @@
-# Starter templates / Modelli iniziali — 1.41
+# Starter templates / Modelli iniziali — 1.42
 
 ## English
 
 Choose **File → New project** or the toolbar **New** button. Select **Blank project** or a starter in the new chooser, read its description and dependencies, then press **Create project**. Cancel closes the chooser without replacing the current project. If the current project has unsaved edits, the normal save/discard/cancel guard runs before replacement. Each starter is a fresh copy with no project path and is marked unsaved: choose Save as to store your own project. Built-in JSON files are never overwritten by creating or editing a copy.
 
-The collection now includes all 32 requested starters. Their application labels and code comments are in English; the chooser is Italian/English. Application controls are editable in the designer; game sprites, grid cells and dynamic content are drawn or created by their commented helpers. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
+The collection includes the original 32 requested starters plus four additional applications (36 total). Their application labels and code comments are in English; the chooser is Italian/English. Application controls are editable in the designer; game sprites, grid cells and dynamic content are drawn or created by their commented helpers. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
 
 | Starter | Included behavior | Where to customize |
 | --- | --- | --- |
@@ -125,7 +125,7 @@ Fifteen new regressions verify 80 safe first-mine placements, flags/flood fill/w
 
 Aggiunti **Campo Minato**, **Labirinto**, **Agenda/Calendario** e **Slideshow PNG/GIF**: ventiquattro modelli più il progetto vuoto, tutti commentati in inglese e senza PIP aggiuntivi. Campo Minato protegge il primo clic e usa bandierine; il labirinto ha un’uscita raggiungibile e controlli da tastiera/pulsanti. L’agenda naviga i mesi e salva appuntamenti JSON applicati con Add/Update; non invia promemoria. Lo slideshow gestisce cartella, precedente/successiva e timer, ma supporta soltanto PNG/GIF statici entro i limiti indicati, non JPEG/WebP. File immagine non copiati né modificati. Restano otto modelli della lista iniziale. Le prove native sul Mac attendono **ambiente collegato**.
 
-## Final batch / Ultimo gruppo — 1.41
+## Final batch / Ultimo gruppo — 1.42
 
 | Starter | Behavior / Funzioni | Customization / Personalizzazione |
 | --- | --- | --- |
@@ -157,3 +157,42 @@ Usare Start/Pause/Reset; cliccare il Canvas per restituire il focus alla tastier
 ### Validation / Verifica
 
 Nineteen new offline regressions cover collisions, victories/losses, connected maps, every piece's four-rotation cycle, line clearing, hard drop, stale callbacks, neural error reduction, explicit tutor sends, sound assignments and real PNG generation/decoding for QR and Code128. Service and audio calls are mocked; no paid API or physical audio test was performed. Native Mac GUI/keyboard/audio/PIP and generated-app deployment acceptance remains pending **ambiente collegato**.
+
+## Four additional applications / Quattro applicazioni aggiuntive — 1.42
+
+| Starter | Included behavior / Funzioni | Customization / Personalizzazione |
+| --- | --- | --- |
+| Kanban and Pomodoro | Three drag-and-drop stages, due dates, CRUD, atomic JSON saves, focus timer / Tre colonne, trascinamento, scadenze, CRUD, JSON atomico e timer | `STAGES`, `kanban_validate`, card drawing and `focus_*` helpers |
+| Interactive Data Explorer | Read-only CSV/TSV, XLSX and SQLite; table selection, filters, sorting, pages, stats, bar chart, CSV export / Lettura dati, selezione tabelle, filtri, ordinamento, pagine, statistiche, grafico ed export | `data_load`, `data_filter`, `data_summary`, chart and table controls |
+| Memory and Attention Lab | Digit sequences with adaptive span, 6×6 O/Q visual search, response times, latest 200 results and CSV / Sequenze adattive, ricerca O/Q, tempi, ultimi 200 risultati e CSV | `lab_start`, timing, span bounds, feedback and plot |
+| The Clockwork Observatory | Three original rooms, collectable clues/keys, two puzzles, solo/rescue endings, atomic JSON progress / Tre stanze, indizi/chiavi, due enigmi, finali solo/salvataggio e progressi JSON | `STORY_JSON`, inventory/puzzle allowlists, action rules and scene Canvas |
+
+### Kanban and focus timer / Kanban e timer
+
+Fill the title, optional ISO date (YYYY-MM-DD) and stage; Add creates a card. Select a card to Update/Delete or drag it to another stage. Use Board up/down or the mouse wheel for longer boards; at most 120 cards. Overdue unfinished cards are marked in red. Open/Save JSON are explicit, independent of saving the IDE project; replacing/closing a dirty board asks before discarding. The focus timer accepts 1–180 minutes, uses a monotonic deadline, supports pause/resume/reset and counts completed sessions in memory. Reset applies a changed duration on the next Start. There is a visual completion message; automatic breaks and sound are not included. Only cards persist; focus progress/session counts do not.
+
+Titolo, data ISO facoltativa e stato si gestiscono con Add/Update/Delete; trascinare una scheda cambia colonna. Scorrimento con rotella o pulsanti, massimo 120 schede. Open/Save JSON salva i dati separatamente dal progetto IDE. Timer 1–180 minuti con pausa/ripresa/reset e avviso visivo; pause automatiche e suono non inclusi. Persistono le schede, non il timer.
+
+### Data inspection / Esplorazione dati
+
+`openpyxl>=3.1,<4` is declared for XLSX and imported lazily only when opening a workbook. CSV/TSV and SQLite use the standard library. Sources are never written: SQLite opens with URI mode=ro plus query_only and closes after each read. SQLite table names must match the discovered table list and are quoted. Export is a separate CSV of the currently filtered loaded rows (all pages); a source-path/alias overwrite is rejected. Formula-like text is escaped for spreadsheet opening, preserving ordinary numeric negatives. Charts show the first 12 filtered rows of the selected column with a zero baseline. Summaries report finite numeric count/min/max/mean; blanks and nonnumeric cells are excluded from numeric statistics, not from row counts.
+
+Limits: 5000 loaded rows, 60 columns, 100 SQLite tables, 10 MB CSV/XLSX file size; expanded XLSX capped at 50 MB / 2000 ZIP entries, active sheet only, cached formula values only (no calculation), 2000 characters per cell. SQLite streams rows with a five-million-character buffer limit and a query instruction budget. Binary cells display a size marker. Truncated sources are labeled. The table displays 100 rows per page with horizontal/vertical scrollbars. CSV requires UTF-8 (optional BOM); comma/semicolon/tab separators are detected. Legacy XLS, SQL script execution, password-protected workbooks and editing sources are not supported by this starter.
+
+`openpyxl` serve per XLSX; CSV/TSV e SQLite usano la libreria standard. Sorgenti in sola lettura, export CSV separato, tabelle selezionabili, 100 righe per pagina, statistiche sui soli numeri finiti e grafico delle prime 12 righe filtrate. Limiti espliciti: 5000 righe, 60 colonne, 100 tabelle; CSV/XLSX massimo 10 MB. XLSX: solo foglio attivo e valori delle formule già calcolati dal programma che ha salvato il file. Nessuna esecuzione di script SQL o modifica dei dati originali.
+
+### Educational cognitive tasks / Attività cognitive educative
+
+Select Memory or Attention and Start trial. Memory shows 2–9 digits, hides them, then accepts a sequence (spaces ignored); response timing starts after hiding. Correct/incorrect trials adjust the next memory span by one within bounds. Attention has a fixed 6×6 grid and one O among Qs; only a click inside a cell records a response. Replacing/stopping a trial cancels its callback and records nothing. The latest 200 anonymous results remain in memory and can be exported as CSV (timestamp, task, level, correctness, response milliseconds). Bars use green/red for correctness and height for response time. Different task times are not directly comparable. No diagnostic norms, clinical scores, therapeutic effects or cross-session profile are claimed; this is editable educational demonstration code. Closing warns about unexported session data.
+
+Memory mostra e nasconde una sequenza; il tempo decorre dalla scomparsa. Lo span varia da 2 a 9 cifre in base alla risposta. Attention usa una griglia fissa 6×6 con una O tra Q. Risultati anonimi di sessione (ultimi 200) esportabili in CSV. Nessuna norma diagnostica o interpretazione clinica; nessuna efficacia terapeutica attribuita.
+
+### Escape room / Avventura investigativa
+
+Select an available action; type an answer before performing a puzzle action. Clues reveal the answers. Doors check keys; progress includes room, inventory, solved puzzles, move count and ending. New/load/close guard unsaved progress. Saves are versioned, validated JSON data; loading never executes code. Edit the embedded `STORY_JSON` to change rooms/text/clues/puzzles, updating `INVENTORY` and solved-ID validation when adding new items or puzzles. Room banners are drawn from original colors/shapes; no external assets or PIP are needed. Inventory and alternative endings make the example a compact state-machine tutorial.
+
+Selezionare un’azione e, per gli enigmi, digitare la risposta prima di eseguirla. Porte con chiave, inventario e due finali; JSON validato senza eseguire codice. La storia è definita in `STORY_JSON`; aggiungendo oggetti/enigmi si aggiornano anche le allowlist del validatore.
+
+### Remote validation / Verifiche remote
+
+Twenty-four new offline regressions cover Kanban CRUD/date/schema/drag/drop/atomic persistence, timer pause/resume/cancellation, UTF-8 CSV and real read-only SQLite/XLSX loads, filters/numeric summaries/pagination/CSV export guards, cognitive task phases/adaptive bounds/timing/export and both complete escape-room paths plus invalid saves. All models compile as generated standalone Python. Native GUI dragging, scrolling, keyboard focus, native PIP and deployment remain pending **ambiente collegato**.

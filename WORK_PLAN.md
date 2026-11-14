@@ -179,3 +179,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Async LLM tutor, local QR/barcode and eight-pad audio with declared dependencies.
 - [x] Nineteen offline regressions, optional dependency round trips and example compilation.
 - [ ] Native Mac GUI, audio, live API, PIP/build acceptance on ambiente collegato.
+
+## Phase 26 — four additional starter applications (1.42)
+
+- [x] Kanban/Pomodoro, Data Explorer, Memory/Attention Lab and original escape room.
+- [x] English-commented code, IT/EN catalog metadata and declared XLSX dependency; 36 starters plus blank.
+- [x] Twenty-four offline regressions, actual CSV/SQLite/XLSX round trips and full example compilation.
+- [ ] Native Mac drag/scroll/focus/PIP/build acceptance on ambiente collegato.

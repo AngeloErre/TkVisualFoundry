@@ -1,10 +1,10 @@
 # Mac reconnection acceptance / Verifiche alla riconnessione
 
-Status: **pending**. The user is travelling with the Mac disconnected. Resume these checks when the user explicitly says **ambiente collegato**. Versions 1.37–1.41 were implemented and automatically tested on remote Linux; it has not been installed or run natively on the user's Mac.
+Status: **pending**. The user is travelling with the Mac disconnected. Resume these checks when the user explicitly says **ambiente collegato**. Versions 1.37–1.42 were implemented and automatically tested on remote Linux; it has not been installed or run natively on the user's Mac.
 
 1. Confirm the connected environment and current repository/version; preserve any user changes before updating. Use a temporary test project and disposable files.
 2. Run the complete Italian/English suite with a supported stable Python. Record actual counts and which graphical tests now execute; do not carry forward Linux counts as Mac results.
-3. Open the IDE: single native menu, visible Project Explorer, readable properties/log, new-project chooser with 32 starters plus blank. Check create/cancel/save/discard workflow.
+3. Open the IDE: single native menu, visible Project Explorer, readable properties/log, new-project chooser with 36 starters plus blank. Check create/cancel/save/discard workflow.
 4. Run all twenty-four starters through F5 in disposable projects. Inspect event/import/startup code and designer controls. Verify stop/relaunch and absence of stale callbacks/processes.
 5. Alarm/timers: stopwatch pause/resume/reset; short countdown finish/stop; invalid input; HH:MM next-occurrence logic; one alert; native system bell; closing while a Tk timer is active. Do not alter OS sound/security settings to make a test pass.
 6. Notepad: create/switch/close tabs, type/paste Unicode, open/save real temporary UTF-8/BOM files, dirty markers, cancel save dialogs, save/discard/cancel on tab/app closure, failed-write preservation and 20-tab limit.
@@ -27,10 +27,17 @@ Sixth batch: test Minesweeper left/right/middle/Control-click, first reveal and 
 
 ## Final eight starters — native acceptance pending
 
-- Create each of the 32 starters and check scroll/description/dependency display in both languages.
+- Create each of the 36 starters and check scroll/description/dependency display in both languages.
 - Invaders/chase/platformer/blocks: keyboard focus, movement, scoring, win/loss, pause/reset/close; repeat resets during play to detect stale timers.
 - Neural Driving: train, start, pause, reset; observe actual steering and preserved weights.
 - Install QR/barcode dependencies through project PIP on each native target; generate/decode a QR and Code128 PNG, including cancellation and errors.
 - Soundboard: install pygame-ce, assign several local files, play/pause/resume/stop, volume and close during playback. No physical audio test has been performed remotely.
 - Study Agent: supply a session key/model explicitly, send a test topic, check responsive UI/errors/close. Real API calls and credentials were not used in remote tests.
 - Generate deployment kits for these dependency-bearing examples and build/run on each target OS. Native installers and wheels remain unverified until reconnection.
+
+## Four additional applications — 1.42 native checks pending
+
+- Kanban: add/update/delete, date validation, drag among all stages, mouse-wheel and button scrolling, open/save/discard guards, timer pause/resume/reset/completion and close while active.
+- Data Explorer: real CSV/TSV/XLSX/SQLite sources; table/column choices, filters/sorting/pages, both scrollbars, statistics/chart, truncation notice and separate CSV export; confirm source bytes remain unchanged. Install openpyxl through project PIP; test native build inclusion.
+- Memory/Attention: sequence visibility and hiding, keyboard answer, adaptive span, O/Q hit testing, start/stop/restart cancellation, result chart/export and close guard. Timing is educational, not a calibrated clinical measure.
+- Escape room: inspect clues, wrong/correct answers, locked doors, inventory, both endings, new/load/save/close guards and persistence.
