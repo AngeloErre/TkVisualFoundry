@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Mini Paint",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Mini Paint",
+      "width": 800,
+      "height": 650,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "ToolChoice",
+          "kind": "Combobox",
+          "x": 20,
+          "y": 15,
+          "width": 180,
+          "height": 30,
+          "props": {
+            "values": [
+              "Brush",
+              "Eraser",
+              "Line",
+              "Rectangle",
+              "Oval"
+            ],
+            "state": "readonly"
+          },
+          "events": {}
+        },
+        {
+          "name": "StrokeScale",
+          "kind": "Scale",
+          "x": 220,
+          "y": 5,
+          "width": 260,
+          "height": 55,
+          "props": {
+            "from_": 1,
+            "to": 30,
+            "orient": "horizontal"
+          },
+          "events": {}
+        },
+        {
+          "name": "PaintCanvas",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 75,
+          "width": 760,
+          "height": 470,
+          "props": {
+            "bg": "white"
+          },
+          "events": {
+            "Click": "# Begin a drawing operation at the mouse position.\npaint_start(self, event)"
+          }
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 605,
+          "width": 760,
+          "height": 30,
+          "props": {
+            "text": "Drag on the canvas to draw. Eraser uses white strokes."
+          },
+          "events": {}
+        },
+        {
+          "name": "Color0",
+          "kind": "Button",
+          "x": 20,
+          "y": 560,
+          "width": 110,
+          "height": 38,
+          "props": {
+            "text": "Black"
+          },
+          "events": {
+            "Click": "# Handle this control in the visual project.\npaint_color(self, 'black')"
+          }
+        },
+        {
+          "name": "Color1",
+          "kind": "Button",
+          "x": 140,
+          "y": 560,
+          "width": 110,
+          "height": 38,
+          "props": {
+            "text": "Red"
+          },
+          "events": {
+            "Click": "# Handle this control in the visual project.\npaint_color(self, '#b42318')"
+          }
+        },
+        {
+          "name": "Color2",
+          "kind": "Button",
+          "x": 260,
+          "y": 560,
+          "width": 110,
+          "height": 38,
+          "props": {
+            "text": "Blue"
+          },
+          "events": {
+            "Click": "# Handle this control in the visual project.\npaint_color(self, '#175cd3')"
+          }
+        },
+        {
+          "name": "ClearButton",
+          "kind": "Button",
+          "x": 440,
+          "y": 560,
+          "width": 150,
+          "height": 38,
+          "props": {
+            "text": "Clear"
+          },
+          "events": {
+            "Click": "# Handle this control in the visual project.\npaint_clear(self)"
+          }
+        },
+        {
+          "name": "ExportButton",
+          "kind": "Button",
+          "x": 610,
+          "y": 560,
+          "width": 170,
+          "height": 38,
+          "props": {
+            "text": "Export EPS…"
+          },
+          "events": {
+            "Click": "# Handle this control in the visual project.\npaint_export(self)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# A small vector-based drawing surface built with Tk Canvas.\nimport tkinter as tk\n\n\ndef paint_color(app, color):\n    app.paint_color = color\n    app.StatusLabel.configure(text=\"Drawing color: \" + color)\n\n\ndef paint_start(app, event):\n    # Freeze tool/color/width for the duration of one mouse stroke.\n    app.paint_tool = app.ToolChoice.get()\n    app.paint_width = max(1, min(30, int(app.StrokeScale.get())))\n    app.paint_active_color = \"white\" if app.paint_tool == \"Eraser\" else app.paint_color\n    app.paint_start = (event.x, event.y)\n    app.paint_last = (event.x, event.y)\n    app.paint_shape = None\n    canvas = app.PaintCanvas\n    if app.paint_tool in (\"Brush\", \"Eraser\"):\n        radius = app.paint_width / 2\n        canvas.create_oval(event.x-radius, event.y-radius, event.x+radius, event.y+radius, fill=app.paint_active_color, outline=app.paint_active_color)\n    elif app.paint_tool == \"Line\":\n        app.paint_shape = canvas.create_line(event.x, event.y, event.x, event.y, fill=app.paint_active_color, width=app.paint_width)\n    elif app.paint_tool in (\"Rectangle\", \"Oval\"):\n        creator = canvas.create_rectangle if app.paint_tool == \"Rectangle\" else canvas.create_oval\n        app.paint_shape = creator(event.x, event.y, event.x, event.y, outline=app.paint_active_color, width=app.paint_width)\n\n\ndef paint_drag(app, event):\n    # The eraser draws white strokes; it does not delete vector objects.\n    if app.paint_last is None:\n        return\n    canvas = app.PaintCanvas\n    if app.paint_tool in (\"Brush\", \"Eraser\"):\n        canvas.create_line(*app.paint_last, event.x, event.y, fill=app.paint_active_color, width=app.paint_width, capstyle=\"round\")\n    elif app.paint_shape is not None:\n        canvas.coords(app.paint_shape, *app.paint_start, event.x, event.y)\n    app.paint_last = (event.x, event.y)\n\n\ndef paint_end(app, event):\n    # Update the last endpoint even when the pointer moved quickly.\n    paint_drag(app, event)\n    app.paint_last = None\n    app.paint_shape = None\n\n\ndef paint_clear(app):\n    if not messagebox.askyesno(\"Clear drawing\", \"Clear the entire drawing?\", parent=app.Form1):\n        return\n    app.PaintCanvas.delete(\"all\")\n    app.paint_last = None\n    app.paint_shape = None\n\n\ndef paint_export(app):\n    # Canvas exports EPS without Pillow; PNG/JPEG conversion is not included.\n    filename = filedialog.asksaveasfilename(parent=app.Form1, defaultextension=\".eps\", filetypes=[(\"EPS drawing\", \"*.eps\")])\n    if not filename:\n        return\n    try:\n        app.PaintCanvas.postscript(file=filename, colormode=\"color\")\n    except (OSError, tk.TclError) as error:\n        messagebox.showerror(\"Export drawing\", str(error), parent=app.Form1)\n",
+  "startup": "# Motion/release bindings complement the designer's click event.\nself.paint_color = \"black\"\nself.paint_last = None\nself.paint_shape = None\nself.ToolChoice.set(\"Brush\")\nself.StrokeScale.set(4)\nself.PaintCanvas.bind(\"<B1-Motion>\", lambda event: paint_drag(self, event))\nself.PaintCanvas.bind(\"<ButtonRelease-1>\", lambda event: paint_end(self, event))\nself.Form1.deiconify()"
+}

@@ -19,7 +19,7 @@ class TemplateMixin:
         ttk.Label(detail,textvariable=title,style='Title.TLabel',wraplength=370).pack(fill='x',pady=6)
         ttk.Label(detail,textvariable=description,wraplength=370,justify='left').pack(fill='x',pady=8)
         ttk.Label(detail,textvariable=packages,wraplength=370,justify='left').pack(fill='x',pady=8)
-        ttk.Label(detail,text=tr('I quattro modelli pronti hanno codice commentato in inglese e controlli modificabili nel designer. Non vengono eseguiti durante la scelta.'),wraplength=370,justify='left').pack(fill='x',pady=8)
+        ttk.Label(detail,text=tr('I modelli pronti hanno codice commentato in inglese e controlli modificabili nel designer. Non vengono eseguiti durante la scelta.'),wraplength=370,justify='left').pack(fill='x',pady=8)
         actions=ttk.Frame(win,padding=10);actions.pack(fill='x');ttk.Button(actions,text=tr('Annulla'),command=win.destroy).pack(side='right')
         candidate=[None]
         def select(event=None):

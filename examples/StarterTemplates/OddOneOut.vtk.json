@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Odd One Out",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Odd One Out",
+      "width": 540,
+      "height": 520,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "PromptLabel",
+          "kind": "Label",
+          "x": 15,
+          "y": 15,
+          "width": 510,
+          "height": 40,
+          "props": {
+            "text": "Find the odd one out",
+            "font": "Helvetica 16"
+          },
+          "events": {}
+        },
+        {
+          "name": "FeedbackLabel",
+          "kind": "Label",
+          "x": 15,
+          "y": 395,
+          "width": 510,
+          "height": 30,
+          "props": {
+            "text": "Choose a tile"
+          },
+          "events": {}
+        },
+        {
+          "name": "ScoreLabel",
+          "kind": "Label",
+          "x": 15,
+          "y": 440,
+          "width": 260,
+          "height": 35,
+          "props": {
+            "text": "Score: 0 / 5"
+          },
+          "events": {}
+        },
+        {
+          "name": "RestartButton",
+          "kind": "Button",
+          "x": 325,
+          "y": 440,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Restart"
+          },
+          "events": {
+            "Click": "# Handle this control in the visual project.\nodd_reset(self)"
+          }
+        },
+        {
+          "name": "Card0",
+          "kind": "Button",
+          "x": 20,
+          "y": 75,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 0)"
+          }
+        },
+        {
+          "name": "Card1",
+          "kind": "Button",
+          "x": 190,
+          "y": 75,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 1)"
+          }
+        },
+        {
+          "name": "Card2",
+          "kind": "Button",
+          "x": 360,
+          "y": 75,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 2)"
+          }
+        },
+        {
+          "name": "Card3",
+          "kind": "Button",
+          "x": 20,
+          "y": 175,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 3)"
+          }
+        },
+        {
+          "name": "Card4",
+          "kind": "Button",
+          "x": 190,
+          "y": 175,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 4)"
+          }
+        },
+        {
+          "name": "Card5",
+          "kind": "Button",
+          "x": 360,
+          "y": 175,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 5)"
+          }
+        },
+        {
+          "name": "Card6",
+          "kind": "Button",
+          "x": 20,
+          "y": 275,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 6)"
+          }
+        },
+        {
+          "name": "Card7",
+          "kind": "Button",
+          "x": 190,
+          "y": 275,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 7)"
+          }
+        },
+        {
+          "name": "Card8",
+          "kind": "Button",
+          "x": 360,
+          "y": 275,
+          "width": 160,
+          "height": 85,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24"
+          },
+          "events": {
+            "Click": "# Submit the selected tile index.\nodd_choose(self, 8)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Find the single different token in each of five rounds.\nimport random\n\n\ndef odd_render(app):\n    # A finished game cannot accept more answers.\n    cards = [getattr(app, \"Card\" + str(i)) for i in range(9)]\n    if app.odd_round >= 5:\n        app.PromptLabel.configure(text=\"Finished! Press Restart to play again.\")\n        for card in cards:\n            card.configure(state=\"disabled\")\n    else:\n        common, different = app.odd_rng.choice([(\"A\", \"B\"), (\"6\", \"9\"), (\"CAT\", \"CAR\"), (\"12\", \"21\")])\n        app.odd_target = app.odd_rng.randrange(9)\n        for i, card in enumerate(cards):\n            card.configure(text=different if i == app.odd_target else common, state=\"normal\")\n        app.PromptLabel.configure(text=f\"Round {app.odd_round + 1}: find the odd one out\")\n    app.ScoreLabel.configure(text=f\"Score: {app.odd_score} / 5\")\n\n\ndef odd_reset(app):\n    # Keep all state on the generated Application instance.\n    app.odd_round = 0\n    app.odd_score = 0\n    app.FeedbackLabel.configure(text=\"Choose the different tile.\")\n    odd_render(app)\n\n\ndef odd_choose(app, index):\n    # Each click completes one round, whether correct or incorrect.\n    if app.odd_round >= 5:\n        return\n    correct = index == app.odd_target\n    app.odd_score += int(correct)\n    app.odd_round += 1\n    app.FeedbackLabel.configure(text=\"Correct!\" if correct else \"That was not the different tile.\")\n    odd_render(app)\n",
+  "startup": "# Use an independent random generator for this game.\nself.odd_rng = random.Random()\nodd_reset(self)\nself.Form1.deiconify()"
+}

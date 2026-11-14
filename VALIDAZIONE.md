@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.36
+
+316 test superati per lingua, 11 grafici saltati. Undici nuove regressioni su intruso, coppie Memory e timer obsoleti, 100 mescolamenti risolvibili del Gioco del 15, mosse/vittoria, pennello/forme/gomma e conferme/esportazione EPS simulata. Tutti i 23 esempi validati e compilati. Collaudo grafico e output EPS nativo ancora da completare.
+
 # TkVisualFoundry 1.35
 
 305 test superati per lingua, 11 grafici saltati. Dieci nuovi test su catalogo/copie/commenti, compilazione, assenza PIP aggiuntivi, quiz, dadi, conversioni Unicode, note reali in cartelle temporanee e guardia delle modifiche. Tutti i 19 esempi validati e compilati. Accettazione grafica del selettore e dei giochi ancora da completare.

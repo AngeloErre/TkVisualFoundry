@@ -1,8 +1,8 @@
 {
-  "version": "1.35",
+  "version": "1.36",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 305,
+  "tests_passed": 316,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -33,7 +33,7 @@
     "it",
     "en"
   ],
-  "example_projects_compiled": 19,
+  "example_projects_compiled": 23,
   "debugging_validation": "Full suite passed in both languages; settings, editor context, worker cancellation/exit, dependency signatures, geometry and atomic save regressions covered. Interactive GUI/Windows/live services remain pending.",
   "package_catalog_validation": "Live official PyPI Simple Index: 938819 names; partial-name search, caching, failed refresh preservation, cancellation, pagination and compatible metadata covered. GUI interaction pending.",
   "icon_validation": "Real PNG/ICO/ICNS generation and decoding, runtime source compilation, Mac/Windows build icon arguments and Setup directive verified; native OS icon display and graphical picker pending.",
@@ -113,6 +113,7 @@
   ],
   "recovery_edge_validation": "Comment/whitespace-only function bodies compile without changing saved text or real executable line offsets; real syntax errors remain diagnosed. UTF-8 BOM projects load without rewriting. 1500 nested containers order/compile and cycles are rejected without recursive traversal. Interactive GUI acceptance pending.",
   "global_search_validation": "Project/event/startup/import scopes; unsaved active and file editor buffers; deleted backing file buffers; literal/case/whole-word positions; confinement/exclusions; bounds/cancellation; non-execution; actual navigation handlers and stale content/project checks covered. Tcl character-unit index conversion checked. Interactive graphical acceptance pending.",
-  "starter_templates": 4,
-  "template_validation": "Catalog uniqueness, standalone generated compilation, no extra requirements, independent copies, comment presence, load non-execution, quiz scoring/restart, dice totals/validation, Unicode text transformations, real temporary note open/save/cancel and new-project cancellation/dirty state tested. Interactive template chooser and native GUI gameplay acceptance pending."
+  "starter_templates": 8,
+  "template_validation": "Catalog uniqueness, standalone generated compilation, no extra requirements, independent copies, comment presence, load non-execution, quiz scoring/restart, dice totals/validation, Unicode text transformations, real temporary note open/save/cancel and new-project cancellation/dirty state tested. Interactive template chooser and native GUI gameplay acceptance pending.",
+  "template_batch2_validation": "Odd One Out scoring/finish, Memory pairs/mismatch locking/stale reset callbacks/completion, 100 solvable Sliding 15 shuffles/legal moves/win, Canvas brush/shape/eraser contracts and clear/EPS cancellation tested. All 23 example projects validate/compile without extra starter requirements. Interactive GUI and native EPS output acceptance pending."
 }

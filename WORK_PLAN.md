@@ -135,3 +135,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Ten regressions and bilingual documentation.
 - [ ] Interactive graphical acceptance.
 - [ ] Remaining templates from the proposed 32-project collection, in later batches.
+
+## Phase 20 — starter templates, second batch (1.36)
+
+- [x] Odd One Out, Memory Pairs, Sliding 15 and Mini-Paint.
+- [x] English comments, no extra PIP, editable controls and eight-item starter catalog.
+- [x] Eleven logic regressions, bilingual docs and example compilation.
+- [ ] Interactive graphical/native drawing acceptance; remaining 24 requested starters.

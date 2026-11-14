@@ -1,3 +1,10 @@
+# 1.36 — Four additional starters
+
+- Add Odd One Out, Memory Pairs, Sliding 15 Puzzle and Mini-Paint.
+- Eight English-commented, standard-library-only starters plus blank project.
+- Guard Memory reset timers and puzzle solvability; add Canvas EPS export.
+- Add eleven logic regressions and update bilingual template guide.
+
 # 1.35 — Starter project chooser
 
 - Choose blank, Quiz, Dice Roller, Text Converter or Sticky Note from New project.

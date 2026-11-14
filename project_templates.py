@@ -9,6 +9,10 @@ TEMPLATES=(
     ('dice','DiceRoller','Simulatore di dadi','Giochi','D6, D20 e D100, da 1 a 100 dadi e bonus. Controlli degli input e totale.'),
     ('text','TextConverter','Convertitore di testi','Utilità','Maiuscolo, minuscolo, camelCase, liste Markdown e conteggio parole/caratteri.'),
     ('notes','StickyNote','Post-it digitali','Utilità','Una nota colorata con apertura e salvataggio manuale UTF-8. Nessun salvataggio automatico.'),
+    ('odd','OddOneOut','Trova l’intruso','Giochi','Cinque turni su una griglia di nove tessere: trova il simbolo diverso e accumula punti.'),
+    ('memory','MemoryPairs','Memory • coppie','Giochi','Otto coppie di lettere, contatore mosse e riavvio. Le coppie sbagliate si richiudono dopo una breve pausa.'),
+    ('puzzle15','Sliding15','Gioco del 15','Giochi','Griglia 4×4, mosse legali e mescolamento sempre risolvibile. Riordina le tessere da 1 a 15.'),
+    ('paint','MiniPaint','Mini-Paint','Creatività','Pennello, gomma bianca, linee, rettangoli e ovali. Colori, spessore, pulizia ed esportazione EPS.'),
 )
 
 

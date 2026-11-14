@@ -1,0 +1,303 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Memory Pairs",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Memory Pairs",
+      "width": 580,
+      "height": 540,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 15,
+          "y": 10,
+          "width": 550,
+          "height": 35,
+          "props": {
+            "text": "Find all eight pairs",
+            "font": "Helvetica 14"
+          },
+          "events": {}
+        },
+        {
+          "name": "Card0",
+          "kind": "Button",
+          "x": 20,
+          "y": 60,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 0)"
+          }
+        },
+        {
+          "name": "Card1",
+          "kind": "Button",
+          "x": 160,
+          "y": 60,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 1)"
+          }
+        },
+        {
+          "name": "Card2",
+          "kind": "Button",
+          "x": 300,
+          "y": 60,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 2)"
+          }
+        },
+        {
+          "name": "Card3",
+          "kind": "Button",
+          "x": 440,
+          "y": 60,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 3)"
+          }
+        },
+        {
+          "name": "Card4",
+          "kind": "Button",
+          "x": 20,
+          "y": 155,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 4)"
+          }
+        },
+        {
+          "name": "Card5",
+          "kind": "Button",
+          "x": 160,
+          "y": 155,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 5)"
+          }
+        },
+        {
+          "name": "Card6",
+          "kind": "Button",
+          "x": 300,
+          "y": 155,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 6)"
+          }
+        },
+        {
+          "name": "Card7",
+          "kind": "Button",
+          "x": 440,
+          "y": 155,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 7)"
+          }
+        },
+        {
+          "name": "Card8",
+          "kind": "Button",
+          "x": 20,
+          "y": 250,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 8)"
+          }
+        },
+        {
+          "name": "Card9",
+          "kind": "Button",
+          "x": 160,
+          "y": 250,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 9)"
+          }
+        },
+        {
+          "name": "Card10",
+          "kind": "Button",
+          "x": 300,
+          "y": 250,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 10)"
+          }
+        },
+        {
+          "name": "Card11",
+          "kind": "Button",
+          "x": 440,
+          "y": 250,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 11)"
+          }
+        },
+        {
+          "name": "Card12",
+          "kind": "Button",
+          "x": 20,
+          "y": 345,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 12)"
+          }
+        },
+        {
+          "name": "Card13",
+          "kind": "Button",
+          "x": 160,
+          "y": 345,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 13)"
+          }
+        },
+        {
+          "name": "Card14",
+          "kind": "Button",
+          "x": 300,
+          "y": 345,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 14)"
+          }
+        },
+        {
+          "name": "Card15",
+          "kind": "Button",
+          "x": 440,
+          "y": 345,
+          "width": 120,
+          "height": 80,
+          "props": {
+            "text": "?",
+            "font": "Helvetica 24",
+            "bg": "#e6edf7"
+          },
+          "events": {
+            "Click": "# Reveal this card and compare it with the previous selection.\nmemory_choose(self, 15)"
+          }
+        },
+        {
+          "name": "RestartButton",
+          "kind": "Button",
+          "x": 20,
+          "y": 460,
+          "width": 540,
+          "height": 38,
+          "props": {
+            "text": "Restart game"
+          },
+          "events": {
+            "Click": "# Handle this control in the visual project.\nmemory_reset(self)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Match eight pairs of letters; no external image assets are required.\nimport random\nimport tkinter as tk\n\n\ndef memory_status(app):\n    complete = len(app.memory_matched) == 16\n    app.StatusLabel.configure(text=f\"Moves: {app.memory_moves} | Pairs: {len(app.memory_matched) // 2} / 8\" + (\" | Complete!\" if complete else \"\"))\n\n\ndef memory_reset(app):\n    # Cancel a pending mismatch callback and invalidate any stale callback.\n    timer = getattr(app, \"memory_timer\", None)\n    if timer is not None:\n        try:\n            app.root.after_cancel(timer)\n        except tk.TclError:\n            pass\n    app.memory_generation = getattr(app, \"memory_generation\", 0) + 1\n    app.memory_timer = None\n    app.memory_deck = list(\"ABCDEFGH\") * 2\n    random.shuffle(app.memory_deck)\n    app.memory_open = []\n    app.memory_matched = set()\n    app.memory_moves = 0\n    app.memory_locked = False\n    for i in range(16):\n        getattr(app, \"Card\" + str(i)).configure(text=\"?\", state=\"normal\", bg=\"#e6edf7\")\n    memory_status(app)\n\n\ndef memory_hide(app, generation):\n    # A reset must not let an old callback change the new game.\n    if generation != app.memory_generation:\n        return\n    for index in app.memory_open:\n        getattr(app, \"Card\" + str(index)).configure(text=\"?\")\n    app.memory_open = []\n    app.memory_locked = False\n    app.memory_timer = None\n\n\ndef memory_choose(app, index):\n    # Ignore duplicate, matched or locked cards.\n    if app.memory_locked or index in app.memory_matched or index in app.memory_open:\n        return\n    getattr(app, \"Card\" + str(index)).configure(text=app.memory_deck[index])\n    app.memory_open.append(index)\n    if len(app.memory_open) != 2:\n        return\n    app.memory_moves += 1\n    first, second = app.memory_open\n    if app.memory_deck[first] == app.memory_deck[second]:\n        app.memory_matched.update(app.memory_open)\n        for matched in app.memory_open:\n            getattr(app, \"Card\" + str(matched)).configure(state=\"disabled\", bg=\"#cce8ce\")\n        app.memory_open = []\n    else:\n        app.memory_locked = True\n        generation = app.memory_generation\n        app.memory_timer = app.root.after(700, lambda: memory_hide(app, generation))\n    memory_status(app)\n",
+  "startup": "# Start with a freshly shuffled deck.\nmemory_reset(self)\nself.Form1.deiconify()"
+}
