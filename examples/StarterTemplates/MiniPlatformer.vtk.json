@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Mini Platformer",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Mini Platformer",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Board",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 90,
+          "width": 600,
+          "height": 540,
+          "props": {
+            "bg": "#101827",
+            "highlightthickness": 0,
+            "takefocus": true
+          },
+          "events": {}
+        },
+        {
+          "name": "Status",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 810,
+          "height": 30,
+          "props": {
+            "text": "Mini Platformer",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Start",
+          "kind": "Button",
+          "x": 20,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Start"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_start(self)\n"
+          }
+        },
+        {
+          "name": "Pause",
+          "kind": "Button",
+          "x": 120,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Pause"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_pause(self)\n"
+          }
+        },
+        {
+          "name": "Reset",
+          "kind": "Button",
+          "x": 220,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Reset"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_reset(self)\n"
+          }
+        },
+        {
+          "name": "Action1",
+          "kind": "Button",
+          "x": 640,
+          "y": 100,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Left"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nplatform_move(self, -6)\n"
+          }
+        },
+        {
+          "name": "Action2",
+          "kind": "Button",
+          "x": 640,
+          "y": 148,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Right"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nplatform_move(self, 6)\n"
+          }
+        },
+        {
+          "name": "Action3",
+          "kind": "Button",
+          "x": 640,
+          "y": 196,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Stop"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nplatform_move(self, 0)\n"
+          }
+        },
+        {
+          "name": "Action4",
+          "kind": "Button",
+          "x": 640,
+          "y": 244,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Jump"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nplatform_jump(self)\n"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Every game owns one cancellable timer; old callbacks cannot restart a reset game.\ndef game_pause(app):\n    app.running = False\n    app.generation += 1\n    if app.timer is not None:\n        app.root.after_cancel(app.timer)\n        app.timer = None\n\ndef game_tick(app, generation):\n    if not app.running or generation != app.generation:\n        return\n    app.timer = None\n    game_step(app)\n    game_draw(app)\n    if app.running and generation == app.generation:\n        app.timer = app.root.after(60, lambda: game_tick(app, generation))\n\ndef game_start(app):\n    if app.running or app.over:\n        return\n    app.running = True\n    app.generation += 1\n    app.Board.focus_set()\n    game_tick(app, app.generation)\n\ndef game_close(app):\n    game_pause(app)\n    app.root.destroy()\n\n# A compact original level demonstrates gravity, landing, jumping and a goal.\nPLATFORMS = [(0,500,180,520),(205,425,330,445),(355,345,480,365),(490,265,595,285)]\ndef game_reset(app):\n    game_pause(app)\n    app.x = 40.0; app.y = 470.0; app.vy = 0.0; app.dx = 0; app.grounded = True; app.won = False; app.over = False\n    game_draw(app)\n\ndef platform_move(app, dx):\n    if app.running:\n        app.dx = dx\n\ndef platform_jump(app):\n    if app.running and app.grounded:\n        app.vy = -15; app.grounded = False\n\ndef game_step(app):\n    old_bottom = app.y + 25\n    app.x = max(0, min(575, app.x + app.dx))\n    app.vy = min(18, app.vy + 0.85); app.y += app.vy; app.grounded = False\n    for left,top,right,bottom in PLATFORMS:\n        if app.vy >= 0 and old_bottom <= top and app.y+25 >= top and app.x+25 > left and app.x < right:\n            app.y = top-25; app.vy = 0; app.grounded = True\n            break\n    app.won = app.x > 545 and app.y < 265\n    app.over = app.won or app.y > 540\n    if app.over:\n        game_pause(app)\n\ndef game_draw(app):\n    c = app.Board; c.delete('all')\n    for platform in PLATFORMS:\n        c.create_rectangle(*platform,fill='#69c49d',outline='')\n    c.create_rectangle(560,205,580,265,fill='#ffd166')\n    c.create_rectangle(app.x,app.y,app.x+25,app.y+25,fill='#76beff')\n    text = ('Goal reached!' if app.won else 'Fell! Reset to retry.') if app.over else 'Hold Left/Right; Space jumps. Side buttons set motion; Stop halts it.'\n    app.Status.configure(text=text)\n",
+  "startup": "# Initialize the model and install keyboard shortcuts without executing external code.\nself.timer = None\nself.generation = 0\nself.running = False\ngame_reset(self)\nself.Board.bind('<Left>', lambda event: platform_move(self, -6))\nself.Board.bind('<Right>', lambda event: platform_move(self, 6))\nself.Board.bind('<KeyRelease-Left>', lambda event: platform_move(self, 0))\nself.Board.bind('<KeyRelease-Right>', lambda event: platform_move(self, 0))\nself.Board.bind('<FocusOut>', lambda event: platform_move(self, 0))\nself.Board.bind('<space>', lambda event: platform_jump(self))\nself.Form1.protocol('WM_DELETE_WINDOW', lambda: game_close(self))\nself.Form1.deiconify()\n",
+  "requirements": []
+}

@@ -1,10 +1,10 @@
-# Starter templates / Modelli iniziali — 1.40
+# Starter templates / Modelli iniziali — 1.41
 
 ## English
 
 Choose **File → New project** or the toolbar **New** button. Select **Blank project** or a starter in the new chooser, read its description and dependencies, then press **Create project**. Cancel closes the chooser without replacing the current project. If the current project has unsaved edits, the normal save/discard/cancel guard runs before replacement. Each starter is a fresh copy with no project path and is marked unsaved: choose Save as to store your own project. Built-in JSON files are never overwritten by creating or editing a copy.
 
-The twenty-four starters below are the first six batches from the proposed 32-project collection. Their application labels and code comments are in English; the chooser is Italian/English. Every visible control is in the project model and can be edited in the designer. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
+The collection now includes all 32 requested starters. Their application labels and code comments are in English; the chooser is Italian/English. Application controls are editable in the designer; game sprites, grid cells and dynamic content are drawn or created by their commented helpers. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
 
 | Starter | Included behavior | Where to customize |
 | --- | --- | --- |
@@ -124,3 +124,36 @@ Fifteen new regressions verify 80 safe first-mine placements, flags/flood fill/w
 ### Sesto gruppo (1.40)
 
 Aggiunti **Campo Minato**, **Labirinto**, **Agenda/Calendario** e **Slideshow PNG/GIF**: ventiquattro modelli più il progetto vuoto, tutti commentati in inglese e senza PIP aggiuntivi. Campo Minato protegge il primo clic e usa bandierine; il labirinto ha un’uscita raggiungibile e controlli da tastiera/pulsanti. L’agenda naviga i mesi e salva appuntamenti JSON applicati con Add/Update; non invia promemoria. Lo slideshow gestisce cartella, precedente/successiva e timer, ma supporta soltanto PNG/GIF statici entro i limiti indicati, non JPEG/WebP. File immagine non copiati né modificati. Restano otto modelli della lista iniziale. Le prove native sul Mac attendono **ambiente collegato**.
+
+## Final batch / Ultimo gruppo — 1.41
+
+| Starter | Behavior / Funzioni | Customization / Personalizzazione |
+| --- | --- | --- |
+| Micro Invaders | Formation movement, limited shots, score, win/loss / Formazione, spari, punteggio, vittoria/sconfitta | `game_step`, `invader_shoot`, Canvas colors |
+| Dot Maze Chase | Connected original maze, dots, breadth-first pursuer / Labirinto originale, punti, inseguitore | `MAZE`, `chase_next`, movement cadence |
+| Mini Platformer | Gravity, jumping, top landing and goal / Gravità, salto, atterraggio e traguardo | `PLATFORMS`, physics, goal position |
+| Falling Blocks | Seven pieces, rotation, hard drop, line clearing / Sette pezzi, rotazione, caduta rapida, righe | `PIECES`, `blocks_valid`, `blocks_clear`, gravity |
+| Neural Driving Lab | Actual 3-6-1 tanh network with supervised training / Rete tanh 3-6-1 con addestramento supervisionato | `neural_target`, `neural_train`, road function |
+| Study Agent | Topic to explanation/example/three questions; async response / Argomento, spiegazione, esempio e tre domande; risposta asincrona | `study_send`, Tutor properties/model/token limit |
+| QR and Barcode Studio | QR/Code128 PNG generation; local image decoding / Generazione QR/Code128 PNG e lettura da immagini locali | `code_generate`, `code_read`, input and image limits |
+| Soundboard | Eight local-file pads, single-stream playback, volume/pause/stop / Otto pad locali, un suono alla volta, volume/pausa/stop | Pad Click events, `sound_assign`, AudioPlayer properties |
+
+### Dependencies and first run / Dipendenze e primo avvio
+
+The first 29 starters (including the five new games/simulations) need no additional PIP packages. The other three declare dependencies that the chooser displays and the existing project PIP workflow can install into the selected Python environment. The templates do not silently install packages. Build on each target operating system and verify package/wheel support there.
+
+I primi 29 modelli (inclusi i cinque nuovi giochi/simulazioni) non richiedono PIP aggiuntivi. Gli altri tre dichiarano le dipendenze, visibili nel selettore e installabili con il flusso PIP del progetto nell’interprete scelto. I modelli non installano pacchetti silenziosamente. La disponibilità dei pacchetti e delle wheel va verificata su ogni sistema di destinazione.
+
+- **Study Agent:** `openai>=2,<4` via LLMClient. Choose a model in the client and provide `OPENAI_API_KEY` or its session-only Key dialog. Model listing and sending are explicit network actions; API usage follows the user's account. No keys are stored in the template. Responses are study aids and are not externally verified. / Scegliere modello e chiave personale; nessuna chiamata all’avvio, credenziali non salvate nel progetto.
+- **QR/barcode:** `qrcode>=8,<9`, `python-barcode>=0.16,<1`, `zxing-cpp>=2.3,<4`, `Pillow>=11,<14`. Generation and reading stay local. QR accepts up to 1000 characters; Code128 accepts printable ASCII. Reading is bounded to 20 MB / 20 million pixels. Decoding success depends on image quality. / Generazione e lettura locali, limiti di input e immagini; qualità dell’immagine determinante.
+- **Soundboard:** `pygame-ce>=2.5.8` via AudioPlayer. Select a slot, Assign an existing WAV/MP3/OGG file, then click its pad. Assignments last for the session; audio files are not bundled. The built-in player offers volume/pause/resume/stop. / Assegnare file ai pad; associazioni di sessione, file audio non inclusi.
+
+### Gameplay / Uso dei giochi
+
+Use Start/Pause/Reset. Keyboard focus belongs to the Canvas; click it after using other controls. Invaders uses Left/Right/Space; maze chase uses arrows; platformer uses Left/Right/Space (side Stop button halts motion); blocks uses arrows, Up to rotate and Space to drop. All five have owned timers with generation guards, canceled on pause, reset or close. Neural Driving: press Train network, then Start; training can be repeated. This is a supervised synthetic teaching example with a handcrafted steering target, not reinforcement learning. Reset preserves learned weights. Artwork consists of original geometric shapes and maps.
+
+Usare Start/Pause/Reset; cliccare il Canvas per restituire il focus alla tastiera. Nei blocchi, Su ruota e Spazio fa cadere il pezzo. La simulazione neurale si usa con Train network e poi Start: apprendimento supervisionato su una strada sintetica, pesi conservati dopo Reset. I cinque modelli annullano i timer su pausa, riavvio e chiusura. Grafica e mappe originali.
+
+### Validation / Verifica
+
+Nineteen new offline regressions cover collisions, victories/losses, connected maps, every piece's four-rotation cycle, line clearing, hard drop, stale callbacks, neural error reduction, explicit tutor sends, sound assignments and real PNG generation/decoding for QR and Code128. Service and audio calls are mocked; no paid API or physical audio test was performed. Native Mac GUI/keyboard/audio/PIP and generated-app deployment acceptance remains pending **ambiente collegato**.

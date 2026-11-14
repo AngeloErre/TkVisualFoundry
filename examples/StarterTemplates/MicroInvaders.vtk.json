@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Micro Invaders",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Micro Invaders",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Board",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 90,
+          "width": 600,
+          "height": 540,
+          "props": {
+            "bg": "#101827",
+            "highlightthickness": 0,
+            "takefocus": true
+          },
+          "events": {}
+        },
+        {
+          "name": "Status",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 810,
+          "height": 30,
+          "props": {
+            "text": "Micro Invaders",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Start",
+          "kind": "Button",
+          "x": 20,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Start"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_start(self)\n"
+          }
+        },
+        {
+          "name": "Pause",
+          "kind": "Button",
+          "x": 120,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Pause"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_pause(self)\n"
+          }
+        },
+        {
+          "name": "Reset",
+          "kind": "Button",
+          "x": 220,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Reset"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_reset(self)\n"
+          }
+        },
+        {
+          "name": "Action1",
+          "kind": "Button",
+          "x": 640,
+          "y": 100,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Left"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ninvader_move(self, -22)\n"
+          }
+        },
+        {
+          "name": "Action2",
+          "kind": "Button",
+          "x": 640,
+          "y": 148,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Right"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ninvader_move(self, 22)\n"
+          }
+        },
+        {
+          "name": "Action3",
+          "kind": "Button",
+          "x": 640,
+          "y": 196,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Shoot"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ninvader_shoot(self)\n"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Every game owns one cancellable timer; old callbacks cannot restart a reset game.\ndef game_pause(app):\n    app.running = False\n    app.generation += 1\n    if app.timer is not None:\n        app.root.after_cancel(app.timer)\n        app.timer = None\n\ndef game_tick(app, generation):\n    if not app.running or generation != app.generation:\n        return\n    app.timer = None\n    game_step(app)\n    game_draw(app)\n    if app.running and generation == app.generation:\n        app.timer = app.root.after(60, lambda: game_tick(app, generation))\n\ndef game_start(app):\n    if app.running or app.over:\n        return\n    app.running = True\n    app.generation += 1\n    app.Board.focus_set()\n    game_tick(app, app.generation)\n\ndef game_close(app):\n    game_pause(app)\n    app.root.destroy()\n\n# Original geometric sprites and a small fixed formation keep the example editable.\ndef game_reset(app):\n    game_pause(app)\n    app.player = 300\n    app.enemies = [[70 + x * 70, 60 + y * 45] for y in range(3) for x in range(7)]\n    app.bullets = []\n    app.direction = 1\n    app.score = 0\n    app.over = False\n    game_draw(app)\n\ndef invader_move(app, dx):\n    if app.running:\n        app.player = max(15, min(585, app.player + dx))\n\ndef invader_shoot(app):\n    if app.running and len(app.bullets) < 5:\n        app.bullets.append([app.player, 480])\n\ndef game_step(app):\n    if any(x < 20 or x > 580 for x, y in app.enemies):\n        app.direction *= -1\n        for enemy in app.enemies:\n            enemy[1] += 18\n    for enemy in app.enemies:\n        enemy[0] += 3 * app.direction\n    remaining = []\n    for x, y in app.bullets:\n        y -= 14\n        hit = next((e for e in app.enemies if abs(e[0]-x) < 19 and abs(e[1]-y) < 17), None)\n        if hit is not None:\n            app.enemies.remove(hit)\n            app.score += 10\n        elif y > 0:\n            remaining.append([x, y])\n    app.bullets = remaining\n    app.over = not app.enemies or any(e[1] >= 465 for e in app.enemies)\n    if app.over:\n        game_pause(app)\n\ndef game_draw(app):\n    c = app.Board\n    c.delete('all')\n    for x, y in app.enemies:\n        c.create_rectangle(x-17, y-12, x+17, y+12, fill='#58d8a8')\n    for x, y in app.bullets:\n        c.create_line(x, y, x, y-10, fill='#fff08a', width=3)\n    c.create_polygon(app.player, 475, app.player-15, 505, app.player+15, 505, fill='#64b5ff')\n    outcome = ('Cleared!' if not app.enemies else 'Game over') if app.over else 'Left/Right and Space'\n    app.Status.configure(text=f'Score: {app.score} | {outcome}')\n",
+  "startup": "# Initialize the model and install keyboard shortcuts without executing external code.\nself.timer = None\nself.generation = 0\nself.running = False\ngame_reset(self)\nself.Board.bind('<Left>', lambda event: invader_move(self, -22))\nself.Board.bind('<Right>', lambda event: invader_move(self, 22))\nself.Board.bind('<space>', lambda event: invader_shoot(self))\nself.Form1.protocol('WM_DELETE_WINDOW', lambda: game_close(self))\nself.Form1.deiconify()\n",
+  "requirements": []
+}

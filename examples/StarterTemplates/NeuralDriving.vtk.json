@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Neural Driving Lab",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Neural Driving Lab",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Board",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 90,
+          "width": 600,
+          "height": 540,
+          "props": {
+            "bg": "#101827",
+            "highlightthickness": 0,
+            "takefocus": true
+          },
+          "events": {}
+        },
+        {
+          "name": "Status",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 810,
+          "height": 30,
+          "props": {
+            "text": "Neural Driving Lab",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Start",
+          "kind": "Button",
+          "x": 20,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Start"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_start(self)\n"
+          }
+        },
+        {
+          "name": "Pause",
+          "kind": "Button",
+          "x": 120,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Pause"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_pause(self)\n"
+          }
+        },
+        {
+          "name": "Reset",
+          "kind": "Button",
+          "x": 220,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Reset"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_reset(self)\n"
+          }
+        },
+        {
+          "name": "Action1",
+          "kind": "Button",
+          "x": 640,
+          "y": 100,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Train network"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ndriving_train(self)\n"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Every game owns one cancellable timer; old callbacks cannot restart a reset game.\ndef game_pause(app):\n    app.running = False\n    app.generation += 1\n    if app.timer is not None:\n        app.root.after_cancel(app.timer)\n        app.timer = None\n\ndef game_tick(app, generation):\n    if not app.running or generation != app.generation:\n        return\n    app.timer = None\n    game_step(app)\n    game_draw(app)\n    if app.running and generation == app.generation:\n        app.timer = app.root.after(60, lambda: game_tick(app, generation))\n\ndef game_start(app):\n    if app.running or app.over:\n        return\n    app.running = True\n    app.generation += 1\n    app.Board.focus_set()\n    game_tick(app, app.generation)\n\ndef game_close(app):\n    game_pause(app)\n    app.root.destroy()\n\n# A real, small 3-6-1 neural network learns a synthetic steering teacher.\nimport math\nimport random\n\ndef neural_create(seed=11):\n    rng = random.Random(seed)\n    return [[[rng.uniform(-0.3,0.3) for _ in range(4)] for _ in range(6)], [rng.uniform(-0.3,0.3) for _ in range(7)]]\n\ndef neural_forward(net, inputs):\n    hidden = [math.tanh(sum(w*x for w,x in zip(row,inputs))+row[3]) for row in net[0]]\n    output = math.tanh(sum(w*h for w,h in zip(net[1],hidden))+net[1][6])\n    return hidden,output\n\ndef neural_target(inputs):\n    return math.tanh(-1.7*inputs[0]+0.65*inputs[1]+0.35*inputs[2])\n\ndef neural_train(net, epochs=12):\n    rng = random.Random(23)\n    samples = [[rng.uniform(-1,1) for _ in range(3)] for _ in range(220)]\n    for _ in range(epochs):\n        for inputs in samples:\n            hidden,out = neural_forward(net,inputs); delta = (out-neural_target(inputs))*(1-out*out)\n            old = net[1][:]\n            for i in range(6):\n                net[1][i] -= 0.025*delta*hidden[i]\n                gradient = delta*old[i]*(1-hidden[i]*hidden[i])\n                for j in range(3):\n                    net[0][i][j] -= 0.025*gradient*inputs[j]\n                net[0][i][3] -= 0.025*gradient\n            net[1][6] -= 0.025*delta\n    return sum((neural_forward(net,x)[1]-neural_target(x))**2 for x in samples)/len(samples)\n\ndef road_center(distance):\n    return 300+105*math.sin(distance/160)\n\ndef game_reset(app):\n    game_pause(app)\n    if not hasattr(app,'network'):\n        app.network = neural_create()\n    app.distance = 0; app.car = road_center(0); app.over = False\n    game_draw(app)\n\ndef driving_train(app):\n    game_pause(app)\n    loss = neural_train(app.network)\n    app.Status.configure(text=f'Trained 3-6-1 network | Mean squared error: {loss:.5f}. Press Start.')\n\ndef game_step(app):\n    center = road_center(app.distance)\n    inputs = [(app.car-center)/90,(road_center(app.distance+24)-center)/18,math.cos(app.distance/160)]\n    _,steering = neural_forward(app.network,inputs)\n    app.car += steering*7\n    app.distance += 4\n    app.over = abs(app.car-road_center(app.distance)) > 83\n    if app.over:\n        game_pause(app)\n\ndef game_draw(app):\n    c = app.Board; c.delete('all')\n    for y in range(0,540,12):\n        center = road_center(app.distance+(440-y)*0.7)\n        c.create_rectangle(center-100,y,center+100,y+12,fill='#425168',outline='')\n        c.create_line(center,y,center,y+6,fill='white')\n    c.create_rectangle(app.car-12,415,app.car+12,450,fill='#ffca55')\n    app.Status.configure(text=f'Distance: {app.distance} | '+('Off road. Reset and train.' if app.over else 'Train then Start: synthetic supervised steering, no external packages.'))\n",
+  "startup": "# Initialize the model and install keyboard shortcuts without executing external code.\nself.timer = None\nself.generation = 0\nself.running = False\ngame_reset(self)\nself.Form1.protocol('WM_DELETE_WINDOW', lambda: game_close(self))\nself.Form1.deiconify()\n",
+  "requirements": []
+}

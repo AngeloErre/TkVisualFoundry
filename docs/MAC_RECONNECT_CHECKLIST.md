@@ -1,10 +1,10 @@
 # Mac reconnection acceptance / Verifiche alla riconnessione
 
-Status: **pending**. The user is travelling with the Mac disconnected. Resume these checks when the user explicitly says **ambiente collegato**. Versions 1.37–1.40 were implemented and automatically tested on remote Linux; it has not been installed or run natively on the user's Mac.
+Status: **pending**. The user is travelling with the Mac disconnected. Resume these checks when the user explicitly says **ambiente collegato**. Versions 1.37–1.41 were implemented and automatically tested on remote Linux; it has not been installed or run natively on the user's Mac.
 
 1. Confirm the connected environment and current repository/version; preserve any user changes before updating. Use a temporary test project and disposable files.
 2. Run the complete Italian/English suite with a supported stable Python. Record actual counts and which graphical tests now execute; do not carry forward Linux counts as Mac results.
-3. Open the IDE: single native menu, visible Project Explorer, readable properties/log, new-project chooser with 24 starters plus blank. Check create/cancel/save/discard workflow.
+3. Open the IDE: single native menu, visible Project Explorer, readable properties/log, new-project chooser with 32 starters plus blank. Check create/cancel/save/discard workflow.
 4. Run all twenty-four starters through F5 in disposable projects. Inspect event/import/startup code and designer controls. Verify stop/relaunch and absence of stale callbacks/processes.
 5. Alarm/timers: stopwatch pause/resume/reset; short countdown finish/stop; invalid input; HH:MM next-occurrence logic; one alert; native system bell; closing while a Tk timer is active. Do not alter OS sound/security settings to make a test pass.
 6. Notepad: create/switch/close tabs, type/paste Unicode, open/save real temporary UTF-8/BOM files, dirty markers, cancel save dialogs, save/discard/cancel on tab/app closure, failed-write preservation and 20-tab limit.
@@ -24,3 +24,13 @@ Fourth batch: verify calculator numeric/function buttons and history; table/reci
 Fifth batch: test a dedicated temporary Contact Book SQLite file, existing/unrelated database refusal, photo PNG/GIF chooser/display/missing paths, Add/Update/save/reopen; exact separate currency balances; inventory +/-1/low-stock states; media loans. Use only disposable SQLite/JSON and photo fixtures, never the user’s real contact or finance data.
 
 Sixth batch: test Minesweeper left/right/middle/Control-click, first reveal and restart; maze Canvas focus/arrows/WASD/buttons/win; calendar month/day selection and date drafts/JSON persistence; slideshow folder selection, real PNG/GIF decoding, missing files, resizing/subsampling, play/pause/manual stepping and rapid folder/close callback cancellation. JPEG/WebP and animated GIF are intentionally unsupported in this starter.
+
+## Final eight starters — native acceptance pending
+
+- Create each of the 32 starters and check scroll/description/dependency display in both languages.
+- Invaders/chase/platformer/blocks: keyboard focus, movement, scoring, win/loss, pause/reset/close; repeat resets during play to detect stale timers.
+- Neural Driving: train, start, pause, reset; observe actual steering and preserved weights.
+- Install QR/barcode dependencies through project PIP on each native target; generate/decode a QR and Code128 PNG, including cancellation and errors.
+- Soundboard: install pygame-ce, assign several local files, play/pause/resume/stop, volume and close during playback. No physical audio test has been performed remotely.
+- Study Agent: supply a session key/model explicitly, send a test topic, check responsive UI/errors/close. Real API calls and credentials were not used in remote tests.
+- Generate deployment kits for these dependency-bearing examples and build/run on each target OS. Native installers and wheels remain unverified until reconnection.

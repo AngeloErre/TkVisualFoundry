@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "TkVisualFoundry 1.40\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.40\nVisual Python / Tkinter designer",
+  "TkVisualFoundry 1.41\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.41\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -682,3 +682,14 @@ EN_MESSAGES.update({'Calcolatrice scientifica': 'Scientific calculator', 'Espres
 EN_MESSAGES.update({'Rubrica contatti': 'Contact book', 'Nomi, telefoni, email, note e foto PNG/GIF. Salvataggio esplicito in un database SQLite dedicato.': 'Names, phone numbers, email, notes and PNG/GIF photos. Explicit saving to a dedicated SQLite database.', 'Gestionale spese': 'Expense manager', 'Entrate e uscite, date e categorie. Totali decimali separati per valuta e salvataggio JSON.': 'Income and expenses, dates and categories. Decimal totals by currency and JSON saving.', 'Inventario casa/magazzino': 'Home/stock inventory', 'Codici univoci, quantità, costi EUR e soglie scorte basse. Modifica stock e salva JSON.': 'Unique codes, quantities, EUR costs and low-stock thresholds. Adjust stock and save JSON.', 'Archivio CD/DVD/giochi': 'CD/DVD/game archive', 'Titoli, tipo, artista/piattaforma, anno e prestiti. Ricerca e salvataggio JSON.': 'Titles, type, artist/platform, year and loans. Search and JSON saving.'})
 
 EN_MESSAGES.update({'Campo Minato': 'Minesweeper', 'Griglia 9×9, dieci mine, primo clic sicuro e bandierine con clic destro o Control-clic.': 'A 9×9 grid, ten mines, safe first click and right-click/Control-click flags.', 'Labirinto': 'Maze', 'Labirinto generato con percorso verso l’uscita. Movimento con frecce, WASD o pulsanti.': 'Generated maze with a path to the exit. Move with arrows, WASD or buttons.', 'Agenda e calendario': 'Agenda and calendar', 'Calendario mensile navigabile e appuntamenti con date/orari. Ricerca e salvataggio JSON.': 'Navigable month calendar and dated/timed appointments. Search and JSON saving.', 'Slideshow PNG/GIF': 'PNG/GIF slideshow', 'Cartella immagini PNG/GIF, precedente/successiva e riproduzione automatica. Nessun PIP aggiuntivo.': 'PNG/GIF folder, previous/next and automatic playback. No extra PIP packages.'})
+
+# Final starter batch: descriptions are translated alongside the existing catalog.
+EN_MESSAGES.update({
+'Microgioco arcade: movimento, spari, formazione di nemici e punteggio.':'Arcade microgame: movement, shooting, enemy formation and score.',
+'Labirinto con punti e inseguitore, controlli da tastiera e pausa.':'Dot maze with a pursuer, keyboard controls and pause.',
+'Piattaforme originali: gravità, salto, caduta e traguardo.':'Original platforms: gravity, jumping, falling and a goal.',
+'Sette blocchi, rotazione, caduta rapida e cancellazione delle righe.':'Seven blocks, rotation, hard drop and line clearing.',
+'Piccola rete neurale addestrabile per guidare su una strada sintetica. Solo libreria standard.':'Trainable small neural network steering on a synthetic road. Standard library only.',
+'Tutor di studio con client OpenAI asincrono. Richiede PIP, modello e chiave API personale.':'Study tutor with an asynchronous OpenAI client. Requires PIP, a model and a personal API key.',
+'Generazione PNG e lettura QR/barcode locali. Richiede qrcode, python-barcode, zxing-cpp e Pillow.':'Local PNG generation and QR/barcode reading. Requires qrcode, python-barcode, zxing-cpp and Pillow.',
+'Otto pad con file audio locali, volume e stop. Richiede pygame; nessun audio incluso.':'Eight pads for local audio files, volume and stop. Requires pygame-ce; no bundled sounds.'})

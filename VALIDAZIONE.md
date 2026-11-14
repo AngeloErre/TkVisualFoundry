@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.41
+
+Linux remoto, Python 3.15.2: 394 test superati per lingua, 11 grafici saltati. Diciannove nuove regressioni su timer, collisioni, labirinto connesso, gravità/salti, sette rotazioni di pezzi con ciclo completo, righe/caduta, addestramento neurale, invio tutor e audio simulati, dipendenze e QR/Code128 PNG generati e riletti realmente. Verifica deterministica extra: rete addestrata, 2500 passi e 10000 unità senza uscire di strada. Tutti i 47 esempi validati e compilati; catalogo di 32 modelli più vuoto. Nessuna chiamata API reale, uscita audio o verifica Mac nativa. Attesa “ambiente collegato”.
+
 # TkVisualFoundry 1.40
 
 Linux remoto, Python 3.15.2: 375 test superati per lingua, 11 grafici saltati. Quindici nuovi test: 80 posizionamenti mine, bandiere/flood fill/vittoria/sconfitta, 25 labirinti connessi e percorso, mesi/bisestili/JSON agenda, limiti foto e callback slideshow simulati. Tutti i 39 esempi validati e compilati. Nessun collaudo nativo Mac: attende “ambiente collegato”.

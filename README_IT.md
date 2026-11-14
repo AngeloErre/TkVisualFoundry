@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.40
+# TkVisualFoundry 1.41
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Ultimi otto modelli iniziali (1.41)
+
+La raccolta comprende ora **32 modelli più Progetto vuoto**, tutti con codice commentato in inglese. Nuovi: Micro Invaders, Dot Maze Chase, Mini Platformer, Falling Blocks, Neural Driving Lab, Study Agent, QR and Barcode Studio e Soundboard. I cinque giochi/simulazioni usano la libreria standard. Il tutor usa il componente OpenAI asincrono e richiede modello e chiave API personali; le dipendenze QR/barcode e audio sono indicate nel selettore. Nessun invio o riproduzione automatica all’avvio. [Guida ai modelli](docs/STARTER_TEMPLATES.md). Test remoti Linux su logica, timer, addestramento neurale, immagini QR/barcode reali e chiamate simulate; collaudo Mac nativo in attesa.
 
 ## Sesto gruppo di modelli (1.40)
 

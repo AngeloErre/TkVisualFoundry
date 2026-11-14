@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Falling Blocks",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Falling Blocks",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Board",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 90,
+          "width": 600,
+          "height": 540,
+          "props": {
+            "bg": "#101827",
+            "highlightthickness": 0,
+            "takefocus": true
+          },
+          "events": {}
+        },
+        {
+          "name": "Status",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 810,
+          "height": 30,
+          "props": {
+            "text": "Falling Blocks",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Start",
+          "kind": "Button",
+          "x": 20,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Start"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_start(self)\n"
+          }
+        },
+        {
+          "name": "Pause",
+          "kind": "Button",
+          "x": 120,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Pause"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_pause(self)\n"
+          }
+        },
+        {
+          "name": "Reset",
+          "kind": "Button",
+          "x": 220,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Reset"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_reset(self)\n"
+          }
+        },
+        {
+          "name": "Action1",
+          "kind": "Button",
+          "x": 640,
+          "y": 100,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Left"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nblocks_move(self, dx=-1)\n"
+          }
+        },
+        {
+          "name": "Action2",
+          "kind": "Button",
+          "x": 640,
+          "y": 148,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Right"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nblocks_move(self, dx=1)\n"
+          }
+        },
+        {
+          "name": "Action3",
+          "kind": "Button",
+          "x": 640,
+          "y": 196,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Rotate"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nblocks_move(self, rotate=True)\n"
+          }
+        },
+        {
+          "name": "Action4",
+          "kind": "Button",
+          "x": 640,
+          "y": 244,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Drop"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nblocks_drop(self)\n"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Every game owns one cancellable timer; old callbacks cannot restart a reset game.\ndef game_pause(app):\n    app.running = False\n    app.generation += 1\n    if app.timer is not None:\n        app.root.after_cancel(app.timer)\n        app.timer = None\n\ndef game_tick(app, generation):\n    if not app.running or generation != app.generation:\n        return\n    app.timer = None\n    game_step(app)\n    game_draw(app)\n    if app.running and generation == app.generation:\n        app.timer = app.root.after(60, lambda: game_tick(app, generation))\n\ndef game_start(app):\n    if app.running or app.over:\n        return\n    app.running = True\n    app.generation += 1\n    app.Board.focus_set()\n    game_tick(app, app.generation)\n\ndef game_close(app):\n    game_pause(app)\n    app.root.destroy()\n\n# Seven geometric pieces fall into a ten-by-twenty board.\nimport random\nPIECES = (((0,1),(1,1),(2,1),(3,1)),((1,0),(2,0),(1,1),(2,1)),((1,0),(0,1),(1,1),(2,1)),((1,0),(2,0),(0,1),(1,1)),((0,0),(1,0),(1,1),(2,1)),((0,0),(0,1),(1,1),(2,1)),((2,0),(0,1),(1,1),(2,1)))\n\ndef blocks_valid(board, piece, x, y):\n    return all(0 <= x+a < 10 and 0 <= y+b < 20 and board[y+b][x+a] == 0 for a,b in piece)\n\ndef blocks_clear(board):\n    kept = [row[:] for row in board if not all(row)]\n    count = 20-len(kept)\n    return [[0]*10 for _ in range(count)] + kept, count\n\ndef blocks_spawn(app):\n    index = random.randrange(len(PIECES))\n    app.piece = list(PIECES[index]); app.piece_size = 4 if index == 0 else 2 if index == 1 else 3\n    app.bx = 3; app.by = 0\n    if not blocks_valid(app.cells,app.piece,app.bx,app.by):\n        app.over = True; game_pause(app)\n\ndef game_reset(app):\n    game_pause(app); app.cells = [[0]*10 for _ in range(20)]; app.lines = 0; app.frames = 0; app.over = False\n    blocks_spawn(app); game_draw(app)\n\ndef blocks_move(app, dx=0, dy=0, rotate=False):\n    if not app.running or app.over:\n        return False\n    # Rotate within a three-cell square; the long piece uses a four-cell square.\n    size = app.piece_size\n    candidate = [(size-1-b,a) for a,b in app.piece] if rotate else app.piece\n    if blocks_valid(app.cells,candidate,app.bx+dx,app.by+dy):\n        app.piece = candidate; app.bx += dx; app.by += dy; game_draw(app); return True\n    return False\n\ndef blocks_lock(app):\n    for a,b in app.piece:\n        app.cells[app.by+b][app.bx+a] = 1\n    app.cells, count = blocks_clear(app.cells); app.lines += count\n    blocks_spawn(app)\n\ndef blocks_drop(app):\n    if not app.running or app.over:\n        return\n    while blocks_move(app,dy=1):\n        pass\n    blocks_lock(app); game_draw(app)\n\ndef game_step(app):\n    app.frames += 1\n    if app.frames % max(2,8-app.lines//3) == 0:\n        if not blocks_move(app,dy=1):\n            blocks_lock(app)\n\ndef game_draw(app):\n    c = app.Board; c.delete('all'); size = 25\n    for y,row in enumerate(app.cells):\n        for x,value in enumerate(row):\n            c.create_rectangle(160+x*size,y*size,160+(x+1)*size,(y+1)*size,fill='#5879b4' if value else '#18243a',outline='#293750')\n    if not app.over:\n        for a,b in app.piece:\n            x,y = app.bx+a,app.by+b\n            c.create_rectangle(160+x*size,y*size,160+(x+1)*size,(y+1)*size,fill='#ffca55')\n    app.Status.configure(text=f'Lines: {app.lines} | '+('Game over' if app.over else 'Arrows move/rotate; Space drops.'))\n",
+  "startup": "# Initialize the model and install keyboard shortcuts without executing external code.\nself.timer = None\nself.generation = 0\nself.running = False\ngame_reset(self)\nself.Board.bind('<Left>', lambda event: blocks_move(self, dx=-1))\nself.Board.bind('<Right>', lambda event: blocks_move(self, dx=1))\nself.Board.bind('<Up>', lambda event: blocks_move(self, rotate=True))\nself.Board.bind('<Down>', lambda event: blocks_move(self, dy=1))\nself.Board.bind('<space>', lambda event: blocks_drop(self))\nself.Form1.protocol('WM_DELETE_WINDOW', lambda: game_close(self))\nself.Form1.deiconify()\n",
+  "requirements": []
+}

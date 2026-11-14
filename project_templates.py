@@ -29,6 +29,14 @@ TEMPLATES=(
     ('maze','MazeExplorer','Labirinto','Giochi','Labirinto generato con percorso verso l’uscita. Movimento con frecce, WASD o pulsanti.'),
     ('agenda','AgendaCalendar','Agenda e calendario','Organizzazione','Calendario mensile navigabile e appuntamenti con date/orari. Ricerca e salvataggio JSON.'),
     ('slideshow','ImageSlideshow','Slideshow PNG/GIF','Creatività','Cartella immagini PNG/GIF, precedente/successiva e riproduzione automatica. Nessun PIP aggiuntivo.'),
+    ('invaders', 'MicroInvaders', 'Micro Invaders', 'Giochi', 'Microgioco arcade: movimento, spari, formazione di nemici e punteggio.'),
+    ('chase', 'DotMazeChase', 'Dot Maze Chase', 'Giochi', 'Labirinto con punti e inseguitore, controlli da tastiera e pausa.'),
+    ('platformer', 'MiniPlatformer', 'Mini Platformer', 'Giochi', 'Piattaforme originali: gravità, salto, caduta e traguardo.'),
+    ('blocks', 'FallingBlocks', 'Falling Blocks', 'Giochi', 'Sette blocchi, rotazione, caduta rapida e cancellazione delle righe.'),
+    ('neural', 'NeuralDriving', 'Neural Driving Lab', 'Giochi', 'Piccola rete neurale addestrabile per guidare su una strada sintetica. Solo libreria standard.'),
+    ('study', 'StudyAgent', 'Study Agent', 'Utilità', 'Tutor di studio con client OpenAI asincrono. Richiede PIP, modello e chiave API personale.'),
+    ('codes', 'CodeStudio', 'QR and Barcode Studio', 'Utilità', 'Generazione PNG e lettura QR/barcode locali. Richiede qrcode, python-barcode, zxing-cpp e Pillow.'),
+    ('soundboard', 'Soundboard', 'Soundboard', 'Creatività', 'Otto pad con file audio locali, volume e stop. Richiede pygame; nessun audio incluso.'),
 )
 
 

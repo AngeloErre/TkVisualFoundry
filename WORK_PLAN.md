@@ -171,3 +171,11 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] English comments, no extra PIP, bounded/timer-safe models and JSON persistence.
 - [x] Fifteen regressions and remote example/suite validation.
 - [ ] Native Mac acceptance on ambiente collegato; remaining eight requested starters.
+
+## Phase 25 — complete 32 starter templates (1.41)
+
+- [x] Final eight templates, English comments, IT/EN chooser metadata.
+- [x] Five standard-library Canvas games/simulations; actual tiny supervised network.
+- [x] Async LLM tutor, local QR/barcode and eight-pad audio with declared dependencies.
+- [x] Nineteen offline regressions, optional dependency round trips and example compilation.
+- [ ] Native Mac GUI, audio, live API, PIP/build acceptance on ambiente collegato.

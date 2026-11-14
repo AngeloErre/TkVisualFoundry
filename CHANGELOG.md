@@ -1,3 +1,9 @@
+# 1.41 — complete starter collection
+
+- Add the final eight English-commented starters: four Canvas arcade games, an actual supervised neural driving demo, an async study tutor, local QR/Code128 generator/reader and an eight-pad soundboard.
+- Declare/display optional packages for the three service/media models; no network/audio on startup. Preserve 29 standard-library starters.
+- Add nineteen offline regressions; 394 passed / 11 GUI skipped in each locale; 47 example projects validate/compile. Native acceptance deferred to ambiente collegato.
+
 # 1.40 — Sixth starter batch
 
 - Add Minesweeper, Maze Explorer, Agenda/Calendar and PNG/GIF Slideshow.

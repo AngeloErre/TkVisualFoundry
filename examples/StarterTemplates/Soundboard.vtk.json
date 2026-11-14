@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Soundboard",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Soundboard",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Instructions",
+          "kind": "Label",
+          "x": 20,
+          "y": 10,
+          "width": 810,
+          "height": 40,
+          "props": {
+            "text": "Select slot 1-8 and Assign. Click a pad to play one sound at a time. Assignments last this session."
+          },
+          "events": {}
+        },
+        {
+          "name": "Slot",
+          "kind": "Combobox",
+          "x": 20,
+          "y": 60,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8"
+            ]
+          },
+          "events": {}
+        },
+        {
+          "name": "Assign",
+          "kind": "Button",
+          "x": 140,
+          "y": 60,
+          "width": 170,
+          "height": 30,
+          "props": {
+            "text": "Assign audio file"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_assign(self)\n"
+          }
+        },
+        {
+          "name": "Pad1",
+          "kind": "Button",
+          "x": 20,
+          "y": 120,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "1: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 1)\n"
+          }
+        },
+        {
+          "name": "Pad2",
+          "kind": "Button",
+          "x": 225,
+          "y": 120,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "2: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 2)\n"
+          }
+        },
+        {
+          "name": "Pad3",
+          "kind": "Button",
+          "x": 430,
+          "y": 120,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "3: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 3)\n"
+          }
+        },
+        {
+          "name": "Pad4",
+          "kind": "Button",
+          "x": 635,
+          "y": 120,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "4: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 4)\n"
+          }
+        },
+        {
+          "name": "Pad5",
+          "kind": "Button",
+          "x": 20,
+          "y": 230,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "5: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 5)\n"
+          }
+        },
+        {
+          "name": "Pad6",
+          "kind": "Button",
+          "x": 225,
+          "y": 230,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "6: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 6)\n"
+          }
+        },
+        {
+          "name": "Pad7",
+          "kind": "Button",
+          "x": 430,
+          "y": 230,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "7: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 7)\n"
+          }
+        },
+        {
+          "name": "Pad8",
+          "kind": "Button",
+          "x": 635,
+          "y": 230,
+          "width": 190,
+          "height": 90,
+          "props": {
+            "text": "8: Empty"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nsound_play(self, 8)\n"
+          }
+        },
+        {
+          "name": "Player",
+          "kind": "AudioPlayer",
+          "x": 20,
+          "y": 370,
+          "width": 810,
+          "height": 170,
+          "props": {
+            "source": "",
+            "volume": 0.7
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Assign local sounds explicitly. The built-in player initializes audio only on Play.\nfrom pathlib import Path\n\ndef sound_assign(app):\n    path = filedialog.askopenfilename(parent=app.Form1,filetypes=[('Audio','*.wav *.mp3 *.ogg')])\n    if not path:\n        return\n    try:\n        slot = int(app.Slot.get())\n        if not 1 <= slot <= 8 or not Path(path).is_file():\n            raise ValueError('Choose a valid slot and existing audio file.')\n        app.sounds[slot] = path\n        getattr(app,'Pad'+str(slot)).configure(text=f'{slot}: {Path(path).name}')\n    except (ValueError,OSError) as exc:\n        messagebox.showerror('Soundboard',str(exc),parent=app.Form1)\n\ndef sound_play(app, slot):\n    path = app.sounds.get(slot)\n    if not path:\n        messagebox.showinfo('Soundboard','Assign an audio file to this slot first.',parent=app.Form1)\n        return\n    app.Player.source = path\n    app.Player.play()\n",
+  "startup": "# Audio assignments remain in memory; no file is opened or played at startup.\nself.sounds = {}\nself.Slot.set('1')\nself.Form1.deiconify()\n",
+  "requirements": []
+}

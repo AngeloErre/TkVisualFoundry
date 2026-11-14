@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "QR and Barcode Studio",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "QR and Barcode Studio",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Help",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 810,
+          "height": 45,
+          "props": {
+            "text": "Generate QR or Code128 as PNG; read QR/barcodes from local images. Install declared PIP dependencies first.",
+            "wraplength": 800
+          },
+          "events": {}
+        },
+        {
+          "name": "Value",
+          "kind": "Entry",
+          "x": 20,
+          "y": 80,
+          "width": 600,
+          "height": 35,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "Format",
+          "kind": "Combobox",
+          "x": 640,
+          "y": 80,
+          "width": 170,
+          "height": 35,
+          "props": {
+            "values": [
+              "QR",
+              "Code128"
+            ]
+          },
+          "events": {}
+        },
+        {
+          "name": "Save",
+          "kind": "Button",
+          "x": 20,
+          "y": 135,
+          "width": 220,
+          "height": 35,
+          "props": {
+            "text": "Generate and save PNG"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncode_save(self)\n"
+          }
+        },
+        {
+          "name": "Read",
+          "kind": "Button",
+          "x": 260,
+          "y": 135,
+          "width": 220,
+          "height": 35,
+          "props": {
+            "text": "Read codes from image"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ncode_open(self)\n"
+          }
+        },
+        {
+          "name": "Result",
+          "kind": "Text",
+          "x": 20,
+          "y": 195,
+          "width": 810,
+          "height": 430,
+          "props": {
+            "wrap": "word"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Optional imaging packages are imported only for explicit actions.\nfrom pathlib import Path\n\ndef code_generate(value, kind, path):\n    if not value or len(value) > 1000:\n        raise ValueError('Enter 1-1000 characters.')\n    if kind == 'QR':\n        import qrcode\n        image = qrcode.make(value)\n    else:\n        if not value.isascii() or not value.isprintable():\n            raise ValueError('Code128 requires printable ASCII text.')\n        from barcode import Code128\n        from barcode.writer import ImageWriter\n        image = Code128(value,writer=ImageWriter()).render()\n    image.save(path,format='PNG')\n\ndef code_read(path):\n    if Path(path).stat().st_size > 20*1024*1024:\n        raise ValueError('Image must be at most 20 MB.')\n    from PIL import Image\n    import zxingcpp\n    with Image.open(path) as image:\n        if image.width*image.height > 20_000_000:\n            raise ValueError('Image dimensions are too large.')\n        return [item.text for item in zxingcpp.read_barcodes(image)]\n\ndef code_save(app):\n    path = filedialog.asksaveasfilename(parent=app.Form1,defaultextension='.png',filetypes=[('PNG','*.png')])\n    if not path:\n        return\n    try:\n        code_generate(app.Value.get(),app.Format.get(),path)\n        app.Result.delete('1.0','end'); app.Result.insert('1.0','Saved: '+path)\n    except Exception as exc:\n        messagebox.showerror('Code Studio',str(exc),parent=app.Form1)\n\ndef code_open(app):\n    path = filedialog.askopenfilename(parent=app.Form1,filetypes=[('Images','*.png *.jpg *.jpeg *.bmp *.gif')])\n    if not path:\n        return\n    try:\n        values = code_read(path)\n        app.Result.delete('1.0','end'); app.Result.insert('1.0','\\n'.join(values) if values else 'No readable code found.')\n    except Exception as exc:\n        messagebox.showerror('Code Studio',str(exc),parent=app.Form1)\n",
+  "startup": "# Generation and reading are local; the declared dependencies appear in the chooser.\nself.Format.set('QR')\nself.Form1.deiconify()\n",
+  "requirements": [
+    "qrcode>=8,<9",
+    "python-barcode>=0.16,<1",
+    "zxing-cpp>=2.3,<4",
+    "Pillow>=11,<14"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Study Agent",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Study Agent",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Help",
+          "kind": "Label",
+          "x": 20,
+          "y": 10,
+          "width": 810,
+          "height": 45,
+          "props": {
+            "text": "Enter a topic. Configure an OpenAI model and API key below; Send uses your API account.",
+            "wraplength": 800
+          },
+          "events": {}
+        },
+        {
+          "name": "Topic",
+          "kind": "Entry",
+          "x": 20,
+          "y": 65,
+          "width": 640,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "Ask",
+          "kind": "Button",
+          "x": 680,
+          "y": 65,
+          "width": 150,
+          "height": 30,
+          "props": {
+            "text": "Explain and quiz"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nstudy_send(self)\n"
+          }
+        },
+        {
+          "name": "Tutor",
+          "kind": "LLMClient",
+          "x": 20,
+          "y": 110,
+          "width": 810,
+          "height": 530,
+          "props": {
+            "provider": "openai",
+            "model": "",
+            "api_key_env": "OPENAI_API_KEY",
+            "max_tokens": 1024
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Reuse the asynchronous built-in client; only an explicit button sends text.\ndef study_send(app):\n    topic = app.Topic.get().strip()\n    if not topic or len(topic) > 2000:\n        messagebox.showerror('Study Agent','Enter a topic (1-2000 characters).',parent=app.Form1)\n        return\n    prompt = ('Act as a patient study tutor. Explain the topic in clear steps, give one worked example, '\n              'then ask three practice questions. Do not claim to have checked external sources. Topic: '+topic)\n    app.Tutor.send(prompt)\n",
+  "startup": "# Configure a model and session key in the client before sending; startup is offline.\nself.Form1.deiconify()\n",
+  "requirements": []
+}

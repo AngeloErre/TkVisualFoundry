@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Dot Maze Chase",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Dot Maze Chase",
+      "width": 860,
+      "height": 680,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "Board",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 90,
+          "width": 600,
+          "height": 540,
+          "props": {
+            "bg": "#101827",
+            "highlightthickness": 0,
+            "takefocus": true
+          },
+          "events": {}
+        },
+        {
+          "name": "Status",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 810,
+          "height": 30,
+          "props": {
+            "text": "Dot Maze Chase",
+            "anchor": "w"
+          },
+          "events": {}
+        },
+        {
+          "name": "Start",
+          "kind": "Button",
+          "x": 20,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Start"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_start(self)\n"
+          }
+        },
+        {
+          "name": "Pause",
+          "kind": "Button",
+          "x": 120,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Pause"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_pause(self)\n"
+          }
+        },
+        {
+          "name": "Reset",
+          "kind": "Button",
+          "x": 220,
+          "y": 50,
+          "width": 90,
+          "height": 30,
+          "props": {
+            "text": "Reset"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ngame_reset(self)\n"
+          }
+        },
+        {
+          "name": "Action1",
+          "kind": "Button",
+          "x": 640,
+          "y": 100,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Left"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nchase_turn(self, -1, 0)\n"
+          }
+        },
+        {
+          "name": "Action2",
+          "kind": "Button",
+          "x": 640,
+          "y": 148,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Right"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nchase_turn(self, 1, 0)\n"
+          }
+        },
+        {
+          "name": "Action3",
+          "kind": "Button",
+          "x": 640,
+          "y": 196,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Up"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nchase_turn(self, 0, -1)\n"
+          }
+        },
+        {
+          "name": "Action4",
+          "kind": "Button",
+          "x": 640,
+          "y": 244,
+          "width": 190,
+          "height": 38,
+          "props": {
+            "text": "Down"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nchase_turn(self, 0, 1)\n"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Every game owns one cancellable timer; old callbacks cannot restart a reset game.\ndef game_pause(app):\n    app.running = False\n    app.generation += 1\n    if app.timer is not None:\n        app.root.after_cancel(app.timer)\n        app.timer = None\n\ndef game_tick(app, generation):\n    if not app.running or generation != app.generation:\n        return\n    app.timer = None\n    game_step(app)\n    game_draw(app)\n    if app.running and generation == app.generation:\n        app.timer = app.root.after(60, lambda: game_tick(app, generation))\n\ndef game_start(app):\n    if app.running or app.over:\n        return\n    app.running = True\n    app.generation += 1\n    app.Board.focus_set()\n    game_tick(app, app.generation)\n\ndef game_close(app):\n    game_pause(app)\n    app.root.destroy()\n\n# This original map uses grid coordinates and breadth-first pursuit.\nfrom collections import deque\nMAZE = ('###############', '#.............#', '#.###.###.###.#', '#...#.....#...#', '#.#.#.###.#.#.#', '#.#.........#.#', '#.###.#.#.###.#', '#.....#.#.....#', '#.###.....###.#', '#.............#', '###############')\n\ndef maze_neighbors(cell):\n    x, y = cell\n    return [(a,b) for a,b in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)) if 0 <= b < len(MAZE) and 0 <= a < len(MAZE[0]) and MAZE[b][a] != '#']\n\ndef chase_next(start, target):\n    queue = deque([(start, [])]); seen = {start}\n    while queue:\n        cell, path = queue.popleft()\n        if cell == target:\n            return path[0] if path else start\n        for neighbor in maze_neighbors(cell):\n            if neighbor not in seen:\n                seen.add(neighbor); queue.append((neighbor, path + [neighbor]))\n    return start\n\ndef game_reset(app):\n    game_pause(app)\n    app.player = (1,1); app.enemy = (13,9); app.intent = (0,0); app.frames = 0\n    app.dots = {(x,y) for y,row in enumerate(MAZE) for x,char in enumerate(row) if char == '.'} - {app.player}\n    app.score = 0; app.over = False\n    game_draw(app)\n\ndef chase_turn(app, dx, dy):\n    if app.running:\n        app.intent = (dx,dy)\n\ndef game_step(app):\n    app.frames += 1\n    if app.frames % 3:\n        return\n    x,y = app.player; dx,dy = app.intent; target = (x+dx,y+dy)\n    if target in maze_neighbors(app.player):\n        app.player = target\n    if app.player in app.dots:\n        app.dots.remove(app.player); app.score += 1\n    caught = app.player == app.enemy\n    if app.frames % 6 == 0 and not caught:\n        app.enemy = chase_next(app.enemy, app.player)\n    app.over = caught or app.player == app.enemy or not app.dots\n    if app.over:\n        game_pause(app)\n\ndef game_draw(app):\n    c = app.Board; c.delete('all'); size = 38\n    for y,row in enumerate(MAZE):\n        for x,char in enumerate(row):\n            if char == '#':\n                c.create_rectangle(x*size,y*size,(x+1)*size,(y+1)*size,fill='#344b80',outline='')\n    for x,y in app.dots:\n        c.create_oval(x*size+16,y*size+16,x*size+22,y*size+22,fill='#fff1a6',outline='')\n    for cell,color in ((app.player,'#ffca55'),(app.enemy,'#ff7187')):\n        x,y = cell; c.create_oval(x*size+5,y*size+5,(x+1)*size-5,(y+1)*size-5,fill=color)\n    outcome = ('All dots collected!' if not app.dots else 'Caught! Reset to retry.') if app.over else 'Arrow keys: collect dots, avoid the pursuer.'\n    app.Status.configure(text=f'Dots: {app.score} | {outcome}')\n",
+  "startup": "# Initialize the model and install keyboard shortcuts without executing external code.\nself.timer = None\nself.generation = 0\nself.running = False\ngame_reset(self)\nself.Board.bind('<Left>', lambda event: chase_turn(self, -1, 0))\nself.Board.bind('<Right>', lambda event: chase_turn(self, 1, 0))\nself.Board.bind('<Up>', lambda event: chase_turn(self, 0, -1))\nself.Board.bind('<Down>', lambda event: chase_turn(self, 0, 1))\nself.Form1.protocol('WM_DELETE_WINDOW', lambda: game_close(self))\nself.Form1.deiconify()\n",
+  "requirements": []
+}
