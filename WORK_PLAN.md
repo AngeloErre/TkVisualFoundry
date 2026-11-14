@@ -119,3 +119,11 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Comment-only function bodies and matching static diagnostics; preserve stored source and line offsets.
 - [x] BOM project load and iterative deep hierarchy/cycle validation.
 - [x] Six regressions, full bilingual suite and follow-up report.
+
+## Phase 18 — global search and navigation (1.34)
+
+- [x] All model scopes and live unsaved editor buffer snapshots.
+- [x] Confined Python file scan, literal matching, limits and cancellation.
+- [x] Navigable previews with content/project guards and Unicode indices.
+- [x] Fourteen regressions and bilingual docs.
+- [ ] Interactive graphical acceptance.

@@ -1,5 +1,5 @@
-# TkVisualFoundry 1.33.1
+# TkVisualFoundry 1.34
 
-Follow-up debug: handle comment-only/whitespace-only event and startup bodies by appending pass in generated code only; use the same normalization in diagnostics. Preserve original text and executable line locations. Accept UTF-8 BOM project files. Order containers iteratively so deep valid hierarchies do not hit Python recursion limits, while cycles and invalid parent/page references remain rejected.
+Add Edit → Global search and Ctrl/Cmd+Shift+F, also available in the command palette and file editors. Search events, startup/import code and confined Python files, using unsaved IDE buffers first. Results show component/file, line and preview; Enter/double-click opens the editor and selects the match. Literal search with match-case/whole-word options, cancellable worker, content/project freshness checks and bounded scanning. No replacement or automatic saving.
 
-281 tests passed per language; 11 graphical tests skipped. Six new regressions include 1500 nested containers, a 1500-node cycle, deterministic sibling order, BOM no-rewrite and breakpoint line preservation. GUI acceptance remains pending. See docs/DEBUG_REPORT_1.33.1.md.
+295 tests passed per language, 11 graphical tests skipped. Fourteen new regressions cover model search and actual snapshot/navigation handlers, including stale-source rejection and Tcl Unicode index units. Interactive GUI acceptance remains pending. See docs/GLOBAL_SEARCH.md.

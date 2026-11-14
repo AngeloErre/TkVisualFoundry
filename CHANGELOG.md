@@ -1,3 +1,10 @@
+# 1.34 — Global search
+
+- Search all event/startup/import code and project Python files, including unsaved buffers.
+- Navigate source/file/line previews with Enter or double-click; select matches.
+- Literal case/word options, bounded cancellable scans and stale-result guards.
+- Preserve open file buffers and support their search shortcut; add fourteen regressions.
+
 # 1.33.1 — Recovery and hierarchy fixes
 
 - Compile comment/whitespace-only bodies without rewriting project text; share behavior with diagnostics.

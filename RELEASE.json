@@ -1,8 +1,8 @@
 {
-  "version": "1.33.1",
+  "version": "1.34",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 281,
+  "tests_passed": 295,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 macOS",
   "jedi_validation_version": "0.20.0",
@@ -111,5 +111,6 @@
     "Compare typed bounded row keys, distinguishing null/text and numeric/text values",
     "Synchronize worker ownership, tolerate exit races and reap cancelled read-only readers"
   ],
-  "recovery_edge_validation": "Comment/whitespace-only function bodies compile without changing saved text or real executable line offsets; real syntax errors remain diagnosed. UTF-8 BOM projects load without rewriting. 1500 nested containers order/compile and cycles are rejected without recursive traversal. Interactive GUI acceptance pending."
+  "recovery_edge_validation": "Comment/whitespace-only function bodies compile without changing saved text or real executable line offsets; real syntax errors remain diagnosed. UTF-8 BOM projects load without rewriting. 1500 nested containers order/compile and cycles are rejected without recursive traversal. Interactive GUI acceptance pending.",
+  "global_search_validation": "Project/event/startup/import scopes; unsaved active and file editor buffers; deleted backing file buffers; literal/case/whole-word positions; confinement/exclusions; bounds/cancellation; non-execution; actual navigation handlers and stale content/project checks covered. Tcl character-unit index conversion checked. Interactive graphical acceptance pending."
 }

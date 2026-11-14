@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.34
+
+295 test superati per lingua, 11 grafici saltati. Quattordici nuove regressioni su ambiti e buffer non salvati, file rimossi aperti, Unicode/posizioni, filtri, confinamento/esclusioni, cancellazione/limiti, non esecuzione, handler di snapshot/navigazione e risultati obsoleti. Indici Tcl verificati. Accettazione grafica ancora da completare.
+
 # TkVisualFoundry 1.33.1
 
 281 test superati per lingua, 11 grafici saltati. Sei regressioni su codice vuoto/commentato, errori reali mantenuti, righe breakpoint, BOM senza riscrittura, 1500 contenitori annidati e cicli/ordine fratelli. Validazione grafica ancora da completare. Dettagli in docs/DEBUG_REPORT_1.33.1.md.

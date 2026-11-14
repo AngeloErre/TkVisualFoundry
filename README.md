@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.33.1
+# TkVisualFoundry 1.34
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Global search and navigation (1.34)
+
+Use **Edit → Global search…** or **Ctrl/Cmd+Shift+F** to search literal text in all events, startup/import code and Python files under the saved project folder. Unsaved IDE buffers override saved contents. Double-click or Enter on a result opens its source and selects the match. Supports match case and whole words; runs in a cancellable background worker and rejects stale locations. See [global search](docs/GLOBAL_SEARCH.md) for scope, exclusions and limits.
 
 ## Recovery and hierarchy fixes (1.33.1)
 

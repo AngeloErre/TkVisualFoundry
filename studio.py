@@ -36,6 +36,7 @@ from workspace_ui import WorkspaceMixin
 from local_history import recovered_path
 from command_palette import CommandPaletteMixin
 from data_viewer_ui import DataViewerMixin
+from search_ui import SearchMixin
 from watch_ui import WatchMixin
 from breakpoint_ui import BreakpointMixin
 from event_breakpoints import resolve_breakpoints
@@ -66,7 +67,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(SearchMixin,DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -84,6 +85,7 @@ class Studio(DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,Insp
         self.protocol('WM_DELETE_WINDOW',self.close)
         self.bind('<F1>',lambda e:self.help())
         self.bind('<F6>',lambda e:self.preview_form())
+        for shortcut in ('<Control-Shift-F>','<Command-Shift-F>'):self.bind(shortcut,self.open_global_search)
         for shortcut in ('<Control-Shift-P>','<Command-Shift-P>'):self.bind(shortcut,self.open_command_palette)
         for sequence, action in [('<Command-s>',self.save),('<Control-s>',self.save),('<Command-o>',self.open_project),('<Control-o>',self.open_project),('<Command-z>',self.undo),('<Control-z>',self.undo),('<F5>',self.run),('<Shift-F5>',self.stop),('<F9>',self.debug)]:
             self.bind(sequence,lambda e,a=action:a())
@@ -682,6 +684,8 @@ class Studio(DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,Insp
         if self.proc and self.proc.poll() is None:
             try:self.proc.wait(timeout=2)
             except subprocess.TimeoutExpired:self.proc.kill(); self.proc.wait()
+        search_window=getattr(self,'global_search_window',None)
+        if search_window is not None and search_window.winfo_exists():search_window.close()
         viewer=getattr(self,'data_viewer_window',None)
         if viewer is not None and viewer.winfo_exists():viewer.close()
         self.finish_local_history();self.stop_preview();self.temp.cleanup(); self.destroy()

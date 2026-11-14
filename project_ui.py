@@ -118,11 +118,13 @@ class ProjectFilesMixin:
         else:members.append(relative)
         self.refresh_project_files();self.update_source()
 
-    def open_project_file(self,event=None):
-        relative=self.selected_project_file();root=self.project_root()
+    def open_project_file(self,event=None,relative=None):
+        relative=relative if relative is not None else self.selected_project_file();root=self.project_root()
         if not relative or root is None:return
         try:
             path=project_file(root,relative)
+            editors=getattr(self,'project_editors',{});self.project_editors=editors
+            if path in editors and editors[path].winfo_exists():editors[path].lift();return editors[path].project_text
             if path.is_dir():return
             if path==self.path.resolve():return messagebox.showinfo(tr('File di progetto'),tr('Il progetto si modifica nel designer.'),parent=self)
             if path.stat().st_size>2*1024*1024:raise ValueError(tr('Editor limitato a file UTF-8 fino a 2 MB.'))
@@ -130,9 +132,8 @@ class ProjectFilesMixin:
             if '\x00' in original:raise ValueError(tr('Editor limitato a file UTF-8 fino a 2 MB.'))
         except Exception as exc:return messagebox.showerror(tr('File di progetto'),str(exc),parent=self)
         editors=getattr(self,'project_editors',{});self.project_editors=editors
-        if path in editors and editors[path].winfo_exists():editors[path].lift();return
         win=tk.Toplevel(self);editors[path]=win;win.title(relative);win.geometry('850x600')
-        text=ScrolledText(win,undo=True,font=('Menlo',12),wrap='none');text.pack(fill='both',expand=True);text.insert('1.0',original);text.edit_reset();text.edit_modified(False)
+        text=ScrolledText(win,undo=True,font=('Menlo',12),wrap='none');text.pack(fill='both',expand=True);text.insert('1.0',original);text.edit_reset();text.edit_modified(False);win.project_text=text
         stamp=path.stat().st_mtime_ns
         def save(event=None):
             nonlocal stamp
@@ -149,7 +150,7 @@ class ProjectFilesMixin:
         ttk.Button(win,text=tr('Salva'),command=save).pack(anchor='e',padx=8,pady=8)
         def save_shortcut(event):
             save();return 'break'
-        win.bind('<Command-s>',save_shortcut);win.bind('<Control-s>',save_shortcut);win.protocol('WM_DELETE_WINDOW',close);win.project_close=close;text.focus_set()
+        win.bind('<Command-s>',save_shortcut);win.bind('<Control-s>',save_shortcut);win.bind('<Command-Shift-F>',self.open_global_search);win.bind('<Control-Shift-F>',self.open_global_search);win.protocol('WM_DELETE_WINDOW',close);win.project_close=close;text.focus_set();return text
 
     def close_project_editors(self):
         for win in list(getattr(self,'project_editors',{}).values()):

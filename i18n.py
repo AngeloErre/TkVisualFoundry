@@ -568,7 +568,7 @@ EN_MESSAGES = {
   "Connetti…": "Connect…",
   "Nome componente già utilizzato.": "Component name already in use.",
   "Ciao!": "Hello!",
-  "TkVisualFoundry 1.33.1\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.33.1\nVisual Python / Tkinter designer",
+  "TkVisualFoundry 1.34\nDesigner visuale Python / Tkinter": "TkVisualFoundry 1.34\nVisual Python / Tkinter designer",
   " • Librerie → Installa dipendenze progetto dopo averlo inserito nel form": " • PIP → Prepare component packages after inserting it into the form",
   "Ctrl+Spazio: completamento.": "Ctrl+Space: completion.",
   "Errore applicazione": "Application error",
@@ -668,3 +668,5 @@ EN_MESSAGES.update({'Sì':'Yes','No':'No','Mostra riferimento':'Show baseline'})
 EN_MESSAGES.update({' • Ultima lettura riuscita: {v0}':' • Last successful read: {v0}'})
 
 EN_MESSAGES.update({'Il codice del progetto e degli eventi deve essere testo.':'Project and event code must be text.','Struttura del form non valida.':'Invalid form structure.'})
+
+EN_MESSAGES.update({'Ricerca globale': 'Global search', 'Ricerca globale…': 'Global search…', 'Cerca negli eventi e nei file Python, inclusi gli editor non salvati.': 'Search events and Python files, including unsaved editors.', 'Cerca nel progetto': 'Search project', 'Interrompi': 'Stop', 'Maiuscole/minuscole': 'Match case', 'Parola intera': 'Whole word', 'Componente / file': 'Component / file', 'Doppio clic o Invio apre la riga. Ricerca letterale; nessun file viene salvato. Limiti: 1.000 risultati, 200 file Python, 2 MiB per sorgente, 20 MiB totali.': 'Double-click or Enter opens the line. Literal search; no files are saved. Limits: 1,000 results, 200 Python files, 2 MiB per source, 20 MiB total.', 'Ricerca in corso…': 'Searching…', 'Ricerca interrotta.': 'Search stopped.', 'Progetto cambiato: ripeti la ricerca.': 'Project changed: search again.', 'Ricerca non riuscita: {v0}': 'Search failed: {v0}', ' • Risultati limitati': ' • Results limited', ' • Sorgenti escluse o limiti: {v0}': ' • Skipped sources or limits: {v0}', ' • Salva il progetto per cercare anche nei file Python.': ' • Save the project to search Python files too.', 'Risultati: {v0}': 'Results: {v0}', 'Sorgente modificata: ripeti la ricerca prima di navigare.': 'Source changed: search again before navigating.', 'Risultato non più disponibile: {v0}': 'Result no longer available: {v0}'})
