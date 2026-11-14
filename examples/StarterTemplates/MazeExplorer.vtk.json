@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Maze Explorer",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Maze Explorer",
+      "width": 740,
+      "height": 600,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "MazeCanvas",
+          "kind": "Canvas",
+          "x": 20,
+          "y": 60,
+          "width": 462,
+          "height": 462,
+          "props": {
+            "bg": "white",
+            "highlightthickness": 0,
+            "takefocus": true
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nself.MazeCanvas.focus_set()"
+          }
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 700,
+          "height": 35,
+          "props": {
+            "text": "Reach the green exit"
+          },
+          "events": {}
+        },
+        {
+          "name": "HelpLabel",
+          "kind": "Label",
+          "x": 505,
+          "y": 65,
+          "width": 215,
+          "height": 100,
+          "props": {
+            "text": "Click the maze, then use arrow keys or WASD. You can also use these buttons.",
+            "wraplength": 205
+          },
+          "events": {}
+        },
+        {
+          "name": "MoveUp",
+          "kind": "Button",
+          "x": 565,
+          "y": 200,
+          "width": 100,
+          "height": 36,
+          "props": {
+            "text": "Up"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmaze_move(self, -1, 0)"
+          }
+        },
+        {
+          "name": "MoveLeft",
+          "kind": "Button",
+          "x": 505,
+          "y": 250,
+          "width": 100,
+          "height": 36,
+          "props": {
+            "text": "Left"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmaze_move(self, 0, -1)"
+          }
+        },
+        {
+          "name": "MoveRight",
+          "kind": "Button",
+          "x": 620,
+          "y": 250,
+          "width": 100,
+          "height": 36,
+          "props": {
+            "text": "Right"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmaze_move(self, 0, 1)"
+          }
+        },
+        {
+          "name": "MoveDown",
+          "kind": "Button",
+          "x": 565,
+          "y": 300,
+          "width": 100,
+          "height": 36,
+          "props": {
+            "text": "Down"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmaze_move(self, 1, 0)"
+          }
+        },
+        {
+          "name": "NewMaze",
+          "kind": "Button",
+          "x": 505,
+          "y": 390,
+          "width": 215,
+          "height": 36,
+          "props": {
+            "text": "New maze"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmaze_reset(self)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Generate a connected maze with iterative depth-first carving.\nimport random\n\n\ndef maze_generate(rng=None):\n    rng = rng or random.Random()\n    grid = [[1] * 21 for row in range(21)]\n    grid[1][1] = 0\n    stack = [(1, 1)]\n    while stack:\n        row, column = stack[-1]\n        options = [(row + dr, column + dc) for dr, dc in ((2, 0), (-2, 0), (0, 2), (0, -2)) if 1 <= row + dr < 20 and 1 <= column + dc < 20 and grid[row + dr][column + dc]]\n        if not options:\n            stack.pop()\n            continue\n        nr, nc = rng.choice(options)\n        grid[(row + nr) // 2][(column + nc) // 2] = 0\n        grid[nr][nc] = 0\n        stack.append((nr, nc))\n    return grid\n\n\ndef maze_status(app):\n    app.StatusLabel.configure(text=f\"Moves: {app.maze_moves}\" + (\" | Exit reached!\" if app.maze_won else \" | Reach the green exit\"))\n\n\ndef maze_reset(app):\n    app.maze_grid = maze_generate()\n    app.maze_position = (1, 1)\n    app.maze_moves = 0\n    app.maze_won = False\n    canvas = app.MazeCanvas\n    canvas.delete(\"all\")\n    for row, values in enumerate(app.maze_grid):\n        for column, wall in enumerate(values):\n            color = \"#263445\" if wall else \"white\"\n            if (row, column) == (19, 19):\n                color = \"#9be2a9\"\n            canvas.create_rectangle(column*22, row*22, (column+1)*22, (row+1)*22, fill=color, outline=color)\n    canvas.create_oval(26, 26, 40, 40, fill=\"#175cd3\", outline=\"\", tags=(\"player\",))\n    maze_status(app)\n    canvas.focus_set()\n\n\ndef maze_move(app, dr, dc):\n    # Every move is one orthogonal step; walls and the outer border are solid.\n    if app.maze_won or (dr, dc) not in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n        return False\n    row, column = app.maze_position\n    nr, nc = row + dr, column + dc\n    if not 0 <= nr < 21 or not 0 <= nc < 21 or app.maze_grid[nr][nc]:\n        return False\n    app.maze_position = (nr, nc)\n    app.maze_moves += 1\n    app.maze_won = (nr, nc) == (19, 19)\n    app.MazeCanvas.coords(\"player\", nc*22+4, nr*22+4, nc*22+18, nr*22+18)\n    maze_status(app)\n    app.MazeCanvas.focus_set()\n    return True\n\n\ndef maze_key(app, event):\n    moves = {\"Up\": (-1, 0), \"Down\": (1, 0), \"Left\": (0, -1), \"Right\": (0, 1), \"w\": (-1, 0), \"s\": (1, 0), \"a\": (0, -1), \"d\": (0, 1)}\n    key = event.keysym if event.keysym in moves else event.keysym.lower()\n    if key in moves:\n        maze_move(app, *moves[key])\n        return \"break\"\n",
+  "startup": "# Click the maze to focus it, then use arrows or WASD.\nmaze_reset(self)\nself.MazeCanvas.bind(\"<KeyPress>\", lambda event: maze_key(self, event))\nself.Form1.deiconify()"
+}

@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.39
+# TkVisualFoundry 1.40
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Sesto gruppo di modelli (1.40)
+
+Aggiunti **Campo Minato**, **Labirinto**, **Agenda/Calendario** e **Slideshow PNG/GIF**: ora **24 modelli più il progetto vuoto**, con commenti in inglese e senza PIP aggiuntivi. Primo clic sicuro, labirinti con uscita raggiungibile, appuntamenti JSON e slideshow con timer gestito. PNG/GIF soltanto: JPEG/WebP non inclusi in questo modello. Collaudo Mac in attesa di “ambiente collegato”. [Guida ai modelli](docs/STARTER_TEMPLATES.md).
 
 ## Quinto gruppo di modelli (1.39)
 

@@ -1,3 +1,10 @@
+# 1.40 — Sixth starter batch
+
+- Add Minesweeper, Maze Explorer, Agenda/Calendar and PNG/GIF Slideshow.
+- Safe mine reveal, connected maze generation, month/date navigation and JSON appointments.
+- Bounded PhotoImage previews and generation-guarded slideshow callbacks.
+- Twenty-four starters and fifteen new regressions; native Mac checks still pending.
+
 # 1.39 — Fifth starter batch
 
 - Add Contact Book, Expense Manager, Home/Stock Inventory and CD/DVD/Game Archive.

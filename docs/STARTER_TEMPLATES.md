@@ -1,10 +1,10 @@
-# Starter templates / Modelli iniziali — 1.39
+# Starter templates / Modelli iniziali — 1.40
 
 ## English
 
 Choose **File → New project** or the toolbar **New** button. Select **Blank project** or a starter in the new chooser, read its description and dependencies, then press **Create project**. Cancel closes the chooser without replacing the current project. If the current project has unsaved edits, the normal save/discard/cancel guard runs before replacement. Each starter is a fresh copy with no project path and is marked unsaved: choose Save as to store your own project. Built-in JSON files are never overwritten by creating or editing a copy.
 
-The twenty starters below are the first five batches from the proposed 32-project collection. Their application labels and code comments are in English; the chooser is Italian/English. Every visible control is in the project model and can be edited in the designer. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
+The twenty-four starters below are the first six batches from the proposed 32-project collection. Their application labels and code comments are in English; the chooser is Italian/English. Every visible control is in the project model and can be edited in the designer. Open its events, startup code and global/import code to inspect or modify behavior. No project code is executed while browsing templates.
 
 | Starter | Included behavior | Where to customize |
 | --- | --- | --- |
@@ -28,8 +28,12 @@ The twenty starters below are the first five batches from the proposed 32-projec
 | Expense Manager | Income/expenses, ISO dates/categories, Decimal balances per currency, JSON | `expense_amount`, `expense_totals`, archive helpers |
 | Home/Stock Inventory | Unique codes, whole quantities, EUR cost, low-stock thresholds, +/-1, JSON | `inventory_adjust`, `inventory_summary` |
 | CD/DVD/Game Archive | Type, artist/platform, year, ownership/borrower, JSON | Media schema and loan/year validator |
+| Minesweeper | 9×9 cells, 10 mines, safe first click, flags, flood fill, win/loss/restart | `mines_place`, `mines_reveal`, designer cell events |
+| Maze Explorer | Connected 21×21 maze, arrows/WASD/buttons, move count, exit | `maze_generate`, `maze_move`, Canvas bindings |
+| Agenda and Calendar | Monday-first month navigation, dates/times/events, search/CRUD, JSON | Calendar helpers, field schema and archive functions |
+| PNG/GIF Slideshow | Folder scan, previous/next, play/pause, interval, bounded preview | `slide_show`, callback generation and scan limits |
 
-All twenty use Python/Tkinter's standard library and require no additional PIP packages. Run with F5 using the selected compatible Python. They can be exported/deployed using the existing project workflow; native builds still require their target platform/toolchain. The original files are in `examples/StarterTemplates/`, included in both source installers and the Mac standalone build's example resources.
+All twenty-four use Python/Tkinter's standard library and require no additional PIP packages. Run with F5 using the selected compatible Python. They can be exported/deployed using the existing project workflow; native builds still require their target platform/toolchain. The original files are in `examples/StarterTemplates/`, included in both source installers and the Mac standalone build's example resources.
 
 ### Second-batch details
 
@@ -41,21 +45,21 @@ Mini-Paint draws vector objects on Canvas; the eraser paints white rather than d
 
 The dice starter provides immediate rolls, not animated dice or a complete RPG rules engine. The text converter creates Markdown **bullet lists**, not a full Markdown parser. Counts update after keyboard edits and on focus changes. The sticky-note starter is one note window, uses explicit file saves and asks before closing without saving; it does not autosave or maintain a desktop-wide multi-note database. The quiz uses a short editable demonstration bank, not a complete assessment system.
 
-Sixty-five automated regressions cover compilation/no extra requirements, independent copies, comment presence and no execution on load; quiz scoring/restart, dice validation/totals, Unicode conversions, real temporary note open/save/cancel and new-project state handling. All 35 example project files validate/compile. Interactive graphical acceptance remains pending.
+Eighty automated regressions cover compilation/no extra requirements, independent copies, comment presence and no execution on load; quiz scoring/restart, dice validation/totals, Unicode conversions, real temporary note open/save/cancel and new-project state handling. All 39 example project files validate/compile. Interactive graphical acceptance remains pending.
 
 ### Next batches
 
-The other requested projects are not yet shown in the chooser. The remaining twelve requested starters include archives, calendars, scientific tools, multimedia apps and arcade games. Arcade games, neural-network driving, databases/media archives and cloud/LLM study agents require separate logic, assets or dependency setup and will be added as complete, documented projects rather than empty placeholders.
+The other requested projects are not yet shown in the chooser. The remaining eight requested starters are neural-network driving, Space Invaders, Pacman, Super Mario, Tetris, an LLM study agent, QR/barcode tools and a multimedia soundboard. Arcade games, neural-network driving, databases/media archives and cloud/LLM study agents require separate logic, assets or dependency setup and will be added as complete, documented projects rather than empty placeholders.
 
 ## Italiano
 
-Da **File → Nuovo progetto** o dal pulsante **Nuovo** scegli un progetto vuoto oppure uno dei venti modelli. Il selettore mostra descrizione e dipendenze. **Crea progetto** apre una copia indipendente ancora da salvare; Annulla lascia il progetto corrente. La normale richiesta di salvare/scartare/annullare protegge le modifiche già presenti. Modificando la copia non si cambia il modello integrato.
+Da **File → Nuovo progetto** o dal pulsante **Nuovo** scegli un progetto vuoto oppure uno dei ventiquattro modelli. Il selettore mostra descrizione e dipendenze. **Crea progetto** apre una copia indipendente ancora da salvare; Annulla lascia il progetto corrente. La normale richiesta di salvare/scartare/annullare protegge le modifiche già presenti. Modificando la copia non si cambia il modello integrato.
 
 Primo gruppo: **Quiz**, **Simulatore di dadi**, **Convertitore di testi** e **Post-it digitali**. Con il secondo gruppo sono i primi otto della raccolta proposta di 32 progetti. I commenti del codice e i testi delle applicazioni dimostrative sono in inglese; il selettore segue la lingua dell’IDE. Tutti i controlli si modificano nel designer e la logica si trova negli eventi, nel codice di avvio e negli import/funzioni globali.
 
 Non occorrono pacchetti PIP aggiuntivi. Avvia con F5 e salva la tua copia prima di usare il normale flusso di deploy. Per il quiz modifica la lista delle domande nel codice di avvio. I dadi permettono D6/D20/D100, quantità e bonus; non includono animazioni. Il convertitore offre maiuscolo/minuscolo, camelCase e liste Markdown, con conteggi. Il post-it è una nota singola con colori e salvataggio manuale di file: non salva automaticamente e chiede conferma prima di chiudere senza salvare.
 
-Sessantacinque test automatici dedicati ai modelli e compilazione/validazione di tutti i 35 esempi. Resta il collaudo grafico. Gli altri 12 modelli non sono ancora nel selettore: saranno sviluppati nei gruppi successivi, senza voci vuote o funzionalità simulate.
+Ottanta test automatici dedicati ai modelli e compilazione/validazione di tutti i 39 esempi. Resta il collaudo grafico. Gli altri 8 modelli non sono ancora nel selettore: saranno sviluppati nei gruppi successivi, senza voci vuote o funzionalità simulate.
 
 ### Secondo gruppo (1.36)
 
@@ -107,3 +111,16 @@ The last three use versioned JSON archives, capped at 500 records / 2 MiB, with 
 ### Quinto gruppo (1.39)
 
 Aggiunti **Rubrica contatti**, **Gestionale spese**, **Inventario casa/magazzino** e **Archivio CD/DVD/giochi**: venti modelli più il progetto vuoto. Tutti con commenti in inglese, senza PIP aggiuntivi. La rubrica salva esplicitamente in un database SQLite dedicato e può mostrare foto PNG/GIF referenziate sul disco; non modifica database con schemi estranei. Gli altri tre salvano JSON. Le spese usano importi decimali e totali separati per valuta; l’inventario segnala scorte basse e rifiuta stock negativi/codici duplicati; l’archivio multimediale controlla anno e nominativo del prestito. I totali riguardano l’intera raccolta, anche quando la lista è filtrata. **Add/Update applica i campi, Save conserva la raccolta**: niente autosave o servizi esterni. Le foto non sono incorporate; JPEG/WebP non sono previsti. Collaudo nativo Mac ancora sospeso.
+
+## Sixth batch (1.40)
+
+- **Minesweeper:** fixed 9×9 board with ten mines. The first unflagged reveal and its neighbors are excluded from mine placement. Left click reveals; right click, middle click or Control-click toggles a flag, up to ten. Empty areas reveal iteratively. Opening all 71 safe cells wins; flags alone do not win. Restart clears all state. Native platform mouse/Control-click interaction remains to be checked.
+- **Maze Explorer:** iterative depth-first carving connects 100 rooms on a 21×21 wall/passage grid. Move the blue player to the green exit with arrows, WASD or buttons. Click the Canvas to focus keyboard input. Walls, diagonal moves and moves after completion are blocked. New maze resets position and move count. No enemies, scoring timer or externally loaded maps are included.
+- **Agenda and Calendar:** Monday-first monthly calendar with a stable 42-cell view. Previous/next navigate across years; a day click starts a new draft and fills its date/09:00–10:00 defaults while filtering the event list by date. Add/Update applies fields; Save JSON persists the collection. Generic Add/Update clears the list search to show all records. Event dates are ISO YYYY-MM-DD, with same-day HH:MM end after start; overlaps are allowed. Up to 500 records / 2 MiB; atomic versioned JSON saves and replacement/close confirmations. No recurring/multi-day events, reminders, notifications or calendar service sync.
+- **PNG/GIF Slideshow:** nonrecursive local folder browsing, sorted selected files, previous/next and 1–10-second automatic playback. Manual stepping pauses playback. Pause/folder replacement/close cancel the owned callback and invalidate stale generations. Supported input is PNG or GIF **first frame only**, not JPEG/WebP or animated playback. Preview limits: 500 images from at most 5,000 directory entries, 2 MiB per file, at most 4096 per side and 8 million pixels. Symlinks are excluded; bad/missing files show a message instead of a stale image. Thumbnails use integer subsampling, not animated transitions or arbitrary resampling. Files are not copied into the project or modified.
+
+Fifteen new regressions verify 80 safe first-mine placements, flags/flood fill/win/loss, 25 connected maze generations with reachable exits and an actual logical path to completion, calendar leap/year transitions and JSON round trips, slideshow file scanning/bounds and mocked Tk image lifetime/timer lifecycle/cancel paths. All 39 examples validate/compile on remote Linux. Native Mac rendering and pointer/keyboard acceptance remain deferred until **ambiente collegato**.
+
+### Sesto gruppo (1.40)
+
+Aggiunti **Campo Minato**, **Labirinto**, **Agenda/Calendario** e **Slideshow PNG/GIF**: ventiquattro modelli più il progetto vuoto, tutti commentati in inglese e senza PIP aggiuntivi. Campo Minato protegge il primo clic e usa bandierine; il labirinto ha un’uscita raggiungibile e controlli da tastiera/pulsanti. L’agenda naviga i mesi e salva appuntamenti JSON applicati con Add/Update; non invia promemoria. Lo slideshow gestisce cartella, precedente/successiva e timer, ma supporta soltanto PNG/GIF statici entro i limiti indicati, non JPEG/WebP. File immagine non copiati né modificati. Restano otto modelli della lista iniziale. Le prove native sul Mac attendono **ambiente collegato**.

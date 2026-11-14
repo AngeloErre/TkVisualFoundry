@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.40
+
+Linux remoto, Python 3.15.2: 375 test superati per lingua, 11 grafici saltati. Quindici nuovi test: 80 posizionamenti mine, bandiere/flood fill/vittoria/sconfitta, 25 labirinti connessi e percorso, mesi/bisestili/JSON agenda, limiti foto e callback slideshow simulati. Tutti i 39 esempi validati e compilati. Nessun collaudo nativo Mac: attende “ambiente collegato”.
+
 # TkVisualFoundry 1.39
 
 Linux remoto, Python 3.15.2: 360 test superati per lingua, 11 grafici saltati. Quattordici regressioni su importi/valute, stock/soglie/codici, prestiti/anno, JSON atomico, SQLite reale con query parametrizzate/guardie schema/rollback e anteprima foto simulata con limiti. Tutti i 35 esempi validati/compilati. Nessun collaudo Mac o anteprima foto nativa: attendono “ambiente collegato”.

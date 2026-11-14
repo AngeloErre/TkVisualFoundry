@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "PNG GIF Slideshow",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "PNG GIF Slideshow",
+      "width": 820,
+      "height": 650,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "OpenFolder",
+          "kind": "Button",
+          "x": 20,
+          "y": 15,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Open folder…"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nslide_open(self)"
+          }
+        },
+        {
+          "name": "PreviousImage",
+          "kind": "Button",
+          "x": 210,
+          "y": 15,
+          "width": 150,
+          "height": 36,
+          "props": {
+            "text": "Previous"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nslide_step(self, -1)"
+          }
+        },
+        {
+          "name": "NextImage",
+          "kind": "Button",
+          "x": 380,
+          "y": 15,
+          "width": 150,
+          "height": 36,
+          "props": {
+            "text": "Next"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nslide_step(self, 1)"
+          }
+        },
+        {
+          "name": "PlayButton",
+          "kind": "Button",
+          "x": 550,
+          "y": 15,
+          "width": 250,
+          "height": 36,
+          "props": {
+            "text": "Play"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nslide_toggle(self)"
+          }
+        },
+        {
+          "name": "ImageLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 70,
+          "width": 780,
+          "height": 430,
+          "props": {
+            "text": "Choose a folder with PNG/GIF images",
+            "bg": "#e6edf7",
+            "wraplength": 740
+          },
+          "events": {}
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 515,
+          "width": 780,
+          "height": 35,
+          "props": {
+            "text": "No folder selected"
+          },
+          "events": {}
+        },
+        {
+          "name": "IntervalScale",
+          "kind": "Scale",
+          "x": 20,
+          "y": 565,
+          "width": 280,
+          "height": 55,
+          "props": {
+            "from_": 1,
+            "to": 10,
+            "orient": "horizontal",
+            "label": "Seconds per image"
+          },
+          "events": {}
+        },
+        {
+          "name": "HelpLabel",
+          "kind": "Label",
+          "x": 320,
+          "y": 565,
+          "width": 480,
+          "height": 60,
+          "props": {
+            "text": "PNG/GIF first frame only. Up to 500 files / 5000 entries. 2 MiB, 4096 pixels per side, 8 million pixels per image.",
+            "wraplength": 470
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Browse local PNG/GIF files using Tk PhotoImage, without Pillow.\nimport os\nimport struct\nfrom pathlib import Path\nimport tkinter as tk\n\n\ndef slide_scan(folder):\n    # Scan at most 5000 entries and keep at most 500 regular image files.\n    files = []\n    with os.scandir(folder) as entries:\n        for count, entry in enumerate(entries):\n            if count >= 5000:\n                break\n            if entry.is_file(follow_symlinks=False) and Path(entry.name).suffix.lower() in (\".png\", \".gif\"):\n                files.append(Path(entry.path))\n                if len(files) >= 500:\n                    break\n    return sorted(files, key=lambda path: (path.name.casefold(), path.name))\n\n\ndef slide_dimensions(path):\n    # Reject oversized images before asking Tk to decode them.\n    if path.stat().st_size > 2 * 1024 * 1024:\n        raise ValueError(\"Image exceeds 2 MiB\")\n    with path.open(\"rb\") as stream:\n        header = stream.read(24)\n    if header.startswith(b\"\\x89PNG\\r\\n\\x1a\\n\") and len(header) >= 24:\n        width, height = struct.unpack(\">II\", header[16:24])\n    elif header[:6] in (b\"GIF87a\", b\"GIF89a\") and len(header) >= 10:\n        width, height = struct.unpack(\"<HH\", header[6:10])\n    else:\n        raise ValueError(\"Not a supported PNG/GIF image\")\n    if not 0 < width <= 4096 or not 0 < height <= 4096 or width * height > 8000000:\n        raise ValueError(\"Image dimensions exceed the preview limit\")\n    return width, height\n\n\ndef slide_show(app):\n    app.slide_photo = None\n    app.ImageLabel.configure(image=\"\", text=\"No image\")\n    if not app.slide_files:\n        return\n    path = app.slide_files[app.slide_index]\n    try:\n        width, height = slide_dimensions(path)\n        image = tk.PhotoImage(master=app.Form1, file=str(path))\n        limit_w = max(1, app.ImageLabel.winfo_width() - 10)\n        limit_h = max(1, app.ImageLabel.winfo_height() - 10)\n        factor = max(1, (width + limit_w - 1) // limit_w, (height + limit_h - 1) // limit_h)\n        app.slide_photo = image.subsample(factor)\n        app.ImageLabel.configure(image=app.slide_photo, text=\"\")\n        app.StatusLabel.configure(text=f\"{app.slide_index + 1} / {len(app.slide_files)} | {path.name}\")\n    except (OSError, ValueError, tk.TclError) as error:\n        app.ImageLabel.configure(text=\"Cannot display this image\")\n        app.StatusLabel.configure(text=path.name + \": \" + str(error))\n\n\ndef slide_pause(app):\n    # A generation counter also invalidates callbacks already queued before pause.\n    app.slide_generation += 1\n    app.slide_playing = False\n    if app.slide_job is not None:\n        try:\n            app.root.after_cancel(app.slide_job)\n        except tk.TclError:\n            pass\n    app.slide_job = None\n    app.PlayButton.configure(text=\"Play\")\n\n\ndef slide_open(app):\n    folder = filedialog.askdirectory(parent=app.Form1)\n    if not folder:\n        return\n    try:\n        files = slide_scan(folder)\n        if not files:\n            raise ValueError(\"No PNG/GIF files found within the scan limit\")\n    except (OSError, ValueError) as error:\n        messagebox.showinfo(\"Open folder\", str(error), parent=app.Form1)\n        return\n    slide_pause(app)\n    app.slide_files = files\n    app.slide_index = 0\n    slide_show(app)\n\n\ndef slide_step(app, step):\n    # Manual navigation pauses the automatic slideshow.\n    slide_pause(app)\n    if app.slide_files:\n        app.slide_index = (app.slide_index + step) % len(app.slide_files)\n        slide_show(app)\n\n\ndef slide_tick(app, generation):\n    if generation != app.slide_generation or not app.slide_playing:\n        return\n    app.slide_job = None\n    app.slide_index = (app.slide_index + 1) % len(app.slide_files)\n    slide_show(app)\n    interval = max(1, min(10, int(app.IntervalScale.get())))\n    app.slide_job = app.root.after(interval * 1000, lambda: slide_tick(app, generation))\n\n\ndef slide_toggle(app):\n    if app.slide_playing:\n        slide_pause(app)\n    elif app.slide_files:\n        slide_pause(app)\n        app.slide_playing = True\n        app.PlayButton.configure(text=\"Pause\")\n        generation = app.slide_generation\n        interval = max(1, min(10, int(app.IntervalScale.get())))\n        app.slide_job = app.root.after(interval * 1000, lambda: slide_tick(app, generation))\n\n\ndef slide_close(app):\n    slide_pause(app)\n    app.root.destroy()\n",
+  "startup": "# Nothing is read until the user selects a folder.\nself.slide_files = []\nself.slide_index = 0\nself.slide_photo = None\nself.slide_job = None\nself.slide_playing = False\nself.slide_generation = 0\nself.IntervalScale.set(3)\nself.Form1.protocol(\"WM_DELETE_WINDOW\", lambda: slide_close(self))\nself.Form1.deiconify()"
+}

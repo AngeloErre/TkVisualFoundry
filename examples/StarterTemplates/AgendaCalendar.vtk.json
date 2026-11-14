@@ -1,0 +1,1024 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Agenda and Calendar",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Agenda and Calendar",
+      "width": 980,
+      "height": 710,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "FilterLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "text": "Search"
+          },
+          "events": {}
+        },
+        {
+          "name": "FilterEntry",
+          "kind": "Entry",
+          "x": 120,
+          "y": 15,
+          "width": 300,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "RecordList",
+          "kind": "Listbox",
+          "x": 20,
+          "y": 405,
+          "width": 400,
+          "height": 155,
+          "props": {
+            "exportselection": false,
+            "font": "Helvetica 12"
+          },
+          "events": {}
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 650,
+          "width": 940,
+          "height": 40,
+          "props": {
+            "text": "Save manually to keep changes",
+            "wraplength": 920
+          },
+          "events": {}
+        },
+        {
+          "name": "Action0",
+          "kind": "Button",
+          "x": 20,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "New"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_clear(self)"
+          }
+        },
+        {
+          "name": "Action1",
+          "kind": "Button",
+          "x": 180,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Add"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_store(self)"
+          }
+        },
+        {
+          "name": "Action2",
+          "kind": "Button",
+          "x": 340,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Update"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_store(self, True)"
+          }
+        },
+        {
+          "name": "Action3",
+          "kind": "Button",
+          "x": 500,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Delete"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_delete(self)"
+          }
+        },
+        {
+          "name": "Action4",
+          "kind": "Button",
+          "x": 660,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Save JSON…"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_save(self)"
+          }
+        },
+        {
+          "name": "Action5",
+          "kind": "Button",
+          "x": 820,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Open JSON…"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_open(self)"
+          }
+        },
+        {
+          "name": "InstructionLabel",
+          "kind": "Label",
+          "x": 445,
+          "y": 15,
+          "width": 510,
+          "height": 38,
+          "props": {
+            "text": "Edit fields → Add or Update → Save JSON. Field drafts are not saved until applied.",
+            "wraplength": 500
+          },
+          "events": {}
+        },
+        {
+          "name": "FieldLabel0",
+          "kind": "Label",
+          "x": 445,
+          "y": 70,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Date (YYYY-MM-DD) *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field0",
+          "kind": "Entry",
+          "x": 445,
+          "y": 96,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel1",
+          "kind": "Label",
+          "x": 445,
+          "y": 135,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Start (HH:MM) *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field1",
+          "kind": "Entry",
+          "x": 445,
+          "y": 161,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel2",
+          "kind": "Label",
+          "x": 445,
+          "y": 200,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "End (HH:MM) *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field2",
+          "kind": "Entry",
+          "x": 445,
+          "y": 226,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel3",
+          "kind": "Label",
+          "x": 445,
+          "y": 265,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Event title *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field3",
+          "kind": "Entry",
+          "x": 445,
+          "y": 291,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel4",
+          "kind": "Label",
+          "x": 445,
+          "y": 330,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Place"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field4",
+          "kind": "Entry",
+          "x": 445,
+          "y": 356,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel5",
+          "kind": "Label",
+          "x": 445,
+          "y": 395,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Notes"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field5",
+          "kind": "Text",
+          "x": 445,
+          "y": 421,
+          "width": 510,
+          "height": 90,
+          "props": {
+            "wrap": "word"
+          },
+          "events": {}
+        },
+        {
+          "name": "PreviousMonth",
+          "kind": "Button",
+          "x": 20,
+          "y": 65,
+          "width": 60,
+          "height": 36,
+          "props": {
+            "text": "<"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_shift(self, -1)"
+          }
+        },
+        {
+          "name": "NextMonth",
+          "kind": "Button",
+          "x": 360,
+          "y": 65,
+          "width": 60,
+          "height": 36,
+          "props": {
+            "text": ">"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_shift(self, 1)"
+          }
+        },
+        {
+          "name": "MonthLabel",
+          "kind": "Label",
+          "x": 85,
+          "y": 65,
+          "width": 270,
+          "height": 30,
+          "props": {
+            "text": "Month",
+            "font": "Helvetica 16"
+          },
+          "events": {}
+        },
+        {
+          "name": "SelectedDayLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 375,
+          "width": 400,
+          "height": 25,
+          "props": {
+            "text": "Select a calendar day"
+          },
+          "events": {}
+        },
+        {
+          "name": "Weekday0",
+          "kind": "Label",
+          "x": 20,
+          "y": 105,
+          "width": 50,
+          "height": 25,
+          "props": {
+            "text": "Mon"
+          },
+          "events": {}
+        },
+        {
+          "name": "Weekday1",
+          "kind": "Label",
+          "x": 76,
+          "y": 105,
+          "width": 50,
+          "height": 25,
+          "props": {
+            "text": "Tue"
+          },
+          "events": {}
+        },
+        {
+          "name": "Weekday2",
+          "kind": "Label",
+          "x": 132,
+          "y": 105,
+          "width": 50,
+          "height": 25,
+          "props": {
+            "text": "Wed"
+          },
+          "events": {}
+        },
+        {
+          "name": "Weekday3",
+          "kind": "Label",
+          "x": 188,
+          "y": 105,
+          "width": 50,
+          "height": 25,
+          "props": {
+            "text": "Thu"
+          },
+          "events": {}
+        },
+        {
+          "name": "Weekday4",
+          "kind": "Label",
+          "x": 244,
+          "y": 105,
+          "width": 50,
+          "height": 25,
+          "props": {
+            "text": "Fri"
+          },
+          "events": {}
+        },
+        {
+          "name": "Weekday5",
+          "kind": "Label",
+          "x": 300,
+          "y": 105,
+          "width": 50,
+          "height": 25,
+          "props": {
+            "text": "Sat"
+          },
+          "events": {}
+        },
+        {
+          "name": "Weekday6",
+          "kind": "Label",
+          "x": 356,
+          "y": 105,
+          "width": 50,
+          "height": 25,
+          "props": {
+            "text": "Sun"
+          },
+          "events": {}
+        },
+        {
+          "name": "Day0",
+          "kind": "Button",
+          "x": 20,
+          "y": 135,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 0)"
+          }
+        },
+        {
+          "name": "Day1",
+          "kind": "Button",
+          "x": 76,
+          "y": 135,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 1)"
+          }
+        },
+        {
+          "name": "Day2",
+          "kind": "Button",
+          "x": 132,
+          "y": 135,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 2)"
+          }
+        },
+        {
+          "name": "Day3",
+          "kind": "Button",
+          "x": 188,
+          "y": 135,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 3)"
+          }
+        },
+        {
+          "name": "Day4",
+          "kind": "Button",
+          "x": 244,
+          "y": 135,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 4)"
+          }
+        },
+        {
+          "name": "Day5",
+          "kind": "Button",
+          "x": 300,
+          "y": 135,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 5)"
+          }
+        },
+        {
+          "name": "Day6",
+          "kind": "Button",
+          "x": 356,
+          "y": 135,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 6)"
+          }
+        },
+        {
+          "name": "Day7",
+          "kind": "Button",
+          "x": 20,
+          "y": 174,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 7)"
+          }
+        },
+        {
+          "name": "Day8",
+          "kind": "Button",
+          "x": 76,
+          "y": 174,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 8)"
+          }
+        },
+        {
+          "name": "Day9",
+          "kind": "Button",
+          "x": 132,
+          "y": 174,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 9)"
+          }
+        },
+        {
+          "name": "Day10",
+          "kind": "Button",
+          "x": 188,
+          "y": 174,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 10)"
+          }
+        },
+        {
+          "name": "Day11",
+          "kind": "Button",
+          "x": 244,
+          "y": 174,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 11)"
+          }
+        },
+        {
+          "name": "Day12",
+          "kind": "Button",
+          "x": 300,
+          "y": 174,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 12)"
+          }
+        },
+        {
+          "name": "Day13",
+          "kind": "Button",
+          "x": 356,
+          "y": 174,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 13)"
+          }
+        },
+        {
+          "name": "Day14",
+          "kind": "Button",
+          "x": 20,
+          "y": 213,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 14)"
+          }
+        },
+        {
+          "name": "Day15",
+          "kind": "Button",
+          "x": 76,
+          "y": 213,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 15)"
+          }
+        },
+        {
+          "name": "Day16",
+          "kind": "Button",
+          "x": 132,
+          "y": 213,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 16)"
+          }
+        },
+        {
+          "name": "Day17",
+          "kind": "Button",
+          "x": 188,
+          "y": 213,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 17)"
+          }
+        },
+        {
+          "name": "Day18",
+          "kind": "Button",
+          "x": 244,
+          "y": 213,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 18)"
+          }
+        },
+        {
+          "name": "Day19",
+          "kind": "Button",
+          "x": 300,
+          "y": 213,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 19)"
+          }
+        },
+        {
+          "name": "Day20",
+          "kind": "Button",
+          "x": 356,
+          "y": 213,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 20)"
+          }
+        },
+        {
+          "name": "Day21",
+          "kind": "Button",
+          "x": 20,
+          "y": 252,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 21)"
+          }
+        },
+        {
+          "name": "Day22",
+          "kind": "Button",
+          "x": 76,
+          "y": 252,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 22)"
+          }
+        },
+        {
+          "name": "Day23",
+          "kind": "Button",
+          "x": 132,
+          "y": 252,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 23)"
+          }
+        },
+        {
+          "name": "Day24",
+          "kind": "Button",
+          "x": 188,
+          "y": 252,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 24)"
+          }
+        },
+        {
+          "name": "Day25",
+          "kind": "Button",
+          "x": 244,
+          "y": 252,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 25)"
+          }
+        },
+        {
+          "name": "Day26",
+          "kind": "Button",
+          "x": 300,
+          "y": 252,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 26)"
+          }
+        },
+        {
+          "name": "Day27",
+          "kind": "Button",
+          "x": 356,
+          "y": 252,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 27)"
+          }
+        },
+        {
+          "name": "Day28",
+          "kind": "Button",
+          "x": 20,
+          "y": 291,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 28)"
+          }
+        },
+        {
+          "name": "Day29",
+          "kind": "Button",
+          "x": 76,
+          "y": 291,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 29)"
+          }
+        },
+        {
+          "name": "Day30",
+          "kind": "Button",
+          "x": 132,
+          "y": 291,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 30)"
+          }
+        },
+        {
+          "name": "Day31",
+          "kind": "Button",
+          "x": 188,
+          "y": 291,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 31)"
+          }
+        },
+        {
+          "name": "Day32",
+          "kind": "Button",
+          "x": 244,
+          "y": 291,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 32)"
+          }
+        },
+        {
+          "name": "Day33",
+          "kind": "Button",
+          "x": 300,
+          "y": 291,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 33)"
+          }
+        },
+        {
+          "name": "Day34",
+          "kind": "Button",
+          "x": 356,
+          "y": 291,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 34)"
+          }
+        },
+        {
+          "name": "Day35",
+          "kind": "Button",
+          "x": 20,
+          "y": 330,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 35)"
+          }
+        },
+        {
+          "name": "Day36",
+          "kind": "Button",
+          "x": 76,
+          "y": 330,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 36)"
+          }
+        },
+        {
+          "name": "Day37",
+          "kind": "Button",
+          "x": 132,
+          "y": 330,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 37)"
+          }
+        },
+        {
+          "name": "Day38",
+          "kind": "Button",
+          "x": 188,
+          "y": 330,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 38)"
+          }
+        },
+        {
+          "name": "Day39",
+          "kind": "Button",
+          "x": 244,
+          "y": 330,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 39)"
+          }
+        },
+        {
+          "name": "Day40",
+          "kind": "Button",
+          "x": 300,
+          "y": 330,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 40)"
+          }
+        },
+        {
+          "name": "Day41",
+          "kind": "Button",
+          "x": 356,
+          "y": 330,
+          "width": 50,
+          "height": 34,
+          "props": {
+            "text": ""
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nagenda_pick(self, 41)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# A local month calendar with explicit versioned JSON persistence.\nimport calendar\nimport datetime\nARCHIVE_KIND = \"agenda\"\nARCHIVE_FIELDS = [('date', 'Date (YYYY-MM-DD)', 'line', True, 10, []), ('start', 'Start (HH:MM)', 'line', True, 5, []), ('end', 'End (HH:MM)', 'line', True, 5, []), ('title', 'Event title', 'line', True, 200, []), ('place', 'Place', 'line', False, 160, []), ('notes', 'Notes', 'text', False, 10000, [])]\n\n\ndef agenda_minutes(value):\n    if re.fullmatch(r\"[0-9]{2}:[0-9]{2}\", value) is None:\n        raise ValueError(\"Use HH:MM times\")\n    hour, minute = map(int, value.split(\":\"))\n    if not 0 <= hour <= 23 or not 0 <= minute <= 59:\n        raise ValueError(\"Invalid time\")\n    return hour * 60 + minute\n\n\ndef archive_extra_validate(records):\n    for record in records:\n        if datetime.date.fromisoformat(record[\"date\"]).isoformat() != record[\"date\"]:\n            raise ValueError(\"Use YYYY-MM-DD dates\")\n        if agenda_minutes(record[\"start\"]) >= agenda_minutes(record[\"end\"]):\n            raise ValueError(\"End must be after start on the same day\")\n\n\ndef archive_sort_key(record):\n    return (record[\"date\"], record[\"start\"], record[\"title\"].casefold())\n\n\ndef archive_row_label(record):\n    return record[\"date\"] + \" \" + record[\"start\"] + \" \" + record[\"title\"][:28]\n\n\ndef agenda_month_cells(year, month):\n    # Monday-first weeks are padded to six rows for stable widget positions.\n    weeks = calendar.Calendar(firstweekday=0).monthdayscalendar(year, month)\n    cells = [day for week in weeks for day in week]\n    return cells + [0] * (42 - len(cells))\n\n\ndef agenda_draw(app):\n    app.calendar_cells = agenda_month_cells(app.calendar_year, app.calendar_month)\n    app.MonthLabel.configure(text=f\"{app.calendar_year:04d}-{app.calendar_month:02d}\")\n    for index, day in enumerate(app.calendar_cells):\n        selected = bool(day and app.calendar_day == datetime.date(app.calendar_year, app.calendar_month, day).isoformat())\n        getattr(app, \"Day\" + str(index)).configure(text=str(day) if day else \"\", state=\"normal\" if day else \"disabled\", bg=\"#cbe2ff\" if selected else \"#f0f0f0\")\n    app.SelectedDayLabel.configure(text=\"Calendar selection: \" + app.calendar_day)\n\n\ndef agenda_pick(app, index):\n    day = app.calendar_cells[index]\n    if not day:\n        return\n    app.calendar_day = datetime.date(app.calendar_year, app.calendar_month, day).isoformat()\n    # A day click starts a new draft and filters the list to that date.\n    archive_clear(app)\n    for field, value in ((app.Field0, app.calendar_day), (app.Field1, \"09:00\"), (app.Field2, \"10:00\")):\n        field.delete(0, \"end\")\n        field.insert(0, value)\n    app.FilterEntry.delete(0, \"end\")\n    app.FilterEntry.insert(0, app.calendar_day)\n    archive_render(app)\n\n\ndef agenda_shift(app, change):\n    serial = app.calendar_year * 12 + app.calendar_month - 1 + change\n    year, month = divmod(serial, 12)\n    if not 1 <= year <= 9999:\n        return\n    app.calendar_year, app.calendar_month = year, month + 1\n    app.calendar_day = datetime.date(year, month + 1, 1).isoformat()\n    agenda_draw(app)\n    agenda_pick(app, app.calendar_cells.index(1))\n\n\n# Generic archive helpers are embedded in each standalone starter.\nimport json\nimport os\nimport re\nimport tempfile\nimport uuid\nfrom pathlib import Path\n\n\ndef archive_validate_records(records):\n    # Validate every record before changing the visible collection.\n    if not isinstance(records, list) or len(records) > 500:\n        raise ValueError(\"Use a list of up to 500 records\")\n    result, identities = [], set()\n    for record in records:\n        if not isinstance(record, dict) or not isinstance(record.get(\"id\"), str) or not 1 <= len(record[\"id\"]) <= 80 or record[\"id\"] in identities:\n            raise ValueError(\"Records need unique nonempty IDs\")\n        clean = {\"id\": record[\"id\"]}\n        identities.add(record[\"id\"])\n        for key, label, kind, required, limit, choices in ARCHIVE_FIELDS:\n            value = record.get(key)\n            if not isinstance(value, str) or len(value) > limit or (required and not value.strip()):\n                raise ValueError(\"Invalid field: \" + label)\n            value = value.strip()\n            if choices and value not in choices:\n                raise ValueError(\"Choose a valid \" + label)\n            clean[key] = value\n        result.append(clean)\n    archive_extra_validate(result)\n    return sorted(result, key=archive_sort_key)\n\n\ndef archive_render(app):\n    query = app.FilterEntry.get().casefold().strip()\n    app.RecordList.delete(0, \"end\")\n    app.archive_visible = []\n    for record in app.archive_records:\n        if query and not any(query in record[key].casefold() for key, *_ in ARCHIVE_FIELDS):\n            continue\n        app.archive_visible.append(record[\"id\"])\n        app.RecordList.insert(\"end\", archive_row_label(record))\n    if app.archive_selected not in app.archive_visible:\n        app.archive_selected = None\n    elif app.archive_selected is not None:\n        app.RecordList.selection_set(app.archive_visible.index(app.archive_selected))\n    app.StatusLabel.configure(text=f\"{len(app.archive_visible)} shown / {len(app.archive_records)} records | Save JSON manually to keep changes\")\n\n\ndef archive_clear(app):\n    # Clear the editor without deleting any stored record.\n    app.archive_selected = None\n    app.RecordList.selection_clear(0, \"end\")\n    for index, (key, label, kind, required, limit, choices) in enumerate(ARCHIVE_FIELDS):\n        field = getattr(app, \"Field\" + str(index))\n        if kind == \"text\":\n            field.delete(\"1.0\", \"end\")\n        elif kind == \"choice\":\n            field.set(choices[0])\n        else:\n            field.delete(0, \"end\")\n    app.StatusLabel.configure(text=\"New record: fill the fields and press Add\")\n\n\ndef archive_select(app):\n    selection = app.RecordList.curselection()\n    if not selection or selection[0] >= len(app.archive_visible):\n        return\n    identity = app.archive_visible[selection[0]]\n    record = next((r for r in app.archive_records if r[\"id\"] == identity), None)\n    if record is None:\n        return\n    app.archive_selected = identity\n    for index, (key, label, kind, required, limit, choices) in enumerate(ARCHIVE_FIELDS):\n        field = getattr(app, \"Field\" + str(index))\n        if kind == \"text\":\n            field.delete(\"1.0\", \"end\")\n            field.insert(\"1.0\", record[key])\n        elif kind == \"choice\":\n            field.set(record[key])\n        else:\n            field.delete(0, \"end\")\n            field.insert(0, record[key])\n\n\ndef archive_collect(app, identity):\n    record = {\"id\": identity}\n    for index, (key, label, kind, required, limit, choices) in enumerate(ARCHIVE_FIELDS):\n        field = getattr(app, \"Field\" + str(index))\n        record[key] = field.get(\"1.0\", \"end-1c\") if kind == \"text\" else field.get()\n    return record\n\n\ndef archive_store(app, update=False):\n    # Validate a copy so invalid edits never partially replace the collection.\n    if update and app.archive_selected is None:\n        messagebox.showinfo(\"Update record\", \"Select a record first\", parent=app.Form1)\n        return\n    identity = app.archive_selected if update else uuid.uuid4().hex\n    candidate = [r.copy() for r in app.archive_records if not update or r[\"id\"] != identity]\n    candidate.append(archive_collect(app, identity))\n    try:\n        candidate = archive_validate_records(candidate)\n    except ValueError as error:\n        messagebox.showerror(\"Invalid record\", str(error), parent=app.Form1)\n        return\n    app.archive_records = candidate\n    app.archive_selected = identity\n    app.FilterEntry.delete(0, \"end\")\n    archive_render(app)\n\n\ndef archive_delete(app):\n    if app.archive_selected is not None and messagebox.askyesno(\"Delete record\", \"Delete the selected record?\", parent=app.Form1):\n        app.archive_records = [r for r in app.archive_records if r[\"id\"] != app.archive_selected]\n        archive_clear(app)\n        archive_render(app)\n\n\ndef archive_save(app):\n    filename = filedialog.asksaveasfilename(parent=app.Form1, defaultextension=\".json\", filetypes=[(\"Archive JSON\", \"*.json\")])\n    if not filename:\n        return\n    temporary = None\n    try:\n        path = Path(filename)\n        content = json.dumps({\"version\": 1, \"kind\": ARCHIVE_KIND, \"records\": archive_validate_records(app.archive_records)}, ensure_ascii=False, indent=2)\n        if len(content.encode(\"utf-8\")) > 2 * 1024 * 1024:\n            raise ValueError(\"Archive exceeds 2 MiB; reduce the collection before saving\")\n        descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=\".archive-\", suffix=\".tmp\")\n        with os.fdopen(descriptor, \"w\", encoding=\"utf-8\") as stream:\n            stream.write(content)\n            stream.flush()\n            os.fsync(stream.fileno())\n        os.replace(temporary, path)\n        app.StatusLabel.configure(text=\"Saved: \" + str(path))\n    except (OSError, ValueError, UnicodeError) as error:\n        messagebox.showerror(\"Save archive\", str(error), parent=app.Form1)\n    finally:\n        if temporary is not None:\n            Path(temporary).unlink(missing_ok=True)\n\n\ndef archive_open(app):\n    filename = filedialog.askopenfilename(parent=app.Form1, filetypes=[(\"Archive JSON\", \"*.json\")])\n    if not filename:\n        return\n    try:\n        path = Path(filename)\n        if path.stat().st_size > 2 * 1024 * 1024:\n            raise ValueError(\"Files are limited to 2 MiB\")\n        data = json.loads(path.read_text(encoding=\"utf-8-sig\"))\n        if not isinstance(data, dict) or data.get(\"version\") != 1 or data.get(\"kind\") != ARCHIVE_KIND:\n            raise ValueError(\"This file belongs to another archive type or version\")\n        records = archive_validate_records(data.get(\"records\"))\n    except (OSError, ValueError, UnicodeError) as error:\n        messagebox.showerror(\"Open archive\", str(error), parent=app.Form1)\n        return\n    if messagebox.askyesno(\"Open archive\", \"Replace the collection? Save current changes first if needed.\", parent=app.Form1):\n        app.archive_records = records\n        archive_clear(app)\n        archive_render(app)\n\n\ndef archive_close(app):\n    # There is no autosave: confirm before discarding the in-memory collection.\n    if messagebox.askyesno(\"Close archive\", \"Close without saving? Use Save JSON first to keep changes.\", parent=app.Form1):\n        app.root.destroy()\n\n\n# Refresh the calendar after the generic list changes, without running a timer.\n_agenda_render_base = archive_render\n\ndef archive_render(app):\n    _agenda_render_base(app)\n    agenda_draw(app)\n",
+  "startup": "# Event records remain in memory until Save JSON is chosen.\ntoday = datetime.date.today()\nself.calendar_year, self.calendar_month = today.year, today.month\nself.calendar_day = today.isoformat()\nself.calendar_cells = agenda_month_cells(today.year, today.month)\nself.archive_records = archive_validate_records([{\"id\": \"sample-event\", \"date\": today.isoformat(), \"start\": \"09:00\", \"end\": \"10:00\", \"title\": \"Example appointment\", \"place\": \"Your place\", \"notes\": \"Replace this example event.\"}])\nself.archive_selected = None\nself.archive_visible = []\nagenda_pick(self, self.calendar_cells.index(today.day))\nself.RecordList.bind(\"<<ListboxSelect>>\", lambda event: archive_select(self))\nself.FilterEntry.bind(\"<KeyRelease>\", lambda event: archive_render(self))\nself.Form1.protocol(\"WM_DELETE_WINDOW\", lambda: archive_close(self))\nself.Form1.deiconify()"
+}

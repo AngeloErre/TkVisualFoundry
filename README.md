@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.39
+# TkVisualFoundry 1.40
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Sixth starter batch (1.40)
+
+Add **Minesweeper**, **Maze Explorer**, **Agenda and Calendar** and **PNG/GIF Slideshow**. There are now **24 English-commented standard-library starters plus Blank project**. Minesweeper has a safe first reveal; generated mazes have a reachable exit; calendar appointments use versioned JSON; slideshow owns/cancels its Tk timer and previews bounded PNG/GIF files. Native Mac acceptance remains deferred. [Template guide](docs/STARTER_TEMPLATES.md).
 
 ## Fifth starter batch (1.39)
 

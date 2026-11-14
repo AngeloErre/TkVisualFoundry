@@ -164,3 +164,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] English comments, no extra PIP, dedicated SQLite contacts and JSON archives.
 - [x] Fourteen regressions and remote suite/example validation.
 - [ ] Native Mac/photo acceptance on ambiente collegato; remaining 12 requested starters.
+
+## Phase 24 — starter templates, sixth batch (1.40)
+
+- [x] Minesweeper, Maze Explorer, Agenda/Calendar and PNG/GIF Slideshow.
+- [x] English comments, no extra PIP, bounded/timer-safe models and JSON persistence.
+- [x] Fifteen regressions and remote example/suite validation.
+- [ ] Native Mac acceptance on ambiente collegato; remaining eight requested starters.

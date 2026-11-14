@@ -1,0 +1,1356 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Minesweeper",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Minesweeper",
+      "width": 560,
+      "height": 650,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 10,
+          "y": 10,
+          "width": 540,
+          "height": 45,
+          "props": {
+            "text": "Reveal safe cells",
+            "wraplength": 530
+          },
+          "events": {}
+        },
+        {
+          "name": "Cell0",
+          "kind": "Button",
+          "x": 20,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 0)"
+          }
+        },
+        {
+          "name": "Cell1",
+          "kind": "Button",
+          "x": 78,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 1)"
+          }
+        },
+        {
+          "name": "Cell2",
+          "kind": "Button",
+          "x": 136,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 2)"
+          }
+        },
+        {
+          "name": "Cell3",
+          "kind": "Button",
+          "x": 194,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 3)"
+          }
+        },
+        {
+          "name": "Cell4",
+          "kind": "Button",
+          "x": 252,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 4)"
+          }
+        },
+        {
+          "name": "Cell5",
+          "kind": "Button",
+          "x": 310,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 5)"
+          }
+        },
+        {
+          "name": "Cell6",
+          "kind": "Button",
+          "x": 368,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 6)"
+          }
+        },
+        {
+          "name": "Cell7",
+          "kind": "Button",
+          "x": 426,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 7)"
+          }
+        },
+        {
+          "name": "Cell8",
+          "kind": "Button",
+          "x": 484,
+          "y": 70,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 8)"
+          }
+        },
+        {
+          "name": "Cell9",
+          "kind": "Button",
+          "x": 20,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 9)"
+          }
+        },
+        {
+          "name": "Cell10",
+          "kind": "Button",
+          "x": 78,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 10)"
+          }
+        },
+        {
+          "name": "Cell11",
+          "kind": "Button",
+          "x": 136,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 11)"
+          }
+        },
+        {
+          "name": "Cell12",
+          "kind": "Button",
+          "x": 194,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 12)"
+          }
+        },
+        {
+          "name": "Cell13",
+          "kind": "Button",
+          "x": 252,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 13)"
+          }
+        },
+        {
+          "name": "Cell14",
+          "kind": "Button",
+          "x": 310,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 14)"
+          }
+        },
+        {
+          "name": "Cell15",
+          "kind": "Button",
+          "x": 368,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 15)"
+          }
+        },
+        {
+          "name": "Cell16",
+          "kind": "Button",
+          "x": 426,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 16)"
+          }
+        },
+        {
+          "name": "Cell17",
+          "kind": "Button",
+          "x": 484,
+          "y": 122,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 17)"
+          }
+        },
+        {
+          "name": "Cell18",
+          "kind": "Button",
+          "x": 20,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 18)"
+          }
+        },
+        {
+          "name": "Cell19",
+          "kind": "Button",
+          "x": 78,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 19)"
+          }
+        },
+        {
+          "name": "Cell20",
+          "kind": "Button",
+          "x": 136,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 20)"
+          }
+        },
+        {
+          "name": "Cell21",
+          "kind": "Button",
+          "x": 194,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 21)"
+          }
+        },
+        {
+          "name": "Cell22",
+          "kind": "Button",
+          "x": 252,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 22)"
+          }
+        },
+        {
+          "name": "Cell23",
+          "kind": "Button",
+          "x": 310,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 23)"
+          }
+        },
+        {
+          "name": "Cell24",
+          "kind": "Button",
+          "x": 368,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 24)"
+          }
+        },
+        {
+          "name": "Cell25",
+          "kind": "Button",
+          "x": 426,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 25)"
+          }
+        },
+        {
+          "name": "Cell26",
+          "kind": "Button",
+          "x": 484,
+          "y": 174,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 26)"
+          }
+        },
+        {
+          "name": "Cell27",
+          "kind": "Button",
+          "x": 20,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 27)"
+          }
+        },
+        {
+          "name": "Cell28",
+          "kind": "Button",
+          "x": 78,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 28)"
+          }
+        },
+        {
+          "name": "Cell29",
+          "kind": "Button",
+          "x": 136,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 29)"
+          }
+        },
+        {
+          "name": "Cell30",
+          "kind": "Button",
+          "x": 194,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 30)"
+          }
+        },
+        {
+          "name": "Cell31",
+          "kind": "Button",
+          "x": 252,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 31)"
+          }
+        },
+        {
+          "name": "Cell32",
+          "kind": "Button",
+          "x": 310,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 32)"
+          }
+        },
+        {
+          "name": "Cell33",
+          "kind": "Button",
+          "x": 368,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 33)"
+          }
+        },
+        {
+          "name": "Cell34",
+          "kind": "Button",
+          "x": 426,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 34)"
+          }
+        },
+        {
+          "name": "Cell35",
+          "kind": "Button",
+          "x": 484,
+          "y": 226,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 35)"
+          }
+        },
+        {
+          "name": "Cell36",
+          "kind": "Button",
+          "x": 20,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 36)"
+          }
+        },
+        {
+          "name": "Cell37",
+          "kind": "Button",
+          "x": 78,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 37)"
+          }
+        },
+        {
+          "name": "Cell38",
+          "kind": "Button",
+          "x": 136,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 38)"
+          }
+        },
+        {
+          "name": "Cell39",
+          "kind": "Button",
+          "x": 194,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 39)"
+          }
+        },
+        {
+          "name": "Cell40",
+          "kind": "Button",
+          "x": 252,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 40)"
+          }
+        },
+        {
+          "name": "Cell41",
+          "kind": "Button",
+          "x": 310,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 41)"
+          }
+        },
+        {
+          "name": "Cell42",
+          "kind": "Button",
+          "x": 368,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 42)"
+          }
+        },
+        {
+          "name": "Cell43",
+          "kind": "Button",
+          "x": 426,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 43)"
+          }
+        },
+        {
+          "name": "Cell44",
+          "kind": "Button",
+          "x": 484,
+          "y": 278,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 44)"
+          }
+        },
+        {
+          "name": "Cell45",
+          "kind": "Button",
+          "x": 20,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 45)"
+          }
+        },
+        {
+          "name": "Cell46",
+          "kind": "Button",
+          "x": 78,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 46)"
+          }
+        },
+        {
+          "name": "Cell47",
+          "kind": "Button",
+          "x": 136,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 47)"
+          }
+        },
+        {
+          "name": "Cell48",
+          "kind": "Button",
+          "x": 194,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 48)"
+          }
+        },
+        {
+          "name": "Cell49",
+          "kind": "Button",
+          "x": 252,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 49)"
+          }
+        },
+        {
+          "name": "Cell50",
+          "kind": "Button",
+          "x": 310,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 50)"
+          }
+        },
+        {
+          "name": "Cell51",
+          "kind": "Button",
+          "x": 368,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 51)"
+          }
+        },
+        {
+          "name": "Cell52",
+          "kind": "Button",
+          "x": 426,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 52)"
+          }
+        },
+        {
+          "name": "Cell53",
+          "kind": "Button",
+          "x": 484,
+          "y": 330,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 53)"
+          }
+        },
+        {
+          "name": "Cell54",
+          "kind": "Button",
+          "x": 20,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 54)"
+          }
+        },
+        {
+          "name": "Cell55",
+          "kind": "Button",
+          "x": 78,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 55)"
+          }
+        },
+        {
+          "name": "Cell56",
+          "kind": "Button",
+          "x": 136,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 56)"
+          }
+        },
+        {
+          "name": "Cell57",
+          "kind": "Button",
+          "x": 194,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 57)"
+          }
+        },
+        {
+          "name": "Cell58",
+          "kind": "Button",
+          "x": 252,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 58)"
+          }
+        },
+        {
+          "name": "Cell59",
+          "kind": "Button",
+          "x": 310,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 59)"
+          }
+        },
+        {
+          "name": "Cell60",
+          "kind": "Button",
+          "x": 368,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 60)"
+          }
+        },
+        {
+          "name": "Cell61",
+          "kind": "Button",
+          "x": 426,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 61)"
+          }
+        },
+        {
+          "name": "Cell62",
+          "kind": "Button",
+          "x": 484,
+          "y": 382,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 62)"
+          }
+        },
+        {
+          "name": "Cell63",
+          "kind": "Button",
+          "x": 20,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 63)"
+          }
+        },
+        {
+          "name": "Cell64",
+          "kind": "Button",
+          "x": 78,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 64)"
+          }
+        },
+        {
+          "name": "Cell65",
+          "kind": "Button",
+          "x": 136,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 65)"
+          }
+        },
+        {
+          "name": "Cell66",
+          "kind": "Button",
+          "x": 194,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 66)"
+          }
+        },
+        {
+          "name": "Cell67",
+          "kind": "Button",
+          "x": 252,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 67)"
+          }
+        },
+        {
+          "name": "Cell68",
+          "kind": "Button",
+          "x": 310,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 68)"
+          }
+        },
+        {
+          "name": "Cell69",
+          "kind": "Button",
+          "x": 368,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 69)"
+          }
+        },
+        {
+          "name": "Cell70",
+          "kind": "Button",
+          "x": 426,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 70)"
+          }
+        },
+        {
+          "name": "Cell71",
+          "kind": "Button",
+          "x": 484,
+          "y": 434,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 71)"
+          }
+        },
+        {
+          "name": "Cell72",
+          "kind": "Button",
+          "x": 20,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 72)"
+          }
+        },
+        {
+          "name": "Cell73",
+          "kind": "Button",
+          "x": 78,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 73)"
+          }
+        },
+        {
+          "name": "Cell74",
+          "kind": "Button",
+          "x": 136,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 74)"
+          }
+        },
+        {
+          "name": "Cell75",
+          "kind": "Button",
+          "x": 194,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 75)"
+          }
+        },
+        {
+          "name": "Cell76",
+          "kind": "Button",
+          "x": 252,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 76)"
+          }
+        },
+        {
+          "name": "Cell77",
+          "kind": "Button",
+          "x": 310,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 77)"
+          }
+        },
+        {
+          "name": "Cell78",
+          "kind": "Button",
+          "x": 368,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 78)"
+          }
+        },
+        {
+          "name": "Cell79",
+          "kind": "Button",
+          "x": 426,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 79)"
+          }
+        },
+        {
+          "name": "Cell80",
+          "kind": "Button",
+          "x": 484,
+          "y": 486,
+          "width": 52,
+          "height": 46,
+          "props": {
+            "text": "",
+            "font": "Helvetica 16",
+            "bg": "#dbe6f5"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reveal(self, 80)"
+          }
+        },
+        {
+          "name": "RestartButton",
+          "kind": "Button",
+          "x": 20,
+          "y": 555,
+          "width": 520,
+          "height": 36,
+          "props": {
+            "text": "New board"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\nmines_reset(self)"
+          }
+        },
+        {
+          "name": "HelpLabel",
+          "kind": "Label",
+          "x": 15,
+          "y": 600,
+          "width": 530,
+          "height": 35,
+          "props": {
+            "text": "Left click: reveal. Right click or Control-click: flag.",
+            "wraplength": 520
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# A 9x9 board with ten mines and a safe first reveal.\nimport random\n\n\ndef mines_neighbors(index):\n    row, column = divmod(index, 9)\n    return [r * 9 + c for r in range(max(0, row - 1), min(9, row + 2)) for c in range(max(0, column - 1), min(9, column + 2)) if (r, c) != (row, column)]\n\n\ndef mines_place(first, rng=None):\n    # Exclude the first cell and its neighbors so the first reveal opens safely.\n    rng = rng or random.Random()\n    excluded = set(mines_neighbors(first)) | {first}\n    return set(rng.sample([i for i in range(81) if i not in excluded], 10))\n\n\ndef mines_count(app, index):\n    return sum(neighbor in app.mine_cells for neighbor in mines_neighbors(index))\n\n\ndef mines_render(app):\n    for index in range(81):\n        revealed = index in app.mine_revealed\n        text = \"\"\n        if app.mine_done and app.mine_cells is not None and index in app.mine_cells:\n            text = \"*\"\n        elif index in app.mine_flags:\n            text = \"F\"\n        elif revealed:\n            count = mines_count(app, index)\n            text = str(count) if count else \"\"\n        getattr(app, \"Cell\" + str(index)).configure(text=text, state=\"disabled\" if revealed or app.mine_done else \"normal\", bg=\"#ffffff\" if revealed else \"#dbe6f5\")\n    state = \"Won!\" if app.mine_done and len(app.mine_revealed) == 71 else \"Game over\" if app.mine_done else \"Find all safe cells\"\n    app.StatusLabel.configure(text=f\"{state} | Flags: {len(app.mine_flags)} / 10 | Safe: {len(app.mine_revealed)} / 71\")\n\n\ndef mines_reset(app):\n    # Mine positions are chosen only on the first unflagged reveal.\n    app.mine_cells = None\n    app.mine_revealed = set()\n    app.mine_flags = set()\n    app.mine_done = False\n    mines_render(app)\n\n\ndef mines_flag(app, index):\n    if app.mine_done or index in app.mine_revealed:\n        return \"break\"\n    if index in app.mine_flags:\n        app.mine_flags.remove(index)\n    elif len(app.mine_flags) < 10:\n        app.mine_flags.add(index)\n    mines_render(app)\n    return \"break\"\n\n\ndef mines_reveal(app, index):\n    if app.mine_done or index in app.mine_flags or index in app.mine_revealed:\n        return\n    if app.mine_cells is None:\n        app.mine_cells = mines_place(index)\n    if index in app.mine_cells:\n        app.mine_done = True\n        mines_render(app)\n        return\n    # Iterative flood fill avoids recursive callbacks for empty areas.\n    pending = [index]\n    while pending:\n        current = pending.pop()\n        if current in app.mine_revealed or current in app.mine_flags or current in app.mine_cells:\n            continue\n        app.mine_revealed.add(current)\n        if mines_count(app, current) == 0:\n            pending.extend(mines_neighbors(current))\n    if len(app.mine_revealed) == 71:\n        app.mine_done = True\n    mines_render(app)\n",
+  "startup": "# Right click, middle click or Control-click toggles a flag.\nmines_reset(self)\nfor index in range(81):\n    cell = getattr(self, \"Cell\" + str(index))\n    for sequence in (\"<Button-3>\", \"<Button-2>\", \"<Control-Button-1>\"):\n        cell.bind(sequence, lambda event, index=index: mines_flag(self, index))\nself.Form1.deiconify()"
+}

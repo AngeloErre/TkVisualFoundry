@@ -1,5 +1,5 @@
-# TkVisualFoundry 1.39
+# TkVisualFoundry 1.40
 
-Add Contact Book, Expense Manager, Home/Stock Inventory and CD/DVD/Game Archive. Twenty English-commented standard-library starters plus Blank project. Contacts explicitly save to a dedicated SQLite database, reject unrelated databases and preview referenced PNG/GIF photos. Other archives provide atomic JSON saving. Expenses keep Decimal balances by currency; inventory supports unique codes, whole stock adjustments and low-stock markers; media tracks ownership/loans.
+Add Minesweeper, Maze Explorer, Agenda and Calendar and PNG/GIF Slideshow. Twenty-four English-commented standard-library starters plus Blank project. Minesweeper defers ten-mine placement until the first safe reveal; mazes use iterative connected carving; the month calendar edits versioned JSON appointments; slideshow provides bounded PNG/GIF folder browsing and owned generation-guarded timers. No JPEG/WebP or animated GIF playback is claimed.
 
-360 tests passed per language; 11 graphical tests skipped. Fourteen new tests include real SQLite round trips, unrelated-schema rejection and transaction rollback preservation. All 35 examples validate/compile. Native Mac GUI/photo acceptance remains deferred until ambiente collegato. See docs/STARTER_TEMPLATES.md.
+375 tests passed per language, 11 graphical tests skipped; all 39 examples validate/compile. Fifteen new regressions include 80 safe mine placements, 25 connected mazes, leap/month transitions and real JSON fixtures plus mocked image/timer contracts. Native Mac acceptance remains pending until ambiente collegato. See docs/STARTER_TEMPLATES.md.

@@ -25,6 +25,10 @@ TEMPLATES=(
     ('expenses','ExpenseManager','Gestionale spese','Organizzazione','Entrate e uscite, date e categorie. Totali decimali separati per valuta e salvataggio JSON.'),
     ('inventory','InventoryManager','Inventario casa/magazzino','Organizzazione','Codici univoci, quantità, costi EUR e soglie scorte basse. Modifica stock e salva JSON.'),
     ('media','MediaCatalog','Archivio CD/DVD/giochi','Organizzazione','Titoli, tipo, artista/piattaforma, anno e prestiti. Ricerca e salvataggio JSON.'),
+    ('mines','Minesweeper','Campo Minato','Giochi','Griglia 9×9, dieci mine, primo clic sicuro e bandierine con clic destro o Control-clic.'),
+    ('maze','MazeExplorer','Labirinto','Giochi','Labirinto generato con percorso verso l’uscita. Movimento con frecce, WASD o pulsanti.'),
+    ('agenda','AgendaCalendar','Agenda e calendario','Organizzazione','Calendario mensile navigabile e appuntamenti con date/orari. Ricerca e salvataggio JSON.'),
+    ('slideshow','ImageSlideshow','Slideshow PNG/GIF','Creatività','Cartella immagini PNG/GIF, precedente/successiva e riproduzione automatica. Nessun PIP aggiuntivo.'),
 )
 
 
