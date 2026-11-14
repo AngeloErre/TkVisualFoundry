@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Sticky Note",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Sticky Note",
+      "width": 580,
+      "height": 420,
+      "bg": "#fff3ad",
+      "widgets": [
+        {
+          "name": "NoteText",
+          "kind": "Text",
+          "x": 15,
+          "y": 15,
+          "width": 550,
+          "height": 285,
+          "props": {
+            "bg": "#fff3ad",
+            "wrap": "word",
+            "font": "Helvetica 15"
+          },
+          "events": {}
+        },
+        {
+          "name": "Color0",
+          "kind": "Button",
+          "x": 15,
+          "y": 315,
+          "width": 175,
+          "height": 36,
+          "props": {
+            "text": "Yellow"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nnote_color(self, '#fff3ad')"
+          }
+        },
+        {
+          "name": "Color1",
+          "kind": "Button",
+          "x": 200,
+          "y": 315,
+          "width": 175,
+          "height": 36,
+          "props": {
+            "text": "Blue"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nnote_color(self, '#d6efff')"
+          }
+        },
+        {
+          "name": "Color2",
+          "kind": "Button",
+          "x": 385,
+          "y": 315,
+          "width": 175,
+          "height": 36,
+          "props": {
+            "text": "Pink"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nnote_color(self, '#ffe0ec')"
+          }
+        },
+        {
+          "name": "SaveNote",
+          "kind": "Button",
+          "x": 15,
+          "y": 365,
+          "width": 270,
+          "height": 36,
+          "props": {
+            "text": "Save note…"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nnote_save(self)"
+          }
+        },
+        {
+          "name": "OpenNote",
+          "kind": "Button",
+          "x": 295,
+          "y": 365,
+          "width": 270,
+          "height": 36,
+          "props": {
+            "text": "Open note…"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nnote_open(self)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Notes are ordinary UTF-8 text files selected by the user.\nfrom pathlib import Path\n\n\ndef note_save(app):\n    # Cancel leaves the note and the filesystem unchanged.\n    filename = filedialog.asksaveasfilename(parent=app.Form1, defaultextension=\".txt\", filetypes=[(\"Text files\", \"*.txt\")])\n    if not filename:\n        return\n    try:\n        Path(filename).write_text(app.NoteText.get(\"1.0\", \"end-1c\"), encoding=\"utf-8\")\n    except OSError as error:\n        messagebox.showerror(\"Save note\", str(error), parent=app.Form1)\n\n\ndef note_open(app):\n    # Confirm before replacing the current text with an existing note.\n    filename = filedialog.askopenfilename(parent=app.Form1, filetypes=[(\"Text files\", \"*.txt\")])\n    if not filename:\n        return\n    try:\n        path = Path(filename)\n        if path.stat().st_size > 2 * 1024 * 1024:\n            raise ValueError(\"Notes are limited to 2 MiB.\")\n        text = path.read_text(encoding=\"utf-8-sig\")\n    except (OSError, UnicodeError, ValueError) as error:\n        messagebox.showerror(\"Open note\", str(error), parent=app.Form1)\n        return\n    if app.NoteText.get(\"1.0\", \"end-1c\") and not messagebox.askyesno(\"Open note\", \"Replace the current note?\", parent=app.Form1):\n        return\n    app.NoteText.delete(\"1.0\", \"end\")\n    app.NoteText.insert(\"1.0\", text)\n\n\ndef note_color(app, color):\n    # Change both the form and text background for a consistent sticky-note look.\n    app.Form1.configure(bg=color)\n    app.NoteText.configure(bg=color)\n\n\ndef note_close(app):\n    # Ask before discarding a note; saving is always an explicit action.\n    if not app.NoteText.get(\"1.0\", \"end-1c\") or messagebox.askyesno(\"Close note\", \"Close this note without saving?\", parent=app.Form1):\n        app.root.destroy()\n",
+  "startup": "# This starter does not silently save notes or keep the window always on top.\nself.NoteText.insert(\"1.0\", \"Write your note here...\")\nself.Form1.deiconify()\n# Override the generated close handler to protect the current note.\nself.Form1.protocol(\"WM_DELETE_WINDOW\", lambda: note_close(self))"
+}

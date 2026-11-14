@@ -1,3 +1,10 @@
+# 1.35 — Starter project chooser
+
+- Choose blank, Quiz, Dice Roller, Text Converter or Sticky Note from New project.
+- English-commented source and editable visual controls; no extra PIP requirements.
+- Fresh unsaved copies and existing unsaved-change protection; no code execution during selection.
+- Add ten regressions and bilingual starter documentation.
+
 # 1.34 — Global search
 
 - Search all event/startup/import code and project Python files, including unsaved buffers.

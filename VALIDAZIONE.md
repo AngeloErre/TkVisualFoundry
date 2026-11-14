@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.35
+
+305 test superati per lingua, 11 grafici saltati. Dieci nuovi test su catalogo/copie/commenti, compilazione, assenza PIP aggiuntivi, quiz, dadi, conversioni Unicode, note reali in cartelle temporanee e guardia delle modifiche. Tutti i 19 esempi validati e compilati. Accettazione grafica del selettore e dei giochi ancora da completare.
+
 # TkVisualFoundry 1.34
 
 295 test superati per lingua, 11 grafici saltati. Quattordici nuove regressioni su ambiti e buffer non salvati, file rimossi aperti, Unicode/posizioni, filtri, confinamento/esclusioni, cancellazione/limiti, non esecuzione, handler di snapshot/navigazione e risultati obsoleti. Indici Tcl verificati. Accettazione grafica ancora da completare.

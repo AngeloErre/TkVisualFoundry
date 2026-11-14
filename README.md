@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.34
+# TkVisualFoundry 1.35
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## New project templates (1.35)
+
+**New project** now opens a template chooser with a blank project and four standard-library starters: **Quiz**, **Dice Roller**, **Text Converter** and **Sticky Note**. Each starter has English-commented code and designer-editable controls, opens as an independent unsaved project, and requires no extra PIP packages. This is the first batch from the planned 32-template collection. See the [starter guide](docs/STARTER_TEMPLATES.md).
 
 ## Global search and navigation (1.34)
 

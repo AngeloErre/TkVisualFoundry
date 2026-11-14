@@ -127,3 +127,11 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] Navigable previews with content/project guards and Unicode indices.
 - [x] Fourteen regressions and bilingual docs.
 - [ ] Interactive graphical acceptance.
+
+## Phase 19 — starter templates, first batch (1.35)
+
+- [x] New-project chooser with blank project and four independent starter copies.
+- [x] Quiz, Dice Roller, Text Converter and Sticky Note, with English comments and no extra PIP.
+- [x] Ten regressions and bilingual documentation.
+- [ ] Interactive graphical acceptance.
+- [ ] Remaining templates from the proposed 32-project collection, in later batches.

@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Text Converter",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Text Converter",
+      "width": 780,
+      "height": 550,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "InputLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 740,
+          "height": 25,
+          "props": {
+            "text": "Input text"
+          },
+          "events": {}
+        },
+        {
+          "name": "InputText",
+          "kind": "Text",
+          "x": 20,
+          "y": 45,
+          "width": 740,
+          "height": 165,
+          "props": {
+            "wrap": "word"
+          },
+          "events": {
+            "KeyPress": "# Update after Tk has inserted or deleted the typed character.\nself.root.after_idle(lambda: text_update_stats(self))",
+            "FocusOut": "# Recount after paste operations and focus changes.\ntext_update_stats(self)"
+          }
+        },
+        {
+          "name": "OutputLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 265,
+          "width": 740,
+          "height": 25,
+          "props": {
+            "text": "Converted text"
+          },
+          "events": {}
+        },
+        {
+          "name": "OutputText",
+          "kind": "Text",
+          "x": 20,
+          "y": 295,
+          "width": 740,
+          "height": 165,
+          "props": {
+            "wrap": "word"
+          },
+          "events": {}
+        },
+        {
+          "name": "StatsLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 480,
+          "width": 740,
+          "height": 35,
+          "props": {
+            "text": "Words: 0 | Characters: 0"
+          },
+          "events": {}
+        },
+        {
+          "name": "Convert0",
+          "kind": "Button",
+          "x": 20,
+          "y": 225,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "UPPERCASE"
+          },
+          "events": {
+            "Click": "# Handle this button click.\ntext_convert(self, 'upper')"
+          }
+        },
+        {
+          "name": "Convert1",
+          "kind": "Button",
+          "x": 210,
+          "y": 225,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "lowercase"
+          },
+          "events": {
+            "Click": "# Handle this button click.\ntext_convert(self, 'lower')"
+          }
+        },
+        {
+          "name": "Convert2",
+          "kind": "Button",
+          "x": 400,
+          "y": 225,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "camelCase"
+          },
+          "events": {
+            "Click": "# Handle this button click.\ntext_convert(self, 'camel')"
+          }
+        },
+        {
+          "name": "Convert3",
+          "kind": "Button",
+          "x": 590,
+          "y": 225,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Markdown bullets"
+          },
+          "events": {
+            "Click": "# Handle this button click.\ntext_convert(self, 'markdown')"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Conversion helpers never modify the original input text.\nimport re\n\n\ndef convert_text_value(text, mode):\n    # Whole Unicode words are used for the simple camelCase transformation.\n    if mode == \"upper\":\n        return text.upper()\n    if mode == \"lower\":\n        return text.lower()\n    if mode == \"camel\":\n        words = re.findall(r\"[^\\W_]+\", text, flags=re.UNICODE)\n        return words[0].lower() + \"\".join(word.title() for word in words[1:]) if words else \"\"\n    if mode == \"markdown\":\n        return \"\\n\".join(\"- \" + line.strip() for line in text.splitlines() if line.strip())\n    raise ValueError(\"Unknown conversion mode\")\n\n\ndef text_update_stats(app):\n    # Tk Text adds a final newline; exclude it from the user's character count.\n    text = app.InputText.get(\"1.0\", \"end-1c\")\n    app.StatsLabel.configure(text=f\"Words: {len(text.split())} | Characters: {len(text)}\")\n\n\ndef text_convert(app, mode):\n    text = app.InputText.get(\"1.0\", \"end-1c\")\n    app.OutputText.delete(\"1.0\", \"end\")\n    app.OutputText.insert(\"1.0\", convert_text_value(text, mode))\n    text_update_stats(app)\n",
+  "startup": "# Try typing or pasting your own text, then choose a conversion.\nself.InputText.insert(\"1.0\", \"Hello world\\nCreate something useful\")\ntext_update_stats(self)\nself.Form1.deiconify()"
+}

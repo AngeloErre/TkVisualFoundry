@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Dice Roller",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Dice Roller",
+      "width": 640,
+      "height": 360,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "DieLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 20,
+          "width": 140,
+          "height": 25,
+          "props": {
+            "text": "Die"
+          },
+          "events": {}
+        },
+        {
+          "name": "CountLabel",
+          "kind": "Label",
+          "x": 190,
+          "y": 20,
+          "width": 140,
+          "height": 25,
+          "props": {
+            "text": "Number of dice"
+          },
+          "events": {}
+        },
+        {
+          "name": "BonusLabel",
+          "kind": "Label",
+          "x": 360,
+          "y": 20,
+          "width": 140,
+          "height": 25,
+          "props": {
+            "text": "Bonus"
+          },
+          "events": {}
+        },
+        {
+          "name": "DieChoice",
+          "kind": "Combobox",
+          "x": 20,
+          "y": 55,
+          "width": 140,
+          "height": 30,
+          "props": {
+            "values": [
+              "D6",
+              "D20",
+              "D100"
+            ],
+            "state": "readonly"
+          },
+          "events": {}
+        },
+        {
+          "name": "CountEntry",
+          "kind": "Entry",
+          "x": 190,
+          "y": 55,
+          "width": 140,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "BonusEntry",
+          "kind": "Entry",
+          "x": 360,
+          "y": 55,
+          "width": 140,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "RollButton",
+          "kind": "Button",
+          "x": 20,
+          "y": 110,
+          "width": 580,
+          "height": 36,
+          "props": {
+            "text": "Roll dice"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nroll_dice(self)"
+          }
+        },
+        {
+          "name": "ResultText",
+          "kind": "Text",
+          "x": 20,
+          "y": 165,
+          "width": 580,
+          "height": 165,
+          "props": {
+            "wrap": "word"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Standard-library random is sufficient for a tabletop dice simulator.\nimport random\n\n\ndef roll_dice(app):\n    # Reject invalid input instead of silently changing the requested roll.\n    try:\n        sides = int(app.DieChoice.get()[1:])\n        count = int(app.CountEntry.get())\n        bonus = int(app.BonusEntry.get())\n        if sides not in (6, 20, 100) or not 1 <= count <= 100 or not -10000 <= bonus <= 10000:\n            raise ValueError(\"out of range\")\n    except (ValueError, TypeError):\n        messagebox.showerror(\"Dice Roller\", \"Use D6/D20/D100, 1-100 dice and a bonus between -10000 and 10000.\")\n        return\n    rolls = [random.randint(1, sides) for _ in range(count)]\n    total = sum(rolls) + bonus\n    # Keep the last roll visible without growing an unlimited history.\n    app.ResultText.delete(\"1.0\", \"end\")\n    app.ResultText.insert(\"1.0\", f\"Rolls: {rolls}\\nBonus: {bonus:+d}\\nTotal: {total}\")\n",
+  "startup": "# Set useful starting values; the controls remain editable in the designer.\nself.DieChoice.set(\"D6\")\nself.CountEntry.insert(0, \"2\")\nself.BonusEntry.insert(0, \"0\")\nself.Form1.deiconify()"
+}

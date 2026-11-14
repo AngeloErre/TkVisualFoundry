@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Quiz Starter",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Quiz Starter",
+      "width": 680,
+      "height": 390,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "QuestionLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 20,
+          "width": 640,
+          "height": 70,
+          "props": {
+            "text": "Question",
+            "font": "Helvetica 18",
+            "wraplength": 610
+          },
+          "events": {}
+        },
+        {
+          "name": "ScoreLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 300,
+          "width": 400,
+          "height": 35,
+          "props": {
+            "text": "Score"
+          },
+          "events": {}
+        },
+        {
+          "name": "Answer1",
+          "kind": "Button",
+          "x": 20,
+          "y": 110,
+          "width": 310,
+          "height": 36,
+          "props": {
+            "text": "Answer 1"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nquiz_answer(self, 0)"
+          }
+        },
+        {
+          "name": "Answer2",
+          "kind": "Button",
+          "x": 350,
+          "y": 110,
+          "width": 310,
+          "height": 36,
+          "props": {
+            "text": "Answer 2"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nquiz_answer(self, 1)"
+          }
+        },
+        {
+          "name": "Answer3",
+          "kind": "Button",
+          "x": 20,
+          "y": 175,
+          "width": 310,
+          "height": 36,
+          "props": {
+            "text": "Answer 3"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nquiz_answer(self, 2)"
+          }
+        },
+        {
+          "name": "Answer4",
+          "kind": "Button",
+          "x": 350,
+          "y": 175,
+          "width": 310,
+          "height": 36,
+          "props": {
+            "text": "Answer 4"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nquiz_answer(self, 3)"
+          }
+        },
+        {
+          "name": "RestartButton",
+          "kind": "Button",
+          "x": 480,
+          "y": 300,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Restart quiz"
+          },
+          "events": {
+            "Click": "# Handle this button click.\nquiz_reset(self)"
+          }
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Quiz helpers keep game state on the Application instance.\ndef quiz_render(app):\n    # Stop accepting answers after the last question.\n    buttons = [app.Answer1, app.Answer2, app.Answer3, app.Answer4]\n    if app.quiz_index >= len(app.quiz_questions):\n        app.QuestionLabel.configure(text=\"Quiz complete!\")\n        for button in buttons:\n            button.configure(state=\"disabled\")\n    else:\n        question, options, correct = app.quiz_questions[app.quiz_index]\n        app.QuestionLabel.configure(text=question)\n        for button, option in zip(buttons, options):\n            button.configure(text=option, state=\"normal\")\n    app.ScoreLabel.configure(text=f\"Score: {app.quiz_score} / {len(app.quiz_questions)}\")\n\n\ndef quiz_reset(app):\n    # Reset both counters before displaying the first question.\n    app.quiz_index = 0\n    app.quiz_score = 0\n    quiz_render(app)\n\n\ndef quiz_answer(app, answer):\n    # The guard prevents clicks from changing a finished quiz.\n    if app.quiz_index >= len(app.quiz_questions):\n        return\n    if answer == app.quiz_questions[app.quiz_index][2]:\n        app.quiz_score += 1\n    app.quiz_index += 1\n    quiz_render(app)\n",
+  "startup": "# Edit this question bank to create your own quiz.\nself.quiz_questions = [\n    (\"Which planet is known as the Red Planet?\", [\"Venus\", \"Mars\", \"Earth\", \"Jupiter\"], 1),\n    (\"How many sides does a triangle have?\", [\"Two\", \"Three\", \"Four\", \"Five\"], 1),\n    (\"Which language is used by this project?\", [\"Python\", \"Java\", \"C#\", \"Ruby\"], 0),\n    (\"What is 7 + 5?\", [\"10\", \"11\", \"12\", \"13\"], 2),\n    (\"Which widget displays a clickable action?\", [\"Label\", \"Entry\", \"Canvas\", \"Button\"], 3),\n]\nquiz_reset(self)\nself.Form1.deiconify()"
+}

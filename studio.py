@@ -37,6 +37,7 @@ from local_history import recovered_path
 from command_palette import CommandPaletteMixin
 from data_viewer_ui import DataViewerMixin
 from search_ui import SearchMixin
+from template_ui import TemplateMixin
 from watch_ui import WatchMixin
 from breakpoint_ui import BreakpointMixin
 from event_breakpoints import resolve_breakpoints
@@ -67,7 +68,7 @@ from hierarchy import CONTAINERS,TABS,ordered_widgets,descendants,widget_origin
 BASE = Path(__file__).resolve().parent
 SETTINGS = Path.home()/'.visualtkstudio.json'
 
-class Studio(SearchMixin,DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
+class Studio(TemplateMixin,SearchMixin,DataViewerMixin,CommandPaletteMixin,WatchMixin,BreakpointMixin,InspectorMixin,DebugViewMixin,AdaptiveMixin,HistoryMixin,RefactorMixin,PreviewMixin,EnvironmentMixin,ProblemsMixin,SelectionMixin,VB6Mixin,IntelligenceMixin,ProductivityMixin,LibraryMixin,ContainerMixin,ProjectFilesMixin,LayoutMixin,ConfigurationMixin,AssistMixin,WorkspaceMixin,SupportMixin,tk.Tk):
     def __init__(self):
         ensure_current()
         super().__init__()
@@ -537,10 +538,12 @@ class Studio(SearchMixin,DataViewerMixin,CommandPaletteMixin,WatchMixin,Breakpoi
         if not answer and hasattr(self,'history_jobs') and self.config_data.get('local_history',True):self.queue_local_snapshot('discarded')
         return self.save() if answer else True
     def new(self):
+        self.choose_new_project()
+    def new_from_template(self,project):
         if not self.dirty_guard():return
-        self.project=new_project(); self.path=None;
+        self.project=copy.deepcopy(project); self.path=None;
         self.history_session=uuid.uuid4().hex;self.history_last_queued=None;self.recovery_unsaved=False
-        self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(self.project,sort_keys=True); self.code.delete('1.0','end'); self.refresh()
+        self.form_index=0; self.selected=None; self.code_target=None; self.history=[]; self.future=[]; self.breaks=set(); self.saved_state=json.dumps(new_project(),sort_keys=True); self.code.delete('1.0','end'); self.refresh()
     def open_project(self):
         if not self.dirty_guard():return
         path=filedialog.askopenfilename(filetypes=[('TkVisualFoundry project','*.vtk.json'),('JSON','*.json')])
