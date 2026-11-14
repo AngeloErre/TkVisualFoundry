@@ -157,3 +157,10 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] English comments, no extra PIP, bounded arithmetic and JSON archives.
 - [x] Thirteen regressions, remote suite, example compilation and bilingual docs.
 - [ ] Native Mac acceptance on explicit ambiente collegato; remaining 16 requested starters.
+
+## Phase 23 — starter templates, fifth batch (1.39)
+
+- [x] Contact Book, Expense Manager, Inventory and CD/DVD/Game Archive.
+- [x] English comments, no extra PIP, dedicated SQLite contacts and JSON archives.
+- [x] Fourteen regressions and remote suite/example validation.
+- [ ] Native Mac/photo acceptance on ambiente collegato; remaining 12 requested starters.

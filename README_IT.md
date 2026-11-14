@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.38
+# TkVisualFoundry 1.39
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Quinto gruppo di modelli (1.39)
+
+Aggiunti **Rubrica contatti**, **Gestionale spese**, **Inventario casa/magazzino** e **Archivio CD/DVD/giochi**: ora **20 modelli più il progetto vuoto**, con commenti in inglese e senza PIP aggiuntivi. La rubrica salva in SQLite dedicato e mostra foto PNG/GIF; gli altri archivi salvano JSON atomico. Spese con totali decimali per valuta, inventario con codici univoci e soglie di scorta. Collaudo Mac ancora in attesa di “ambiente collegato”. [Guida ai modelli](docs/STARTER_TEMPLATES.md).
 
 ## Quarto gruppo di modelli (1.38)
 

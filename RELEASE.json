@@ -1,8 +1,8 @@
 {
-  "version": "1.38",
+  "version": "1.39",
   "python_minimum": "3.15",
   "python_releaselevel": "final",
-  "tests_passed": 346,
+  "tests_passed": 360,
   "tests_skipped_graphical": 11,
   "validation_interpreter": "Python 3.15.2 Linux remote (Mac disconnected)",
   "jedi_validation_version": "0.20.1",
@@ -33,7 +33,7 @@
     "it",
     "en"
   ],
-  "example_projects_compiled": 31,
+  "example_projects_compiled": 35,
   "debugging_validation": "Full suite passed in both languages; settings, editor context, worker cancellation/exit, dependency signatures, geometry and atomic save regressions covered. Interactive GUI/Windows/live services remain pending.",
   "package_catalog_validation": "Live official PyPI Simple Index: 938819 names; partial-name search, caching, failed refresh preservation, cancellation, pagination and compatible metadata covered. GUI interaction pending.",
   "icon_validation": "Real PNG/ICO/ICNS generation and decoding, runtime source compilation, Mac/Windows build icon arguments and Setup directive verified; native OS icon display and graphical picker pending.",
@@ -113,10 +113,11 @@
   ],
   "recovery_edge_validation": "Comment/whitespace-only function bodies compile without changing saved text or real executable line offsets; real syntax errors remain diagnosed. UTF-8 BOM projects load without rewriting. 1500 nested containers order/compile and cycles are rejected without recursive traversal. Interactive GUI acceptance pending.",
   "global_search_validation": "Project/event/startup/import scopes; unsaved active and file editor buffers; deleted backing file buffers; literal/case/whole-word positions; confinement/exclusions; bounds/cancellation; non-execution; actual navigation handlers and stale content/project checks covered. Tcl character-unit index conversion checked. Interactive graphical acceptance pending.",
-  "starter_templates": 16,
+  "starter_templates": 20,
   "template_validation": "Catalog uniqueness, standalone generated compilation, no extra requirements, independent copies, comment presence, load non-execution, quiz scoring/restart, dice totals/validation, Unicode text transformations, real temporary note open/save/cancel and new-project cancellation/dirty state tested. Interactive template chooser and native GUI gameplay acceptance pending.",
   "template_batch2_validation": "Odd One Out scoring/finish, Memory pairs/mismatch locking/stale reset callbacks/completion, 100 solvable Sliding 15 shuffles/legal moves/win, Canvas brush/shape/eraser contracts and clear/EPS cancellation tested. All 23 example projects validate/compile without extra starter requirements. Interactive GUI and native EPS output acceptance pending.",
   "template_batch3_validation": "Seventeen tests cover stopwatch/countdown/alarm behavior, habits dates/streaks/validation/atomic JSON files, notepad dynamic tab logic/unsaved guards/atomic UTF-8 saves and Pixel Art bounds/palette/PPM/SVG exports. Native Mac GUI, alerts and export display pending user reconnection.",
   "mac_acceptance": "Deferred until user reports ambiente collegato; see docs/MAC_RECONNECT_CHECKLIST.md. No Mac connection, installation or native validation was performed in this release.",
-  "template_batch4_validation": "Thirteen tests cover allowlisted calculator AST/limits/history, archive schemas/IDs/CRUD/filter selection, recipe time bounds, timetable overlaps/ordering, atomic JSON round trips/failures/type guards/cancellation/size limits. Linux remote only; native Mac graphical acceptance pending user reconnection."
+  "template_batch4_validation": "Thirteen tests cover allowlisted calculator AST/limits/history, archive schemas/IDs/CRUD/filter selection, recipe time bounds, timetable overlaps/ordering, atomic JSON round trips/failures/type guards/cancellation/size limits. Linux remote only; native Mac graphical acceptance pending user reconnection.",
+  "template_batch5_validation": "Fourteen tests cover Decimal expenses/currency isolation/input validation, inventory totals/thresholds/adjustment/unique codes, media loans/year, JSON atomic persistence, actual contact SQLite round trips/parameters/schema guards/rollback/cancellation and mocked PNG preview bounds/lifetime. Remote Linux only; native photo display and Mac acceptance pending."
 }

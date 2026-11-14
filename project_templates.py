@@ -21,6 +21,10 @@ TEMPLATES=(
     ('timetable','WeeklyTimetable','Orario settimanale','Organizzazione','Lezioni, giorni, orari, aula e docente. Verifica sovrapposizioni e salva un archivio JSON.'),
     ('recipes','RecipeManager','Ricettario','Organizzazione','Ricette, ingredienti, preparazione, categorie e tempi. Ricerca e gestione di un archivio JSON.'),
     ('books','BookCatalog','Catalogo libri','Organizzazione','Titoli, autori, stato di lettura, prestiti e valutazioni. Ricerca e gestione di un archivio JSON.'),
+    ('contacts','ContactBook','Rubrica contatti','Organizzazione','Nomi, telefoni, email, note e foto PNG/GIF. Salvataggio esplicito in un database SQLite dedicato.'),
+    ('expenses','ExpenseManager','Gestionale spese','Organizzazione','Entrate e uscite, date e categorie. Totali decimali separati per valuta e salvataggio JSON.'),
+    ('inventory','InventoryManager','Inventario casa/magazzino','Organizzazione','Codici univoci, quantità, costi EUR e soglie scorte basse. Modifica stock e salva JSON.'),
+    ('media','MediaCatalog','Archivio CD/DVD/giochi','Organizzazione','Titoli, tipo, artista/piattaforma, anno e prestiti. Ricerca e salvataggio JSON.'),
 )
 
 

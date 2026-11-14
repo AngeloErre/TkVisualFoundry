@@ -1,0 +1,337 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Home and Stock Inventory",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Home and Stock Inventory",
+      "width": 980,
+      "height": 710,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "FilterLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 100,
+          "height": 30,
+          "props": {
+            "text": "Search"
+          },
+          "events": {}
+        },
+        {
+          "name": "FilterEntry",
+          "kind": "Entry",
+          "x": 120,
+          "y": 15,
+          "width": 300,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "RecordList",
+          "kind": "Listbox",
+          "x": 20,
+          "y": 70,
+          "width": 400,
+          "height": 490,
+          "props": {
+            "exportselection": false,
+            "font": "Helvetica 12"
+          },
+          "events": {}
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 650,
+          "width": 940,
+          "height": 40,
+          "props": {
+            "text": "Save manually to keep changes",
+            "wraplength": 920
+          },
+          "events": {}
+        },
+        {
+          "name": "InstructionLabel",
+          "kind": "Label",
+          "x": 445,
+          "y": 15,
+          "width": 510,
+          "height": 38,
+          "props": {
+            "text": "Edit fields → Add or Update → Save. Field drafts are not saved until applied.",
+            "wraplength": 500
+          },
+          "events": {}
+        },
+        {
+          "name": "FieldLabel0",
+          "kind": "Label",
+          "x": 445,
+          "y": 70,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Unique item code *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field0",
+          "kind": "Entry",
+          "x": 445,
+          "y": 96,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel1",
+          "kind": "Label",
+          "x": 445,
+          "y": 135,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Item name *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field1",
+          "kind": "Entry",
+          "x": 445,
+          "y": 161,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel2",
+          "kind": "Label",
+          "x": 445,
+          "y": 200,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Quantity (0-1000000) *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field2",
+          "kind": "Entry",
+          "x": 445,
+          "y": 226,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel3",
+          "kind": "Label",
+          "x": 445,
+          "y": 265,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Unit cost EUR *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field3",
+          "kind": "Entry",
+          "x": 445,
+          "y": 291,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel4",
+          "kind": "Label",
+          "x": 445,
+          "y": 330,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Low-stock threshold *"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field4",
+          "kind": "Entry",
+          "x": 445,
+          "y": 356,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "FieldLabel5",
+          "kind": "Label",
+          "x": 445,
+          "y": 395,
+          "width": 510,
+          "height": 23,
+          "props": {
+            "text": "Location"
+          },
+          "events": {}
+        },
+        {
+          "name": "Field5",
+          "kind": "Entry",
+          "x": 445,
+          "y": 421,
+          "width": 510,
+          "height": 30,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "Action0",
+          "kind": "Button",
+          "x": 20,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "New"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_clear(self)"
+          }
+        },
+        {
+          "name": "Action1",
+          "kind": "Button",
+          "x": 180,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Add"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_store(self)"
+          }
+        },
+        {
+          "name": "Action2",
+          "kind": "Button",
+          "x": 340,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Update"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_store(self, True)"
+          }
+        },
+        {
+          "name": "Action3",
+          "kind": "Button",
+          "x": 500,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Delete"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_delete(self)"
+          }
+        },
+        {
+          "name": "Action4",
+          "kind": "Button",
+          "x": 660,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Save JSON…"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_save(self)"
+          }
+        },
+        {
+          "name": "Action5",
+          "kind": "Button",
+          "x": 820,
+          "y": 595,
+          "width": 140,
+          "height": 36,
+          "props": {
+            "text": "Open JSON…"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\narchive_open(self)"
+          }
+        },
+        {
+          "name": "StockPlus",
+          "kind": "Button",
+          "x": 445,
+          "y": 520,
+          "width": 245,
+          "height": 36,
+          "props": {
+            "text": "+1 stock"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ninventory_adjust(self, 1)"
+          }
+        },
+        {
+          "name": "StockMinus",
+          "kind": "Button",
+          "x": 710,
+          "y": 520,
+          "width": 245,
+          "height": 36,
+          "props": {
+            "text": "-1 stock"
+          },
+          "events": {
+            "Click": "# Handle this designer control.\ninventory_adjust(self, -1)"
+          }
+        },
+        {
+          "name": "SummaryLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 565,
+          "width": 940,
+          "height": 25,
+          "props": {
+            "text": "All-record quantity, EUR stock value and low-stock count"
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Customize the schema and validation for this standalone archive.\nARCHIVE_KIND = 'inventory'\nARCHIVE_FIELDS = [('sku', 'Unique item code', 'line', True, 80, []), ('title', 'Item name', 'line', True, 200, []), ('quantity', 'Quantity (0-1000000)', 'line', True, 7, []), ('cost', 'Unit cost EUR', 'line', True, 16, []), ('threshold', 'Low-stock threshold', 'line', True, 7, []), ('location', 'Location', 'line', False, 100, [])]\n\n# Stock values use whole quantities and exact decimal unit costs.\nfrom decimal import Decimal\n\n\ndef inventory_quantity(value):\n    if re.fullmatch(r\"[0-9]{1,7}\", value) is None or int(value) > 1000000:\n        raise ValueError(\"Quantities and thresholds must be whole numbers from 0 to 1000000\")\n    return int(value)\n\n\ndef inventory_cost(value):\n    if re.fullmatch(r\"[0-9]{1,9}([.,][0-9]{1,2})?\", value) is None:\n        raise ValueError(\"Use a nonnegative unit cost with at most two decimals\")\n    return Decimal(value.replace(\",\", \".\"))\n\n\ndef archive_extra_validate(records):\n    codes = set()\n    for record in records:\n        code = record[\"sku\"].casefold()\n        if code in codes:\n            raise ValueError(\"Item codes must be unique ignoring letter case\")\n        codes.add(code)\n        record[\"quantity\"] = str(inventory_quantity(record[\"quantity\"]))\n        record[\"threshold\"] = str(inventory_quantity(record[\"threshold\"]))\n        record[\"cost\"] = format(inventory_cost(record[\"cost\"]), \".2f\")\n\n\ndef archive_sort_key(record):\n    return record[\"sku\"].casefold()\n\n\ndef archive_row_label(record):\n    low = inventory_quantity(record[\"quantity\"]) <= inventory_quantity(record[\"threshold\"])\n    return (\"[LOW] \" if low else \"\") + record[\"sku\"] + \" | \" + record[\"title\"][:25] + \" | qty \" + record[\"quantity\"]\n\n\ndef inventory_summary(records):\n    quantity = sum(inventory_quantity(r[\"quantity\"]) for r in records)\n    value = sum((inventory_quantity(r[\"quantity\"]) * inventory_cost(r[\"cost\"]) for r in records), Decimal(\"0.00\"))\n    low = sum(inventory_quantity(r[\"quantity\"]) <= inventory_quantity(r[\"threshold\"]) for r in records)\n    return quantity, value, low\n\n\ndef inventory_adjust(app, change):\n    # Validate a replacement copy; never allow a negative stock quantity.\n    if app.archive_selected is None:\n        return\n    candidate = [record.copy() for record in app.archive_records]\n    for record in candidate:\n        if record[\"id\"] == app.archive_selected:\n            record[\"quantity\"] = str(inventory_quantity(record[\"quantity\"]) + change)\n    try:\n        app.archive_records = archive_validate_records(candidate)\n    except ValueError as error:\n        messagebox.showerror(\"Stock change\", str(error), parent=app.Form1)\n        return\n    archive_render(app)\n    archive_select(app)\n\n\n# Generic archive helpers are embedded in each standalone starter.\nimport json\nimport os\nimport re\nimport tempfile\nimport uuid\nfrom pathlib import Path\n\n\ndef archive_validate_records(records):\n    # Validate every record before changing the visible collection.\n    if not isinstance(records, list) or len(records) > 500:\n        raise ValueError(\"Use a list of up to 500 records\")\n    result, identities = [], set()\n    for record in records:\n        if not isinstance(record, dict) or not isinstance(record.get(\"id\"), str) or not 1 <= len(record[\"id\"]) <= 80 or record[\"id\"] in identities:\n            raise ValueError(\"Records need unique nonempty IDs\")\n        clean = {\"id\": record[\"id\"]}\n        identities.add(record[\"id\"])\n        for key, label, kind, required, limit, choices in ARCHIVE_FIELDS:\n            value = record.get(key)\n            if not isinstance(value, str) or len(value) > limit or (required and not value.strip()):\n                raise ValueError(\"Invalid field: \" + label)\n            value = value.strip()\n            if choices and value not in choices:\n                raise ValueError(\"Choose a valid \" + label)\n            clean[key] = value\n        result.append(clean)\n    archive_extra_validate(result)\n    return sorted(result, key=archive_sort_key)\n\n\ndef archive_render(app):\n    query = app.FilterEntry.get().casefold().strip()\n    app.RecordList.delete(0, \"end\")\n    app.archive_visible = []\n    for record in app.archive_records:\n        if query and not any(query in record[key].casefold() for key, *_ in ARCHIVE_FIELDS):\n            continue\n        app.archive_visible.append(record[\"id\"])\n        app.RecordList.insert(\"end\", archive_row_label(record))\n    if app.archive_selected not in app.archive_visible:\n        app.archive_selected = None\n    elif app.archive_selected is not None:\n        app.RecordList.selection_set(app.archive_visible.index(app.archive_selected))\n    app.StatusLabel.configure(text=f\"{len(app.archive_visible)} shown / {len(app.archive_records)} records | Save JSON manually to keep changes\")\n\n\ndef archive_clear(app):\n    # Clear the editor without deleting any stored record.\n    app.archive_selected = None\n    app.RecordList.selection_clear(0, \"end\")\n    for index, (key, label, kind, required, limit, choices) in enumerate(ARCHIVE_FIELDS):\n        field = getattr(app, \"Field\" + str(index))\n        if kind == \"text\":\n            field.delete(\"1.0\", \"end\")\n        elif kind == \"choice\":\n            field.set(choices[0])\n        else:\n            field.delete(0, \"end\")\n    app.StatusLabel.configure(text=\"New record: fill the fields and press Add\")\n\n\ndef archive_select(app):\n    selection = app.RecordList.curselection()\n    if not selection or selection[0] >= len(app.archive_visible):\n        return\n    identity = app.archive_visible[selection[0]]\n    record = next((r for r in app.archive_records if r[\"id\"] == identity), None)\n    if record is None:\n        return\n    app.archive_selected = identity\n    for index, (key, label, kind, required, limit, choices) in enumerate(ARCHIVE_FIELDS):\n        field = getattr(app, \"Field\" + str(index))\n        if kind == \"text\":\n            field.delete(\"1.0\", \"end\")\n            field.insert(\"1.0\", record[key])\n        elif kind == \"choice\":\n            field.set(record[key])\n        else:\n            field.delete(0, \"end\")\n            field.insert(0, record[key])\n\n\ndef archive_collect(app, identity):\n    record = {\"id\": identity}\n    for index, (key, label, kind, required, limit, choices) in enumerate(ARCHIVE_FIELDS):\n        field = getattr(app, \"Field\" + str(index))\n        record[key] = field.get(\"1.0\", \"end-1c\") if kind == \"text\" else field.get()\n    return record\n\n\ndef archive_store(app, update=False):\n    # Validate a copy so invalid edits never partially replace the collection.\n    if update and app.archive_selected is None:\n        messagebox.showinfo(\"Update record\", \"Select a record first\", parent=app.Form1)\n        return\n    identity = app.archive_selected if update else uuid.uuid4().hex\n    candidate = [r.copy() for r in app.archive_records if not update or r[\"id\"] != identity]\n    candidate.append(archive_collect(app, identity))\n    try:\n        candidate = archive_validate_records(candidate)\n    except ValueError as error:\n        messagebox.showerror(\"Invalid record\", str(error), parent=app.Form1)\n        return\n    app.archive_records = candidate\n    app.archive_selected = identity\n    app.FilterEntry.delete(0, \"end\")\n    archive_render(app)\n\n\ndef archive_delete(app):\n    if app.archive_selected is not None and messagebox.askyesno(\"Delete record\", \"Delete the selected record?\", parent=app.Form1):\n        app.archive_records = [r for r in app.archive_records if r[\"id\"] != app.archive_selected]\n        archive_clear(app)\n        archive_render(app)\n\n\ndef archive_save(app):\n    filename = filedialog.asksaveasfilename(parent=app.Form1, defaultextension=\".json\", filetypes=[(\"Archive JSON\", \"*.json\")])\n    if not filename:\n        return\n    temporary = None\n    try:\n        path = Path(filename)\n        content = json.dumps({\"version\": 1, \"kind\": ARCHIVE_KIND, \"records\": archive_validate_records(app.archive_records)}, ensure_ascii=False, indent=2)\n        if len(content.encode(\"utf-8\")) > 2 * 1024 * 1024:\n            raise ValueError(\"Archive exceeds 2 MiB; reduce the collection before saving\")\n        descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=\".archive-\", suffix=\".tmp\")\n        with os.fdopen(descriptor, \"w\", encoding=\"utf-8\") as stream:\n            stream.write(content)\n            stream.flush()\n            os.fsync(stream.fileno())\n        os.replace(temporary, path)\n        app.StatusLabel.configure(text=\"Saved: \" + str(path))\n    except (OSError, ValueError, UnicodeError) as error:\n        messagebox.showerror(\"Save archive\", str(error), parent=app.Form1)\n    finally:\n        if temporary is not None:\n            Path(temporary).unlink(missing_ok=True)\n\n\ndef archive_open(app):\n    filename = filedialog.askopenfilename(parent=app.Form1, filetypes=[(\"Archive JSON\", \"*.json\")])\n    if not filename:\n        return\n    try:\n        path = Path(filename)\n        if path.stat().st_size > 2 * 1024 * 1024:\n            raise ValueError(\"Files are limited to 2 MiB\")\n        data = json.loads(path.read_text(encoding=\"utf-8-sig\"))\n        if not isinstance(data, dict) or data.get(\"version\") != 1 or data.get(\"kind\") != ARCHIVE_KIND:\n            raise ValueError(\"This file belongs to another archive type or version\")\n        records = archive_validate_records(data.get(\"records\"))\n    except (OSError, ValueError, UnicodeError) as error:\n        messagebox.showerror(\"Open archive\", str(error), parent=app.Form1)\n        return\n    if messagebox.askyesno(\"Open archive\", \"Replace the collection? Save current changes first if needed.\", parent=app.Form1):\n        app.archive_records = records\n        archive_clear(app)\n        archive_render(app)\n\n\ndef archive_close(app):\n    # There is no autosave: confirm before discarding the in-memory collection.\n    if messagebox.askyesno(\"Close archive\", \"Close without saving? Use Save JSON first to keep changes.\", parent=app.Form1):\n        app.root.destroy()\n\n\n# Stock adjustments affect memory until Save JSON is chosen.\n_inventory_render_base = archive_render\n\ndef archive_render(app):\n    _inventory_render_base(app)\n    quantity, value, low = inventory_summary(app.archive_records)\n    app.SummaryLabel.configure(text=f\"All records: {quantity} units | value EUR {value:.2f} | low stock: {low}\")\n",
+  "startup": "# The sample is in memory only. Save explicitly to keep your changes.\nself.archive_records = archive_validate_records([{'id': 'sample-stock', 'sku': 'ITEM-001', 'title': 'Example item', 'quantity': '5', 'cost': '2.50', 'threshold': '2', 'location': 'Shelf A'}])\nself.archive_selected = None\nself.archive_visible = []\narchive_clear(self)\narchive_render(self)\nself.RecordList.bind(\"<<ListboxSelect>>\", lambda event: archive_select(self))\nself.FilterEntry.bind(\"<KeyRelease>\", lambda event: archive_render(self))\nself.Form1.protocol(\"WM_DELETE_WINDOW\", lambda: archive_close(self))\nself.Form1.deiconify()"
+}

@@ -1,3 +1,10 @@
+# 1.39 — Fifth starter batch
+
+- Add Contact Book, Expense Manager, Home/Stock Inventory and CD/DVD/Game Archive.
+- Dedicated SQLite contact saves/reads and PNG/GIF preview; atomic JSON for other archives.
+- Decimal currency balances, unique/nonnegative inventory and borrower/year validation.
+- Twenty starters, fourteen new regressions and updated reconnection checklist.
+
 # 1.38 — Fourth starter batch
 
 - Add Scientific Calculator, Weekly Timetable, Recipe Manager and Book Catalog.
