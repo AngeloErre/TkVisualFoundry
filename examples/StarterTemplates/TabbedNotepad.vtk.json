@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Tabbed Notepad",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Tabbed Notepad",
+      "width": 820,
+      "height": 590,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "NewNote",
+          "kind": "Button",
+          "x": 20,
+          "y": 15,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "New tab"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\ntabs_add(self)"
+          }
+        },
+        {
+          "name": "OpenNote",
+          "kind": "Button",
+          "x": 220,
+          "y": 15,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Open file…"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\ntabs_open(self)"
+          }
+        },
+        {
+          "name": "SaveNote",
+          "kind": "Button",
+          "x": 420,
+          "y": 15,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Save note…"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\ntabs_save(self)"
+          }
+        },
+        {
+          "name": "CloseNote",
+          "kind": "Button",
+          "x": 620,
+          "y": 15,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Close tab"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\ntabs_close(self)"
+          }
+        },
+        {
+          "name": "NotesTabs",
+          "kind": "Notebook",
+          "x": 20,
+          "y": 70,
+          "width": 780,
+          "height": 440,
+          "props": {
+            "pages": [
+              "Note 1"
+            ]
+          },
+          "events": {}
+        },
+        {
+          "name": "NoteText1",
+          "kind": "Text",
+          "x": 5,
+          "y": 5,
+          "width": 760,
+          "height": 395,
+          "props": {
+            "wrap": "word",
+            "undo": true,
+            "font": "Helvetica 13"
+          },
+          "events": {},
+          "parent": "NotesTabs",
+          "page": "Note 1"
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 530,
+          "width": 780,
+          "height": 35,
+          "props": {
+            "text": "Use New tab to add notes. A star marks unsaved changes."
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# A standard-library tabbed text editor with explicit UTF-8 saves.\nimport tkinter as tk\nfrom tkinter.scrolledtext import ScrolledText\nfrom pathlib import Path\nimport os\nimport tempfile\n\n\ndef tabs_current(app):\n    return app.notes.get(str(app.NotesTabs.select()))\n\n\ndef tabs_title(app, tab):\n    # Compare against saved content rather than clearing the dirty state on focus.\n    note = app.notes.get(str(tab))\n    if note is None:\n        return\n    dirty = note[\"text\"].get(\"1.0\", \"end-1c\") != note[\"saved\"]\n    app.NotesTabs.tab(tab, text=note[\"title\"] + (\" *\" if dirty else \"\"))\n\n\ndef tabs_modified(app, tab):\n    note = app.notes.get(str(tab))\n    if note is not None and note[\"text\"].edit_modified():\n        note[\"text\"].edit_modified(False)\n        tabs_title(app, tab)\n\n\ndef tabs_add(app):\n    # New pages are built dynamically; the first page is editable in the designer.\n    if len(app.notes) >= 20:\n        messagebox.showerror(\"New note\", \"At most 20 notes can be open.\")\n        return None\n    app.note_counter += 1\n    title = \"Note \" + str(app.note_counter)\n    frame = app.NotesTabs.add_page(title)\n    text = ScrolledText(frame, undo=True, wrap=\"word\", font=(\"Helvetica\", 13))\n    text.pack(fill=\"both\", expand=True)\n    tab = str(frame)\n    app.notes[tab] = {\"text\": text, \"path\": None, \"title\": title, \"saved\": \"\"}\n    text.edit_modified(False)\n    text.bind(\"<<Modified>>\", lambda event: tabs_modified(app, tab))\n    app.NotesTabs.select(frame)\n    text.focus_set()\n    return tab\n\n\ndef tabs_save(app, note=None):\n    # A temporary file prevents partial writes from truncating an existing note.\n    note = note if note is not None else tabs_current(app)\n    if note is None:\n        return False\n    filename = note[\"path\"] or filedialog.asksaveasfilename(parent=app.Form1, defaultextension=\".txt\", filetypes=[(\"Text files\", \"*.txt\")])\n    if not filename:\n        return False\n    temporary = None\n    try:\n        path = Path(filename)\n        content = note[\"text\"].get(\"1.0\", \"end-1c\")\n        descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=\".note-\", suffix=\".tmp\")\n        with os.fdopen(descriptor, \"w\", encoding=\"utf-8\") as stream:\n            stream.write(content)\n            stream.flush()\n            os.fsync(stream.fileno())\n        os.replace(temporary, path)\n        note.update(path=str(path), saved=content, title=path.name)\n        for tab, item in app.notes.items():\n            if item is note:\n                tabs_title(app, tab)\n        app.StatusLabel.configure(text=\"Saved: \" + str(path))\n        return True\n    except (OSError, UnicodeError) as error:\n        messagebox.showerror(\"Save note\", str(error), parent=app.Form1)\n        return False\n    finally:\n        if temporary is not None:\n            Path(temporary).unlink(missing_ok=True)\n\n\ndef tabs_confirm(app, note):\n    if note[\"text\"].get(\"1.0\", \"end-1c\") == note[\"saved\"]:\n        return True\n    answer = messagebox.askyesnocancel(\"Unsaved note\", \"Save changes to \" + note[\"title\"] + \"?\", parent=app.Form1)\n    return False if answer is None else tabs_save(app, note) if answer else True\n\n\ndef tabs_close(app):\n    tab = str(app.NotesTabs.select())\n    note = app.notes.get(tab)\n    if note is None or not tabs_confirm(app, note):\n        return\n    app.NotesTabs.forget(tab)\n    del app.notes[tab]\n    for title, frame in list(app.NotesTabs.pages.items()):\n        if str(frame) == tab:\n            frame.destroy()\n            del app.NotesTabs.pages[title]\n            break\n    if not app.notes:\n        tabs_add(app)\n\n\ndef tabs_open(app):\n    filename = filedialog.askopenfilename(parent=app.Form1, filetypes=[(\"Text files\", \"*.txt\"), (\"All files\", \"*\")])\n    if not filename:\n        return\n    try:\n        path = Path(filename).resolve()\n        if path.stat().st_size > 2 * 1024 * 1024:\n            raise ValueError(\"Files are limited to 2 MiB.\")\n        content = path.read_text(encoding=\"utf-8-sig\")\n        if \"\\x00\" in content:\n            raise ValueError(\"Binary files are not supported.\")\n    except (OSError, ValueError, UnicodeError) as error:\n        messagebox.showerror(\"Open note\", str(error), parent=app.Form1)\n        return\n    for tab, note in app.notes.items():\n        if note[\"path\"] and Path(note[\"path\"]).resolve() == path:\n            app.NotesTabs.select(tab)\n            note[\"text\"].focus_set()\n            return\n    tab = tabs_add(app)\n    if tab is None:\n        return\n    note = app.notes[tab]\n    note[\"text\"].insert(\"1.0\", content)\n    note[\"text\"].edit_modified(False)\n    note.update(path=str(path), saved=content, title=path.name)\n    tabs_title(app, tab)\n\n\ndef tabs_close_app(app):\n    # Cancellation leaves all tabs open, even if earlier notes were saved.\n    for note in list(app.notes.values()):\n        if not tabs_confirm(app, note):\n            return\n    app.root.destroy()\n",
+  "startup": "# Register the designer-created first page; later pages use tabs_add.\nself.note_counter = 1\nfirst_tab = str(self.NotesTabs.pages[\"Note 1\"])\nself.notes = {first_tab: {\"text\": self.NoteText1, \"path\": None, \"title\": \"Note 1\", \"saved\": \"\"}}\nself.NoteText1.edit_modified(False)\nself.NoteText1.bind(\"<<Modified>>\", lambda event: tabs_modified(self, first_tab))\nself.Form1.protocol(\"WM_DELETE_WINDOW\", lambda: tabs_close_app(self))\nself.Form1.deiconify()"
+}

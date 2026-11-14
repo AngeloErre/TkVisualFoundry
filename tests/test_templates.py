@@ -12,7 +12,7 @@ from project_templates import catalog,instantiate
 
 class StarterTemplateTests(unittest.TestCase):
     def test_catalog_unique_and_every_starter_compiles_without_pip(self):
-        entries=catalog();self.assertEqual(len(entries),9);self.assertEqual(len({e['id'] for e in entries}),9)
+        entries=catalog();self.assertEqual(len(entries),13);self.assertEqual(len({e['id'] for e in entries}),13)
         for entry in entries:
             p=instantiate(entry['id']);validate(p);compile(generate(p),entry['id'],'exec');self.assertEqual(requirements(p),[])
     def test_copies_are_independent_and_source_files_unchanged(self):
@@ -20,7 +20,7 @@ class StarterTemplateTests(unittest.TestCase):
         self.assertEqual(instantiate('quiz'),original)
         with self.assertRaises(ValueError):instantiate('../outside')
     def test_all_template_code_sections_have_comments(self):
-        for key in ('quiz','dice','text','notes','odd','memory','puzzle15','paint'):
+        for key in ('quiz','dice','text','notes','odd','memory','puzzle15','paint','clocks','notepad','habits','pixels'):
             p=instantiate(key);sections=[p['imports'],p['startup']]+[body for f in p['forms'] for w in f['widgets'] for body in w['events'].values()]
             for section in sections:self.assertTrue(any(t.type==tokenize.COMMENT for t in tokenize.generate_tokens(io.StringIO(section).readline)),key)
     def test_loading_templates_never_executes_their_imports(self):

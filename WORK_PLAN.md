@@ -142,3 +142,11 @@ Next: visual debugging and expansion of adaptive layouts.
 - [x] English comments, no extra PIP, editable controls and eight-item starter catalog.
 - [x] Eleven logic regressions, bilingual docs and example compilation.
 - [ ] Interactive graphical/native drawing acceptance; remaining 24 requested starters.
+
+## Phase 21 — starter templates, third batch (1.37)
+
+- [x] Alarm/timers, Tabbed Notepad, Habit Tracker and Pixel Art; English comments, no extra PIP.
+- [x] Seventeen logic/file regressions, Linux remote suite and all example compilation.
+- [x] Persist Mac reconnection checklist and separate remote/native validation evidence.
+- [ ] User signal: ambiente collegato. Then perform native graphical tests/debugging and report results.
+- [ ] Remaining 20 requested starters.

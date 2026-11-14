@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.36
+# TkVisualFoundry 1.37
 
 **A visual Python/Tkinter IDE inspired by Visual Basic 6.** Design forms, add components, edit properties, write event handlers, manage project files, run/debug applications and prepare deployment kits from one workspace. IDE installer scripts target macOS and Windows; generated projects include native build workflows. Windows installation requires platform acceptance.
 
 [Italiano](README_IT.md) · [Changelog](CHANGELOG.md) · [Release notes](RELEASE_NOTES.md)
+
+## Third starter batch (1.37)
+
+Four additional English-commented standard-library starters are available: **Alarm and Timers**, **Tabbed Notepad**, **Habit Tracker** and **Pixel Art Editor**. The chooser now contains **12 starters plus Blank project**. This release was developed and automatically tested on remote Linux while the Mac was disconnected. Native Mac checks are queued in the [reconnection checklist](docs/MAC_RECONNECT_CHECKLIST.md); see the [starter guide](docs/STARTER_TEMPLATES.md) for capabilities and limits.
 
 ## Four additional starters (1.36)
 

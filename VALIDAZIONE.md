@@ -1,3 +1,7 @@
+# TkVisualFoundry 1.37
+
+Linux remoto, Python 3.15.2: 333 test superati per lingua, 11 grafici saltati. Diciassette nuovi test su timer/sveglia, date e serie abitudini, salvataggi atomici, schede/annullamento note, bordi/colori/esportazione PPM/SVG. Tutti i 27 esempi validati e compilati. Mac scollegato: nessuna verifica nativa eseguita. Ripresa prevista al messaggio “ambiente collegato”, con checklist in docs/MAC_RECONNECT_CHECKLIST.md.
+
 # TkVisualFoundry 1.36
 
 316 test superati per lingua, 11 grafici saltati. Undici nuove regressioni su intruso, coppie Memory e timer obsoleti, 100 mescolamenti risolvibili del Gioco del 15, mosse/vittoria, pennello/forme/gomma e conferme/esportazione EPS simulata. Tutti i 23 esempi validati e compilati. Collaudo grafico e output EPS nativo ancora da completare.

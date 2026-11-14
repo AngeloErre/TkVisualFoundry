@@ -1,3 +1,10 @@
+# 1.37 — Third starter batch, remote development
+
+- Add Alarm and Timers, Tabbed Notepad, Habit Tracker and Pixel Art Editor.
+- Twelve English-commented standard-library starters plus Blank project.
+- Atomic note/habit saves, unsaved tab guards, monotonic timers and PPM/SVG export.
+- Seventeen template tests on remote Linux; defer Mac acceptance to explicit reconnection.
+
 # 1.36 — Four additional starters
 
 - Add Odd One Out, Memory Pairs, Sliding 15 Puzzle and Mini-Paint.

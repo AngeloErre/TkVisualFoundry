@@ -13,6 +13,10 @@ TEMPLATES=(
     ('memory','MemoryPairs','Memory • coppie','Giochi','Otto coppie di lettere, contatore mosse e riavvio. Le coppie sbagliate si richiudono dopo una breve pausa.'),
     ('puzzle15','Sliding15','Gioco del 15','Giochi','Griglia 4×4, mosse legali e mescolamento sempre risolvibile. Riordina le tessere da 1 a 15.'),
     ('paint','MiniPaint','Mini-Paint','Creatività','Pennello, gomma bianca, linee, rettangoli e ovali. Colori, spessore, pulizia ed esportazione EPS.'),
+    ('clocks','ClocksAndTimers','Sveglia e timer','Utilità','Cronometro con pausa, conto alla rovescia e sveglia HH:MM. Segnale tramite campanella di sistema.'),
+    ('notepad','TabbedNotepad','Blocco note a schede','Utilità','Note multiple con apertura e salvataggio UTF-8, schede dinamiche e protezione delle modifiche non salvate.'),
+    ('habits','HabitTracker','Tracker di abitudini','Organizzazione','Abitudini giornaliere, serie consecutive e cronologia. Apertura e salvataggio manuale JSON.'),
+    ('pixels','PixelArt','Editor Pixel Art','Creatività','Griglia 16×16, colori e gomma bianca. Esporta immagini PPM o SVG senza librerie esterne.'),
 )
 
 

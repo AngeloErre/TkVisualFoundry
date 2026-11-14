@@ -1,0 +1,199 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Clocks and Timers",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Clocks and Timers",
+      "width": 740,
+      "height": 440,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "StopwatchTitle",
+          "kind": "Label",
+          "x": 20,
+          "y": 15,
+          "width": 700,
+          "height": 25,
+          "props": {
+            "text": "Stopwatch"
+          },
+          "events": {}
+        },
+        {
+          "name": "StopwatchLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 45,
+          "width": 300,
+          "height": 45,
+          "props": {
+            "text": "00:00:00",
+            "font": "Helvetica 24"
+          },
+          "events": {}
+        },
+        {
+          "name": "ToggleWatch",
+          "kind": "Button",
+          "x": 350,
+          "y": 48,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Start / Pause"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nstopwatch_toggle(self)"
+          }
+        },
+        {
+          "name": "ResetWatch",
+          "kind": "Button",
+          "x": 540,
+          "y": 48,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Reset"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nstopwatch_reset(self)"
+          }
+        },
+        {
+          "name": "CountdownTitle",
+          "kind": "Label",
+          "x": 20,
+          "y": 110,
+          "width": 200,
+          "height": 25,
+          "props": {
+            "text": "Countdown (seconds)"
+          },
+          "events": {}
+        },
+        {
+          "name": "SecondsEntry",
+          "kind": "Entry",
+          "x": 20,
+          "y": 145,
+          "width": 130,
+          "height": 32,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "CountdownLabel",
+          "kind": "Label",
+          "x": 170,
+          "y": 140,
+          "width": 170,
+          "height": 45,
+          "props": {
+            "text": "00:00:00",
+            "font": "Helvetica 20"
+          },
+          "events": {}
+        },
+        {
+          "name": "StartCountdown",
+          "kind": "Button",
+          "x": 350,
+          "y": 145,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Start"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\ncountdown_start(self)"
+          }
+        },
+        {
+          "name": "StopCountdown",
+          "kind": "Button",
+          "x": 540,
+          "y": 145,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Stop"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\ncountdown_stop(self)"
+          }
+        },
+        {
+          "name": "AlarmTitle",
+          "kind": "Label",
+          "x": 20,
+          "y": 215,
+          "width": 200,
+          "height": 25,
+          "props": {
+            "text": "Alarm (local HH:MM)"
+          },
+          "events": {}
+        },
+        {
+          "name": "AlarmEntry",
+          "kind": "Entry",
+          "x": 20,
+          "y": 255,
+          "width": 300,
+          "height": 32,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "SetAlarm",
+          "kind": "Button",
+          "x": 350,
+          "y": 252,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Set alarm"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nalarm_set(self)"
+          }
+        },
+        {
+          "name": "ClearAlarm",
+          "kind": "Button",
+          "x": 540,
+          "y": 252,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Clear alarm"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nalarm_clear(self)"
+          }
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 320,
+          "width": 700,
+          "height": 70,
+          "props": {
+            "text": "Keep the app open. System bell availability depends on the platform.",
+            "wraplength": 680
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Monotonic time keeps elapsed timers independent of wall-clock changes.\nimport time\nimport datetime\n\n\ndef clock_format(seconds):\n    seconds = max(0, int(seconds))\n    return f\"{seconds // 3600:02d}:{seconds // 60 % 60:02d}:{seconds % 60:02d}\"\n\n\ndef stopwatch_toggle(app):\n    # Accumulate elapsed time only when pausing a running stopwatch.\n    now = time.monotonic()\n    if app.sw_started is None:\n        app.sw_started = now\n    else:\n        app.sw_elapsed += now - app.sw_started\n        app.sw_started = None\n\n\ndef stopwatch_reset(app):\n    app.sw_elapsed = 0.0\n    app.sw_started = None\n    app.StopwatchLabel.configure(text=\"00:00:00\")\n\n\ndef countdown_start(app):\n    # Reject invalid durations without replacing an active countdown.\n    try:\n        duration = int(app.SecondsEntry.get())\n        if not 1 <= duration <= 86400:\n            raise ValueError(\"Duration must be 1-86400 seconds.\")\n    except ValueError:\n        messagebox.showerror(\"Countdown\", \"Enter a whole number from 1 to 86400 seconds.\")\n        return\n    app.count_deadline = time.monotonic() + duration\n    app.CountdownLabel.configure(text=clock_format(duration))\n    app.StatusLabel.configure(text=\"Countdown running\")\n\n\ndef countdown_stop(app):\n    app.count_deadline = None\n    app.StatusLabel.configure(text=\"Countdown stopped\")\n\n\ndef alarm_set(app):\n    # An HH:MM alarm in the past is scheduled for the next local day.\n    try:\n        hour, minute = app.AlarmEntry.get().strip().split(\":\")\n        hour, minute = int(hour), int(minute)\n        if not 0 <= hour <= 23 or not 0 <= minute <= 59:\n            raise ValueError(\"Invalid time\")\n    except (ValueError, TypeError):\n        messagebox.showerror(\"Alarm\", \"Use a valid HH:MM time, for example 07:30.\")\n        return\n    now = datetime.datetime.now()\n    target = now.replace(hour=hour, minute=minute, second=0, microsecond=0)\n    if target <= now:\n        target += datetime.timedelta(days=1)\n    app.alarm_target = target\n    app.StatusLabel.configure(text=\"Alarm set: \" + target.strftime(\"%Y-%m-%d %H:%M\"))\n\n\ndef alarm_clear(app):\n    app.alarm_target = None\n    app.StatusLabel.configure(text=\"Alarm cleared\")\n\n\ndef clock_refresh(app):\n    # This function is separate from scheduling so its timing rules can be tested.\n    now = time.monotonic()\n    elapsed = app.sw_elapsed + (now - app.sw_started if app.sw_started is not None else 0)\n    app.StopwatchLabel.configure(text=clock_format(elapsed))\n    if app.count_deadline is not None:\n        remaining = max(0.0, app.count_deadline - now)\n        app.CountdownLabel.configure(text=clock_format(int(remaining + 0.999999)))\n        if remaining <= 0:\n            app.count_deadline = None\n            app.StatusLabel.configure(text=\"Countdown finished!\")\n            app.root.bell()\n    if app.alarm_target is not None and datetime.datetime.now() >= app.alarm_target:\n        app.alarm_target = None\n        app.StatusLabel.configure(text=\"Alarm!\")\n        app.root.bell()\n\n\ndef clock_tick(app):\n    # A single Tk callback serves all three tools; never sleep on the UI thread.\n    clock_refresh(app)\n    app.clock_job = app.root.after(100, lambda: clock_tick(app))\n\n\ndef clock_close(app):\n    # Stop the owned callback before destroying the window.\n    if app.clock_job is not None:\n        app.root.after_cancel(app.clock_job)\n    app.root.destroy()\n",
+  "startup": "# Timers and alarms are session-only and require the application to remain open.\nself.sw_started = None\nself.sw_elapsed = 0.0\nself.count_deadline = None\nself.alarm_target = None\nself.clock_job = None\nself.SecondsEntry.insert(0, \"60\")\nself.AlarmEntry.insert(0, \"07:30\")\nclock_tick(self)\nself.Form1.protocol(\"WM_DELETE_WINDOW\", lambda: clock_close(self))\nself.Form1.deiconify()"
+}

@@ -1,5 +1,5 @@
-# TkVisualFoundry 1.36
+# TkVisualFoundry 1.37
 
-Add four English-commented standard-library starters: Odd One Out, Memory Pairs, Sliding 15 Puzzle and Mini-Paint. New project now offers eight starters plus Blank project. All controls remain designer-editable. Memory invalidates/cancels old mismatch callbacks on reset; Sliding 15 shuffles through legal moves; Mini-Paint supports brush/white eraser, line/rectangle/oval, colors/width, clear confirmation and EPS export.
+Add Alarm and Timers, Tabbed Notepad, Habit Tracker and Pixel Art Editor. There are now twelve English-commented standard-library starters plus Blank project. Timers use monotonic time and owned Tk callbacks; notes provide dirty-state save/discard/cancel protection and atomic UTF-8 saves; habits support validated JSON history/streaks; Pixel Art paints a 16×16 grid and exports PPM/SVG. No extra PIP required by the new templates.
 
-316 tests passed per language; 11 graphical tests skipped. Eleven new logic regressions include 100 solvable puzzle shuffles. All 23 example projects validate/compile. Interactive gameplay, drawing and native EPS output acceptance remain pending. See docs/STARTER_TEMPLATES.md.
+333 tests passed per language; 11 graphical tests skipped. All 27 example projects validate/compile. Seventeen new template regressions run on remote Linux with Python 3.15.2. The Mac is disconnected: graphical/native checks and debugging resume only when the user reports ambiente collegato. See docs/MAC_RECONNECT_CHECKLIST.md.

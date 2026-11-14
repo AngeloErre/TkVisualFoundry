@@ -1,8 +1,12 @@
-# TkVisualFoundry 1.36
+# TkVisualFoundry 1.37
 
 **IDE visuale Python/Tkinter ispirato a Visual Basic 6.** Permette di disegnare form, aggiungere componenti, modificarne le proprietà, scrivere eventi, gestire file, eseguire/debuggare applicazioni e preparare il deploy da un unico ambiente. Gli script di installazione dell’IDE sono per macOS e Windows; i progetti generati comprendono procedure di build native. L’installazione Windows richiede collaudo sulla piattaforma.
 
 [English README](README.md) · [Cronologia](CHANGELOG.md) · [Note di rilascio](RELEASE_NOTES.md)
+
+## Terzo gruppo di modelli (1.37)
+
+Aggiunti **Sveglia e timer**, **Blocco note a schede**, **Tracker di abitudini** ed **Editor Pixel Art**, con commenti in inglese e senza PIP aggiuntivi. Ora sono disponibili **12 modelli più il progetto vuoto**. Sviluppo e test automatici sono stati eseguiti su Linux remoto con il Mac scollegato. Le verifiche native attendono il messaggio “ambiente collegato”: consulta la [checklist](docs/MAC_RECONNECT_CHECKLIST.md) e la [guida ai modelli](docs/STARTER_TEMPLATES.md).
 
 ## Altri quattro modelli (1.36)
 

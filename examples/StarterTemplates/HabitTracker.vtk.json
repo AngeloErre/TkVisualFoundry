@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "files": [],
+  "language": "en",
+  "name": "Habit Tracker",
+  "forms": [
+    {
+      "name": "Form1",
+      "title": "Daily Habit Tracker",
+      "width": 760,
+      "height": 510,
+      "bg": "#f0f0f0",
+      "widgets": [
+        {
+          "name": "HabitEntry",
+          "kind": "Entry",
+          "x": 20,
+          "y": 20,
+          "width": 530,
+          "height": 32,
+          "props": {},
+          "events": {}
+        },
+        {
+          "name": "AddHabit",
+          "kind": "Button",
+          "x": 570,
+          "y": 18,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Add habit"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nhabit_add(self)"
+          }
+        },
+        {
+          "name": "HabitList",
+          "kind": "Listbox",
+          "x": 20,
+          "y": 75,
+          "width": 720,
+          "height": 275,
+          "props": {
+            "exportselection": false,
+            "font": "Helvetica 12"
+          },
+          "events": {}
+        },
+        {
+          "name": "ToggleHabit",
+          "kind": "Button",
+          "x": 20,
+          "y": 370,
+          "width": 170,
+          "height": 36,
+          "props": {
+            "text": "Toggle today"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nhabit_toggle(self)"
+          }
+        },
+        {
+          "name": "RemoveHabit",
+          "kind": "Button",
+          "x": 205,
+          "y": 370,
+          "width": 165,
+          "height": 36,
+          "props": {
+            "text": "Remove"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nhabit_remove(self)"
+          }
+        },
+        {
+          "name": "SaveHabits",
+          "kind": "Button",
+          "x": 390,
+          "y": 370,
+          "width": 165,
+          "height": 36,
+          "props": {
+            "text": "Save JSON…"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nhabit_save(self)"
+          }
+        },
+        {
+          "name": "OpenHabits",
+          "kind": "Button",
+          "x": 575,
+          "y": 370,
+          "width": 165,
+          "height": 36,
+          "props": {
+            "text": "Open JSON…"
+          },
+          "events": {
+            "Click": "# Handle this designer button.\nhabit_open(self)"
+          }
+        },
+        {
+          "name": "StatusLabel",
+          "kind": "Label",
+          "x": 20,
+          "y": 430,
+          "width": 720,
+          "height": 55,
+          "props": {
+            "text": "Save manually to preserve changes",
+            "wraplength": 700
+          },
+          "events": {}
+        }
+      ],
+      "events": {}
+    }
+  ],
+  "imports": "# Habit history stays in memory until the user saves a JSON file.\nimport datetime\nimport json\nimport os\nimport tempfile\nfrom pathlib import Path\n\n\ndef habit_streak(days, today=None):\n    # Yesterday's streak remains visible until today's habit is completed.\n    today = today or datetime.date.today()\n    recorded = set(days)\n    cursor = today if today.isoformat() in recorded else today - datetime.timedelta(days=1)\n    streak = 0\n    while cursor.isoformat() in recorded:\n        streak += 1\n        cursor -= datetime.timedelta(days=1)\n    return streak\n\n\ndef habit_render(app):\n    app.HabitList.delete(0, \"end\")\n    today = datetime.date.today().isoformat()\n    for habit in app.habits:\n        mark = \"[done]\" if today in habit[\"days\"] else \"[ ]\"\n        app.HabitList.insert(\"end\", f\"{mark} {habit['name']} | streak: {habit_streak(habit['days'])} | total: {len(habit['days'])}\")\n    app.StatusLabel.configure(text=f\"{len(app.habits)} habits | Today: {today} | Save manually to keep changes\")\n\n\ndef habit_add(app):\n    # Names are short, nonempty and unique ignoring letter case.\n    name = app.HabitEntry.get().strip()\n    if not name or len(name) > 80 or len(app.habits) >= 200 or any(h[\"name\"].casefold() == name.casefold() for h in app.habits):\n        messagebox.showerror(\"Habit\", \"Use a unique name of 1-80 characters (maximum 200 habits).\")\n        return\n    app.habits.append({\"name\": name, \"days\": []})\n    app.HabitEntry.delete(0, \"end\")\n    habit_render(app)\n\n\ndef habit_toggle(app):\n    selected = app.HabitList.curselection()\n    if not selected:\n        return\n    habit = app.habits[selected[0]]\n    today = datetime.date.today().isoformat()\n    if today in habit[\"days\"]:\n        habit[\"days\"].remove(today)\n    else:\n        habit[\"days\"].append(today)\n        habit[\"days\"].sort()\n    habit_render(app)\n    app.HabitList.selection_set(selected[0])\n\n\ndef habit_remove(app):\n    selected = app.HabitList.curselection()\n    if selected and messagebox.askyesno(\"Remove habit\", \"Remove the selected habit and its history?\", parent=app.Form1):\n        del app.habits[selected[0]]\n        habit_render(app)\n\n\ndef habit_validate(data):\n    # Validate the entire file before replacing the current collection.\n    if not isinstance(data, list) or len(data) > 200:\n        raise ValueError(\"Expected a list of up to 200 habits.\")\n    result, names = [], set()\n    for item in data:\n        if not isinstance(item, dict):\n            raise ValueError(\"Invalid habit record.\")\n        name, days = item.get(\"name\"), item.get(\"days\")\n        if not isinstance(name, str) or not name.strip() or len(name) > 80 or name.casefold() in names:\n            raise ValueError(\"Invalid or duplicate habit name.\")\n        if not isinstance(days, list) or len(days) > 3660 or not all(isinstance(day, str) for day in days):\n            raise ValueError(\"Invalid day history.\")\n        for day in days:\n            if datetime.date.fromisoformat(day).isoformat() != day:\n                raise ValueError(\"Dates must use YYYY-MM-DD.\")\n        names.add(name.casefold())\n        result.append({\"name\": name, \"days\": sorted(set(days))})\n    return result\n\n\ndef habit_save(app):\n    filename = filedialog.asksaveasfilename(parent=app.Form1, defaultextension=\".json\", filetypes=[(\"Habit JSON\", \"*.json\")])\n    if not filename:\n        return\n    temporary = None\n    try:\n        path = Path(filename)\n        content = json.dumps(habit_validate(app.habits), ensure_ascii=False, indent=2)\n        descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=\".habit-\", suffix=\".tmp\")\n        with os.fdopen(descriptor, \"w\", encoding=\"utf-8\") as stream:\n            stream.write(content)\n            stream.flush()\n            os.fsync(stream.fileno())\n        os.replace(temporary, path)\n        app.StatusLabel.configure(text=\"Habit history saved\")\n    except (OSError, ValueError) as error:\n        messagebox.showerror(\"Save habits\", str(error), parent=app.Form1)\n    finally:\n        if temporary is not None:\n            Path(temporary).unlink(missing_ok=True)\n\n\ndef habit_open(app):\n    filename = filedialog.askopenfilename(parent=app.Form1, filetypes=[(\"Habit JSON\", \"*.json\")])\n    if not filename:\n        return\n    try:\n        path = Path(filename)\n        if path.stat().st_size > 2 * 1024 * 1024:\n            raise ValueError(\"File exceeds 2 MiB.\")\n        data = habit_validate(json.loads(path.read_text(encoding=\"utf-8-sig\")))\n    except (OSError, ValueError, UnicodeError) as error:\n        messagebox.showerror(\"Open habits\", str(error), parent=app.Form1)\n        return\n    if messagebox.askyesno(\"Open habits\", \"Replace the current collection? Save it first if needed.\", parent=app.Form1):\n        app.habits = data\n        habit_render(app)\n\n\ndef habit_close(app):\n    # Saving is explicit; always confirm before closing a collection.\n    if messagebox.askyesno(\"Close tracker\", \"Close without saving? Use Save first to keep changes.\", parent=app.Form1):\n        app.root.destroy()\n",
+  "startup": "# Sample habits are editable; no personal data is collected automatically.\nself.habits = [{\"name\": \"Read for 10 minutes\", \"days\": []}, {\"name\": \"Practice Python\", \"days\": []}]\nhabit_render(self)\nself.Form1.protocol(\"WM_DELETE_WINDOW\", lambda: habit_close(self))\nself.Form1.deiconify()"
+}
